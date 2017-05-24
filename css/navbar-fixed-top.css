@@ -2,3 +2,11 @@ body {
   min-height: 2000px;
   padding-top: 70px;
 }
+
+.candidate_card {
+    background-color: gainsboro;
+}
+
+.candidate_name {
+    text-align: center;
+}

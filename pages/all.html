@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
         <!-- Custom styles for this template -->
-        <link href="css/navbar-fixed-top.css" rel="stylesheet">
+        <link href="../css/navbar-fixed-top.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -41,8 +41,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="./pages/all.html">Overview</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li class="active"><a href="./all.html">Overview</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -71,18 +71,58 @@
     <!-- Content! -->
     <div class="container">
 
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Local Elections!</h1>
-        <p>If you want more information before you cast your 2017 ballot for Cambridge City Council, you've come to the right place. We've compiled everything we could find - from op-eds to campaign finance records. Determine who deserves your #1 vote - or your #19!</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">Explore Candidates &raquo;</a>
-        </p>
-      </div>
+        <section class="candidates">
 
-      <div class="section">
-        <p> probably some text
-      </div>
+            <div class="col-md-3">
+                <article class="candidate_card">
+                    <picture>
+                        <img
+                            class="img-responsive reason_image"
+                            src="../images/both_cats_default.jpg"
+                            alt="default picture">
+                    </picture>
+                    <h3 class="candidate_name">Marc McGovern</h3>
+                </article>
+            </div>
+
+            <div class="col-md-3">
+                <article class="candidate_card">
+                    <picture>
+                        <img
+                            class="img-responsive reason_image"
+                            src="../images/both_cats_default.jpg"
+                            alt="default picture">
+                    </picture>
+                    <h3 class="candidate_name">Jan Deveruex</h3>
+<!--                     <span class="label label-info">incumbent</span>
+ -->                </article>
+            </div>
+
+            <div class="col-md-3">
+                <article class="candidate_card">
+                    <picture>
+                        <img
+                            class="img-responsive reason_image"
+                            src="../images/both_cats_default.jpg"
+                            alt="default picture">
+                    </picture>
+                    <h3 class="candidate_name">Denise Simmons</h3>
+                </article>
+            </div>
+
+            <div class="col-md-3">
+                <article class="candidate_card">
+                    <picture>
+                        <img
+                            class="img-responsive reason_image"
+                            src="../images/both_cats_default.jpg"
+                            alt="default picture">
+                    </picture>
+                    <h3 class="candidate_name">Nadeem Mazen</h3>
+                </article>
+            </div>
+
+        </section>
 
     </div> <!-- /container -->
 
