@@ -1,0 +1,22 @@
+body {
+  padding-top: 70px;
+}
+
+.candidate_card {
+    background-color: gainsboro;
+}
+
+.candidate_name {
+    text-align: center;
+}
+
+/**/
+.page_footer {
+    padding-bottom: 30px;
+}
+.about_us {
+    float:right;
+}
+.about_us_link {
+    color: #0057b8;
+}
