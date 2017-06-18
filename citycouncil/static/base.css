@@ -1,5 +1,4 @@
 body {
-  min-height: 2000px;
   padding-top: 70px;
 }
 
@@ -9,4 +8,15 @@ body {
 
 .candidate_name {
     text-align: center;
+}
+
+/**/
+.page_footer {
+    padding-bottom: 30px;
+}
+.about_us {
+    float:right;
+}
+.about_us_link {
+    color: #0057b8;
 }

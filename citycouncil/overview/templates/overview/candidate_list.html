@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <section class="candidates">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Running</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            {% for runner in runners %}
+
+                <div class="col-md-3">
+                    <article class="candidate_card">
+                        <a href="./cand_marc.html">
+                            <picture>
+                                <img
+                                    class="img-responsive reason_image"
+                                    src="../images/both_cats_default.jpg"
+                                    alt="default picture">
+                            </picture>
+                            <h3 class="candidate_name">{{ runner.fullname }}</h3>
+                        </a>
+                    </article>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Not Running</h2>
+            </div>
+        </div>
+
+        <div class="row">
+
+            {% for not_runner in not_runners %}
+            
+                <div class="col-md-3">
+                    <article class="candidate_card">
+                        <a href="./cand_marc.html">
+                            <picture>
+                                <img
+                                    class="img-responsive reason_image"
+                                    src="../images/both_cats_default.jpg"
+                                    alt="default picture">
+                            </picture>
+                            <h3 class="candidate_name">{{ not_runner.fullname }}</h3>
+                        </a>
+                    </article>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+{% endblock %}
