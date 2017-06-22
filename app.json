@@ -1,0 +1,8 @@
+{
+  "name": "Cambridge City Council",
+  "description": "An overview of all the cambridge city council candidates",
+  "image": "heroku/python",
+  "repository": "https://github.com/seakelps/cambridge",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ]
+}
