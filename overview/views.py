@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.db.models import Q
+from django.views.generic import DetailView
 
 from .models import Candidate
 
@@ -17,4 +18,5 @@ def candidate_list(request):
     return render(request, 'overview/candidate_list.html', context)
 
 
-# todo: detail?
+class CandidateDetail(DetailView):
+    model = Candidate
