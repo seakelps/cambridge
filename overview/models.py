@@ -19,6 +19,7 @@ class Candidate(models.Model):
     is_incumbent = models.BooleanField(default=0)
 
     headshot = models.ImageField(default='', blank=True, upload_to='headshots/')
+    headshot_description = models.CharField(default='headshot of candidate', max_length=500)
 
     def __str__(self):
         return self.fullname

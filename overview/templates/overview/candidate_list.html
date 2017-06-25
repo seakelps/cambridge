@@ -19,9 +19,9 @@
                         <a href="./cand_marc.html">
                             <picture>
                                 <img
-                                    class="img-responsive reason_image"
+                                    class="img-responsive"
                                     src="{{ runner.headshot.url }}"
-                                    alt="picture of candidate">
+                                    alt="{{ runner.headshot_description }}">
                             </picture>
                             <h3 class="candidate_name">{{ runner.fullname }}</h3>
                         </a>
@@ -47,9 +47,9 @@
                         <a href="./cand_marc.html">
                             <picture>
                                 <img
-                                    class="img-responsive reason_image"
+                                    class="img-responsive"
                                     src="{{ not_runner.headshot.url }}"
-                                    alt="default picture">
+                                    alt="{{ not_runner.headshot_description }}">
                             </picture>
                             <h3 class="candidate_name">{{ not_runner.fullname }}</h3>
                         </a>
