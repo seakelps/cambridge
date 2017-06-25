@@ -18,5 +18,7 @@ class Candidate(models.Model):
     is_running = models.NullBooleanField()
     is_incumbent = models.BooleanField(default=0)
 
+    headshot = models.ImageField(default='', blank=True, upload_to='headshots/')
+
     def __str__(self):
         return self.fullname
