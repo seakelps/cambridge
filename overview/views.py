@@ -45,6 +45,5 @@ class CandidateDetail(DetailView):
         # </script> will make us sad still
         if self.object.id in candidate_locations:
             candidate_locations[self.object.id]['color'] = 'red'
-        candidate_locations[self.object.id]['color'] = 'red'
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
         return context
