@@ -20,7 +20,7 @@
                             <picture>
                                 <img
                                     class="img-responsive"
-                                    src="{{ runner.headshot.url }}"
+                                    src="{% if runner.headshot %} runner.headshot.url {% endif %}"
                                     alt="{{ runner.headshot_description }}">
                             </picture>
                             <h3 class="candidate_name">{{ runner.fullname }}</h3>
@@ -48,7 +48,7 @@
                             <picture>
                                 <img
                                     class="img-responsive"
-                                    src="{{ not_runner.headshot.url }}"
+                                    src="{% if not_runner.headshot %} not_runner.headshot.url {% endif %}"
                                     alt="{{ not_runner.headshot_description }}">
                             </picture>
                             <h3 class="candidate_name">{{ not_runner.fullname }}</h3>
