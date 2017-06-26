@@ -32,7 +32,7 @@ class CandidateList(ListView):
         candidates = Candidate.objects.order_by("fullname")
         context['runners'] = candidates.exclude(is_running=False)
         context['not_running'] = candidates.filter(is_running=False)
-        context['candidate_locations'] = json.dumps(get_candidate_locations().values())
+        context['candidate_locations'] = json.dumps(list(get_candidate_locations().values()))
         return context
 
 
@@ -43,6 +43,7 @@ class CandidateDetail(DetailView):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
         candidate_locations = get_candidate_locations('wht')
         # </script> will make us sad still
-        candidate_locations[self.object.id]['color'] = 'red'
-        context['candidate_locations'] = json.dumps(candidate_locations.values())
+        if self.object.id in candidate_locations:
+            candidate_locations[self.object.id]['color'] = 'red'
+        context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
         return context
