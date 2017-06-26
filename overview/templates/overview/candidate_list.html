@@ -1,8 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
+
+
+{% block head_extra %}
+<script>
+    // data for candidate_map.js
+    var initialLocations = {{ candidate_locations|safe }};
+</script>
+<script async src="{% static "overview/candidate_map.js" %}"></script>
+<script async defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script>
+
+<style>
+#map {
+    height: 400px;
+    width: 100%;
+}
+</style>
+{% endblock %}
+
 
 {% block content %}
-
-    <section class="candidates">
+<div class="row">
+    <section class="candidates col-md-6">
 
         <div class="row">
             <div class="col-md-12">
@@ -62,4 +81,12 @@
 
     </section>
 
+    <div class="col-md-6">
+        <div id="map" height=300 width=300 class="map-container">
+            <div class="map-alert">
+                <div class="alert alert-warning" data-bind="text:gerror"></div>
+            </div>
+        </div>
+    </div>
+<div>
 {% endblock %}

@@ -6,6 +6,9 @@ class Candidate(models.Model):
     fullname = models.CharField(max_length=200)
     shortname = models.CharField(max_length=200)
 
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
     # restricting this field
     pronoun_choices = (
         ('she', 'She'),
