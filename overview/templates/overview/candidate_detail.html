@@ -44,7 +44,10 @@ caption {
             <footer>{{ object.fullname }}</footer>
         </blockquote>
 
-        <img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Terminator-2-judgement-day.jpg" />
+        <img
+            class="img-responsive"
+            src="{{ object.headshot.url }}"
+            alt="{{ object.headshot_description }}">
     </div>
 
     <div class="col-md-6">
