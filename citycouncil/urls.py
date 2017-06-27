@@ -11,6 +11,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^', include('overview.urls')),
+    url(r'^compare/', include('comparison.urls')),
     url(r'^admin/', admin.site.urls),
 ]
 
