@@ -53,11 +53,19 @@
                         <ul class="dropdown-menu">
                             <li class="dropdown-header">Incumbents</li>
                             {% for incumbent in incumbents %}
-                                <li><a href="{% url "candidate_detail" incumbent.slug %}">{{ incumbent.fullname }}</a></li>
+                                {% if incumbent.slug %}
+                                    <li><a href="{% url "candidate_detail" incumbent.slug %}">{{ incumbent.fullname }}</a></li>
+                                {% else %}
+                                    <li class="disabled"><a href="#">{{ incumbent.fullname }}</a></li>
+                                {% endif %}
                             {% endfor %}
                             <li class="dropdown-header">Challengers</li>
                             {% for non_incumbent in non_incumbents %}
-                                <li><a href="{% url "candidate_detail" non_incumbent.slug %}">{{ non_incumbent.fullname }}</a></li>
+                                {% if non_incumbent.slug %}
+                                    <li><a href="{% url "candidate_detail" non_incumbent.slug %}">{{ non_incumbent.fullname }}</a></li>
+                                {% else %}
+                                    <li class="disabled"><a href="#">{{ non_incumbent.fullname }}</a></li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </li>

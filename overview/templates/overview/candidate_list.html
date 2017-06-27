@@ -35,7 +35,7 @@
 
                 <div class="col-md-3">
                     <article class="candidate_card">
-                        <a href="{% url "candidate_detail" runner.slug %}">
+                        <a href="{% if runner.slug %}{% url "candidate_detail" runner.slug %}{% else %}#{% endif %}">
                             <picture>
                                 <img
                                     class="img-responsive"
@@ -63,7 +63,7 @@
             
                 <div class="col-md-3">
                     <article class="candidate_card">
-                        <a href="./cand_marc.html">
+                        <a href="{% if non_runner.slug %}{% url "candidate_detail" non_runner.slug %}{% else %}#{% endif %}">
                             <picture>
                                 <img
                                     class="img-responsive"
