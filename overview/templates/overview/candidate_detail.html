@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+<script>
+    // data for candidate_map.js
+    var initialLocations = {{ candidate_locations|safe }};
+</script>
+<script async src="{% static "overview/candidate_map.js" %}"></script>
+<script async defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script>
+
+<style>
+#map {
+    height: 400px;
+    width: 100%;
+}
+caption {
+    font-size: 2em;
+    font-weight: bold;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <table class="table table-condensed">
+            <caption>
+                {{ object.fullname }}
+            </caption>
+            <tr>
+                <th>Incumbent?</th>
+                <td>{{ object.incumbent|yesno:"Yes,No" }}</td>
+            </tr>
+            <tr>
+                <th>Running?</th>
+                <td>{{ object.running|yesno:"Yes,No" }}</td>
+            </tr>
+        </table>
+
+        <blockquote>
+            I am the Terminator, the Governator, and a conservative in that order.
+            <footer>{{ object.fullname }}</footer>
+        </blockquote>
+
+        <img
+            class="img-responsive"
+            src="{{ object.headshot.url }}"
+            alt="{{ object.headshot_description }}">
+    </div>
+
+    <div class="col-md-6">
+        <div id="map" height=300 width=300 class="map-container">
+            <div class="map-alert">
+                <div class="alert alert-warning" data-bind="text:gerror"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
