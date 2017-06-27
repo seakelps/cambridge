@@ -17,17 +17,7 @@
             {% for runner in runners %}
 
                 <div class="col-md-3">
-                    <article class="candidate_card">
-                        <a href="{% if runner.slug %}{% url "candidate_detail" runner.slug %}{% else %}#{% endif %}">
-                            <picture>
-                                <img
-                                    class="img-responsive"
-                                    src="{% if runner.headshot %}{{ runner.headshot.url }}{% endif %}"
-                                    alt="{{ runner.headshot_description }}">
-                            </picture>
-                            <h3 class="candidate_name">{{ runner.fullname }}</h3>
-                        </a>
-                    </article>
+                    {% include "overview/candidate_card.html" with candidate=runner only %}
                 </div>
 
             {% endfor %}
@@ -43,19 +33,8 @@
         <div class="row">
             {% for not_runner in not_runners %}
                 <div class="col-md-3">
-                    <article class="candidate_card">
-                        <a href="{% if non_runner.slug %}{% url "candidate_detail" non_runner.slug %}{% else %}#{% endif %}">
-                            <picture>
-                                <img
-                                    class="img-responsive"
-                                    src="{% if not_runner.headshot %}{{ not_runner.headshot.url }}{% endif %}"
-                                    alt="{{ not_runner.headshot_description }}">
-                            </picture>
-                            <h3 class="candidate_name">{{ not_runner.fullname }}</h3>
-                        </a>
-                    </article>
+                    {% include "overview/candidate_card.html" with candidate=non_runner only %}
                 </div>
-
             {% endfor %}
         </div>
     </section>

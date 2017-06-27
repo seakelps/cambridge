@@ -33,17 +33,7 @@
         <div class="row">
             {% for candidate in found_candidates %}
                 <div class="col-md-3">
-                    <article class="candidate_card">
-                        <a href="./cand_marc.html">
-                            <picture>
-                                <img
-                                    class="img-responsive"
-                                    src="{% if candidate.headshot %}{{ candidate.headshot.url }}{% endif %}"
-                                    alt="{{ candidate.headshot_description }}">
-                            </picture>
-                            <h3 class="candidate_name">{{ candidate.fullname }}</h3>
-                        </a>
-                    </article>
+                    {% include "overview/candidate_card.html" with candidate=candidate only %}
                 </div>
             {% endfor %}
         </div>

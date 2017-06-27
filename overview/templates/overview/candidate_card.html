@@ -1,0 +1,11 @@
+<article class="candidate_card">
+    <a href="{% if candidate.slug %}{% url "candidate_detail" candidate.slug %}{% else %}#{% endif %}">
+        <picture>
+            <img
+                class="img-responsive"
+                src="{% if candidate.headshot %}{{ candidate.headshot.url }}{% endif %}"
+                alt="{{ candidate.headshot_description }}">
+        </picture>
+        <h3 class="candidate_name">{{ candidate.fullname }}</h3>
+    </a>
+</article>
