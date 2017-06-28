@@ -20,7 +20,7 @@ class CandidateList(ListView):
 
         candidates = Candidate.objects.order_by("fullname")
         context['runners'] = candidates.exclude(is_running=False)
-        context['not_running'] = candidates.filter(is_running=False)
+        context['not_runners'] = candidates.filter(is_running=False)
         return context
 
 
