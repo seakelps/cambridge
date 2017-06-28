@@ -31,11 +31,11 @@ caption {
             </caption>
             <tr>
                 <th>Incumbent?</th>
-                <td>{{ object.incumbent|yesno:"Yes,No" }}</td>
+                <td>{{ object.is_incumbent|yesno:"Yes,No" }}</td>
             </tr>
             <tr>
                 <th>Running?</th>
-                <td>{{ object.running|yesno:"Yes,No" }}</td>
+                <td>{{ object.is_running|yesno:"Yes,No" }}</td>
             </tr>
         </table>
 
