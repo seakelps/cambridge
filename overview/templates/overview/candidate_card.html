@@ -3,7 +3,7 @@
         <picture>
             <img
                 class="img-responsive"
-                src="{% if candidate.headshot %}{{ candidate.headshot.url }}{% endif %}"
+                src="{{ candidate.headshot }}"
                 alt="{{ candidate.headshot_description }}">
         </picture>
         <h3 class="candidate_name">{{ candidate.fullname }}</h3>

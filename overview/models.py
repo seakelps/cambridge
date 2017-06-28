@@ -26,7 +26,10 @@ class Candidate(models.Model):
 
     @cached_property
     def headshot(self):
-        return staticfiles_storage.url(u'headshots/{0.slug}.png'.format(self))
+        try:
+            return staticfiles_storage.url(u'headshots/{0.slug}.png'.format(self))
+        except ValueError:
+            return staticfiles_storage.url(u'headshots/blank.png')
     headshot_description = models.CharField(default='headshot of candidate', max_length=500)
 
     def __str__(self):

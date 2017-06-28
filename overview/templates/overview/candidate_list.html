@@ -15,11 +15,9 @@
         <div class="row">
 
             {% for runner in runners %}
-
                 <div class="col-md-3">
                     {% include "overview/candidate_card.html" with candidate=runner only %}
                 </div>
-
             {% endfor %}
 
         </div>
