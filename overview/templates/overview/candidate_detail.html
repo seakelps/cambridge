@@ -37,6 +37,15 @@ caption {
                 <th>Running?</th>
                 <td>{{ object.is_running|yesno:"Yes,No" }}</td>
             </tr>
+            {% if object.website %}
+            <tfoot>
+                <tr>
+                    <td colspan=99>
+                        <a href="{{ object.website }}" target="_blank">Find out more</a>
+                    </td>
+                </tr>
+            </tfoot>
+            {% endif %}
         </table>
 
         <blockquote>
