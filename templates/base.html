@@ -42,7 +42,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Cambridge Council Candidates</a>
+                <a class="navbar-brand" href="#"><span class="header-text">Cambridge Council Candidates</span></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -65,6 +65,14 @@
                                     <li><a href="{% url "candidate_detail" non_incumbent.slug %}">{{ non_incumbent.fullname }}</a></li>
                                 {% else %}
                                     <li class="disabled"><a href="#">{{ non_incumbent.fullname }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            <li class="dropdown-header">Not Running</i>
+                            {% for not_runner in not_runners %}
+                                {% if not_runner.slug %}
+                                    <li><a href="{% url "candidate_detail" not_runner.slug %}">{{ not_runner.fullname }}</a></li>
+                                {% else %}
+                                    <li class="disabled"><a href="#">{{ not_runner.fullname }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
