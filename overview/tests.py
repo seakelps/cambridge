@@ -1,3 +1,14 @@
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 
-# Create your tests here.
+from .models import Candidate
+
+
+class CandidateListTest(TestCase):
+    def test_sanity(self):
+        Candidate.objects.create(fullname="R McRunner", slug="runner")
+        Candidate.objects.create(is_running=False, fullname="N McStationary", slug="non-runner")
+
+        resp = self.client.get(reverse("all"))
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, "overview/candidate_card.html", count=2)
