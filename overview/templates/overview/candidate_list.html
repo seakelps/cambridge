@@ -3,38 +3,33 @@
 
 
 {% block content %}
-<div class="row">
-    <section class="candidates col-md-6">
+<section class="candidates">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Running</h2>
+        </div>
+    </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Running</h2>
+    <div class="row">
+        {% for runner in runners %}
+            <div class="col-md-3">
+                {% include "overview/candidate_card.html" with candidate=runner only %}
             </div>
+        {% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Not Running</h2>
         </div>
+    </div>
 
-        <div class="row">
-
-            {% for runner in runners %}
-                <div class="col-md-3">
-                    {% include "overview/candidate_card.html" with candidate=runner only %}
-                </div>
-            {% endfor %}
-
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Not Running</h2>
+    <div class="row">
+        {% for not_runner in not_runners %}
+            <div class="col-md-3">
+                {% include "overview/candidate_card.html" with candidate=not_runner only %}
             </div>
-        </div>
-
-        <div class="row">
-            {% for not_runner in not_runners %}
-                <div class="col-md-3">
-                    {% include "overview/candidate_card.html" with candidate=not_runner only %}
-                </div>
-            {% endfor %}
-        </div>
-    </section>
-</div>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}
