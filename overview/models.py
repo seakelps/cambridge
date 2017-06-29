@@ -7,6 +7,7 @@ class Candidate(models.Model):
     slug = models.SlugField()
     fullname = models.CharField(max_length=200)
     shortname = models.CharField(max_length=200)
+    website = models.URLField(help_text="Main candidate website", blank=True, default="")
 
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
