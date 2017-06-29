@@ -1,7 +1,16 @@
+/* navbar */
 body {
   padding-top: 70px;
 }
 
+@media (max-width: 375px) {
+    .header-text {
+        font-size: 14px;
+        color:red;
+    }
+}
+
+/* candidate page */
 .candidate_card {
     background-color: gainsboro;
 }
@@ -10,7 +19,7 @@ body {
     text-align: center;
 }
 
-/**/
+/* tweaking the footer */
 .page_footer {
     padding-bottom: 30px;
 }
