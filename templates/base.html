@@ -67,14 +67,6 @@
                                     <li class="disabled"><a href="#">{{ non_incumbent.fullname }}</a></li>
                                 {% endif %}
                             {% endfor %}
-                            <li class="dropdown-header">Not Running</i>
-                            {% for not_runner in not_runners %}
-                                {% if not_runner.slug %}
-                                    <li><a href="{% url "candidate_detail" not_runner.slug %}">{{ not_runner.fullname }}</a></li>
-                                {% else %}
-                                    <li class="disabled"><a href="#">{{ not_runner.fullname }}</a></li>
-                                {% endif %}
-                            {% endfor %}
                         </ul>
                     </li>
                     <li class="dropdown">
