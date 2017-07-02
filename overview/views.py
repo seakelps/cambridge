@@ -58,7 +58,7 @@ class VotingRecord(TemplateView):
 
     template_name = "overview/voting_record.html"
 
-    # TODO convert meeting id and item id into link
     # Improve Yeas, Nays (make those columns not searchable)
     # summarize the item description more
+    # move ^ to python so we only do it once
     # thumbs up thumbs down neutral clear instead of sort?

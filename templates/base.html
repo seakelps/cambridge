@@ -100,25 +100,55 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/mark.js/8.6.0/jquery.mark.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.js"></script>
     <script>
+
+    function abbreviateNumber(value) {
+        // https://stackoverflow.com/a/10601315
+        var newValue = Number(value.replace(/[$,]/g, ''));
+        if (value[0] == '$' && newValue >= 1000) {
+            var suffixes = ["", "k", "m", "b","t"];
+            var suffixNum = Math.floor( (""+newValue).length/3 );
+            var shortValue = '';
+            for (var precision = 2; precision >= 1; precision--) {
+                shortValue = parseFloat( (suffixNum != 0 ? (newValue / Math.pow(1000,suffixNum) ) : newValue).toPrecision(precision));
+                var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+                if (dotLessShortValue.length <= 2) { break; }
+            }
+            if (shortValue % 1 != 0) {
+                shortNum = shortValue.toFixed(1);
+            }
+            return '$' + shortValue+suffixes[suffixNum];
+        } else {
+            return value;
+        }
+    }
+
     function format ( d ) {
         return d.item_description;
     }
 
     function short_description ( d ) {
-        let short_description = d.item_description.slice(0, 20);
+        let short_description = d.item_description;
+        short_description = short_description.slice(0, 1000).split(' ').map(abbreviateNumber).join(' ');
+        short_description = short_description.slice(0, 20);
         return `<a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?MeetingID=${d.meeting_id}&ID=${d.item_id}">${short_description}</a>`
     }
      
     var dt;
     $(document).ready(function() {
         dt = $('#myTable').DataTable( {
+            mark: true,
             // "processing": true,
             // "serverSide": true,
-            "ajax": "{% static  "voting_record.json" %}",
-            "columns": [
+            ajax: "{% static  "voting_record.json" %}",
+            searching: true,
+            lengthChange: false,
+            columns: [
                 { orderable: false, data: short_description,  },
                 { orderable: false, data: "item_description", visible: false },
                 { searchable: false, data: "Jan Devereux" },
@@ -165,6 +195,16 @@
                 $('#'+id+' td.details-control').trigger( 'click' );
             } );
         } );
+
+        $("#voteSearch").on("input", function() {
+            let val = $(this).val().replace(/[s,.\s]+$/, "");
+            dt.columns(1).search(val).draw();
+            if (val.length > 3) {
+                dt.rows({ filtered: "applied" }).every(function() {
+                    this.child(format(this.data())).show();
+                });
+            }
+        });
     } );
 
 

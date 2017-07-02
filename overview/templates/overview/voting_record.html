@@ -7,14 +7,50 @@
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<style>
+#myTable_filter { display: none; }
+
+#myTable { table-layout: fixed; }
+#myTable tr[role=row] {
+    cursor: pointer;
+}
+
+tr td:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
 {% endblock %}
 
 {% block content %}
 
+<div class="panel panel-default">
+    <div class="panel-heading">What matters to you?</div>
+    <div class="panel-body">
+        <div class="col-md-6">
+            <form>
+                <input type="search" id="voteSearch" class="form-control" placeholder="Bikes...?">
+            </form>
+        </div>
+        <div>
+            <p>
+            Search recent City Council agenda items to see where <em>your</em>
+            councilors stand on <em>your</em> issues.
+            </p>
+        </div>
+    </div>
+</div>
+
+
 <table id="myTable" class="display" cellspacing="0" width="100%">
+    <colgroup>
+        <col width="10%" style="overflow: hidden"></col>
+    </colgroup>
     <thead>
         <tr>
-            <th>Short Description</th>
+            <th>Description</th>
             <th>Item Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -29,7 +65,7 @@
     </thead>
     <tfoot>
         <tr>
-            <th>Short Description</th>
+            <th>Description</th>
             <th>Item Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
