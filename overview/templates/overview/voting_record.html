@@ -8,13 +8,14 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 <script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
 <script defer src="https://cdn.jsdelivr.net/mark.js/8.6.0/jquery.mark.min.js"></script>
-<script defer src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.js"></script>
+<script defer src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
 
 <style>
 #myTable_filter { display: none; }
 
 #myTable { table-layout: fixed; }
 
+/* [role=row] ensures we're not looking at the detail expansions
 /* try to make it more obvious that it is clickable */
 #myTable tr[role=row] {
     cursor: pointer;
@@ -24,7 +25,7 @@
     text-decoration: underline;
 }
 
-tr td:first-child {
+tr[role=row] td:first-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -130,13 +131,15 @@ tr td:first-child {
         short_description = short_description.slice(0, 100);
         return `<a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?MeetingID=${d.meeting_id}&ID=${d.item_id}">${short_description}</a>`
     }
+
+    function searchValue() {
+        return $("#voteSearch").val().split(/\s+/).map($.trim);
+    }
      
     var dt;
     $(document).ready(function() {
         dt = $('#myTable').DataTable( {
             mark: true,
-            // "processing": true,
-            // "serverSide": true,
             ajax: "{% static  "voting_record.json" %}",
             searching: true,
             lengthChange: false,
@@ -155,9 +158,6 @@ tr td:first-child {
             ],
         } );
      
-        // Array to track the ids of the details displayed rows
-        var detailRows = [];
-     
         $('#myTable tbody').on( 'click', 'tr[role=row]', function () {
             var tr = $(this);
             var row = dt.row( tr );
@@ -166,34 +166,21 @@ tr td:first-child {
             if ( row.child.isShown() ) {
                 tr.removeClass( 'details' );
                 row.child.hide();
-     
-                // Remove from the 'open' array
-                detailRows.splice( idx, 1 );
             }
             else {
                 tr.addClass( 'details' );
                 row.child( format( row.data() ) ).show();
-     
-                // Add to the 'open' array
-                if ( idx === -1 ) {
-                    detailRows.push( tr.attr('id') );
-                }
+                row.child().mark(searchValue());
             }
         } );
      
-        // On each draw, loop over the `detailRows` array and show any child rows
-        dt.on( 'draw', function () {
-            $.each( detailRows, function ( i, id ) {
-                $('#'+id+' td.details-control').trigger( 'click' );
-            } );
-        } );
-
         $("#voteSearch").on("input", function() {
-            let val = $(this).val().replace(/[s,.\s]+$/, "");
+            let val = $.trim( $(this).val() );
             dt.columns(1).search(val).draw();
             if (val.length > 3) {
-                dt.rows({ filtered: "applied" }).every(function() {
+                dt.rows({ filter: "applied" }).every(function() {
                     this.child(format(this.data())).show();
+                    this.child().mark(searchValue());
                 });
             }
         });
