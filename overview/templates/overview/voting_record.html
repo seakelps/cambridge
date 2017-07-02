@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head_extra %}
+{# duplicated below #}
+{{ block.super }}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+
+<table id="myTable" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>meeting_id</th>
+            <th>item_id</th>
+            <th>item_description</th>
+            {# <th>item_body</th> #}
+            <th>Jan Devereux</th>
+            <th>Dennis J Carlone</th>
+            <th>Nadeem A Mazen</th>
+            <th>E Denise Simmons</th>
+            <th>Timothy J Toomey</th>
+            <th>Craig A Kelley</th>
+            <th>Leland Cheung</th>
+            <th>Marc C McGovern</th>
+            <th>David P Maher</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>meeting_id</th>
+            <th>item_id</th>
+            <th>item_description</th>
+            {# <th>item_body</th> #}
+            <th>Jan Devereux</th>
+            <th>Dennis J Carlone</th>
+            <th>Nadeem A Mazen</th>
+            <th>E Denise Simmons</th>
+            <th>Timothy J Toomey</th>
+            <th>Craig A Kelley</th>
+            <th>Leland Cheung</th>
+            <th>Marc C McGovern</th>
+            <th>David P Maher</th>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}
