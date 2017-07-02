@@ -47,7 +47,7 @@ class VotingRecord(TemplateView):
             ll = list(reader)
 
         for l in ll:
-            l.pop("item_body")  # while it's too much data
+            l.pop("item_body")  # while not well formatted enough. too long or empty frequently
             l['item_description'] = (l['item_description']
                                      .split("City Manager", 1)[-1].strip(', ')
                                      .replace("A communication was received ", "")
@@ -60,5 +60,5 @@ class VotingRecord(TemplateView):
 
     # TODO convert meeting id and item id into link
     # Improve Yeas, Nays (make those columns not searchable)
-    # hide the item_body field underneith
     # summarize the item description more
+    # thumbs up thumbs down neutral clear instead of sort?
