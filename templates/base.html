@@ -130,12 +130,11 @@
         // Array to track the ids of the details displayed rows
         var detailRows = [];
      
-        $('#myTable tbody').on( 'click', 'tr', function () {
+        $('#myTable tbody').on( 'click', 'tr[role=row]', function () {
             var tr = $(this);
             var row = dt.row( tr );
             var idx = $.inArray( tr.attr('id'), detailRows );
      
-            // TODO prevent child from being clicked!
             if ( row.child.isShown() ) {
                 tr.removeClass( 'details' );
                 row.child.hide();
