@@ -1,6 +1,7 @@
-from django.db import models
-from django.utils.functional import cached_property
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.db import models
+from django.urls import reverse
+from django.utils.functional import cached_property
 
 
 class Candidate(models.Model):
@@ -49,3 +50,6 @@ class Candidate(models.Model):
 
     def __str__(self):
         return self.fullname
+
+    def get_absolute_url(self):
+        return reverse("candidate_detail", args=[self.slug])
