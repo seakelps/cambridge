@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'overview',
     'comparison',
+    'voting_history',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
