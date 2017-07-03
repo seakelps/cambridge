@@ -35,7 +35,7 @@ caption {
             </tr>
             <tr>
                 <th>Running?</th>
-                <td>{{ object.is_running|yesno:"Yes,No" }}</td>
+                <td>{{ object.is_running|yesno:"Yes,No,Maybe" }}</td>
             </tr>
             {% if object.website %}
             <tfoot>
