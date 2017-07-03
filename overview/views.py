@@ -1,3 +1,4 @@
+import re
 import json
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
@@ -47,14 +48,17 @@ class VotingRecord(TemplateView):
             ll = list(reader)
 
         for l in ll:
-            l.pop("item_body")  # while not well formatted enough. too long or empty frequently
-            l['item_description'] = (l['item_description']
-                                     .split("City Manager", 1)[-1].strip(', ')
-                                     .replace("A communication was received ", "")
-                                     .replace("relative to ", "")
-                                     .replace("the appropriation of ", ""))
+            l['short_description'] = (l['item_description']
+                                      .split("City Manager", 1)[-1].strip(', ')
+                                      .replace("A communication was received ", "")
+                                      .replace("relative to ", "")
+                                      .replace("the appropriation of ", "")
+                                      .replace("the ", "")  # should be word boundary
+                                      .replace("a ", "")
+                                      .replace("of ", ""))
+            l['short_description'] = re.sub("\s+", " ", l['short_description']).strip().capitalize()
 
-        json.dump({"data": ll}, "static/voting_record.json")
+        json.dump({"data": ll}, open("static/voting_record.json", "w"), indent=True)
 
     template_name = "overview/voting_record.html"
 
@@ -62,3 +66,5 @@ class VotingRecord(TemplateView):
     # summarize the item description more
     # move ^ to python so we only do it once
     # thumbs up thumbs down neutral clear instead of sort?
+    # close the children (remove highlights? should be destroyed on reopen)
+    # search body / see if we can / lemmatize and keywordify?
