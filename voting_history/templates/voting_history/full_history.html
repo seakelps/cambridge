@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Councilmember Voting History{% endblock %}
+
+{% block meta_description %}
+Search through recent City Council votes. 
+See where current councilors stand on your issues.
+{% endblock %}
+
 {% block head_extra %}
+<meta property="og:title" content="Councilmemeber Voting History" />
+{# also included in panel #}
+<meta property="og:description" content="Search through recent City Council votes. See where current councilors stand on your issues." />
+
+
 {# duplicated below #}
 {{ block.super }}
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
@@ -45,7 +57,7 @@ tr[role=row] td:first-child {
     </div>
     <div class="panel-body">
         <div class="col-md-4">
-            <span>
+            <span>{# also included in og:description #}
             Search through recent City Council votes.
             See where current councilors stand on your issues.
             </span>
