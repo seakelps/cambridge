@@ -28,3 +28,34 @@ body {
 .about_us_link {
     color: #0057b8;
 }
+
+/* PALLETE */
+.text-blue {
+    color: #002F90 !important; 
+}
+.text-lightblue {
+    color: #0057b8 !important; 
+}
+.text-darkred {
+    color: #a80000 !important; 
+}
+.text-red {
+    color: #e4002b !important; 
+}
+
+.bg-blue {
+    background-color: #002F90 !important; 
+    color: white !important;
+}
+.bg-lightblue {
+    background-color: #0057b8 !important; 
+    color: white !important;
+}
+.bg-darkred {
+    background-color: #a80000 !important; 
+    color: white !important;
+}
+.bg-red {
+    background-color: #e4002b !important; 
+    color: white !important;
+}
