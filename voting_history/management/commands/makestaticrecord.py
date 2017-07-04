@@ -10,7 +10,7 @@ from django.conf import settings
 class Command(BaseCommand):
     help = 'Make voting_record.json from voting_record.csv'
 
-    # not quiet cosher, since static isn't necessarily the static_dir, but
+    # not quite kosher, since static isn't necessarily the static_dir, but
     # we're checking it in so it doesn't matter much
     csv_source = os.path.join(settings.BASE_DIR, 'static', 'voting_record.csv')
     json_out = os.path.join(settings.BASE_DIR, 'static', 'voting_record.json')
