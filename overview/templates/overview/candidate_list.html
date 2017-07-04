@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" media="screen" title="no title" charset="utf-8">
+{% endblock %}
+
 
 {% block content %}
 <section class="candidates">
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Running</h2>
-        </div>
-    </div>
-
     <div class="row">
         {% for runner in runners %}
             <div class="col-md-3">
@@ -32,4 +30,12 @@
         {% endfor %}
     </div>
 </section>
+{% endblock %}
+
+{% block endscripts %}
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
 {% endblock %}
