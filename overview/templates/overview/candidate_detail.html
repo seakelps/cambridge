@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Learn More About {{ object.fullname }}{% endblock %}
+
+{% block meta_description %}{% if object.is_running %}{{ object.fullname }} is running for Cambridge City Council.{% endif %}{% endblock %}
+
 {% block head_extra %}
+<meta property="og:image" content="{{ object.headshot }}">
+
+
 <script>
     // data for candidate_map.js
     var initialLocations = {{ candidate_locations|safe }};
