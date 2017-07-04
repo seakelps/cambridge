@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'overview.context_processors.header',
+                'overview.context_processors.constants',
             ],
         },
     },
@@ -143,3 +144,4 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+CONTACT_EMAIL = "admin@cambridge.vote"
