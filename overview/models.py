@@ -9,6 +9,7 @@ class Candidate(models.Model):
     fullname = models.CharField(max_length=200)
     shortname = models.CharField(max_length=200)
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
+    facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
 
     # where they live
     address = models.CharField(max_length=200, blank=True)
