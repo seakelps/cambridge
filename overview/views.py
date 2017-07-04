@@ -8,7 +8,20 @@ from .utils import get_candidate_locations
 
 # servering the jumbotron page
 def index(request):
-    return render(request, 'overview/index.html', context={'num_runners': Candidate.objects.exclude(is_running=False).count()})
+    num_runners = Candidate.objects.exclude(is_running=False).count()
+
+    description = """
+        If you want more information before you cast your 2017
+        ballot for Cambridge City Council, you've come to the right place. We're
+        compiling everything we can find - from op-eds to campaign finance records.
+        Determine who deserves your #1 vote - or your #{num_runners}!
+    """.format(num_runners=num_runners).strip()
+
+    return render(request, 'overview/index.html', context={
+        'title': "Vote Local!",
+        'description': description,
+        'num_runners': num_runners,
+    })
 
 
 class CandidateList(ListView):
