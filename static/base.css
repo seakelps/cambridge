@@ -37,6 +37,12 @@ body {
     text-align: center;
 }
 
+.candidate_card > .candidate_website {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
 /* tweaking the footer */
 .page_footer {
     padding-bottom: 30px;
