@@ -1,13 +1,33 @@
+{% load truncate_website from overview %}
+
+
 <article class="candidate_card thumbnail">
     <a href="{% if candidate.slug %}{% url "candidate_detail" candidate.slug %}{% else %}#{% endif %}">
         <picture class="headshot">
             <img
-                class="img-responsive"
+                class="img-circle"
+                height="150" width="150"  {# all 1:1 #}
                 src="{{ candidate.headshot }}"
                 alt="{{ candidate.headshot_description }}">
         </picture>
-        <div class="caption">
-            <h3 class="candidate_name">{{ candidate.fullname }}</h3>
-        </div>
     </a>
+
+    <div class="caption">
+        <div class="candidate_name">
+                {{ candidate.fullname }} {% if candidate.is_incumbent %}<i class="text-muted fa fa-institution"></i>{% endif %}
+                <br />
+                <a target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website }}</a>
+        </div>
+    </div>
+
+    {# could toggle different card views #}
+    <div class="text-center">
+        {% if candidate.facebook %}
+            <a class="btn btn-link" target="_blank" href="{{ candidate.facebook }}"</a>><i class="fa fa-facebook"></i></a>
+        {% else %}
+            <a class="btn btn-link" disabled><i class="fa fa-facebook"></i></a>
+        {% endif %}
+        <a class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Voting Record" disabled><i class="fa fa-check-square"></i></a>
+        <a class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Finance" disabled><i class="fa fa-dollar"></i></a>
+    </div>
 </article>

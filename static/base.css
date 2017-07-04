@@ -11,7 +11,7 @@ body {
 
 /* candidate page */
 .candidate_card {
-    background-color: gainsboro;
+    background-color: #FEFEFE;
 }
 
 .candidate_name {
@@ -58,4 +58,10 @@ body {
 .bg-red {
     background-color: #e4002b; 
     color: white;
+}
+
+.headshot {
+    text-align: center;
+    display: block;
+    margin-top: 2em;
 }

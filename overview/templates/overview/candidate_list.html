@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" media="screen" title="no title" charset="utf-8">
+{% endblock %}
+
 
 {% block content %}
 <section class="candidates">
@@ -32,4 +36,12 @@
         {% endfor %}
     </div>
 </section>
+{% endblock %}
+
+{% block endscripts %}
+<script>
+$(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
 {% endblock %}
