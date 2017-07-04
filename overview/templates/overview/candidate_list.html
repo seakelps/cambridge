@@ -6,7 +6,7 @@
 <section class="candidates">
     <div class="row">
         {% for runner in runners %}
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-3">
                 {% include "overview/candidate_card.html" with candidate=runner only %}
             </div>
         {% endfor %}
@@ -20,7 +20,7 @@
 
     <div class="row">
         {% for not_runner in not_runners %}
-            <div class="col-md-3">
+            <div class="col-sm-6 col-md-3">
                 {% include "overview/candidate_card.html" with candidate=not_runner only %}
             </div>
         {% endfor %}
