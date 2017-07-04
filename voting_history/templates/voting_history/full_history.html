@@ -121,10 +121,14 @@ tr[role=row] td:first-child {
 
 {% block endscripts %}
 <script>
-    function abbreviateNumber(value) {
-        // https://stackoverflow.com/a/10601315
-        var newValue = Number(value.replace(/[$,]/g, ''));
-        if (value[0] == '$' && newValue >= 1000) {
+    function truncateDollars(string) {
+        /* find money-like tokens in description text and truncates them 
+           truncateDollars("$123,456,789") -> "$0.1b"
+           truncateDollars("anything else") -> "anything else"
+           credit to https://stackoverflow.com/a/10601315
+        */
+        var newValue = Number(string.replace(/[$,]/g, ''));
+        if (string[0] == '$' && newValue >= 1000) {
             var suffixes = ["", "k", "m", "b","t"];
             var suffixNum = Math.floor( (""+newValue).length/3 );
             var shortValue = '';
@@ -138,18 +142,19 @@ tr[role=row] td:first-child {
             }
             return '$' + shortValue+suffixes[suffixNum];
         } else {
-            return value;
+            return string;
         }
     }
 
-    function format ( d ) {
+    function childText( d ) {
+        /* text (can be html) for foldout row when main row is clicked */
         return d.item_description;
-        return `<details><summary>${d.item_description}</summary><blockquote>${d.item_body}</blockquote></details>`;
     }
 
-    function short_description ( d ) {
+    function makeShorterDescription ( d ) {
+        /* item preview text */
         let short_description = d.short_description;
-        short_description = short_description.slice(0, 200).split(' ').map(abbreviateNumber).join(' ');
+        short_description = short_description.slice(0, 200).split(' ').map(truncateDollars).join(' ');
         short_description = short_description.slice(0, 100);
         short_description = short_description || "<i>missing</i>"
         return `<a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?MeetingID=${d.meeting_id}&ID=${d.item_id}">${short_description}</a>`
@@ -159,9 +164,8 @@ tr[role=row] td:first-child {
         return $("#voteSearch").val().split(/\s+/).map($.trim);
     }
      
-    var dt;
     $(document).ready(function() {
-        dt = $('#myTable').DataTable( {
+        var dt = $('#myTable').DataTable( {
             mark: true,
             ajax: "{% static  "voting_record.json" %}",
             searching: true,
@@ -171,7 +175,7 @@ tr[role=row] td:first-child {
                 { data: "item_id", visible: false },
                 { orderable: false, data: "item_description", visible: false },
                 { orderable: false, data: "item_body", visible: false },
-                { orderable: false, data: short_description,  },
+                { orderable: false, data: makeShorterDescription,  },
                 { searchable: false, data: "Jan Devereux" },
                 { searchable: false, data: "Dennis J Carlone" },
                 { searchable: false, data: "Nadeem A Mazen" },
@@ -185,6 +189,7 @@ tr[role=row] td:first-child {
         } );
      
         $('#myTable tbody').on( 'click', 'tr[role=row]', function () {
+            /* toggle child row visibility */
             var tr = $(this);
             var row = dt.row( tr );
      
@@ -194,26 +199,31 @@ tr[role=row] td:first-child {
             }
             else {
                 tr.addClass( 'details' );
-                row.child( format( row.data() ) ).show();
+                row.child( childText( row.data() ) ).show();
                 row.child().mark(searchValue());
             }
         } );
 
+        /* table-responsive must wrap the table, but data-tables adds a div
+           before and after the table, so we have to do this after DataTables is
+           applied so the table controls don't also scroll */
         $("#myTable").wrap("<div class='table-responsive'></div>");
          
         $("#voteSearch").on("input", function() {
+            /* search the full item body for the key. fold out descriptions if */
             let val = $.trim( $(this).val() );
             // Currently only searching body because [1,2] is 1 && 2, not 1 ||
             // 2. Could concat the fields if this isn't good enough.
 
             dt.columns(2).search(val).draw();
             dt.rows({ filter: "applied" }).every(function() {
-                if (val.length > 3) {
-                    this.child(format(this.data())).show();
+                if (val.length > 3) {  // if they've typed this much, fold results out
+                    this.child(childText(this.data())).show();
                 } 
                 
-                if (this.child()) {
+                if (this.child()) { // if folded out
                     if (val.length == 0) {
+                        // otherwise we leave the last mark() around
                         this.child().unmark(); 
                     } else {
                         this.child().mark(searchValue());
