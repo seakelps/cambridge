@@ -8,7 +8,7 @@ from .utils import get_candidate_locations
 
 # servering the jumbotron page
 def index(request):
-    return render(request, 'overview/index.html')
+    return render(request, 'overview/index.html', context={'num_runners': Candidate.objects.exclude(is_running=False).count()})
 
 
 class CandidateList(ListView):
