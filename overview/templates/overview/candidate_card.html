@@ -16,7 +16,8 @@
         <div class="candidate_name">
                 {{ candidate.fullname }} {% if candidate.is_incumbent %}<i class="text-muted fa fa-institution"></i>{% endif %}
                 <br />
-                <a target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website }}</a>
+                {# nbsp to make this take up a line at least #}
+                <a class="candidate_website" target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website|default:"&nbsp;" }}</a>
         </div>
     </div>
 
