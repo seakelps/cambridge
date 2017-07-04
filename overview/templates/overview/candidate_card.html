@@ -2,7 +2,7 @@
 
 
 <article class="candidate_card thumbnail">
-    <a href="{% if candidate.slug %}{% url "candidate_detail" candidate.slug %}{% else %}#{% endif %}">
+    <a href="{% if candidate.slug %}{% url "candidate_detail" candidate.slug %}{% else %}#{% endif %}" class="headshot">
         <picture class="headshot">
             <img
                 class="img-circle"
@@ -22,6 +22,7 @@
 
     {# could toggle different card views #}
     <div class="text-center">
+        <a class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Learn More" href="{% if candidate.slug %}{% url "candidate_detail" candidate.slug %}{% else %}#{% endif %}"><i class="fa fa-search"></i></a>
         {% if candidate.facebook %}
             <a class="btn btn-link" target="_blank" href="{{ candidate.facebook }}"</a>><i class="fa fa-facebook"></i></a>
         {% else %}
