@@ -42,11 +42,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><span class="header-text">Cambridge Council Candidates</span></a>
+                <a class="navbar-brand" href="{% url 'index' %}"><span class="header-text">Cambridge Council Candidates</span></a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="{% if request.resolver_match.url_name == 'index' %} active {% endif %}"><a href="{% url 'index' %}">Home</a></li>
                     <li class="{% if request.resolver_match.url_name == 'all' %} active {% endif %}"><a href="{% url 'all' %}">All</a></li>
                     <li class="dropdown {% if request.resolver_match.url_name == 'candidate_detail' %} active {% endif %}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
@@ -70,11 +69,11 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Issues <span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Environment</a></li>
-                            <li><a href="#">Housing</a></li>
-                            <li><a href="#">???</a></li>
+                            <li><a href="{% url 'full_history' %}">Incumbent Voting</a></li>
+                            <li class="disabled"><a href="#">Press Coverage</a></li>
+                            <li class="disabled"><a href="#">Campaign Finance</a></li>
                         </ul>
                     </li>
                 </ul>
