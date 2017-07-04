@@ -25,10 +25,24 @@ caption {
 {% block content %}
 <div class="row">
     <div class="col-md-4">
+        {# too thin to stand on it's own #}
+        {% include "overview/candidate_card.html" with candidate=object only %}
+    </div>
+
+    <div class="col-md-8">
+        {% if object.is_running == False %}
+        <div class="alert alert-danger">This candidate is <strong>not running</strong> in 2017</div>
+        {% elif object.is_running == None %}
+        <div class="alert alert-warning">
+            This candidate has not declared yet for 2017, but we think they might be planning to.
+            <a class="alert-link" href="mailto:{{ CONTACT_EMAIL }}">Contact us</a> to update their status.
+        </div>
+        {% endif %}
+
         <table class="table table-condensed">
-            <caption>
-                {{ object.fullname }}
-            </caption>
+            <colgroup>
+                <col style="width: 20%"></col>
+            </colgroup>
             <tr>
                 <th>Incumbent?</th>
                 <td>{{ object.is_incumbent|yesno:"Yes,No" }}</td>
@@ -37,30 +51,37 @@ caption {
                 <th>Running?</th>
                 <td>{{ object.is_running|yesno:"Yes,No,Maybe" }}</td>
             </tr>
+
             {% if object.website %}
-            <tfoot>
                 <tr>
-                    <td colspan=99>
-                        <a href="{{ object.website }}" target="_blank">Find out more</a>
-                    </td>
+                    <th>Website</td>
+                    <td><a href="{{ object.website }}" target="_blank">{{ object.website }}</a></td>
                 </tr>
-            </tfoot>
+            </tr>
+            {% endif %}
+
+            {% if object.facebook %}
+                <tr>
+                    <th>Facebook</th>
+                    <td><a href="{{ object.facebook }}" target="_blank">{{ object.facebook }}</a></td>
+                </tr>
+            </tr>
+            {% endif %}
+
+            {% if object.address %}
+                <tr>
+                    <th>Address</th>
+                    <td><a href="{{ object.address }}" target="_blank">{{ object.address }}</a></td>
+                </tr>
+            </tr>
             {% endif %}
         </table>
-
-        <blockquote>
-            I am the Terminator, the Governator, and a conservative in that order.
-            <footer>{{ object.fullname }}</footer>
-        </blockquote>
-
-        <img
-            class="img-responsive"
-            src="{{ object.headshot }}"
-            alt="{{ object.headshot_description }}">
     </div>
+</div>
 
-    <div class="col-md-6">
-        <div id="map" height=300 width=300 class="map-container">
+<div class="row">
+    <div class="col-md-12">
+        <div id="map" class="map-container">
             <div class="map-alert">
                 <div class="alert alert-warning" data-bind="text:gerror"></div>
             </div>

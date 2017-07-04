@@ -14,6 +14,7 @@ body {
     /* background currently white. I'd rather have the background be slightly
      * darker but would have to restyle everything */
     background-color: #FEFEFE;
+    max-width: 300px;  /* looks silly otherwise */
 }
 
 .candidate_card {
