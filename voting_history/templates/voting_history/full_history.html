@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Councilmember Voting History{% endblock %}
+
+{% block meta_description %}
+Search through recent City Council votes. 
+See where current councillors stand on your issues.
+{% endblock %}
+
+{% block head_extra %}
+<meta property="og:title" content="Councilmember Voting History" />
+{# also included in panel #}
+<meta property="og:description" content="Search through recent City Council votes. See where current councillors stand on your issues." />
+
+
+{# duplicated below #}
+{{ block.super }}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.js"></script>
+<script defer src="https://cdn.jsdelivr.net/mark.js/8.6.0/jquery.mark.min.js"></script>
+<script defer src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+{# <script defer src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script> need to remove dataTables.min.css for this to look decent #}
+<link https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css>
+
+<style>
+#myTable_filter { display: none; }
+
+#myTable { table-layout: fixed; }
+
+/* [role=row] ensures we're not looking at the detail expansions
+/* try to make it more obvious that it is clickable */
+#myTable tr[role=row] {
+    cursor: pointer;
+}
+
+#myTable tr[role=row]:hover {
+    text-decoration: underline;
+}
+
+tr[role=row] td:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        What matters to you?
+    </div>
+    <div class="panel-body">
+        <div class="col-md-4">
+            <span>{# also included in og:description #}
+            Search through recent City Council votes.
+            See where current councillors stand on your issues.
+            </span>
+        </div>
+        <div class="col-md-8">
+            <form action="#">
+                <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
+            </form>
+        </div>
+    </div>
+
+    <div class="panel-footer">
+        <cite class="text-muted">
+            Data gathered from 
+            <a href="http://cambridgema.iqm2.com/" target="_blank">Camrbridge Open Meetings Portal</a>
+        </cite>
+    </div>
+</div>
+
+
+<table id="myTable" class="table table-condensed table-striped" cellspacing="0" width="100%">
+    <colgroup>
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Item Id</th>
+            <th>Item Description</th>
+            <th>Item Body</th>
+            <th>Description</th>
+            <th>Devereux</th>
+            <th>Carlone</th>
+            <th>Mazen</th>
+            <th>Simmons</th>
+            <th>Toomey</th>
+            <th>Kelley</th>
+            <th>Cheung</th>
+            <th>McGovern</th>
+            <th>Maher</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <th>Item Id</th>
+            <th>Item Description</th>
+            <th>Item Body</th>
+            <th>Description</th>
+            <th>Devereux</th>
+            <th>Carlone</th>
+            <th>Mazen</th>
+            <th>Simmons</th>
+            <th>Toomey</th>
+            <th>Kelley</th>
+            <th>Cheung</th>
+            <th>McGovern</th>
+            <th>Maher</th>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}
+
+
+{% block endscripts %}
+<script>
+    function abbreviateNumber(value) {
+        // https://stackoverflow.com/a/10601315
+        var newValue = Number(value.replace(/[$,]/g, ''));
+        if (value[0] == '$' && newValue >= 1000) {
+            var suffixes = ["", "k", "m", "b","t"];
+            var suffixNum = Math.floor( (""+newValue).length/3 );
+            var shortValue = '';
+            for (var precision = 2; precision >= 1; precision--) {
+                shortValue = parseFloat( (suffixNum != 0 ? (newValue / Math.pow(1000,suffixNum) ) : newValue).toPrecision(precision));
+                var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+                if (dotLessShortValue.length <= 2) { break; }
+            }
+            if (shortValue % 1 != 0) {
+                shortNum = shortValue.toFixed(1);
+            }
+            return '$' + shortValue+suffixes[suffixNum];
+        } else {
+            return value;
+        }
+    }
+
+    function format ( d ) {
+        return d.item_description;
+        return `<details><summary>${d.item_description}</summary><blockquote>${d.item_body}</blockquote></details>`;
+    }
+
+    function short_description ( d ) {
+        let short_description = d.short_description;
+        short_description = short_description.slice(0, 200).split(' ').map(abbreviateNumber).join(' ');
+        short_description = short_description.slice(0, 100);
+        short_description = short_description || "<i>missing</i>"
+        return `<a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?MeetingID=${d.meeting_id}&ID=${d.item_id}">${short_description}</a>`
+    }
+
+    function searchValue() {
+        return $("#voteSearch").val().split(/\s+/).map($.trim);
+    }
+     
+    var dt;
+    $(document).ready(function() {
+        dt = $('#myTable').DataTable( {
+            mark: true,
+            ajax: "{% static  "voting_record.json" %}",
+            searching: true,
+            lengthChange: false,
+            order: [[ 0, "desc" ]],
+            columns: [
+                { data: "item_id", visible: false },
+                { orderable: false, data: "item_description", visible: false },
+                { orderable: false, data: "item_body", visible: false },
+                { orderable: false, data: short_description,  },
+                { searchable: false, data: "Jan Devereux" },
+                { searchable: false, data: "Dennis J Carlone" },
+                { searchable: false, data: "Nadeem A Mazen" },
+                { searchable: false, data: "E Denise Simmons" },
+                { searchable: false, data: "Timothy J Toomey" },
+                { searchable: false, data: "Craig A Kelley" },
+                { searchable: false, data: "Leland Cheung" },
+                { searchable: false, data: "Marc C McGovern" },
+                { searchable: false, data: "David P Maher" }
+            ],
+        } );
+     
+        $('#myTable tbody').on( 'click', 'tr[role=row]', function () {
+            var tr = $(this);
+            var row = dt.row( tr );
+     
+            if ( row.child.isShown() ) {
+                tr.removeClass( 'details' );
+                row.child.hide();
+            }
+            else {
+                tr.addClass( 'details' );
+                row.child( format( row.data() ) ).show();
+                row.child().mark(searchValue());
+            }
+        } );
+
+        $("#myTable").wrap("<div class='table-responsive'></div>");
+         
+        $("#voteSearch").on("input", function() {
+            let val = $.trim( $(this).val() );
+            // Currently only searching body because [1,2] is 1 && 2, not 1 ||
+            // 2. Could concat the fields if this isn't good enough.
+
+            dt.columns(2).search(val).draw();
+            dt.rows({ filter: "applied" }).every(function() {
+                if (val.length > 3) {
+                    this.child(format(this.data())).show();
+                } 
+                
+                if (this.child()) {
+                    if (val.length == 0) {
+                        this.child().unmark(); 
+                    } else {
+                        this.child().mark(searchValue());
+                    }
+                }
+            });
+        });
+    } );
+</script>
+{% endblock %}
