@@ -37,9 +37,10 @@ body {
     text-align: center;
 }
 
-.candidate_card > .candidate_website {
+.candidate_card .candidate_website {
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
     display: block;
 }
 
