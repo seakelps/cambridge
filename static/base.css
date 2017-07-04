@@ -31,31 +31,31 @@ body {
 
 /* PALLETE */
 .text-blue {
-    color: #002F90 !important; 
+    color: #002F90; 
 }
 .text-lightblue {
-    color: #0057b8 !important; 
+    color: #0057b8; 
 }
 .text-darkred {
-    color: #a80000 !important; 
+    color: #a80000; 
 }
 .text-red {
-    color: #e4002b !important; 
+    color: #e4002b; 
 }
 
 .bg-blue {
-    background-color: #002F90 !important; 
-    color: white !important;
+    background-color: #002F90; 
+    color: white;
 }
 .bg-lightblue {
-    background-color: #0057b8 !important; 
-    color: white !important;
+    background-color: #0057b8; 
+    color: white;
 }
 .bg-darkred {
-    background-color: #a80000 !important; 
-    color: white !important;
+    background-color: #a80000; 
+    color: white;
 }
 .bg-red {
-    background-color: #e4002b !important; 
-    color: white !important;
+    background-color: #e4002b; 
+    color: white;
 }
