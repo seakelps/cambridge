@@ -24,11 +24,21 @@ caption {
 
 {% block content %}
 <div class="row">
+    <div class="col-md-12">
+        <h1>{{ object.fullname }}</h1>
+    </div>
+
+    {% if object.is_running == False %}
+    <div class="col-md-12 alert alert-danger">This candidate is <strong>not running</strong> in 2017</div>
+    {% elif object.is_running == None %}
+    <div class="col-md-12 alert alert-warning">
+        This candidate has not declared yet for 2017, but we think they might be planning to.
+        <a class="alert-link" href="mailto:{{ CONTACT_EMAIL }}">Contact us</a> to update their status.
+    </div>
+    {% endif %}
+
     <div class="col-md-4">
         <table class="table table-condensed">
-            <caption>
-                {{ object.fullname }}
-            </caption>
             <tr>
                 <th>Incumbent?</th>
                 <td>{{ object.is_incumbent|yesno:"Yes,No" }}</td>
