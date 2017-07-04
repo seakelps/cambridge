@@ -40,6 +40,9 @@ caption {
         {% endif %}
 
         <table class="table table-condensed">
+            <colgroup>
+                <col style="width: 20%"></col>
+            </colgroup>
             <tr>
                 <th>Incumbent?</th>
                 <td>{{ object.is_incumbent|yesno:"Yes,No" }}</td>
