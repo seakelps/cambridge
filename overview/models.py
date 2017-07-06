@@ -8,6 +8,8 @@ class Candidate(models.Model):
     slug = models.SlugField()
     fullname = models.CharField(max_length=200)
     shortname = models.CharField(max_length=200)
+    email = models.EmailField(blank=True, default="")
+
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
     facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
 
