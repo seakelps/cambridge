@@ -11,13 +11,16 @@ function initMap() {
     });
 
     for (let location of initialLocations) {
-        addMarker(map, location);
+        addMarker(map, new Location(location));
     }
 }
 
 var Location = function(data) {
     this.id = data.id;
     this.name = data.name;
+
+    var names = data.name.split(' ')
+    this.label = names[0][0] + names[names.length - 1][0]; // two letter abbreviation
     this.lat = data.lat;
     this.lng = data.lng;
     this.color = data.color;
@@ -30,8 +33,9 @@ function addMarker(map, feature) {
         position: new google.maps.LatLng(feature.lat, feature.lng),
         map: map,
         icon: {
-            url: 'http://maps.google.com/mapfiles/kml/paddle/' + feature.color + '-blank.png',
-            scaledSize: new google.maps.Size(30, 30),
+          // https://developers.google.com/chart/image/docs/gallery/dynamic_icons?csw=1#pins
+          // chld=size|rotation|color|fontsize|fontweight|text
+          url: `https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.75|0|${feature.color}|11|_|${feature.label}`
         },
         title: feature.name
     });
