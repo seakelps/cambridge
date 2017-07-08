@@ -9,6 +9,10 @@ body {
     }
 }
 
+summary {
+    cursor: pointer;  /* it's clickable... make it look clickable */
+}
+
 /* candidate page */
 .candidate_card {
     /* background currently white. I'd rather have the background be slightly
