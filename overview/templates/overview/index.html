@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load fullurl %}
+{% load static %}
 
 {% block head_extra %}
 <meta name="twitter:card" content="summary">
@@ -9,15 +10,41 @@
 <meta name="twitter:image" content="{% fullstatic "council_chamber-twitter.png" %}"/>
 <meta name="twitter:label1" value="Candidates Filed So Far" />
 <meta name="twitter:data1" value="{{ num_runners }}" />
+<script>
+    // data for candidate_map.js
+    var initialLocations = {{ candidate_locations|safe }};
+</script>
+<script async src="{% static "overview/candidate_map.js" %}"></script>
+<script async defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script>
+
+<style>
+#map {
+    height: 400px;
+    width: 100%;
+}
+caption {
+    font-size: 2em;
+    font-weight: bold;
+}
+</style>
 {% endblock %}
 
 {% block content %} 
     <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron">
-        <h1>Vote Local!</h1>
-        <p>If you want more information before you cast your 2017 ballot for Cambridge City Council, you've come to the right place. We're compiling everything we can find - from op-eds to campaign finance records. Determine who deserves your #1 vote - or your #{{ num_runners }}!</p>
-        <p>
-        <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">Explore Candidates &raquo;</a>
-        </p>
+    <div class="jumbotron row">
+        <div class="col-md-6">
+            <h1>Vote Local!</h1>
+            <p>If you want more information before you cast your 2017 ballot for Cambridge City Council, you've come to the right place. We're compiling everything we can find - from op-eds to campaign finance records. Determine who deserves your #1 vote - or your #{{ num_runners }}!</p>
+            <p>
+                <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">Explore Candidates &raquo;</a>
+            </p>
+        </div>
+        <div class="col-md-6">
+            <div id="map" class="map-container">
+                <div class="map-alert">
+                    <div class="alert alert-warning" data-bind="text:gerror"></div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
