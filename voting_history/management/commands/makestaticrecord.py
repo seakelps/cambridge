@@ -34,4 +34,4 @@ class Command(BaseCommand):
             else:
                 row['short_description'] = ''  # js crashes otherwise
 
-        json.dump({"data": rows}, open("static/voting_record.json", "w"))
+        json.dump({"data": rows}, open("static/voting_record.json", "w"), indent=True)

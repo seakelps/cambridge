@@ -21,6 +21,7 @@ def index(request):
         'title': "Vote Local!",
         'description': description,
         'num_runners': num_runners,
+        'candidate_locations': json.dumps(list(get_candidate_locations().values())),
     })
 
 
