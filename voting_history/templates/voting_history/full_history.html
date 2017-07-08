@@ -35,17 +35,13 @@ See where current councillors stand on your issues.
     cursor: pointer;
 }
 
-#myTable tr[role=row]:hover {
-    text-decoration: underline;
-}
 
-tr[role=row] td:first-child {
+/* make the short truncate */
+tr[role=row] td:nth-child(2) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-
 </style>
 {% endblock %}
 
@@ -86,6 +82,7 @@ tr[role=row] td:first-child {
             <th>Item Id</th>
             <th>Item Description</th>
             <th>Item Body</th>
+            <th>Date</th>
             <th>Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -103,6 +100,7 @@ tr[role=row] td:first-child {
             <th>Item Id</th>
             <th>Item Description</th>
             <th>Item Body</th>
+            <th>Date</th>
             <th>Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -175,6 +173,7 @@ tr[role=row] td:first-child {
                 { data: "item_id", visible: false },
                 { orderable: false, data: "item_description", visible: false },
                 { orderable: false, data: "item_body", visible: false },
+                { width: "10ch", orderable: true, data: "date", visible: true },
                 { orderable: false, data: makeShorterDescription,  },
                 { searchable: false, data: "Jan Devereux" },
                 { searchable: false, data: "Dennis J Carlone" },
