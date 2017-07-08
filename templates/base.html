@@ -25,6 +25,23 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
 
+        <script>window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+          if (d.getElementById(id)) return t;
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs);
+
+          t._e = [];
+          t.ready = function(f) {
+            t._e.push(f);
+          };
+
+          return t;
+        }(document, "script", "twitter-wjs"));</script>
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" media="screen" title="no title" charset="utf-8">
         {% block head_extra %}{% endblock %}
     </head>
@@ -87,8 +104,18 @@
 
         <hr>
         <footer class="page_footer">
-            <span>© 2017</span>
-            <span class="about_us"><a class="about_us_link" href="{% url "about_us" %}">About us</a></span>
+            <p>
+
+                <a class="twitter-follow-button"
+                  href="https://twitter.com/cambridge_vote"
+                  target="_blank"
+                  data-size="large">Follow</a>
+
+                <span class="about_us">
+                    <a class="about_us_link" href="{% url "about_us" %}">About us</a>
+                    © 2017
+                </span>
+            </p>
         </footer>
     </div> <!-- /container -->
 
