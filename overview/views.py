@@ -42,9 +42,9 @@ class CandidateDetail(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
-        candidate_locations = get_candidate_locations(default_color='wht')
+        candidate_locations = get_candidate_locations(default_color='EEE')
         # </script> will make us sad still
         if self.object.id in candidate_locations:
-            candidate_locations[self.object.id]['color'] = 'red'
+            candidate_locations[self.object.id]['color'] = 'F00'
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
         return context
