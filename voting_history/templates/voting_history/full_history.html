@@ -4,7 +4,7 @@
 {% block title %}Councilmember Voting History{% endblock %}
 
 {% block meta_description %}
-Search through recent City Council votes. 
+Search through recent City Council votes.
 See where current councillors stand on your issues.
 {% endblock %}
 
@@ -71,16 +71,29 @@ tr[role=row] td:first-child {
 
     <div class="panel-footer">
         <cite class="text-muted">
-            Data gathered from 
-            <a href="http://cambridgema.iqm2.com/" target="_blank">Cambridge Open Meetings Portal</a>
+            <details>
+                <summary>
+                    Data gathered from
+                    <a href="http://cambridgema.iqm2.com/" target="_blank">
+                        Cambridge Open Meetings Portal
+                    </a>
+                </summary>
+
+                We aggregated this data from
+                <a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_BoardMember.aspx?ID=1020">
+                    individual candidate voting histories.
+                </a>
+
+                <br/>
+                <small>
+                    Last scraped on <time>2017-06-07</time>
+                </small>
         </cite>
     </div>
 </div>
 
 
 <table id="myTable" class="table table-condensed table-striped" cellspacing="0" width="100%">
-    <colgroup>
-    </colgroup>
     <thead>
         <tr>
             <th>Item Id</th>
@@ -122,7 +135,7 @@ tr[role=row] td:first-child {
 {% block endscripts %}
 <script>
     function truncateDollars(string) {
-        /* find money-like tokens in description text and truncates them 
+        /* find money-like tokens in description text and truncates them
            truncateDollars("$123,456,789") -> "$0.1b"
            truncateDollars("anything else") -> "anything else"
            credit to https://stackoverflow.com/a/10601315
@@ -163,7 +176,7 @@ tr[role=row] td:first-child {
     function searchValue() {
         return $("#voteSearch").val().split(/\s+/).map($.trim);
     }
-     
+
     $(document).ready(function() {
         var dt = $('#myTable').DataTable( {
             mark: true,
@@ -187,12 +200,12 @@ tr[role=row] td:first-child {
                 { searchable: false, data: "David P Maher" }
             ],
         } );
-     
+
         $('#myTable tbody').on( 'click', 'tr[role=row]', function () {
             /* toggle child row visibility */
             var tr = $(this);
             var row = dt.row( tr );
-     
+
             if ( row.child.isShown() ) {
                 tr.removeClass( 'details' );
                 row.child.hide();
@@ -208,7 +221,7 @@ tr[role=row] td:first-child {
            before and after the table, so we have to do this after DataTables is
            applied so the table controls don't also scroll */
         $("#myTable").wrap("<div class='table-responsive'></div>");
-         
+
         $("#voteSearch").on("input", function() {
             /* search the full item body for the key. fold out descriptions if */
             let val = $.trim( $(this).val() );
@@ -219,12 +232,12 @@ tr[role=row] td:first-child {
             dt.rows({ filter: "applied" }).every(function() {
                 if (val.length > 3) {  // if they've typed this much, fold results out
                     this.child(childText(this.data())).show();
-                } 
-                
+                }
+
                 if (this.child()) { // if folded out
                     if (val.length == 0) {
                         // otherwise we leave the last mark() around
-                        this.child().unmark(); 
+                        this.child().unmark();
                     } else {
                         this.child().mark(searchValue());
                     }
