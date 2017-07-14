@@ -61,6 +61,11 @@ tr[role=row] td:nth-child(2) {
         <div class="col-md-8">
             <form action="#">
                 <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="key_vote"> Search only controversial votes
+                    </label>
+                </div>
             </form>
         </div>
     </div>
@@ -96,6 +101,8 @@ tr[role=row] td:nth-child(2) {
             <th>Item Description</th>
             <th>Item Body</th>
             <th>Date</th>
+            <th>Key Vote</th>
+
             <th>Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -114,6 +121,8 @@ tr[role=row] td:nth-child(2) {
             <th>Item Description</th>
             <th>Item Body</th>
             <th>Date</th>
+            <th>Key Vote</th>
+
             <th>Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -175,8 +184,17 @@ tr[role=row] td:nth-child(2) {
         return $("#voteSearch").val().split(/\s+/).map($.trim);
     }
 
+
+    var dt;
     $(document).ready(function() {
-        var dt = $('#myTable').DataTable( {
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var checked = $("[name=key_vote]")[0].checked;
+                return !checked || (data[5] == "true");  // no support for booleans
+            }
+        );
+
+        dt = $('#myTable').DataTable( {
             mark: true,
             ajax: "{% static  "voting_record.json" %}",
             searching: true,
@@ -188,6 +206,8 @@ tr[role=row] td:nth-child(2) {
                 { orderable: false, data: "item_body", visible: false },
                 { width: "10ch", orderable: true, data: "date", visible: true },
                 { orderable: false, data: makeShorterDescription,  },
+                { searchable: true, visible: false, orderable: false, data: "key_vote" },
+
                 { searchable: false, data: "Jan Devereux" },
                 { searchable: false, data: "Dennis J Carlone" },
                 { searchable: false, data: "Nadeem A Mazen" },
@@ -220,6 +240,8 @@ tr[role=row] td:nth-child(2) {
            before and after the table, so we have to do this after DataTables is
            applied so the table controls don't also scroll */
         $("#myTable").wrap("<div class='table-responsive'></div>");
+
+        $("[name=key_vote]").on("change", () => dt.draw());
 
         $("#voteSearch").on("input", function() {
             /* search the full item body for the key. fold out descriptions if */
