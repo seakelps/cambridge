@@ -15,23 +15,26 @@ class Command(BaseCommand):
     csv_source = os.path.join(settings.BASE_DIR, 'static', 'voting_record.csv')
     json_out = os.path.join(settings.BASE_DIR, 'static', 'voting_record.json')
 
+    def add_short_description(self, row):
+        self.junk = self.junk or re.compile(r'\b({})\b'.format('|'.join([
+            "A communication was received", "relative to",
+            "the appropriation of", "the", "a", "of"])))
+
+        short_description = row['item_description'].split("City Manager", 1)[-1]
+        short_description = self.junk.sub('', short_description)
+        short_description = re.sub("\s+", " ", short_description).strip(', ')
+
+        if short_description:
+            row['short_description'] = short_description[0].upper() + short_description[1:]
+        else:
+            row['short_description'] = ''  # js crashes otherwise
+
     def handle(self, *args, **kwargs):
         with open("static/voting_record.csv", "r") as fp:
             reader = csv.DictReader(fp)
             rows = list(reader)
 
-        junk = re.compile(r'\b({})\b'.format('|'.join([
-            "A communication was received", "relative to",
-            "the appropriation of", "the", "a", "of"])))
-
         for row in rows:
-            short_description = row['item_description'].split("City Manager", 1)[-1]
-            short_description = junk.sub('', short_description)
-            short_description = re.sub("\s+", " ", short_description).strip(', ')
-
-            if short_description:
-                row['short_description'] = short_description[0].upper() + short_description[1:]
-            else:
-                row['short_description'] = ''  # js crashes otherwise
+            self.add_short_description(row)
 
         json.dump({"data": rows}, open("static/voting_record.json", "w"), indent=True)
