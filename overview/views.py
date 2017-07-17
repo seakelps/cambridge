@@ -5,6 +5,9 @@ from django.views.generic import DetailView, ListView
 from .models import Candidate
 from .utils import get_candidate_locations
 
+from campaign_finance.models import RawBankReport
+from campaign_finance.models import get_candidate_money_at_start_of_2017, get_candidate_2017_spent, get_candidate_2017_raised
+
 
 # servering the jumbotron page
 def index(request):
@@ -48,4 +51,16 @@ class CandidateDetail(DetailView):
         if self.object.id in candidate_locations:
             candidate_locations[self.object.id]['color'] = 'F00'
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
+
+        if self.object.cpf_id:
+            context['latest_bank_report'] = RawBankReport.objects.filter(cpf_id=self.object.cpf_id).latest("filing_date")
+            context['money_2017_start'] = get_candidate_money_at_start_of_2017(self.object.cpf_id)
+            context['money_2017_spent'] = get_candidate_2017_spent(self.object.cpf_id)
+            context['money_2017_raised'] = get_candidate_2017_raised(self.object.cpf_id)
+        else:
+            context['latest_bank_report'] = None
+            context['money_2017_start'] = None
+            context['money_2017_spent'] = None
+            context['money_2017_raised'] = None
+
         return context

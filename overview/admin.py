@@ -21,7 +21,7 @@ class HasWebsite(admin.SimpleListFilter):
 
 class CandidateAdmin(admin.ModelAdmin):
     readonly_fields = ('headshot', )
-    list_display = ('fullname', 'is_running', 'is_incumbent')
+    list_display = ('fullname', 'is_running', 'is_incumbent', 'cpf_id')
     list_filter = ('is_running', 'is_incumbent', HasWebsite)
     prepopulated_fields = {"slug": ("fullname",)}
 

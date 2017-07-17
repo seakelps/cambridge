@@ -95,3 +95,15 @@ a.headshot {
     padding-top: 2em;
     text-align: center;
 }
+
+/* $$$ panels */
+.panel-money {
+    text-align: center;
+}
+.panel-heading-money {
+    background-color: #002F90;
+}
+.money-amount {
+    margin-top: 10px;
+    color: white;
+}
