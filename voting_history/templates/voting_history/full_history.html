@@ -178,6 +178,10 @@ tr[role=row] td:nth-child(2) {
         return `<a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?MeetingID=${d.meeting_id}&ID=${d.item_id}">${short_description}</a>`
     }
 
+    function make_search_field( d ) {
+        return d.item_description + " " + d.item_body;
+    }
+
     function vote( data, type, row ) {
         return `<span class=${data.replace(" ", "_")}>${data.replace(/s$/, "")}</span>`;
     }
@@ -196,7 +200,7 @@ tr[role=row] td:nth-child(2) {
             columns: [
                 { data: "item_id", visible: false },
                 { orderable: false, data: "item_description", visible: false },
-                { orderable: false, data: "item_body", visible: false },
+                { orderable: false, data: make_search_field, visible: false },
                 { width: "10ch", orderable: true, data: "date", visible: true },
                 { orderable: false, data: makeShorterDescription,  },
                 { render:vote, searchable: false, data: "Jan Devereux" },
