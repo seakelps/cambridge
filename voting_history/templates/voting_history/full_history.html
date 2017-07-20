@@ -73,17 +73,19 @@ tr[role=row] td:nth-child(2) {
                     <a href="http://cambridgema.iqm2.com/" target="_blank">
                         Cambridge Open Meetings Portal
                     </a>
+
+                    <small class="pull-right">
+                        Last scraped on <time>2017-06-07</time>
+                        <a class="fa fa-download" title="Download our data" data-placement="bottom" data-toggle="tooltip" href="{% static "voting_record.csv" %}" download target="_black"></a>
+                    </small>
                 </summary>
 
-                We aggregated this data from
+                Data aggregated from
                 <a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_BoardMember.aspx?ID=1020">
-                    individual candidate voting histories.
-                </a>
+                    individual candidate voting histories
+                </a> for all active City Councillors.
 
                 <br/>
-                <small>
-                    Last scraped on <time>2017-06-07</time>
-                </small>
         </cite>
     </div>
 </div>
@@ -243,6 +245,7 @@ tr[role=row] td:nth-child(2) {
                 }
             });
         });
+        $("[data-toggle=tooltip]").tooltip();
     } );
 </script>
 {% endblock %}
