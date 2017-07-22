@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Learn More About {{ object.fullname }}{% endblock %}
 
@@ -121,7 +122,7 @@ caption {
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
                     {% if money_2017_raised is not None %}
-                        $&nbsp;{{ money_2017_raised }}
+                        $&nbsp;{{ money_2017_raised|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
@@ -137,7 +138,7 @@ caption {
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
                     {% if money_2017_spent is not None %}
-                        $&nbsp;{{ money_2017_spent }}
+                        $&nbsp;{{ money_2017_spent|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
@@ -153,7 +154,7 @@ caption {
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
                     {% if money_2017_start is not None %}
-                        $&nbsp;{{ money_2017_start }}
+                        $&nbsp;{{ money_2017_start|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
