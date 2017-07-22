@@ -28,6 +28,7 @@ var Location = function(data) {
     this.lat = data.lat;
     this.lng = data.lng;
     this.color = data.color;
+    this.main = data.main;
 };
 
 
@@ -41,6 +42,7 @@ function addMarker(map, feature) {
           // chld=size|rotation|color|fontsize|fontweight|text
           url: `https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.75|0|${feature.color}|11|_|${feature.label}`
         },
-        title: feature.name
+        title: feature.name,
+        zIndex: feature.main ? 2 : 1  // put primary focus on top of other candidate pins
     });
 };
