@@ -4,15 +4,19 @@
 
 
 function initMap() {
-    var mapDiv = document.getElementById('map');
-    map = new google.maps.Map(mapDiv, {
-        center: {lat: 42.3767926, lng: -71.1064153},
-        zoom: 13
-    });
+    /* google maps callback. waiting for document.ready so we don't ever load
+     * it before the id=map exists */
+    $(function() {
+        var mapDiv = document.getElementById('map');
+        map = new google.maps.Map(mapDiv, {
+            center: {lat: 42.3767926, lng: -71.1064153},
+            zoom: 13
+        });
 
-    for (let location of initialLocations) {
-        addMarker(map, new Location(location));
-    }
+        for (let location of initialLocations) {
+            addMarker(map, new Location(location));
+        }
+    });
 }
 
 var Location = function(data) {
