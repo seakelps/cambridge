@@ -106,7 +106,7 @@ caption {
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
                     {% if latest_bank_report.ending_balance_display is not None %}
-                        $&nbsp;{{ latest_bank_report.ending_balance_display }}
+                        $&nbsp;{{ latest_bank_report.ending_balance_display|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
