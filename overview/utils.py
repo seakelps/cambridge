@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from .models import Candidate
 
 
@@ -10,4 +11,5 @@ def get_candidate_locations(candidates=Candidate.objects.all(), default_color="F
         'lat': cand.latitude,
         'lng': cand.longitude,
         'color': default_color,
+        'link': reverse("candidate_detail", args=[cand.slug]),
     } for cand in has_address}

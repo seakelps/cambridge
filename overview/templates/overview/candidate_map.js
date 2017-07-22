@@ -29,11 +29,12 @@ var Location = function(data) {
     this.lng = data.lng;
     this.color = data.color;
     this.main = data.main;
+    this.link = data.link;
 };
 
 
 function addMarker(map, feature) {
-    return new google.maps.Marker({
+    var marker = new google.maps.Marker({
         id : feature.id,
         position: new google.maps.LatLng(feature.lat, feature.lng),
         map: map,
@@ -45,4 +46,22 @@ function addMarker(map, feature) {
         title: feature.name,
         zIndex: feature.main ? 2 : 1  // put primary focus on top of other candidate pins
     });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: `<a href="${feature.link}">${feature.name}</a>`
+    });
+
+    google.maps.event.addListener(marker, 'click', function() {
+        if (infowindow.getAnchor()) {
+            infowindow.close(map, marker);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            setTimeout(function() {
+              infowindow.open(map, marker);
+              marker.setAnimation(null);
+            }, 700);
+        }
+    });
+
+    return marker;
 };

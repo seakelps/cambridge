@@ -49,7 +49,10 @@ class CandidateDetail(DetailView):
         candidate_locations = get_candidate_locations(default_color='EEE')
         # </script> will make us sad still
         if self.object.id in candidate_locations:
-            candidate_locations[self.object.id]['color'] = 'F00'
+            candidate_locations[self.object.id].update({
+                'color': 'F00',
+                'main': True
+            })
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
 
         if self.object.cpf_id:
