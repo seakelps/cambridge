@@ -64,9 +64,7 @@ tr[role=row] td:nth-child(2) {
             </span>
         </div>
         <div class="col-md-8">
-            <form action="#">
-                <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
-            </form>
+            <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
         </div>
     </div>
 
@@ -178,6 +176,11 @@ tr[role=row] td:nth-child(2) {
         return `<a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?MeetingID=${d.meeting_id}&ID=${d.item_id}">${short_description}</a>`
     }
 
+    function make_search_field( d ) {
+        // including makeShorterDescription so we can search on truncated $40k
+        return makeShorterDescription(d) + " " + d.item_description + " " + d.item_body;
+    }
+
     function vote( data, type, row ) {
         return `<span class=${data.replace(" ", "_")}>${data.replace(/s$/, "")}</span>`;
     }
@@ -196,7 +199,7 @@ tr[role=row] td:nth-child(2) {
             columns: [
                 { data: "item_id", visible: false },
                 { orderable: false, data: "item_description", visible: false },
-                { orderable: false, data: "item_body", visible: false },
+                { orderable: false, data: make_search_field, visible: false },
                 { width: "10ch", orderable: true, data: "date", visible: true },
                 { orderable: false, data: makeShorterDescription,  },
                 { render:vote, searchable: false, data: "Jan Devereux" },
@@ -249,6 +252,8 @@ tr[role=row] td:nth-child(2) {
                         // otherwise we leave the last mark() around
                         this.child().unmark();
                     } else {
+                        // had some trouble going from $ to $4 without unmarking, but other searches seem to have worked
+                        this.child().unmark();
                         this.child().mark(searchValue());
                     }
                 }

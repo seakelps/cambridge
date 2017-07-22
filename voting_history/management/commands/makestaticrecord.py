@@ -20,13 +20,24 @@ class Command(BaseCommand):
             reader = csv.DictReader(fp)
             rows = list(reader)
 
-        junk = re.compile(r'\b({})\b'.format('|'.join([
-            "A communication was received", "relative to",
-            "the appropriation of", "the", "a", "of"])))
+        junk = [re.compile(regex) for regex in [
+            "Transmitting Communication.*?relative to",
+            "A communication was received.*?(transmitting|regarding|informing)",
+            "A communication transmitted from.*?(relative to|transmitting|regarding|informing)",
+            "That the City Manager.*?and to report back to the City Council on",
+            "That the City Council go on record",
+            r"(\ba )?grant from.*for (?=\$)",
+            "relative to",
+            r"Councillor [A-Z]\w*?\b",
+            "the appropriation of", r"\bthe\b", r"\ba\b", r"\bof\b", r"\bfiled\b"
+        ]]
 
         for row in rows:
-            short_description = row['item_description'].split("City Manager", 1)[-1]
-            short_description = junk.sub('', short_description)
+            short_description = row['item_description']
+
+            for j in junk:
+                short_description = j.sub("", short_description)
+
             short_description = re.sub("\s+", " ", short_description).strip(', ')
 
             if short_description:
