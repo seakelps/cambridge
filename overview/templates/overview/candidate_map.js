@@ -10,6 +10,10 @@ function initMap() {
         var mapDiv = document.getElementById('map');
         map = new google.maps.Map(mapDiv, {
             center: {lat: 42.3767926, lng: -71.1064153},
+            navigationControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            scrollwheel: false,
             zoom: 13
         });
 
