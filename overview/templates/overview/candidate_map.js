@@ -55,11 +55,7 @@ function addMarker(map, feature) {
         if (infowindow.getAnchor()) {
             infowindow.close(map, marker);
         } else {
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-            setTimeout(function() {
-              infowindow.open(map, marker);
-              marker.setAnimation(null);
-            }, 700);
+            infowindow.open(map, marker);
         }
     });
 
