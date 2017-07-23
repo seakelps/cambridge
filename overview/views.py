@@ -53,7 +53,12 @@ class CandidateDetail(DetailView):
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
 
         if self.object.cpf_id:
-            context['latest_bank_report'] = RawBankReport.objects.filter(cpf_id=self.object.cpf_id).latest("filing_date")
+            try:
+                context['latest_bank_report'] = RawBankReport.objects\
+                    .filter(cpf_id=self.object.cpf_id)\
+                    .latest("filing_date")
+            except RawBankReport.DoesNotExist:
+                context['latest_bank_report'] = None
             context['money_2017_start'] = get_candidate_money_at_start_of_2017(self.object.cpf_id)
             context['money_2017_spent'] = get_candidate_2017_spent(self.object.cpf_id)
             context['money_2017_raised'] = get_candidate_2017_raised(self.object.cpf_id)
