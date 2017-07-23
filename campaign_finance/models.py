@@ -104,11 +104,57 @@ class RawCampaignReceipt(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
 
 
+# turn ^ into v
+#
+# weeee
+class ReceiptCleaned(models.Model):
+
+    # link
+    raw_receipt_id = models.ForeignKey(RawCampaignReceipt)
+
+    # source of cleaner
+    date_cleaned = models.DateField(null=True, blank=True)
+    who_cleaned = models.CharField(max_length=200)
+    how_cleaned = models.CharField(max_length=200)
+
+    # what was done?
+    old_value = models.CharField(max_length=200)
+    new_value = models.CharField(max_length=200)
+    # this is annoying. I wanted it to be:
+    # choice_list = [f.name for f in RawCampaignReceipt._meta.get_fields() if f.name != 'id']
+    # tuple(zip(choice_list, choice_list))
+    choices = (
+        ('recipient_cpf_id', 'Recipient cpf id'),
+        ('recipient_full_name', 'Recipient full name'),
+        ('date', 'Date'),
+        ('first_name', 'First name'),
+        ('last_name', 'Last name'),
+        ('address', 'Address'),
+        ('city', 'City'),
+        ('state', 'State'),
+        ('zip', 'zip'),
+        ('occupation', 'Occupation'),
+        ('employer', 'Employer'),
+        ('principal_officer', 'Principal officer'),
+        ('contributor_id', 'Contributor ID'),
+        ('is_inkind', 'Is inkind'),
+        ('amount', 'Amount')
+    )
+    maxlen = max([len(x[0]) for x in choices])
+    field_changed = models.CharField(max_length=maxlen, choices=choices)
+
+
 # humans entering data never goes well.
 # this is the above data, but with effort on our part to, ex.,
 # change "athena health" and "Athenahealth" into all the same "Athenahealth, Inc.";
-# fix zipcodes that don't exist, etc.
+# fix zipcodes that don't exist; standardize "self-employdl", etc.
+#
+# other than the cleaning, *exactly* the same as the raw receipt, deliberately.
+# additional/different information goes into additional tables.
 class CleanCampaignReceipt(models.Model):
+
+    # not positive this is the best way
+    raw_receipt = models.ForeignKey(RawCampaignReceipt)
 
     # who gets the money
     recipient_cpf_id = models.IntegerField()
@@ -134,9 +180,6 @@ class CleanCampaignReceipt(models.Model):
 
     # the money
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-
-    # our stuff
-    occupation_type = models.CharField(max_length=200)
 
 
 # potential table: cleaning operation/note

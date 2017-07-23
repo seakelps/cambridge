@@ -1,0 +1,26 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <th>Candidate</th>
+        <th>Uncleaned Receipts</th>
+        <th>Clean?</th>
+        <th>Cleaned Receipts</th>
+        <th>Review?</th>
+    </thead>
+
+    {% for runner in runners %}
+        <tr>
+            <td>{{ runner.fullname }}</td>
+            <td>{{ runner.num_raw_receipts }}</td>
+            <td>there will be a button here</td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endfor %}
+
+</table>
+
+{% endblock %}

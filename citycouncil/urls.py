@@ -12,10 +12,13 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^', include('overview.urls')),
+
     url(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
     url(r'^compare/', include('comparison.urls')),
     url(r'^history/', include('voting_history.urls')),
     url(r'^admin/', admin.site.urls),
+
+    url(r'^admin/finance', include('campaign_finance.admin_urls')),
 ]
 
 if settings.DEBUG:
