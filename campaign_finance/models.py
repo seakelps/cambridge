@@ -172,11 +172,16 @@ def get_candidate_2017_spent(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
         cpf_id=candidate_cpf_id,
         beginning_date_display__year=2017
-        ).aggregate(Sum("expenditure_total_display"))
+    ).aggregate(Sum("expenditure_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2017).values("beginning_date_display").annotate(Count("beginning_date_display")).aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+    max_num_reports = RawBankReport.objects\
+        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2017)\
+        .values("beginning_date_display")\
+        .annotate(Count("beginning_date_display"))\
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+
     if max_num_reports > 1:
         print("oh noes!")
         return None
@@ -194,7 +199,12 @@ def get_candidate_2017_raised(candidate_cpf_id):
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2017).values("beginning_date_display").annotate(Count("beginning_date_display")).aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+    max_num_reports = RawBankReport.objects\
+        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2017)\
+        .values("beginning_date_display")\
+        .annotate(Count("beginning_date_display"))\
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+
     if max_num_reports > 1:
         print("oh noes!")
         return None
