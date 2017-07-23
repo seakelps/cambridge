@@ -66,7 +66,7 @@
                     <li class="{% if request.resolver_match.url_name == 'all' %} active {% endif %}"><a href="{% url 'all' %}">All</a></li>
                     <li class="dropdown {% if request.resolver_match.url_name == 'candidate_detail' %} active {% endif %}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
+                        <ul id="candidate_list" class="dropdown-menu">
                             <li class="dropdown-header">Incumbents</li>
                             {% for incumbent in incumbents %}
                                 {% if incumbent.slug %}

@@ -107,3 +107,8 @@ a.headshot {
     margin-top: 10px;
     color: white;
 }
+
+#candidate_list {
+    max-height: 60vh;
+    overflow-y: scroll;
+}
