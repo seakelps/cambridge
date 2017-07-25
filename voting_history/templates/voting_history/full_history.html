@@ -65,14 +65,34 @@ tr[role=row] td:nth-child(2) {
         </div>
         <div class="col-md-8">
             <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
+
+            <div style="margin-top: 0.5em">
+                <label class="radio-inline"><input type="radio" name="vote-split" value="all" checked>All</label>
+                <label class="radio-inline"><input type="radio" name="vote-split" value="contested">Contested (13)</label>
+                <label class="radio-inline"><input type="radio" name="vote-split" value="unanimous">Unanimous (363)</label>
+            </div>
+
+            {% comment %}
+            <div class="row">
+                <div class="col-md-4">
+                    <select type="select" name="split" class="form-control" style="display: inline-block">
+                        <option value="all" selected disabled>Vote Split</option>
+                        <option value="unanimous">Unanimous</option>
+                        <option value="contested">Contested</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            {% endcomment %}
+
         </div>
     </div>
 
     <div class="panel-footer">
         <cite class="text-muted">
             <details>
-                <summary>
-                    Data gathered from
+                <summary class="data_gathered_from">
+                    <span class="data_highlight">Data</span> gathered from
                     <a href="http://cambridgema.iqm2.com/" target="_blank">
                         Cambridge Open Meetings Portal
                     </a>
@@ -101,6 +121,8 @@ tr[role=row] td:nth-child(2) {
             <th>Item Description</th>
             <th>Item Body</th>
             <th>Date</th>
+            <th>Vote Split</th>
+
             <th>Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -119,6 +141,8 @@ tr[role=row] td:nth-child(2) {
             <th>Item Description</th>
             <th>Item Body</th>
             <th>Date</th>
+            <th>Vote Split</th>
+
             <th>Description</th>
             <th>Devereux</th>
             <th>Carlone</th>
@@ -189,8 +213,21 @@ tr[role=row] td:nth-child(2) {
         return $("#voteSearch").val().split(/\s+/).map($.trim);
     }
 
+
+    var dt;
     $(document).ready(function() {
-        var dt = $('#myTable').DataTable( {
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var vote_split = $("[name=vote-split]:checked").val();
+                if (vote_split == 'all') {
+                    return true;
+                } else {
+                    return data[5] == vote_split;
+                }
+            }
+        );
+
+        dt = $('#myTable').DataTable( {
             mark: true,
             ajax: "{% static  "voting_record.json" %}",
             searching: true,
@@ -202,6 +239,8 @@ tr[role=row] td:nth-child(2) {
                 { orderable: false, data: make_search_field, visible: false },
                 { width: "10ch", orderable: true, data: "date", visible: true },
                 { orderable: false, data: makeShorterDescription,  },
+                { searchable: true, visible: false, orderable: false, data: "vote_split" },
+
                 { render:vote, searchable: false, data: "Jan Devereux" },
                 { render:vote, searchable: false, data: "Dennis J Carlone" },
                 { render:vote, searchable: false, data: "Nadeem A Mazen" },
@@ -234,6 +273,8 @@ tr[role=row] td:nth-child(2) {
            before and after the table, so we have to do this after DataTables is
            applied so the table controls don't also scroll */
         $("#myTable").wrap("<div class='table-responsive'></div>");
+
+        $("[name=vote-split]").on("change", () => dt.draw());
 
         $("#voteSearch").on("input", function() {
             /* search the full item body for the key. fold out descriptions if */
