@@ -17,15 +17,26 @@ class Command(BaseCommand):
     # we're checking it in so it doesn't matter much
     csv_source = os.path.join(settings.BASE_DIR, 'static', 'voting_record.csv')
     json_out = os.path.join(settings.BASE_DIR, 'static', 'voting_record.json')
-    junk = re.compile(r'\b({})\b'.format('|'.join([
-        "A communication was received", "relative to",
-        "the appropriation of", "the", "a", "of"])))
+    junk = (re.compile(regex) for regex in [
+        "Transmitting Communication.*?relative to",
+        "A communication was received.*?(transmitting|regarding|informing)",
+        "A communication transmitted from.*?(relative to|transmitting|regarding|informing)",
+        "That the City Manager.*?and to report back to the City Council on",
+        "That the City Council go on record",
+        r"(\ba )?grant from.*for (?=\$)",
+        "relative to",
+        r"Councillor [A-Z]\w*?\b",
+        "the appropriation of", r"\bthe\b", r"\ba\b", r"\bof\b", r"\bfiled\b"
+    ])
 
     def add_short_description(self, row):
         """ reduce some junk where we can from the short descriptions so the
         preview is more useful """
-        short_description = row['item_description'].split("City Manager", 1)[-1]
-        short_description = self.junk.sub('', short_description)
+        short_description = row['item_description']
+
+        for j in self.junk:
+            short_description = j.sub("", short_description)
+
         short_description = re.sub("\s+", " ", short_description).strip(', ')
 
         if short_description:

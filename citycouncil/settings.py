@@ -33,15 +33,19 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
 # Application definition
 
 INSTALLED_APPS = [
+    # ours
     'overview',
     'comparison',
     'voting_history',
+    'campaign_finance',
+    # others
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'fullurl',
 ]
 

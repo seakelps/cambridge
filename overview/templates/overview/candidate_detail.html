@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Learn More About {{ object.fullname }}{% endblock %}
 
@@ -91,6 +92,76 @@ caption {
         <div id="map" class="map-container">
             <div class="map-alert">
                 <div class="alert alert-warning" data-bind="text:gerror"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Campaign Finance</h2>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="panel panel-money">
+            <div class="panel-heading panel-heading-money">
+                <h3 class="money-amount">
+                    {% if latest_bank_report.ending_balance_display is not None %}
+                        $&nbsp;{{ latest_bank_report.ending_balance_display|intcomma }}
+                    {% else %}
+                        <i>TBD</i>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                Balance
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="panel panel-money">
+            <div class="panel-heading panel-heading-money">
+                <h3 class="money-amount">
+                    {% if money_2017_raised is not None %}
+                        $&nbsp;{{ money_2017_raised|intcomma }}
+                    {% else %}
+                        <i>TBD</i>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                Raised in 2017
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="panel panel-money">
+            <div class="panel-heading panel-heading-money">
+                <h3 class="money-amount">
+                    {% if money_2017_spent is not None %}
+                        $&nbsp;{{ money_2017_spent|intcomma }}
+                    {% else %}
+                        <i>TBD</i>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                Spent in 2017
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+        <div class="panel panel-money">
+            <div class="panel-heading panel-heading-money">
+                <h3 class="money-amount">
+                    {% if money_2017_start is not None %}
+                        $&nbsp;{{ money_2017_start|intcomma }}
+                    {% else %}
+                        <i>TBD</i>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                Jan 1, 2017 Balance
             </div>
         </div>
     </div>

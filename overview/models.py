@@ -10,6 +10,9 @@ class Candidate(models.Model):
     shortname = models.CharField(max_length=200)
     email = models.EmailField(blank=True, default="")
 
+    # primarily for linking to finance records
+    cpf_id = models.IntegerField(null=True, blank=True)
+
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
     facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
 
