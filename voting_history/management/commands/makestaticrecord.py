@@ -2,9 +2,6 @@ import os.path
 import csv
 import re
 import json
-from functools import reduce
-from operator import mul
-from collections import Counter
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -44,16 +41,14 @@ class Command(BaseCommand):
         else:
             row['short_description'] = ''  # js crashes otherwise
 
-    def add_key_vote(self, row):
+    def add_vote_split(self, row):
         """ calculate key votes based on "controversialness". hopefully
         designed to work for larger voter bases """
-        vals = Counter(row[c] for c in self.candidates)
-        vals.pop("Absent", "")
-
-        # normal product runs into issues floor effects, so boosting by 10 to get
-        # it favor many splits of equal size. Might be worth considering the
-        # Absents if this isn't a good enough seed
-        row['key_vote'] = reduce(mul, (10 + x for x in vals.values())) > len(self.candidates) + 10
+        vals = set(row[c] for c in self.candidates)
+        if "Nays" in vals or "Present" in vals:
+            row['vote_split'] = "contested"
+        else:
+            row['vote_split'] = "unanimous"
 
     def handle(self, *args, **kwargs):
         with open("static/voting_record.csv", "r") as fp:
@@ -64,6 +59,6 @@ class Command(BaseCommand):
 
         for row in rows:
             self.add_short_description(row)
-            self.add_key_vote(row)
+            self.add_vote_split(row)
 
         json.dump({"data": rows}, open("static/voting_record.json", "w"), indent=True)

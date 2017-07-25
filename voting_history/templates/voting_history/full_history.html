@@ -47,7 +47,6 @@ tr[role=row] td:nth-child(2) {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -64,13 +63,27 @@ tr[role=row] td:nth-child(2) {
             </span>
         </div>
         <div class="col-md-8">
-            </form>
             <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="key_vote"> Search only controversial votes
-                </label>
+
+            <div style="margin-top: 0.5em">
+                <label class="radio-inline"><input type="radio" name="vote-split" value="all" checked>All</label>
+                <label class="radio-inline"><input type="radio" name="vote-split" value="contested">Contested (13)</label>
+                <label class="radio-inline"><input type="radio" name="vote-split" value="unanimous">Unanimous (363)</label>
             </div>
+
+            {% comment %}
+            <div class="row">
+                <div class="col-md-4">
+                    <select type="select" name="split" class="form-control" style="display: inline-block">
+                        <option value="all" selected disabled>Vote Split</option>
+                        <option value="unanimous">Unanimous</option>
+                        <option value="contested">Contested</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            {% endcomment %}
+
         </div>
     </div>
 
@@ -107,7 +120,7 @@ tr[role=row] td:nth-child(2) {
             <th>Item Description</th>
             <th>Item Body</th>
             <th>Date</th>
-            <th>Key Vote</th>
+            <th>Vote Split</th>
 
             <th>Description</th>
             <th>Devereux</th>
@@ -127,7 +140,7 @@ tr[role=row] td:nth-child(2) {
             <th>Item Description</th>
             <th>Item Body</th>
             <th>Date</th>
-            <th>Key Vote</th>
+            <th>Vote Split</th>
 
             <th>Description</th>
             <th>Devereux</th>
@@ -204,8 +217,12 @@ tr[role=row] td:nth-child(2) {
     $(document).ready(function() {
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
-                var checked = $("[name=key_vote]")[0].checked;
-                return !checked || (data[5] == "true");  // no support for booleans
+                var vote_split = $("[name=vote-split]:checked").val();
+                if (vote_split == 'all') {
+                    return true;
+                } else {
+                    return data[5] == vote_split;
+                }
             }
         );
 
@@ -221,7 +238,7 @@ tr[role=row] td:nth-child(2) {
                 { orderable: false, data: make_search_field, visible: false },
                 { width: "10ch", orderable: true, data: "date", visible: true },
                 { orderable: false, data: makeShorterDescription,  },
-                { searchable: true, visible: false, orderable: false, data: "key_vote" },
+                { searchable: true, visible: false, orderable: false, data: "vote_split" },
 
                 { render:vote, searchable: false, data: "Jan Devereux" },
                 { render:vote, searchable: false, data: "Dennis J Carlone" },
@@ -256,7 +273,7 @@ tr[role=row] td:nth-child(2) {
            applied so the table controls don't also scroll */
         $("#myTable").wrap("<div class='table-responsive'></div>");
 
-        $("[name=key_vote]").on("change", () => dt.draw());
+        $("[name=vote-split]").on("change", () => dt.draw());
 
         $("#voteSearch").on("input", function() {
             /* search the full item body for the key. fold out descriptions if */
