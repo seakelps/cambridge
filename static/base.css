@@ -122,12 +122,3 @@ a.headshot {
 .data_gathered_from:focus .data_highlight {
     color: blue;
 }
-/* did not work as intended - either there is a weird bug, or there's a way to do this */
-/*summary.data_gathered_from:not(:focus)::-webkit-details-marker,
-details.data_gathered_from:not(:focus)::-webkit-details-marker {
-    color: blue;
-}
-summary.data_gathered_from:focus::-webkit-details-marker,
-details.data_gathered_from:focus::-webkit-details-marker {
-    color: red;
-}*/
