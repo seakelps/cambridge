@@ -83,6 +83,34 @@ caption {
                 </tr>
             </tr>
             {% endif %}
+
+            {% if endorsements %}
+                <tr>
+                    <th>Endorsements</th>
+                    <td>
+                        {% for endorsement in endorsements %}
+                            {% if endorsement.link %}
+                            <a href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {% if endorsement.organization.logo %}
+                                        <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo.url }}" />
+                                    {% else %}
+                                        {{ endorsement.organization.name }}
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                <span data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {% if endorsement.organization.logo %}
+                                        <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo.url }}" />
+                                    {% else %}
+                                        {{ endorsement.organization.name }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+
         </table>
     </div>
 </div>
@@ -166,4 +194,11 @@ caption {
         </div>
     </div>
 </div>
+{% endblock %}
+
+
+{% block endscripts %}
+    <script>
+        $("[data-toggle=tooltip]").tooltip();
+    </script>
 {% endblock %}
