@@ -63,7 +63,7 @@ class Candidate(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(max_length=40, unique=True)
-    logo = models.ImageField(blank=True)
+    logo = models.URLField(blank=True, max_length=150)
 
     def __str__(self):
         return self.name
