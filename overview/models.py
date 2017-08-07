@@ -59,3 +59,18 @@ class Candidate(models.Model):
 
     def get_absolute_url(self):
         return reverse("candidate_detail", args=[self.slug])
+
+
+class Organization(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    logo = models.URLField(blank=True, max_length=150)
+
+    def __str__(self):
+        return self.name
+
+
+class Endorsement(models.Model):
+    organization = models.ForeignKey(Organization)
+    candidate = models.ForeignKey(Candidate)
+    date = models.DateField(blank=True, null=True)
+    link = models.URLField(max_length=150, blank=True)

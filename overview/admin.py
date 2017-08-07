@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from .models import Candidate
+from .models import Candidate, Endorsement, Organization
+
+
+class EndorsementInline(admin.TabularInline):
+    model = Endorsement
 
 
 class HasWebsite(admin.SimpleListFilter):
@@ -25,9 +29,22 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite)
     prepopulated_fields = {"slug": ("fullname",)}
 
+    inlines = [EndorsementInline]
+
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
     headshot.allow_tags = True
 
 
+class OrganizationAdmin(admin.ModelAdmin):
+    readonly_fields = ['has_logo']
+    list_display = ('name', 'has_logo')
+    inlines = [EndorsementInline]
+
+    def has_logo(self, obj):
+        return bool(obj.logo)
+    has_logo.boolean = True
+
+
 admin.site.register(Candidate, CandidateAdmin)
+admin.site.register(Organization, OrganizationAdmin)
