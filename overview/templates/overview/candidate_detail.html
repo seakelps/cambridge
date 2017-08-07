@@ -83,6 +83,24 @@ caption {
                 </tr>
             </tr>
             {% endif %}
+
+            {% if endorsements %}
+                <tr>
+                    <th>Endorsements</th>
+                    <td>
+                        {% for endorsement in endorsements %}
+                        <a href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }} on {{ endorsement.date|date }}">
+                            {% if endorsement.organization.logo %}
+                                <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo.url }}" />
+                            {% else %}
+                                {{ endorsement.organization.name }}
+                            {% endif %}
+                        </a>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+
         </table>
     </div>
 </div>
@@ -166,4 +184,11 @@ caption {
         </div>
     </div>
 </div>
+{% endblock %}
+
+
+{% block endscripts %}
+    <script>
+        $("[data-toggle=tooltip]").tooltip();
+    </script>
 {% endblock %}
