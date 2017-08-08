@@ -1,4 +1,7 @@
 /* Plot map of cambridge for candidates
+ * included into the page via django so that we can guarantee initMap is
+ * defined before the maps API tries to call it without making this script a
+ * seperate synchronous download.
  * Right now requires #map element and data stored in initialLocations
  */
 
