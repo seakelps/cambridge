@@ -15,6 +15,7 @@ class Candidate(models.Model):
 
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
     facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
+    endorsements_link = models.URLField(help_text="Endorsements List", blank=True, default="")
 
     # where they live
     address = models.CharField(max_length=200, blank=True)
