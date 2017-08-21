@@ -70,7 +70,13 @@
                             <li class="dropdown-header">Incumbents</li>
                             {% for incumbent in incumbents %}
                                 {% if incumbent.slug %}
-                                    <li><a href="{% url "candidate_detail" incumbent.slug %}">{{ incumbent.fullname }}</a></li>
+                                    <li>
+                                        {% if incumbent.is_running == False %}
+                                            <a href="{% url "candidate_detail" incumbent.slug %}" class="not_running">{{ incumbent.fullname }}</a>
+                                        {% else %}
+                                            <a href="{% url "candidate_detail" incumbent.slug %}">{{ incumbent.fullname }}</a>
+                                        {% endif %}
+                                    </li>
                                 {% else %}
                                     <li class="disabled"><a href="#">{{ incumbent.fullname }}</a></li>
                                 {% endif %}
@@ -78,7 +84,13 @@
                             <li class="dropdown-header">Challengers</li>
                             {% for non_incumbent in non_incumbents %}
                                 {% if non_incumbent.slug %}
-                                    <li><a href="{% url "candidate_detail" non_incumbent.slug %}">{{ non_incumbent.fullname }}</a></li>
+                                    <li>
+                                        {% if non_incumbent.is_running == False %}
+                                            <a href="{% url "candidate_detail" non_incumbent.slug %}" class="not_running">{{ non_incumbent.fullname }}</a>
+                                        {% else %}
+                                            <a href="{% url "candidate_detail" non_incumbent.slug %}">{{ non_incumbent.fullname }}</a>
+                                        {% endif %}
+                                    </li>
                                 {% else %}
                                     <li class="disabled"><a href="#">{{ non_incumbent.fullname }}</a></li>
                                 {% endif %}
