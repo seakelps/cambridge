@@ -9,6 +9,11 @@ body {
     }
 }
 
+/* used in candidate dropdown in header */
+.not_running {
+    text-decoration: line-through;
+}
+
 summary {
     cursor: pointer;  /* it's clickable... make it look clickable */
 }
