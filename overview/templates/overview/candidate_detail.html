@@ -84,7 +84,7 @@ caption {
             </tr>
             {% endif %}
 
-            {% if endorsements %}
+            {% if endorsements or object.endorsements_link %}
                 <tr>
                     <th>Endorsements</th>
                     <td>
@@ -107,6 +107,9 @@ caption {
                                 </span>
                             {% endif %}
                         {% endfor %}
+                        {% if object.endorsements_link %}
+                            <a href="{{ object.endorsements_link }}" target="_blank">more&hellip;</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endif %}
