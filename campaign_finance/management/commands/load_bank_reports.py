@@ -12,11 +12,10 @@ class Command(BaseCommand):
     help = """Load bank reports scraped with `python download_ocpfus.py --bankreports`"""
 
     def add_arguments(self, parser):
-        parser.add_argument('campaign_bank_reports.csv', type=FileType('r'))
+        parser.add_argument(metavar='<campaign_bank_reports.csv>', dest='report_csv', type=FileType('r'))
 
-    def handle(self, *args, **options):
-        fp = open('campaign_finance/migrations/cambridge_bank_reports_2017-07-16.csv', 'r')
-        bank_reports_csv = csv.DictReader(fp)
+    def handle(self, report_csv, *args, **options):
+        bank_reports_csv = csv.DictReader(report_csv)
 
         for row in bank_reports_csv:
 
@@ -29,7 +28,7 @@ class Command(BaseCommand):
                 fdate = timezone.make_aware(datetime.datetime.strptime(row["FilingDate"], "%Y-%m-%dT%H:%M:%S"))
 
             if d.year > 2014:
-                RawBankReport.objects.get_or_create(
+                _, created = RawBankReport.objects.get_or_create(
                     ocpf_id=row["Id"],
                     defaults=dict(
                         report_id=row["ReportId"],
@@ -68,6 +67,8 @@ class Command(BaseCommand):
                         payments_display=unstupify_ocpfus_money_column(row["PaymentsDisplay"]),
                         savings_total_display=unstupify_ocpfus_money_column(row["SavingsTotalDisplay"]),
                     ))
+                if created:
+                    print('created')
 
 
 def unstupify_ocpfus_money_column(col):
