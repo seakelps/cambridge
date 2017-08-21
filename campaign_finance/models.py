@@ -20,6 +20,7 @@ class Committee(models.Model):
 class RawBankReport(models.Model):
 
     # identifying the report in ocpf's system
+    # ocpf_id == report_id in all examples
     ocpf_id = models.IntegerField()  # "id" in ocpf.us
     report_id = models.IntegerField()
     report_type_id = models.IntegerField()
