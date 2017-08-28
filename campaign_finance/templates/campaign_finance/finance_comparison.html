@@ -1,8 +1,27 @@
 {% extends "base.html" %}
+{% load fullurl %}
 {% load static %}
 
-{% block content %}
+{% block title %}What funds are candidates raising?{% endblock %}
+{% block meta_description %}See how much money candidates are raising - and how much they are spending.{% endblock %}
 
+{% block head_extra %}
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="twitter:title" value="What funds are candidates raising?" />
+<meta name="twitter:description" value="See how much money candidates are raising - and how much they are spending." />
+
+<meta name="twitter:image" content="{% fullstatic "campaign_finance/money-2017-08-20.png" %}"/>
+<meta property="og:image" content="{% fullstatic "campaign_finance/money-2017-08-20.png" %}"/>
+
+<meta name="twitter:label1" value="City" />
+<meta name="twitter:data1" value="Cambridge, MA" />
+
+<meta name="twitter:label2" value="As of" />
+<meta name="twitter:data2" value="8/20/2017" />
+{% endblock %}
+
+{% block content %}
 <div class="panel panel-primary">
     <div class="panel-heading">
         What funds are candidates raising?
