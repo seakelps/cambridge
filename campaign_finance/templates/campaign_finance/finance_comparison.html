@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        What funds are candidates raising?
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <span>{# also included in og:description #}
+            See how much money candidates are raising - and how much they are spending.
+            </span>
+        </div>
+
+        <!-- candidate drop down here? -->
+
+    </div>
+
+    <div class="panel-footer">
+        <cite class="text-muted">
+            <span class="data_highlight">Data</span> gathered from the
+            <a href="http://www.ocpf.us" target="_blank">
+                Office of Campaign and Political Finance
+            </a>
+        </cite>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h4>Balance</h4>
+    </div>
+    <div class="col-md-12">
+        <picture class="finance_bubble_graph">
+            <img
+                class="img"
+                style="max-width: 100%"
+                src="{% static 'campaign_finance/money-2017-08-20.png' %}"
+                alt="visual representation of campaign finance raise and spend">
+        </picture>
+    </div>
+</div>
+
+{% endblock %}

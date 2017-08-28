@@ -3,3 +3,9 @@
 from django.shortcuts import render
 
 from .models import RawBankReport
+
+from django.views.generic import TemplateView
+
+
+class FinanceComparison(TemplateView):
+    template_name = "campaign_finance/finance_comparison.html"
