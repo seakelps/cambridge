@@ -19,7 +19,7 @@
 
 <style>
 #map {
-    height: 400px;
+    height: 300px;
     width: 100%;
 }
 caption {
@@ -31,19 +31,49 @@ caption {
 
 {% block content %} 
     <!-- Main component for a primary marketing message or call to action -->
-    <div class="jumbotron row">
-        <div class="col-md-6">
-            <h1>Vote Local!</h1>
-            <p>If you want more information before you cast your 2017 ballot for Cambridge City Council, you've come to the right place. We're compiling everything we can find - from op-eds to campaign finance records. Determine who deserves your #1 vote - or your #{{ num_runners }}!</p>
-            <p>
-                <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">Explore Candidates &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-6">
-            <div id="map" class="map-container">
-                <div class="map-alert">
-                    <div class="alert alert-warning" data-bind="text:gerror"></div>
+    <div class="jumbotron" style="margin-top: -20px">
+        <div class="container">
+            <div class="col-md-6">
+                <h1 style="text-align:center">Vote Local!</h1>
+                <p>We're compiling everything we can find about 2017 Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!</p>
+                <p style="text-align:center">
+                    <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">Explore Candidates &raquo;</a>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div id="map" class="map-container">
+                    <div class="map-alert">
+                        <div class="alert alert-warning" data-bind="text:gerror"></div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Voting</h2>
+                <p>Cambridge has a ranked choice system, which might be different than what you're used to. We've made an illustration of how it works as well as collected other explanations.</p>
+                <p>
+                    <a class="btn btn-default" href="#" role="button">Learn more &raquo;</a>
+                    <a class="btn btn-default" href="https://www.sec.state.ma.us/ovr/" role="button">Register to vote &raquo;</a>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h2>Exploring</h2>
+                <p>In addition to the individual candidate views, we're providing tools to see the whole field. Click on the Explore tab in the above navigation bar, or start with:</p>
+                <p>
+                    <a class="btn btn-default" href="#" role="button">Votes &raquo;</a>
+                    <a class="btn btn-default" href="#" role="button">Finance &raquo;</a>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h2>Comparing</h2>
+                <p>Coming soon: the ability to compare and rank candidates - and save your rankings for later!</p>
+                <!-- <p><a class="btn btn-default" href="#" role="button">Learn more &raquo;</a></p> -->
+                <!-- <a class="btn btn-default" href="#" role="button">Sign up for email updates</a> -->
             </div>
         </div>
     </div>
