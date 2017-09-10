@@ -46,6 +46,10 @@ summary {
     text-align: center;
 }
 
+.candidate_name h1 {
+    font-size: inherit;
+}
+
 .candidate_card .candidate_website {
     overflow: hidden;
     text-overflow: ellipsis;
