@@ -57,7 +57,7 @@ caption {
                 <h2>Voting</h2>
                 <p>Cambridge has a ranked choice system, which might be different than what you're used to. We've made an illustration of how it works as well as collected other explanations.</p>
                 <p>
-                    <a class="btn btn-default" href="#" role="button">Learn more &raquo;</a>
+                    <a class="btn btn-default" href="{% url 'how_to_vote' %}" role="button">Learn more &raquo;</a>
                     <a class="btn btn-default" href="https://www.sec.state.ma.us/ovr/" role="button">Register to vote &raquo;</a>
                 </p>
             </div>
@@ -65,8 +65,8 @@ caption {
                 <h2>Exploring</h2>
                 <p>In addition to the individual candidate views, we're providing tools to see the whole field. Click on the Explore tab in the above navigation bar, or start with:</p>
                 <p>
-                    <a class="btn btn-default" href="#" role="button">Votes &raquo;</a>
-                    <a class="btn btn-default" href="#" role="button">Finance &raquo;</a>
+                    <a class="btn btn-default" href="{% url 'full_history' %}" role="button">Votes &raquo;</a>
+                    <a class="btn btn-default" href="{% url 'finance_comparison' %}" role="button">Finance &raquo;</a>
                 </p>
             </div>
             <div class="col-md-4">
