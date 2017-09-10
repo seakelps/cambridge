@@ -33,17 +33,19 @@ caption {
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron" style="margin-top: -20px">
         <div class="container">
-            <div class="col-md-6">
-                <h1 style="text-align:center">Vote Local!</h1>
-                <p>We're compiling everything we can find about 2017 Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!</p>
-                <p style="text-align:center">
-                    <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">Explore Candidates &raquo;</a>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <div id="map" class="map-container">
-                    <div class="map-alert">
-                        <div class="alert alert-warning" data-bind="text:gerror"></div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h1 style="text-align:center">Vote Local!</h1>
+                    <p>We're compiling everything we can find about 2017 Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!</p>
+                    <p style="text-align:center">
+                        <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">Explore Candidates &raquo;</a>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div id="map" class="map-container">
+                        <div class="map-alert">
+                            <div class="alert alert-warning" data-bind="text:gerror"></div>
+                        </div>
                     </div>
                 </div>
             </div>
