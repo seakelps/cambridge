@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-10 11:20-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: overview/templates/overview/index.html:39
+msgid "Vote Local!"
+msgstr "¡Vote Cerca!"
+
+#: overview/templates/overview/index.html:41
+#, python-format
+msgid ""
+"We're compiling everything we can find about 2017 Cambridge City Council "
+"candidates - from op-eds to campaign finance records. Determine who deserves "
+"your #1, #2, or #9 vote - you've got %(num_runners)s options!"
+msgstr ""
+"Estámos recopilando todo lo que encontramos sobre los candidatos del Consejo "
+"Municipal 2017 &mdash; hace op-eds a estados de cuenta. Averigüe quién "
+"merece su voto #1, #2, or #9 &mdash; tiene su #%(num_runners)s de opciónes!"
+
+#: overview/templates/overview/index.html:43
+msgid "Explore Candidates"
+msgstr "Explorar los Candidatos"
+
+#: overview/templates/overview/index.html:61
+msgid "Voting"
+msgstr "Votando"
+
+#: overview/templates/overview/index.html:62
+msgid ""
+"Cambridge has a ranked choice system, which might be different than what "
+"you're used to. We've made an illustration of how it works as well as "
+"collected other explanations."
+msgstr ""
+
+#: overview/templates/overview/index.html:64
+msgid "Learn More"
+msgstr "Aprender Más"
+
+#: overview/templates/overview/index.html:65
+msgid "Register to vote"
+msgstr "Registrarse como votante"
+
+#: overview/templates/overview/index.html:69
+msgid "Exploring"
+msgstr "Explorar"
+
+#: overview/templates/overview/index.html:70
+msgid ""
+"In addition to the individual candidate views, we're providing tools to see "
+"the whole field. Click on the Explore tab in the above navigation bar, or "
+"start with:"
+msgstr ""
+"Además de ver cada candidato, estámos desarrollando herramienta para ver la "
+"totalidad del conjunto."
+
+#: overview/templates/overview/index.html:72
+msgid "Votes"
+msgstr "Votos"
+
+#: overview/templates/overview/index.html:73
+msgid "Finance"
+msgstr "Estados De Cuenta"
+
+#: overview/templates/overview/index.html:77
+msgid "Comparing"
+msgstr "Comparar"
+
+#: overview/templates/overview/index.html:78
+msgid ""
+"Coming soon: the ability to compare and rank candidates - and save your "
+"rankings for later!"
+msgstr ""
+"Disponible muy pronto: el poder de comparar e ordenar candidatos &mdash; y "
+"salvar el orden!"

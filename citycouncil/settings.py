@@ -57,9 +57,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'citycouncil.urls'
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 
 class InvalidString(str):
