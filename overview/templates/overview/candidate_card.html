@@ -15,10 +15,10 @@
 
     <div class="caption">
         <div class="candidate_name">
-                {{ candidate.fullname }} {% if candidate.is_incumbent %}<i class="text-muted fa fa-institution"></i>{% endif %}
-                <br />
-                {# nbsp to make this take up a line at least #}
-                <a class="candidate_website" target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website|default:"&nbsp;" }}</a>
+            <h1 class="candidate_header">{{ candidate.fullname }}</h1> {% if candidate.is_incumbent %}<i class="text-muted fa fa-institution"></i>{% endif %}
+            <br />
+            {# nbsp to make this take up a line at least #}
+            <a class="candidate_website" target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website|default:"&nbsp;" }}</a>
         </div>
     </div>
 

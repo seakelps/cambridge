@@ -46,6 +46,12 @@ summary {
     text-align: center;
 }
 
+.candidate_header {
+    font-size: inherit;
+    font-weight: inherit;
+    display: inline;
+}
+
 .candidate_card .candidate_website {
     overflow: hidden;
     text-overflow: ellipsis;
