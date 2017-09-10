@@ -48,6 +48,7 @@ summary {
 
 .candidate_name h1 {
     font-size: inherit;
+    display: inline;
 }
 
 .candidate_card .candidate_website {
