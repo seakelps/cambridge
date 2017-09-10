@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-10 11:20-0400\n"
+"POT-Creation-Date: 2017-09-10 14:19-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,3 +88,99 @@ msgid ""
 msgstr ""
 "Disponible muy pronto: el poder de comparar e ordenar candidatos &mdash; y "
 "salvar el orden!"
+
+#: templates/how_to_vote.html:11
+msgid "About the System"
+msgstr "Acerca de la Systema"
+
+#: templates/how_to_vote.html:14
+#, python-format
+msgid ""
+"Cambridge has a ranked choice system, which might be different than what "
+"you&rsquo;re used to.\n"
+"                See our %(prezi)sinteractive presentation</a> to learn more "
+"about Ranked Choice Voting."
+msgstr ""
+
+#: templates/how_to_vote.html:23
+#, fuzzy
+#| msgid "Register to vote"
+msgid "How to Register and Vote"
+msgstr "Registrarse como votante"
+
+#: templates/how_to_vote.html:27
+#, python-format
+msgid "Read more from the %(eleidx)sMassachusetts Elections Division</a>"
+msgstr ""
+
+#: templates/how_to_vote.html:34
+msgid "Registration (deadline Oct. 18)"
+msgstr ""
+
+#: templates/how_to_vote.html:36
+msgid ""
+"\n"
+"                    Although there was a recent court decision against "
+"Massachusetts's registration deadline, \n"
+"                    it seems unlikely that same-day registration will be "
+"implemented for this election season. \n"
+"                    That means <strong>you should register to vote before "
+"the original deadline &mdash; October 18th.</strong>\n"
+"                "
+msgstr ""
+
+#: templates/how_to_vote.html:42
+msgid "There are a couple of ways to register:"
+msgstr ""
+
+#: templates/how_to_vote.html:45
+#, python-format
+msgid ""
+"If you have a valid driver&rsquo;s license, learner&rsquo;s permit, or non-"
+"driver ID issued by Massachusetts, you can %(online)sregister online</a>."
+msgstr ""
+
+#: templates/how_to_vote.html:49
+#, python-format
+msgid ""
+"If you do not, you must register by mail or in person &mdash; details "
+"%(how_reg)shere</a>."
+msgstr ""
+
+#: templates/how_to_vote.html:56
+msgid "Voting Absentee"
+msgstr ""
+
+#: templates/how_to_vote.html:59
+#, python-format
+msgid ""
+"\n"
+"                    You must fill out the absentee %(absentee)sform</a> and "
+"turn it into the Clerk&rsquo;s office.\n"
+"                    You can turn it in by mail, in person, by fax, or as a "
+"scanned attached to an email by 12 p.m. on the day before the election:\n"
+"                "
+msgstr ""
+
+#: templates/how_to_vote.html:66
+msgid "Election Commission"
+msgstr ""
+
+#: templates/how_to_vote.html:75
+msgid "Voting In person"
+msgstr ""
+
+#: templates/how_to_vote.html:78
+#, python-format
+msgid "Look up your polling location %(lookup)shere</a>."
+msgstr ""
+
+#: templates/how_to_vote.html:80
+msgid "On November 7th, go there and vote!"
+msgstr ""
+
+#: templates/how_to_vote.html:81
+msgid ""
+"An ID is not usually required, but sometimes it is &mdash; bring one if you "
+"have it, just in case."
+msgstr ""
