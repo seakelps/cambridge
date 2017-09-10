@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^', include('overview.urls')),
     url(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
-    url(r'^votehowto/$', TemplateView.as_view(template_name="how_to_vote.html"), name="how_to_vote"),
+    url(r'^how-to-vote/$', TemplateView.as_view(template_name="how_to_vote.html"), name="how_to_vote"),
     url(r'^compare/', include('comparison.urls')),
     url(r'^history/', include('voting_history.urls')),
     url(r'^finance/', include('campaign_finance.urls')),
