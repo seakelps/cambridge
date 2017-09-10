@@ -46,8 +46,9 @@ summary {
     text-align: center;
 }
 
-.candidate_name h1 {
+.candidate_header {
     font-size: inherit;
+    font-weight: inherit;
     display: inline;
 }
 
