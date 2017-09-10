@@ -10,9 +10,23 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+
+class HowToVote(TemplateView):
+    template_name = "how_to_vote.html"
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['title'] = "How To Vote in Cambridge Municiple Elections"
+        context['description'] = """Cambridge has a ranked choice system, which
+        might be different than what you're used to. Make sure you register
+        ahead of time and bring an ID with you. """
+        return context
+
+
 urlpatterns = [
     url(r'^', include('overview.urls')),
     url(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
+    url(r'^how-to-vote/$', HowToVote.as_view(), name="how_to_vote"),
     url(r'^compare/', include('comparison.urls')),
     url(r'^history/', include('voting_history.urls')),
     url(r'^finance/', include('campaign_finance.urls')),
