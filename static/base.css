@@ -9,6 +9,11 @@ body {
     }
 }
 
+/* tweaks */
+.splash_header {
+    text-align: center;
+}
+
 /* used in candidate dropdown in header */
 .not_running {
     text-decoration: line-through;
@@ -44,6 +49,12 @@ summary {
 
 .candidate_name {
     text-align: center;
+}
+
+.candidate_header {
+    font-size: inherit;
+    font-weight: inherit;
+    display: inline;
 }
 
 .candidate_card .candidate_website {

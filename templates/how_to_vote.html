@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 
 {% block content %}
@@ -7,51 +8,62 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h2>About the System</h2>
+                <h2>{% blocktrans %}About the System{% endblocktrans %}</h2>
 
-                Cambridge has a ranked choice system, which might be different than what you&rsquo;re used to.
-                See our <a href="https://prezi.com/p/nefetndyg_n1" target="_blank" rel="noopener">interactive presentation</a> to learn more about Ranked Choice Voting. 
+                {% with prezi='<a href="https://prezi.com/p/nefetndyg_n1" target="_blank" rel="noopener">' %}
+                {% blocktrans %}Cambridge has a ranked choice system, which might be different than what you&rsquo;re used to.
+                See our {{ prezi }}interactive presentation</a> to learn more about Ranked Choice Voting.{% endblocktrans %}
+                {% endwith %}
                 <!-- <iframe width="560" height="315" src="https://prezi.com/p/nefetndyg_n1" frameborder="0" allowfullscreen> </iframe> -->
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <h2>How to Register and Vote</h2>
+                <h2>{% blocktrans %}How to Register and Vote{% endblocktrans %}</h2>
 
                 <p>
-                    Read more from the <a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/eleidx.htm">Massachusetts Elections Division</a>
+                    {% with eleidx='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/eleidx.htm">' %}
+                    {% blocktrans %}Read more from the {{ eleidx }}Massachusetts Elections Division</a>{% endblocktrans %}
+                    {% endwith %}
                 </p>
             </div>
 
             <div class="col-md-6">
 
-                <h3>Registration (deadline Oct. 18)</h3>
+                <h3>{% blocktrans %}Registration (deadline Oct. 18){% endblocktrans %}</h3>
 
-                <p>
+                <p>{% blocktrans %}
                     Although there was a recent court decision against Massachusetts's registration deadline, 
                     it seems unlikely that same-day registration will be implemented for this election season. 
                     That means <strong>you should register to vote before the original deadline &mdash; October 18th.</strong>
-                </p>
+                {% endblocktrans %}</p>
 
-                <p>There are a couple of ways to register:</p>
+                <p>{% blocktrans %}There are a couple of ways to register:{% endblocktrans %}</p>
                 <ul>
-                    <li>If you have a valid driver&rsquo;s license, learner&rsquo;s permit, or non-driver ID issued by Massachusetts, you can <a href="https://www.sec.state.ma.us/ovr/" target="_blank" rel="noopener">register online</a>.</li>
-                    <li>If you do not, you must register by mail or in person &mdash; details <a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/eleifv/howreg.htm">here</a>.</li>
+                    {% with online='<a href="https://www.sec.state.ma.us/ovr/" target="_blank" rel="noopener">' %}
+                    <li>{% blocktrans %}If you have a valid driver&rsquo;s license, learner&rsquo;s permit, or non-driver ID issued by Massachusetts, you can {{ online }}register online</a>.{% endblocktrans %}</li>
+                    {% endwith %}
+
+                    {% with how_reg='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/eleifv/howreg.htm">' %}
+                    <li>{% blocktrans %}If you do not, you must register by mail or in person &mdash; details {{ how_reg }}here</a>.{% endblocktrans %}</li>
+                    {% endwith %}
                 </ul>
 
             </div>
             <div class="col-md-6">
 
-                <h3>Voting Absentee</h3>
+                <h3>{% blocktrans %}Voting Absentee{% endblocktrans %}</h3>
 
-                <p>
-                    You must fill out the absentee <a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/elepdf/absentee_ballot.pdf">form</a> and turn it into the Clerk&rsquo;s office.
+                {% with absentee='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/elepdf/absentee_ballot.pdf">' %}
+                <p>{% blocktrans %}
+                    You must fill out the absentee {{ absentee }}form</a> and turn it into the Clerk&rsquo;s office.
                     You can turn it in by mail, in person, by fax, or as a scanned attached to an email by 12 p.m. on the day before the election:
-                </p>
+                {% endblocktrans %}</p>
+                {% endwith %}
 
                 <address class="well well-sm" style="font-variant: small-caps;">
-                    Election Commission
+                    {% blocktrans %}Election Commission{% endblocktrans %}
                     <p>
                         51 Inman ST, First Floor
                         <br>Cambridge, MA 02139
@@ -60,11 +72,13 @@
                     <br>Email: <a href="mailto:elections2@cambridgema.gov">elections2@cambridgema.gov</a>
                 </address>
 
-                <h3>Voting In person</h3>
+                <h3>{% blocktrans %}Voting In person{% endblocktrans %}</h3>
                 <ul>
-                    <li>Look up your polling location <a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/wheredoivotema/bal/MyElectionInfo.aspx">here</a>.</li>
-                    <li>On November 7th, go there and vote!</li>
-                    <li>An ID is not usually required, but sometimes it is &mdash; bring one if you have it, just in case.</li>
+                    {% with lookup='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/wheredoivotema/bal/MyElectionInfo.aspx">' %}
+                    <li>{% blocktrans %}Look up your polling location {{ lookup }}here</a>.{% endblocktrans %}</li>
+                    {% endwith %}
+                    <li>{% blocktrans %}On November 7th, go there and vote!{% endblocktrans %}</li>
+                    <li>{% blocktrans %}An ID is not usually required, but sometimes it is &mdash; bring one if you have it, just in case.{% endblocktrans %}</li>
                 </ul>
 
                 <p><strong>Note</strong>: early voting is <em>not</em> available for municipal elections in Massachusetts!</p>
