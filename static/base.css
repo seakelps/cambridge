@@ -9,6 +9,11 @@ body {
     }
 }
 
+/* tweaks */
+.splash_header {
+    text-align: center;
+}
+
 /* used in candidate dropdown in header */
 .not_running {
     text-decoration: line-through;
