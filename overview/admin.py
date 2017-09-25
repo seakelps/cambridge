@@ -24,6 +24,16 @@ class HasWebsite(admin.SimpleListFilter):
 
 
 class CandidateAdmin(admin.ModelAdmin):
+
+    fieldsets = [
+        (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun']}),
+        ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter']}),
+        ('Out Writing',           {'fields': ['private_notes', 'blurb']}),
+        ('Election',              {'fields': ['is_incumbent', 'is_running', 'political_party']}),
+        ('Housing',               {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_sell_value']}),
+        ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist']}),
+    ]
+
     readonly_fields = ('headshot', )
     list_display = ('fullname', 'is_running', 'is_incumbent', 'cpf_id')
     list_filter = ('is_running', 'is_incumbent', HasWebsite)
