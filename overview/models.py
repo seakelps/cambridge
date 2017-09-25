@@ -22,10 +22,10 @@ class Candidate(models.Model):
 
     # contact, campaign info
     email = models.EmailField(blank=True, default="")
-    campaign_manager = models.CharField(max_length=200, default="")
+    campaign_manager = models.CharField(max_length=200, blank=True, default="")
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
     facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
-    twitter = models.CharField(max_length=100, default="")
+    twitter = models.CharField(max_length=100, blank=True, default="")
 
     # blurbs
     private_notes = models.TextField(blank=True)
