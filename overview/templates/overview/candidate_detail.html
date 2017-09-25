@@ -3,12 +3,12 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Learn More About {{ object.fullname }}{% endblock %}
+{% block title %}Learn More About {{ candidate.fullname }}{% endblock %}
 
-{% block meta_description %}{% if object.is_running %}{{ object.fullname }} is running for Cambridge City Council.{% endif %}{% endblock %}
+{% block meta_description %}{{ candidate.blurb }}{% endblock %}
 
 {% block head_extra %}
-<meta property="og:image" content="{{ object.headshot }}">
+<meta property="og:image" content="{{ candidate.headshot }}">
 
 <script>
     // data for candidate_map.js
@@ -46,9 +46,8 @@
 
     <div class="col-md-8">
         <h1>{{ candidate.fullname }}</h1>
-        <p class="lead">{% lorem 40 w random %}</p>
-        <p>{% lorem 10 w random %}</p>
-        <p>{% lorem 10 w random %}</p>
+
+        {{ candidate.blurb|linebreaks }}
 
         <ul class="list-inline">
             {% if candidate.website %}
@@ -72,12 +71,15 @@
             </li>
             {% endif %}
 
+            {% if candidate.twitter %}
             <li>
                 <a class="btn btn-link" target="_blank" href="#">
                     <span class="fa fa-twitter"></span>
-                    {% lorem 1 w random %}
+                    {{ candidate.twitter }}
+                </a>
                 </a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </div>
@@ -99,21 +101,37 @@
                     <th>Job</th>
                     <td>{% lorem 1 w %}</td>
                 </tr>
+                
+                {% if candidate.education %}
                 <tr>
-                    <th>Degrees</th>
-                    <td>{% lorem 1 w %} from Hahhhhvahhhd</td>
+                    <th>Education</th>
+                    <td>{{ candidate.education }}</td>
                 </tr>
+                {% endif %}
+
                 <tr>
                     <th>Address</th>
-                    <td>{{ candidate.address }}</td>
+                    <td>
+                        {{ candidate.housing_status|title }}s at <strong>{{ candidate.address }}</strong>
+                        {% if candidate.housing_sell_value %}
+                            <br>
+                            <span class="text-muted">Valued at ${{ candidate.housing_sell_value|floatformat:0|intcomma }}</span>
+                        {% endif %}
+                    </td>
                 </tr>
-                <tr>
-                    <th>Rent / Own</th>
-                    <td>{% lorem 1 w random %}</td>
-                </tr>
+
                 <tr>
                     <th>Age</th>
-                    <td>{% lorem 1 w random %}</td>
+                    <td>{{ candidate.date_of_birth|timesince }}
+                        {% if candidate.date_of_birth or candidate.place_of_birth %}
+                        <br>
+                        <span class="text-muted">
+                            Born
+                            {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
+                            {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
+                        </span>
+                        {% endif %}
+                    </td>
                 </tr>
             </tbody>
         </table>
