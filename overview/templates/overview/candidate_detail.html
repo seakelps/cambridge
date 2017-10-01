@@ -102,10 +102,13 @@
                     <th>Incumbent</th>
                     <td>{{ candidate.is_incumbent|yesno:"Yes,No" }}</td>
                 </tr>
+                
+                {% if candidate.job %}
                 <tr>
                     <th>Job</th>
-                    <td>{% lorem 1 w %}</td>
+                    <td>{{ candidate.job }}</td>
                 </tr>
+                {% endif %}
                 
                 {% if candidate.education %}
                 <tr>

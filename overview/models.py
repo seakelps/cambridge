@@ -78,6 +78,7 @@ class Candidate(models.Model):
 
     # lifestyle
     is_cyclist = models.NullBooleanField()
+    job = models.CharField(max_length=200, blank=True)
 
     # and more
     # race? ethnicity? lgbt?
