@@ -2,6 +2,15 @@
 {% load i18n %}
 
 
+{% block head_extra %}
+<style>
+.prezi {
+    width: 100%;
+}
+</style>
+{% endblock %}
+
+
 {% block content %}
 <div class="container">
     <section>
@@ -10,11 +19,24 @@
             <div class="col-md-12">
                 <h2>{% blocktrans %}About the System{% endblocktrans %}</h2>
 
-                {% with prezi='<a href="https://prezi.com/p/nefetndyg_n1" target="_blank" rel="noopener">' %}
-                {% blocktrans %}Cambridge has a ranked choice system, which might be different than what you&rsquo;re used to.
-                See our {{ prezi }}interactive presentation</a> to learn more about Ranked Choice Voting.{% endblocktrans %}
-                {% endwith %}
-                <!-- <iframe width="560" height="315" src="https://prezi.com/p/nefetndyg_n1" frameborder="0" allowfullscreen> </iframe> -->
+                <div class="col-md-6">
+                    {% blocktrans %}Cambridge has a ranked choice system, which might be different than what you&rsquo;re used to.
+                    See our interactive presentation on the right to learn more about Ranked Choice Voting.{% endblocktrans %}
+
+                    <h3>{% blocktrans %}Other resources{% endblocktrans %}</h3>
+
+                    <ul>
+                        <li><a target="_blank" rel="noopener" href="https://www.cambridgema.gov/Departments/electioncommission">
+                            {% blocktrans %}Cambridge Election Commission Homepage{% endblocktrans %}
+                        </a></li>
+                    </ul>
+
+                </div>
+
+                <div class="col-md-6">
+                    {# there's like no decent way to get a poster image for this. if the prezi fails to load run due to noscript, it will just partially load some html #}
+                    <iframe class="prezi" height="400" frameBorder="0" src="https://prezi.com/view/AZKLkl5N4sd4IcQwje3J/embed" webkitallowfullscreen="1" mozallowfullscreen="1" allowfullscreen="1"></iframe> 
+                </div>
             </div>
         </div>
 
@@ -82,21 +104,6 @@
                 </ul>
 
                 <p><strong>Note</strong>: early voting is <em>not</em> available for municipal elections in Massachusetts!</p>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Other resources</h2>
-
-                <ul>
-                    <li><a target="_blank" rel="noopener" href="https://www.cambridgema.gov/Departments/electioncommission">Cambridge Election Commission Homepage</a></li>
-                    <li> Candidate Jan Devereux made an <a target="_blank" rel="noopener" href="https://jandevereux.org/about/about-our-ranked-choice-voting-system/">explanation</a> and a video about the system: <br>
-                        <iframe style="width: 100%" height="315" src="https://www.youtube.com/embed/RR3GXb-N9nM" frameborder="0" allowfullscreen></iframe>
-                        <span class="text-muted">Linking this video does not represent an endorsement</span>
-                    </li>
-                </ul>
-
             </div>
         </div>
     </section>
