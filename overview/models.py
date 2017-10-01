@@ -133,6 +133,9 @@ class Survey(models.Model):
     description = models.CharField(max_length=500)
     link = models.CharField(max_length=500)
 
+    def __str__(self):
+        return self.name
+
 
 class Questionnaire(models.Model):
     survey = models.ForeignKey(Survey)
@@ -143,3 +146,6 @@ class Questionnaire(models.Model):
     @property
     def survey_link(self):
         return self.link or self.survey.link
+
+    def __str__(self):
+        return "{} answering {}".format(self.candidate, self.survey)
