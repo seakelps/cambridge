@@ -27,6 +27,16 @@ class Candidate(models.Model):
     facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
     twitter = models.CharField(max_length=100, blank=True, default="")
 
+    # voting
+    voter_id_number = models.CharField(max_length=100, blank=True, default="")
+    date_of_registration = models.DateField(blank=True, null=True)
+    voter_status_choices = (
+        ('A', 'Active'),
+        ('I', 'Inactive'),
+        ('u',  'Unknown'),
+    )
+    voter_status = models.CharField(max_length=3, choices=voter_status_choices, default='u', blank=True)
+
     # blurbs
     private_notes = models.TextField(blank=True)
     blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)

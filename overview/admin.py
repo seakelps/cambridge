@@ -28,6 +28,7 @@ class CandidateAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun']}),
         ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter']}),
+        ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'political_party']}),
         ('Housing',               {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_sell_value']}),
