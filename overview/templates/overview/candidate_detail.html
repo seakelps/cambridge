@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% load truncate_website from overview %}
+{% load markdown truncate_website from overview %}
 {% load static %}
 {% load humanize %}
 
 {% block title %}Learn More About {{ candidate.fullname }}{% endblock %}
 
-{% block meta_description %}{{ candidate.blurb }}{% endblock %}
+{% block meta_description %}{{ candidate.blurb|markdown }}{% endblock %}
 
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
@@ -47,7 +47,7 @@
     <div class="col-md-8">
         <h1>{{ candidate.fullname }}</h1>
 
-        {{ candidate.blurb|linebreaks }}
+        {{ candidate.blurb|markdown }}
 
         <ul class="list-inline">
             {% if candidate.website %}
