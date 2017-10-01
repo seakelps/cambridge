@@ -23,6 +23,22 @@ class HasWebsite(admin.SimpleListFilter):
             return queryset
 
 
+class HasBlurb(admin.SimpleListFilter):
+    title = "Has Blurb"
+    parameter_name = "has_blurb"
+
+    def lookups(self, request, model_admin):
+        return (("yes", "Yes"), ("no", "No"))
+
+    def queryset(self, request, queryset):
+        if self.value() == "yes":
+            return queryset.exclude(blurb="")
+        elif self.value() == "no":
+            return queryset.filter(blurb="")
+        else:
+            return queryset
+
+
 class CandidateAdmin(admin.ModelAdmin):
 
     fieldsets = [
@@ -35,9 +51,9 @@ class CandidateAdmin(admin.ModelAdmin):
         ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist']}),
     ]
 
-    readonly_fields = ('headshot', )
-    list_display = ('fullname', 'is_running', 'is_incumbent', 'cpf_id')
-    list_filter = ('is_running', 'is_incumbent', HasWebsite)
+    readonly_fields = ('headshot', 'has_blurb')
+    list_display = ('fullname', 'is_running', 'is_incumbent', 'cpf_id', 'has_blurb')
+    list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb)
     prepopulated_fields = {"slug": ("fullname",)}
 
     inlines = [EndorsementInline]
@@ -45,6 +61,10 @@ class CandidateAdmin(admin.ModelAdmin):
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
     headshot.allow_tags = True
+
+    def has_blurb(self, instance):
+        return bool(instance.blurb)
+    has_blurb.boolean = True
 
 
 class OrganizationAdmin(admin.ModelAdmin):
