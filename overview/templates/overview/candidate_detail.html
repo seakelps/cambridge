@@ -28,6 +28,11 @@
     width: 70%; 
     margin-top: 20px;
 }
+
+.survey_link {
+    display: block;
+    margin-top: 0.75em;
+}
 </style>
 {% endblock %}
 
@@ -146,6 +151,7 @@
     </div>
 </div>
 
+{% comment %}
 <div class="row">
     <div class="col-md-12">
         <h2 id="interviews">Interviews</h2>
@@ -239,21 +245,23 @@
         </div>
     </div>
 </div>
+{% endcomment %}
 
 
+{% comment %}
 <div class="row">
     <div class="col-md-12">
         <h2 id="press">Press</h2>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <h3>Authored</h3>
         <ul>
             <li>{% lorem 7 w random %}</li>
         </ul>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <h3>About</h3>
         <ul>
             <li>{% lorem 7 w random %}</li>
@@ -262,13 +270,45 @@
             <li>{% lorem 7 w random %}</li>
         </ul>
     </div>
+</div>
+{% endcomment %}
 
-    <div class="col-md-4">
-        <h3>Questionnaire</h3>
-        <ul>
-            <li>{% lorem 7 w random %}</li>
-            <li>{% lorem 7 w random %}</li>
-        </ul>
+<div class="row">
+    <div class="col-md-12">
+        <h2 id="questionnaires">Questionnaire</h2>
+    </div>
+
+    <div class="col-md-12 table-responsive">
+        <table class="table">
+            <colgroup>
+                <col style="width: 2em"></col>
+            </colgroup>
+            <tbody>
+                {% for questionnaire in candidate.questionnaire_set.all %}
+                <tr>
+                    <td>
+                        <i class="hidden-xs fa fa-2x fa-fw {{ questionnaire.survey.icon_class }}" aria-hidden="true"></i>
+                        <i class="visible-xs fa fa-fw {{ questionnaire.survey.icon_class }}" aria-hidden="true"></i>
+                    </td>
+                    <td>{{ questionnaire.survey.topic }}</td>
+                    <td>
+                        {{ questionnaire.survey.name }}
+                        <a class="fa fa-info-circle" 
+                           href="#!" 
+                           data-toggle="popover" 
+                           data-html="true" 
+                           data-container="body" 
+                           data-title="{{ questionnaire.survey.name }}" 
+                           data-content='{{ questionnaire.survey.description }}<a class="survey_link" target="_blank" href="{{questionnaire.survey_link }}">Read the Survey</a>'></a>
+                    </td>
+                    <td>{% if questionnaire.date %}
+                            {{ questionnaire.date|date:"c" }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -352,5 +392,6 @@
 {% block endscripts %}
     <script>
         $("[data-toggle=tooltip]").tooltip();
+        $("[data-toggle=popover]").popover();
     </script>
 {% endblock %}

@@ -123,3 +123,22 @@ class Endorsement(models.Model):
     candidate = models.ForeignKey(Candidate)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
+
+
+class Survey(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    topic = models.CharField(max_length=40)
+    icon_class = models.CharField(max_length=40, help_text='icon class like "fa-tree"')
+    description = models.CharField(max_length=500)
+    link = models.CharField(max_length=500)
+
+
+class Questionnaire(models.Model):
+    survey = models.ForeignKey(Survey)
+    candidate = models.ForeignKey(Candidate)
+    date = models.DateField(blank=True, null=True)
+    link = models.URLField(max_length=150, blank=True)
+
+    @property
+    def survey_link(self):
+        return self.link or self.survey.link
