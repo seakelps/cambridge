@@ -29,7 +29,7 @@
     margin-top: 20px;
 }
 
-.survey_link {
+.questionnaire_link {
     display: block;
     margin-top: 0.75em;
 }
@@ -278,7 +278,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h2 id="questionnaires">Questionnaire</h2>
+        <h2 id="questionnaires">Questionnaires</h2>
     </div>
 
     <div class="col-md-12 table-responsive">
@@ -287,25 +287,26 @@
                 <col style="width: 2em"></col>
             </colgroup>
             <tbody>
-                {% for questionnaire in candidate.questionnaire_set.all %}
+                {% for response in candidate.questionnaireresponse_set.all %}
                 <tr>
                     <td>
-                        <i class="hidden-xs fa fa-2x fa-fw {{ questionnaire.survey.icon_class }}" aria-hidden="true"></i>
-                        <i class="visible-xs fa fa-fw {{ questionnaire.survey.icon_class }}" aria-hidden="true"></i>
+                        <i class="hidden-xs fa fa-2x fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
+                        <i class="visible-xs fa fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
                     </td>
-                    <td>{{ questionnaire.survey.topic }}</td>
+                    <td>{{ response.questionnaire.topic }}</td>
                     <td>
-                        {{ questionnaire.survey.name }}
+                        {{ response.questionnaire.name }}
                         <a class="fa fa-info-circle" 
                            href="#!" 
                            data-toggle="popover" 
+                           data-trigger="focus"
                            data-html="true" 
                            data-container="body" 
-                           data-title="{{ questionnaire.survey.name }}" 
-                           data-content='{{ questionnaire.survey.description }}<a class="survey_link" target="_blank" href="{{questionnaire.survey_link }}">Read the Survey</a>'></a>
+                           data-title="{{ response.questionnaire.name }}" 
+                           data-content='{{ response.questionnaire.description }}<a class="questionnaire_link" target="_blank" href="{{response.questionnaire_link }}">Read the Survey</a>'></a>
                     </td>
-                    <td>{% if questionnaire.date %}
-                            {{ questionnaire.date|date:"c" }}
+                    <td>{% if response.date %}
+                            {{ response.date|date:"c" }}
                         {% endif %}
                     </td>
                 </tr>

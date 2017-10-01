@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Candidate, Endorsement, Organization, Questionnaire, Survey
+from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire
 
 
-class QuestionnaireInline(admin.TabularInline):
-    model = Questionnaire
+class QuestionnaireResponseInline(admin.TabularInline):
+    model = QuestionnaireResponse
 
 
 class EndorsementInline(admin.TabularInline):
@@ -43,7 +43,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite)
     prepopulated_fields = {"slug": ("fullname",)}
 
-    inlines = [EndorsementInline, QuestionnaireInline]
+    inlines = [EndorsementInline, QuestionnaireResponseInline]
 
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
@@ -60,11 +60,11 @@ class OrganizationAdmin(admin.ModelAdmin):
     has_logo.boolean = True
 
 
-class SurveyAdmin(admin.ModelAdmin):
-    inlines = [QuestionnaireInline]
+class QuestionnaireAdmin(admin.ModelAdmin):
+    inlines = [QuestionnaireResponseInline]
 
 
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Survey, SurveyAdmin)
-admin.site.register(Questionnaire)
+admin.site.register(Questionnaire, QuestionnaireAdmin)
+admin.site.register(QuestionnaireResponse)
