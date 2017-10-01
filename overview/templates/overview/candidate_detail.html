@@ -309,6 +309,8 @@
                         {% endif %}
                     </td>
                 </tr>
+                {% empty %}
+                <caption class="text-muted">This candidate has not filled out any questionnaires that we know about</caption>
                 {% endfor %}
             </tbody>
         </table>
