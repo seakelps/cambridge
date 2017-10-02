@@ -131,7 +131,7 @@ class Questionnaire(models.Model):
     topic = models.CharField(max_length=40)
     icon_class = models.CharField(max_length=40, help_text='icon class like "fa-tree"')
     description = models.CharField(max_length=500)
-    link = models.CharField(max_length=500, blank=True)
+    link = models.URLField(max_length=500, blank=True)
 
     def __str__(self):
         return self.name
@@ -149,3 +149,27 @@ class QuestionnaireResponse(models.Model):
 
     def __str__(self):
         return "{} answering {}".format(self.candidate, self.questionnaire)
+
+
+class VisibleManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(visible=True)
+
+
+class InterviewVideo(models.Model):
+    candidate = models.ForeignKey(Candidate)
+    sort_order = models.FloatField()
+    link = models.URLField(max_length=500, blank=True)
+    visible = models.BooleanField(default=True)
+
+    objects = models.Manager()
+    active = VisibleManager()
+
+    def save(self, *args, **kwargs):
+        if not self.sort_order:
+            self.sort_order = InterviewVideo.objects.aggregate(models.Max('id'))['id__max']
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["sort_order"]

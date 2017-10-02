@@ -54,6 +54,7 @@ class CandidateDetail(DetailView):
                 'main': True
             })
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
+        context['videos'] = self.object.interviewvideo_set(manager="active").all()
 
         if self.object.cpf_id:
             try:

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire
+from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo
 
 
 class QuestionnaireResponseInline(admin.TabularInline):
@@ -9,6 +9,10 @@ class QuestionnaireResponseInline(admin.TabularInline):
 
 class EndorsementInline(admin.TabularInline):
     model = Endorsement
+
+
+class VideoInlineAdmin(admin.TabularInline):
+    model = InterviewVideo
 
 
 class HasWebsite(admin.SimpleListFilter):
@@ -43,7 +47,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite)
     prepopulated_fields = {"slug": ("fullname",)}
 
-    inlines = [EndorsementInline, QuestionnaireResponseInline]
+    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin]
 
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
