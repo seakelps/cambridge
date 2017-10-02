@@ -73,7 +73,7 @@ class Candidate(models.Model):
         ('own',  'Own'),
         ('dorm', 'Dorm'),
         ('o',    'Other'),
-        ('u',    'Unknown')
+        ('u',    'Live')
     )
     housing_status = models.CharField(max_length=4, choices=housing_choices, default='u', blank=True)
     housing_sell_value = models.FloatField(null=True, blank=True)
@@ -88,6 +88,7 @@ class Candidate(models.Model):
 
     # lifestyle
     is_cyclist = models.NullBooleanField()
+    job = models.CharField(max_length=200, blank=True)
 
     # and more
     # race? ethnicity? lgbt?
@@ -133,3 +134,52 @@ class Endorsement(models.Model):
     candidate = models.ForeignKey(Candidate)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
+
+
+class Questionnaire(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    topic = models.CharField(max_length=40)
+    icon_class = models.CharField(max_length=40, help_text='icon class like "fa-tree"')
+    description = models.CharField(max_length=500)
+    link = models.URLField(max_length=500, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class QuestionnaireResponse(models.Model):
+    questionnaire = models.ForeignKey(Questionnaire)
+    candidate = models.ForeignKey(Candidate)
+    date = models.DateField(blank=True, null=True)
+    link = models.URLField(max_length=150, blank=True)
+
+    @property
+    def questionnaire_link(self):
+        return self.link or self.questionnaire.link
+
+    def __str__(self):
+        return "{} answering {}".format(self.candidate, self.questionnaire)
+
+
+class VisibleManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(visible=True)
+
+
+class InterviewVideo(models.Model):
+    candidate = models.ForeignKey(Candidate)
+    sort_order = models.FloatField()
+    link = models.URLField(max_length=500, blank=True)
+    visible = models.BooleanField(default=True)
+
+    objects = models.Manager()
+    active = VisibleManager()
+
+    def save(self, *args, **kwargs):
+        if not self.sort_order:
+            self.sort_order = InterviewVideo.objects.aggregate(models.Max('id'))['id__max']
+
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["sort_order"]

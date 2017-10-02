@@ -1,3 +1,5 @@
+from markdown import markdown
+from django.utils.safestring import mark_safe
 from urllib.parse import urlparse
 
 from django import template
@@ -21,3 +23,9 @@ def truncate_website(value):
         return
     else:
         return value
+
+
+@register.filter(name="markdown")
+@stringfilter
+def md(string):
+    return mark_safe(markdown(string))
