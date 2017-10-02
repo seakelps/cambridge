@@ -143,6 +143,36 @@
                         {% endif %}
                     </td>
                 </tr>
+
+                {% if endorsements or object.endorsements_link %}
+                <tr>
+                    <th>Endorsements</th>
+                    <td>
+                        {% for endorsement in endorsements %}
+                            {% if endorsement.link %}
+                            <a href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                {% if endorsement.organization.logo %}
+                                    <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
+                                {% else %}
+                                    {{ endorsement.organization.name }}
+                                {% endif %}
+                            </a>
+                            {% else %}
+                            <span data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                {% if endorsement.organization.logo %}
+                                    <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
+                                {% else %}
+                                    {{ endorsement.organization.name }}
+                                {% endif %}
+                            </span>
+                            {% endif %}
+                        {% endfor %}
+                        {% if object.endorsements_link %}
+                            <a href="{{ object.endorsements_link }}" target="_blank">more&hellip;</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>
