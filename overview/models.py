@@ -63,7 +63,7 @@ class Candidate(models.Model):
         ('own',  'Own'),
         ('dorm', 'Dorm'),
         ('o',    'Other'),
-        ('u',    'Unknown')
+        ('u',    'Live')
     )
     housing_status = models.CharField(max_length=4, choices=housing_choices, default='u', blank=True)
     housing_sell_value = models.FloatField(null=True, blank=True)

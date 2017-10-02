@@ -120,7 +120,7 @@
                 <tr>
                     <th>Address</th>
                     <td>
-                        {{ candidate.housing_status|title }}s at <strong>{{ candidate.address }}</strong>
+                        {{ candidate.get_housing_status_display|title }}s at <strong>{{ candidate.address }}</strong>
                         {% if candidate.housing_sell_value %}
                             <br>
                             <span class="text-muted">Valued at ${{ candidate.housing_sell_value|floatformat:0|intcomma }}</span>
@@ -154,6 +154,7 @@
     </div>
 </div>
 
+{% if videos %}
 <div class="row">
     <div class="col-md-12">
         <h2 id="interviews">Interviews</h2>
@@ -230,7 +231,7 @@
     </div>
     {% endif %}
 </div>
-
+{% endif %}
 
 {% comment %}
 <div class="row">
@@ -292,7 +293,7 @@
                     </td>
                 </tr>
                 {% empty %}
-                <caption class="text-muted">This candidate has not filled out any questionnaires that we know about</caption>
+                <caption class="text-muted">This candidate has not filled out any questionnaires that we know about.</caption>
                 {% endfor %}
             </tbody>
         </table>
