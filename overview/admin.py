@@ -1,4 +1,6 @@
+import re
 from django.contrib import admin
+from django.forms import ModelForm
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo
 
@@ -13,6 +15,27 @@ class EndorsementInline(admin.TabularInline):
 
 class VideoInlineAdmin(admin.TabularInline):
     model = InterviewVideo
+
+    class form(ModelForm):
+
+        def clean_link(self):
+            link = self.cleaned_data['link']
+
+            video_match = re.match(r"^https://www.youtube.com/watch\?v=([^&]+)", link)
+            if video_match:
+                return "https://www.youtube.com/embed/{}".format(video_match.group(1))
+
+            embed_match = re.match(r"^https://www.youtube.com/embed/([^&]+)", link)
+            if embed_match:
+                return "https://www.youtube.com/embed/{}".format(embed_match.group(1))
+
+            vid_id_match = re.match(r"^[\w_]+$", link)
+            if vid_id_match:
+                return "https://www.youtube.com/embed/{}".format(vid_id_match.group())
+
+        class Meta:
+            model = InterviewVideo
+            exclude = []
 
 
 class HasWebsite(admin.SimpleListFilter):
