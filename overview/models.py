@@ -168,7 +168,7 @@ class VisibleManager(models.Manager):
 
 class InterviewVideo(models.Model):
     candidate = models.ForeignKey(Candidate)
-    sort_order = models.FloatField()
+    sort_order = models.FloatField(blank=True)
     link = models.URLField(max_length=500, blank=True)
     visible = models.BooleanField(default=True)
 
