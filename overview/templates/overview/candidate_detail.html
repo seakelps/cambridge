@@ -28,12 +28,8 @@
     width: 70%; 
     margin-top: 20px;
 }
-
-.questionnaire_link {
-    display: block;
-    margin-top: 0.75em;
-}
 </style>
+
 {% endblock %}
 
 
@@ -296,9 +292,9 @@
     </div>
 
     <div class="col-md-12 table-responsive">
-        <table class="table">
+        <table class="table" style="table-layout: fixed">
             <colgroup>
-                <col style="width: 2em"></col>
+                <col style="width: 3em"></col>
             </colgroup>
             <tbody>
                 {% for response in candidate.questionnaireresponse_set.all %}
@@ -307,7 +303,11 @@
                         <i class="hidden-xs fa fa-2x fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
                         <i class="visible-xs fa fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
                     </td>
-                    <td>{{ response.questionnaire.topic }}</td>
+                    <td class="hoverable">
+                        <a class="hoot" data-original="{{ response.questionnaire.topic }}" target="_blank" href="{{response.questionnaire_link }}">
+                            {{ response.questionnaire.topic }}
+                        </a>
+                    </td>
                     <td>
                         {{ response.questionnaire.name }}
                         <a class="fa fa-info-circle" 
@@ -317,8 +317,9 @@
                            data-html="true" 
                            data-container="body" 
                            data-title="{{ response.questionnaire.name }}" 
-                           data-content='{{ response.questionnaire.description }}<a class="questionnaire_link" target="_blank" href="{{response.questionnaire_link }}">Read the Survey</a>'></a>
+                           data-content='{{ response.questionnaire.description }}'></a>
                     </td>
+
                     <td>{% if response.date %}
                             {{ response.date|date:"c" }}
                         {% endif %}
@@ -413,5 +414,19 @@
     <script>
         $("[data-toggle=tooltip]").tooltip();
         $("[data-toggle=popover]").popover();
+
+        $("td.hoverable").hover(function() {
+            let $td = $(this);
+            let $hoot = $td.find(".hoot");
+            $hoot.fadeOut(200, function() {
+                $hoot.text("View their answers").fadeIn(200);
+            });
+        }, function() {
+            let $td = $(this);
+            let $hoot = $td.find(".hoot");
+            $hoot.fadeOut(200, function() {
+                $hoot.text($hoot.data('original')).fadeIn(200);
+            });
+        });
     </script>
 {% endblock %}
