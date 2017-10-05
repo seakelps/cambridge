@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load markdown truncate_website from overview %}
+{% load yt_direct markdown truncate_website from overview %}
 {% load static %}
 {% load humanize %}
 
@@ -9,6 +9,13 @@
 
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
+
+{% for video in videos %}
+    {% if forloop.first %}
+        <meta property='og:video' content='{{ video.link|yt_direct }}' />
+        <meta property="og:type" content="video"> 
+    {% endif %}
+{% endfor %}
 
 <script>
     // data for candidate_map.js
