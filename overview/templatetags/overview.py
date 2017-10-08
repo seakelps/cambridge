@@ -29,3 +29,11 @@ def truncate_website(value):
 @stringfilter
 def md(string):
     return mark_safe(markdown(string))
+
+
+@register.filter
+@stringfilter
+def yt_direct(video_url):
+    # /embed/ link gets read as flash by facebook
+    # but /v/ link is read as html5
+    return video_url.replace("/embed/", "/v/")
