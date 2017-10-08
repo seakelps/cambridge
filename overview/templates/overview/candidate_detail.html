@@ -163,7 +163,7 @@
                                     {% if endorsement.organization.logo %}
                                         <img src="{{ endorsement.organization.logo }}" />
                                     {% else %}
-                                        {{ endorsement.organization.name }}
+                                        <div>{{ endorsement.organization.name }}</div>
                                     {% endif %}
                                 </a>
                                 {% else %}
@@ -171,14 +171,16 @@
                                     {% if endorsement.organization.logo %}
                                         <img src="{{ endorsement.organization.logo }}" />
                                     {% else %}
-                                        {{ endorsement.organization.name }}
+                                        {# div because display:block for new lines #}
+                                        <div>{{ endorsement.organization.name }}<div>
                                     {% endif %}
                                 </span>
                                 {% endif %}
                             {% endspaceless %}
                         {% endfor %}
                         {% if object.endorsements_link %}
-                            <a href="{{ object.endorsements_link }}" target="_blank">more&hellip;</a>
+                            <hr/>
+                            <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
                         {% endif %}
                     </td>
                 </tr>
