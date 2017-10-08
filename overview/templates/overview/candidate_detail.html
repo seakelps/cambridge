@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load markdown truncate_website from overview %}
+{% load yt_direct markdown truncate_website from overview %}
 {% load static %}
 {% load humanize %}
 
@@ -9,6 +9,13 @@
 
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
+
+{% for video in videos %}
+    {% if forloop.first %}
+        <meta property='og:video' content='{{ video.link|yt_direct }}' />
+        <meta property="og:type" content="video"> 
+    {% endif %}
+{% endfor %}
 
 <script>
     // data for candidate_map.js
@@ -43,6 +50,7 @@
     margin-top: 0.75em;
 }
 </style>
+
 {% endblock %}
 
 
@@ -72,7 +80,7 @@
 
             {% if candidate.email %}
             <li>
-                <a class="candidate_website" target="_blank" href="{{ candidate.email}}">{{ candidate.email }}</a>
+                <a class="candidate_website" target="_blank" href="mailto:{{ candidate.email}}">{{ candidate.email }}</a>
             </li>
             {% endif %}
 
@@ -158,23 +166,25 @@
                     <th>Endorsements</th>
                     <td>
                         {% for endorsement in endorsements %}
-                            {% if endorsement.link %}
-                            <a href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                {% if endorsement.organization.logo %}
-                                    <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
+                            {% spaceless %}
+                                {% if endorsement.link %}
+                                <a href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {% if endorsement.organization.logo %}
+                                        <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
+                                    {% else %}
+                                        {{ endorsement.organization.name }}
+                                    {% endif %}
+                                </a>
                                 {% else %}
-                                    {{ endorsement.organization.name }}
+                                <span data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {% if endorsement.organization.logo %}
+                                        <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
+                                    {% else %}
+                                        {{ endorsement.organization.name }}
+                                    {% endif %}
+                                </span>
                                 {% endif %}
-                            </a>
-                            {% else %}
-                            <span data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                {% if endorsement.organization.logo %}
-                                    <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
-                                {% else %}
-                                    {{ endorsement.organization.name }}
-                                {% endif %}
-                            </span>
-                            {% endif %}
+                            {% endspaceless %}
                         {% endfor %}
                         {% if object.endorsements_link %}
                             <a href="{{ object.endorsements_link }}" target="_blank">more&hellip;</a>
@@ -221,9 +231,9 @@
     </div>
 
     <div class="col-md-12 table-responsive">
-        <table class="table">
+        <table class="table" style="table-layout: fixed">
             <colgroup>
-                <col style="width: 2em"></col>
+                <col style="width: 3em"></col>
             </colgroup>
             <tbody>
                 {% for response in candidate.questionnaireresponse_set.all %}
@@ -232,7 +242,11 @@
                         <i class="hidden-xs fa fa-2x fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
                         <i class="visible-xs fa fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
                     </td>
-                    <td>{{ response.questionnaire.topic }}</td>
+                    <td class="hoverable">
+                        <a class="hoot" data-original="{{ response.questionnaire.topic }}" target="_blank" href="{{response.questionnaire_link }}">
+                            {{ response.questionnaire.topic }}
+                        </a>
+                    </td>
                     <td>
                         {{ response.questionnaire.name }}
                         <a class="fa fa-info-circle" 
@@ -242,8 +256,9 @@
                            data-html="true" 
                            data-container="body" 
                            data-title="{{ response.questionnaire.name }}" 
-                           data-content='{{ response.questionnaire.description }}<a class="questionnaire_link" target="_blank" href="{{response.questionnaire_link }}">Read the Survey</a>'></a>
+                           data-content='{{ response.questionnaire.description }}'></a>
                     </td>
+
                     <td>{% if response.date %}
                             {{ response.date|date:"c" }}
                         {% endif %}
@@ -338,5 +353,19 @@
     <script>
         $("[data-toggle=tooltip]").tooltip();
         $("[data-toggle=popover]").popover();
+
+        $("td.hoverable").hover(function() {
+            let $td = $(this);
+            let $hoot = $td.find(".hoot");
+            $hoot.fadeOut(200, function() {
+                $hoot.text("View their answers").fadeIn(200);
+            });
+        }, function() {
+            let $td = $(this);
+            let $hoot = $td.find(".hoot");
+            $hoot.fadeOut(200, function() {
+                $hoot.text($hoot.data('original')).fadeIn(200);
+            });
+        });
     </script>
 {% endblock %}

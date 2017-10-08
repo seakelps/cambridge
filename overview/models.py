@@ -151,7 +151,7 @@ class QuestionnaireResponse(models.Model):
     questionnaire = models.ForeignKey(Questionnaire)
     candidate = models.ForeignKey(Candidate)
     date = models.DateField(blank=True, null=True)
-    link = models.URLField(max_length=150, blank=True)
+    link = models.URLField(max_length=250, blank=True)
 
     @property
     def questionnaire_link(self):
