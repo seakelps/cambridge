@@ -146,6 +146,10 @@ a.headshot {
     padding: 15px;
 }
 
+.sortable td.sorter {
+    cursor: move;
+}
+
 .sortable tr.fade {
     background-color: #ddd;  /* not working */
 }
@@ -159,7 +163,7 @@ a.headshot {
     counter-increment: rowNumber;
 }
 
-#candidateRankerSidebar table.ordered tr td:last-child::after{
+#candidateRankerSidebar table.ordered tr td:first-child::after{
     content: counter(rowNumber);
     min-width: 1em;
     margin-right: 0.5em;
