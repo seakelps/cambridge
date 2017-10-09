@@ -91,6 +91,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'overview.context_processors.header',
                 'overview.context_processors.constants',
+                'overview.context_processors.sidebar',
             ],
         },
     },

@@ -15,6 +15,7 @@
         <!-- Bootstrap core CSS -->
         <!-- <link href="../../dist/css/bootstrap.min.css" rel="stylesheet"> -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
         <!-- Custom styles for this template -->
         <link href="{% static 'base.css' %}" rel="stylesheet">
@@ -147,11 +148,13 @@
 
         <div class="panel-body">
             <table class="ordered table">
-                <tbody class="sortable">
-                    <tr><td>Dan Lenke</td></tr>
-                    <tr><td>Fabian Andreson</td></tr>
-                    <tr><td>Test MgGee</td></tr>
-                    <tr><td>Sudo McKenziface</td></tr>
+                <tbody id="candidateList" class="sortable">
+                    {% for candidate in runners %}
+                        <tr>
+                            <td class="sorter"><span class="fa fa-unsorted"></span></td>
+                            <td>{{ candidate.fullname }} <a href="{% url "candidate_detail" candidate.slug %}" style="float:right" class="fa fa-external-link"></a></td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
 
@@ -164,7 +167,14 @@
             </ol>
             {% endcomment %}
 
-            <button class="btn btn-block btn-primary"><i class="fa fa-plus"></i> Add Candidate</button>
+			{# placeholder doesn't work and data-placeholder only work with multiple #}
+			<select id="addCandidate" class="btn btn-primary">
+				{# value="" matches when we reset so it reselects the disabled option #}
+				<option value="" selected disabled>+ Add Candidate</option>
+                {% for candidate in runners %}
+                    <option value="{{ candidate.slug }}">{{ candidate.fullname }}</option>
+                {% endfor %}
+			</select>
         </div>
     </div>
 
@@ -176,6 +186,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slideReveal/1.1.2/jquery.slidereveal.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.6.3/html.sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js"></script>
 
     <script>
         $('#candidateRankerSidebar').slideReveal({
@@ -192,8 +203,28 @@
         $('#candidateRankerSidebar').slideReveal("show");
 
         sortable('.sortable', {
-          placeholder: '<tr class="fade"><td colspan="7">&nbsp;</td></tr>'
+          placeholder: '<tr class="fade"><td colspan="7">&nbsp;</td></tr>',
+          handle: ".sorter",
         });
+
+		$("#addCandidate").chosen({
+			width: "100%",
+    		// inherit_select_class: true,
+			classes: "btn btn-primary",
+		}).change(function(_event, selected) {
+			$("#candidateList").append($(`<tr><td>${selected.selected}</td></tr>`));
+			sortable(".sortable");
+			$("#addCandidate").val('').trigger("chosen:updated");
+		});
+
+		// $("#candidateRankerSidebar .chosen-single").removeClass("chosen-single").addClass("btn btn-primary btn-block");
+		// really need to use something like sass or less and @extend btn, btn-primary, btn-block for this
+
+		// Need to open the candidates page from the the scroller
+		// "definitlely not" bucket
+		// remove the candidate from chosen list
+		// clear the chosen input on select
+		// style the chosen input more?
     </script>
 
     {% block endscripts %}{% endblock %}
