@@ -61,6 +61,11 @@
                 </button>
                 <a class="navbar-brand" href="{% url 'index' %}"><span class="header-text">Cambridge Council Candidates</span></a>
             </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="rankCandidates"><span class="fa fa-sort-numeric-asc fa-2x"></span></a></li>
+            </ul>
+
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="{% if request.resolver_match.url_name == 'all' %} active {% endif %}"><a href="{% url 'all' %}">All</a></li>
@@ -133,12 +138,63 @@
         </footer>
     </div> <!-- /container -->
 
+    <div id="candidateRankerSidebar" class="panel panel-info" style="position:relative">
+        <div  class="panel-heading">
+            <a href="#" class="close">&times;</a>
+            <h3>Rank Candidates</h3>
+            <p>Rank candidates as you learn more about them</p>
+        </div>
+
+        <div class="panel-body">
+            <table class="ordered table">
+                <tbody class="sortable">
+                    <tr><td>Dan Lenke</td></tr>
+                    <tr><td>Fabian Andreson</td></tr>
+                    <tr><td>Test MgGee</td></tr>
+                    <tr><td>Sudo McKenziface</td></tr>
+                </tbody>
+            </table>
+
+            {% comment %}
+            <ol class="sortable">
+                <li>Dan Lenke</li>
+                <li>Fabian Andreson</li>
+                <li>Test MgGee</li>
+                <li>Sudo McKenziface</li>
+            </ol>
+            {% endcomment %}
+
+            <button class="btn btn-block btn-primary"><i class="fa fa-plus"></i> Add Candidate</button>
+        </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideReveal/1.1.2/jquery.slidereveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.6.3/html.sortable.min.js"></script>
+
+    <script>
+        $('#candidateRankerSidebar').slideReveal({
+          overlay: true,
+          push: false,
+          position: "right",
+          trigger: $("#rankCandidates")
+        });
+
+        $("#candidateRankerSidebar .close").click(function() {
+            $("#candidateRankerSidebar").slideReveal("hide")
+        });
+
+        $('#candidateRankerSidebar').slideReveal("show");
+
+        sortable('.sortable', {
+          placeholder: '<tr class="fade"><td colspan="7">&nbsp;</td></tr>'
+        });
+    </script>
 
     {% block endscripts %}{% endblock %}
     </body>

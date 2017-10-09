@@ -138,3 +138,31 @@ a.headshot {
 .data_gathered_from:focus .data_highlight {
     color: blue;
 }
+
+
+/* Sorting Sidebar */
+.sortable tr {
+    margin: 5px;
+    padding: 15px;
+}
+
+.sortable tr.fade {
+    background-color: #ddd;  /* not working */
+}
+
+/* table numbering from https://stackoverflow.com/a/17012547/3208419 */
+#candidateRankerSidebar sortable table.ordered {
+    counter-reset: rowNumber;
+}
+
+#candidateRankerSidebar table.ordered tr {
+    counter-increment: rowNumber;
+}
+
+#candidateRankerSidebar table.ordered tr td:last-child::after{
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+    text-align: right;
+    float:right;
+}
