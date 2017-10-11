@@ -8,10 +8,6 @@ def header(request):
     return {'incumbents': incumbents, 'non_incumbents': non_incumbents}
 
 
-def sidebar(request):
-    return {'runners': Candidate.objects.filter(is_running=True)}
-
-
 def constants(request):
     return {
         "CONTACT_EMAIL": settings.CONTACT_EMAIL,
