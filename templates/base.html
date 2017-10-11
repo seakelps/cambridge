@@ -149,10 +149,10 @@
         <div class="panel-body">
             <table class="ordered table">
                 <tbody id="candidateList" class="sortable">
-                    {% for candidate in runners %}
+                    {% for element in my_ranking.annotated_candidates.all %}
                         <tr>
                             <td class="sorter"><span class="fa fa-unsorted"></span></td>
-                            <td>{{ candidate.fullname }} <a href="{% url "candidate_detail" candidate.slug %}" style="float:right" class="fa fa-external-link"></a></td>
+                            <td>{{ element.candidate.fullname }} <a href="{% url "candidate_detail" element.candidate.slug %}" style="float:right" class="fa fa-external-link"></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>
