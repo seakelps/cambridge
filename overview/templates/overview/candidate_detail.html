@@ -36,6 +36,16 @@
     margin-top: 20px;
 }
 
+.endorsement img {
+    max-height: 30px;
+    max-width: 100px;
+}
+
+ul.endorsements {
+    list-style: none;
+    padding-left: 0px;
+}
+
 #theCarousel {
     overflow-x: scroll;
     white-space: nowrap;
@@ -48,6 +58,13 @@
 .questionnaire_link {
     display: block;
     margin-top: 0.75em;
+}
+
+
+@media(max-width:768px) {
+    .dl-horizontal dd {
+        padding-bottom: 20px;
+    }
 }
 </style>
 
@@ -111,88 +128,88 @@
     </div>
 
     <div class="col-md-6">
-        <table class="table table-condensed">
-            <colgroup>
-                <col width="20%"></col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <th>Incumbent</th>
-                    <td>{{ candidate.is_incumbent|yesno:"Yes,No" }}</td>
-                </tr>
-                
-                {% if candidate.job %}
-                <tr>
-                    <th>Job</th>
-                    <td>{{ candidate.job }}</td>
-                </tr>
+        <dl class="dl-horizontal">
+            <dt>Incumbent</dt>
+            <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
+            
+            {% if candidate.job %}
+                <dt>Job</dt>
+                <dd>{{ candidate.job }}</dd>
+            {% endif %}
+            
+            {% if candidate.education %}
+                <dt>Education</dt>
+                <dd>{{ candidate.education }}</dd>
+            {% endif %}
+
+            <dt>Address</dt>
+            <dd>
+                {{ candidate.get_housing_status_display|title }}s at <strong>{{ candidate.address }}</strong>
+                {% if candidate.housing_sell_value %}
+                    <br>
+                    <span class="text-muted">Valued at ${{ candidate.housing_sell_value|floatformat:0|intcomma }}</span>
                 {% endif %}
-                
-                {% if candidate.education %}
-                <tr>
-                    <th>Education</th>
-                    <td>{{ candidate.education }}</td>
-                </tr>
+            </dd>
+
+            <dt>Age</dt>
+            <dd>{{ candidate.date_of_birth|timesince }}
+                {% if candidate.date_of_birth or candidate.place_of_birth %}
+                <br>
+                <span class="text-muted">
+                    Born
+                    {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
+                    {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
+                </span>
                 {% endif %}
+            </dd>
 
-                <tr>
-                    <th>Address</th>
-                    <td>
-                        {{ candidate.get_housing_status_display|title }}s at <strong>{{ candidate.address }}</strong>
-                        {% if candidate.housing_sell_value %}
-                            <br>
-                            <span class="text-muted">Valued at ${{ candidate.housing_sell_value|floatformat:0|intcomma }}</span>
-                        {% endif %}
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>Age</th>
-                    <td>{{ candidate.date_of_birth|timesince }}
-                        {% if candidate.date_of_birth or candidate.place_of_birth %}
-                        <br>
-                        <span class="text-muted">
-                            Born
-                            {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
-                            {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
-                        </span>
-                        {% endif %}
-                    </td>
-                </tr>
-
-                {% if endorsements or object.endorsements_link %}
-                <tr>
-                    <th>Endorsements</th>
-                    <td>
-                        {% for endorsement in endorsements %}
+            {% if endorsements or object.endorsements_link %}
+                <dt>Endorsements</dt>
+                <dd>
+                    {% for endorsement in endorsements %}
+                        {% if endorsement.organization.logo %}
                             {% spaceless %}
                                 {% if endorsement.link %}
-                                <a href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {% if endorsement.organization.logo %}
-                                        <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
-                                    {% else %}
-                                        {{ endorsement.organization.name }}
-                                    {% endif %}
+                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    <img src="{{ endorsement.organization.logo }}" />
                                 </a>
                                 {% else %}
-                                <span data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {% if endorsement.organization.logo %}
-                                        <img style="max-height: 30px; max-width: 30px" src="{{ endorsement.organization.logo }}" />
-                                    {% else %}
-                                        {{ endorsement.organization.name }}
-                                    {% endif %}
+                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    <img src="{{ endorsement.organization.logo }}" />
                                 </span>
                                 {% endif %}
                             {% endspaceless %}
-                        {% endfor %}
-                        {% if object.endorsements_link %}
-                            <a href="{{ object.endorsements_link }}" target="_blank">more&hellip;</a>
                         {% endif %}
-                    </td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
+                    {% endfor %}
+
+                    <ul class="endorsements">
+                    {% for endorsement in endorsements %}
+                        {% if not endoresment.organization.logo %}
+                            {% spaceless %}
+                            <li>
+                                {% if endorsement.link %}
+                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {{ endorsement.organization.name }}
+                                </a>
+                                {% else %}
+                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {# div because display:block for new lines #}
+                                    {{ endorsement.organization.name }}
+                                </span>
+                                {% endif %}
+                            {% endspaceless %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+
+                    {% if object.endorsements_link %}
+                        <hr/>
+                        <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
+                    {% endif %}
+                </dd>
+            {% endif %}
+        </dl>
     </div>
 
     <div class="col-md-6">

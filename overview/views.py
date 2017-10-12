@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
+from django.db.models.functions import Length
 
 from .models import Candidate
 from .utils import get_candidate_locations
@@ -72,6 +73,8 @@ class CandidateDetail(DetailView):
             context['money_2017_spent'] = None
             context['money_2017_raised'] = None
 
-        context['endorsements'] = self.object.endorsement_set.select_related("organization").all()
+        context['endorsements'] = self.object.endorsement_set\
+            .order_by("-organization__logo")\
+            .select_related("organization").all()
 
         return context
