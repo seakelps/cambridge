@@ -79,7 +79,7 @@ class CandidateAdmin(admin.ModelAdmin):
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'political_party']}),
         ('Housing',               {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_sell_value']}),
-        ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist']}),
+        ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist', 'job']}),
     ]
 
     readonly_fields = ('headshot', 'has_blurb')
