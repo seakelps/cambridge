@@ -86,7 +86,7 @@
 
             {% if candidate.facebook %}
             <li>
-                <a class="btn btn-link" target="_blank" href="{{ candidate.facebook }}"</a>
+                <a target="_blank" href="{{ candidate.facebook_url }}">
                     <span class="fa fa-facebook"></span>
                     {{ candidate.facebook }}
                 </a>
@@ -95,10 +95,9 @@
 
             {% if candidate.twitter %}
             <li>
-                <a class="btn btn-link" target="_blank" href="https://twitter.com/{{ candidate.twitter }}">
+                <a target="_blank" href="{{ candidate.twitter_url }}">
                     <span class="fa fa-twitter"></span>
                     {{ candidate.twitter }}
-                </a>
                 </a>
             </li>
             {% endif %}
