@@ -40,6 +40,12 @@
     max-height: 30px;
     max-width: 100px;
 }
+
+ul.endorsements {
+    list-style: none;
+    padding-left: 0px;
+}
+
 </style>
 
 {% endblock %}
@@ -157,27 +163,42 @@
                     <th>Endorsements</th>
                     <td>
                         {% for endorsement in endorsements %}
-                            {% spaceless %}
-                                {% if endorsement.link %}
-                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {% if endorsement.organization.logo %}
+                            {% if endorsement.organization.logo %}
+                                {% spaceless %}
+                                    {% if endorsement.link %}
+                                    <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
                                         <img src="{{ endorsement.organization.logo }}" />
+                                    </a>
                                     {% else %}
-                                        <div>{{ endorsement.organization.name }}</div>
-                                    {% endif %}
-                                </a>
-                                {% else %}
-                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {% if endorsement.organization.logo %}
+                                    <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
                                         <img src="{{ endorsement.organization.logo }}" />
-                                    {% else %}
-                                        {# div because display:block for new lines #}
-                                        <div>{{ endorsement.organization.name }}<div>
+                                    </span>
                                     {% endif %}
-                                </span>
-                                {% endif %}
-                            {% endspaceless %}
+                                {% endspaceless %}
+                            {% endif %}
                         {% endfor %}
+
+                        <ul class="endorsements">
+                        {% for endorsement in endorsements %}
+                            {% if not endoresment.organization.logo %}
+                                {% spaceless %}
+                                <li>
+                                    {% if endorsement.link %}
+                                    <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                        {{ endorsement.organization.name }}
+                                    </a>
+                                    {% else %}
+                                    <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                        {# div because display:block for new lines #}
+                                        {{ endorsement.organization.name }}
+                                    </span>
+                                    {% endif %}
+                                {% endspaceless %}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+
                         {% if object.endorsements_link %}
                             <hr/>
                             <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
