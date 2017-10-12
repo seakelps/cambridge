@@ -24,7 +24,9 @@ class Candidate(models.Model):
     email = models.EmailField(blank=True, default="")
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
-    facebook = models.URLField(help_text="Candidate facebook page", blank=True, default="")
+    facebook = models.CharField(max_length=100, help_text="Candidate facebook page", blank=True, default="")
+
+
     twitter = models.CharField(max_length=100, blank=True, default="")
 
     # voting
@@ -119,6 +121,16 @@ class Candidate(models.Model):
 
     def get_absolute_url(self):
         return reverse("candidate_detail", args=[self.slug])
+
+    @property
+    def facebook_url(self):
+        if self.facebook:
+            return "https://www.facebook.com/{}/".format(self.facebook)
+
+    @property
+    def twitter_url(self):
+        if self.twitter:
+            return "https://twitter.com/{}".format(self.twitter)
 
 
 class Organization(models.Model):

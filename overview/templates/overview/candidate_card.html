@@ -28,7 +28,7 @@
         <a class="btn btn-link" data-toggle="tooltip" data-placement="bottom" title="Learn More" href="{% if candidate.slug %}{% url "candidate_detail" candidate.slug %}{% else %}#{% endif %}"><i class="fa fa-search"></i></a>
         
         {% if candidate.facebook %}
-            <a class="btn btn-link" target="_blank" href="{{ candidate.facebook }}"</a><i class="fa fa-facebook"></i></a>
+            <a class="btn btn-link" target="_blank" href="{{ candidate.facebook_url }}"</a><i class="fa fa-facebook"></i></a>
         {% else %}
             <a class="btn btn-link" disabled><i class="fa fa-facebook"></i></a>
         {% endif %}
