@@ -107,7 +107,9 @@ class Candidate(models.Model):
 
     # primarily for linking to finance records
     cpf_id = models.IntegerField(null=True, blank=True)
-
+    previous_results_map = models.URLField(
+        help_text="previous election results from Davi",
+        blank=True, null=True)
 
     ##### finally, defined functions
     @cached_property
