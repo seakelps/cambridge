@@ -144,10 +144,34 @@ ul.endorsements {
 
             <dt>Address</dt>
             <dd>
-                {{ candidate.get_housing_status_display|title }}s at <strong>{{ candidate.address }}</strong>
+                {{ candidate.get_housing_status_display|title }}s
+                {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
+                at
+                <strong>{{ candidate.address }}</strong>
                 {% if candidate.housing_sell_value %}
                     <br>
-                    <span class="text-muted">Valued at ${{ candidate.housing_sell_value|floatformat:0|intcomma }}</span>
+                    <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
+                        <a class="fa fa-info-circle"
+                           href="#!"
+                           data-toggle="popover"
+                           data-trigger="focus"
+                           data-html="true"
+                           data-container="body"
+                           data-content='Housing value estimated from last assessed property tax value and public real estate estimates (like Zillow). In a couple of cases, that data was not available; it was then estimated based on neighboring properties.'>
+                       </a>
+                    </span>
+                {% endif %}
+                {% if candidate.housing_sale_date %}
+                    <br>
+                    <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
+                        {% if candidate.housing_sale_price %}
+                            for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
+                        {% endif %}
+                        {% if candidate.housing_sale_price_inflation %}
+                        <br>
+                        inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
+                        {% endif %}
+                    </span>
                 {% endif %}
             </dd>
 

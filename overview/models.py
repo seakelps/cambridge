@@ -25,8 +25,6 @@ class Candidate(models.Model):
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
     facebook = models.CharField(max_length=100, help_text="Candidate facebook page", blank=True, default="")
-
-
     twitter = models.CharField(max_length=100, blank=True, default="")
 
     # voting
@@ -78,7 +76,11 @@ class Candidate(models.Model):
         ('u',    'Live')
     )
     housing_status = models.CharField(max_length=4, choices=housing_choices, default='u', blank=True)
+    housing_status_note = models.CharField(max_length=200, null=True, blank=True)
     housing_sell_value = models.FloatField(null=True, blank=True)
+    housing_sale_date = models.DateField(null=True, blank=True)
+    housing_sale_price = models.FloatField(null=True, blank=True)
+    housing_sale_price_inflation = models.FloatField(null=True, blank=True)
 
     ## demographics
     # birth
