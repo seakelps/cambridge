@@ -170,3 +170,8 @@ a.headshot {
     text-align: right;
     float:right;
 }
+
+.selected {
+    border: thin solid black;
+    background: lightyellow;
+}

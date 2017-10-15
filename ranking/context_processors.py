@@ -3,9 +3,12 @@ from .models import RankedList
 
 
 def sidebar(request):
-    ranked_list = RankedList.objects.for_user(request.user)
-
-    return {
+    context = {
         'runners': Candidate.objects.filter(is_running=True),
-        'my_ranking': ranked_list,
     }
+
+    if request.user.is_authenticated:
+        ranked_list = RankedList.objects.for_user(request.user)
+        context['my_ranking'] = ranked_list
+
+    return context

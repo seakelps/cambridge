@@ -50,6 +50,8 @@
 
     <body>
 
+    {% csrf_token %}
+
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -147,14 +149,22 @@
         </div>
 
         <div class="panel-body">
-            <table class="ordered table">
-                <tbody id="candidateList" class="sortable">
-                    {% for element in my_ranking.annotated_candidates.all %}
-                        <tr>
-                            <td class="sorter"><span class="fa fa-unsorted"></span></td>
-                            <td>{{ element.candidate.fullname }} <a href="{% url "candidate_detail" element.candidate.slug %}" style="float:right" class="fa fa-external-link"></a></td>
-                        </tr>
-                    {% endfor %}
+            <table class="ordered table" style="table-layout: fixed">
+                <colgroup>
+                    <col style="width: 4em"></col>
+                    <col style=""></col>
+                    <col style="width: 4em"></col>
+                </colgroup>
+                <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
+                    <tr>
+                        <td class="sorter"><span class="fa fa-unsorted"></span></td>
+                        <td> 
+                            <span data-bind="text:name"></span>
+                        </td>
+                        <td>
+                            <a data-bind="attr: {href: '/candidates/' + slug }" style="float:right" class="fa fa-external-link"></a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -185,37 +195,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slideReveal/1.1.2/jquery.slidereveal.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.6.3/html.sortable.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    {# <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.6.3/html.sortable.min.js"></script> #}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-sortable/1.1.0/knockout-sortable.js"></script>
+    <script src="{% static "candidate_sidebar.js" %}"></script>
 
     <script>
-        $('#candidateRankerSidebar').slideReveal({
-          overlay: true,
-          push: false,
-          position: "right",
-          trigger: $("#rankCandidates")
-        });
-
-        $("#candidateRankerSidebar .close").click(function() {
-            $("#candidateRankerSidebar").slideReveal("hide")
-        });
-
-        $('#candidateRankerSidebar').slideReveal("show");
-
-        sortable('.sortable', {
-          placeholder: '<tr class="fade"><td colspan="7">&nbsp;</td></tr>',
-          handle: ".sorter",
-        });
-
-		$("#addCandidate").chosen({
-			width: "100%",
-    		// inherit_select_class: true,
-			classes: "btn btn-primary",
-		}).change(function(_event, selected) {
-			$("#candidateList").append($(`<tr><td>${selected.selected}</td></tr>`));
-			sortable(".sortable");
-			$("#addCandidate").val('').trigger("chosen:updated");
-		});
+        ko.applyBindings(view_model);
 
 		// $("#candidateRankerSidebar .chosen-single").removeClass("chosen-single").addClass("btn btn-primary btn-block");
 		// really need to use something like sass or less and @extend btn, btn-primary, btn-block for this
@@ -225,6 +213,10 @@
 		// remove the candidate from chosen list
 		// clear the chosen input on select
 		// style the chosen input more?
+
+        {% for element in my_ranking.annotated_candidates.all %}
+        {% endfor %}
+
     </script>
 
     {% block endscripts %}{% endblock %}

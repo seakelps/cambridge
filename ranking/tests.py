@@ -28,12 +28,42 @@ class ListViewTest(TestCase):
 
 
 class MyListTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = overview_factories.User()
+        self.client.force_login(self.user)
 
     def test_create_list(self):
-        user = overview_factories.User()
-        self.client.force_login(user)
-
         resp = self.client.get(reverse("my_ranking"))
         self.assertEqual(resp.status_code, 200)
 
-        self.assertTrue(user.rankedlist)
+        self.assertTrue(self.user.rankedlist)
+
+    def test_save_candidate(self):
+        self.client.get(reverse("my_ranking"))
+        candidate = overview_factories.Candidate()
+
+        resp = self.client.post(reverse("my_ranking"), {
+            "candidates": [candidate.slug]
+        })
+        self.assertEqual(resp.status_code, 302)
+
+        self.assertTrue(self.user.rankedlist)
+        self.assertTrue(self.user.rankedlist.annotated_candidates.all())
+
+    def test_overwrite(self):
+        self.client.get(reverse("my_ranking"))
+
+        self.user.rankedlist.annotated_candidates.create(
+            order=1,
+            candidate=overview_factories.Candidate())
+
+        candidate = overview_factories.Candidate()
+
+        resp = self.client.post(reverse("my_ranking"), {
+            "candidates": [candidate.slug]
+        })
+        self.assertEqual(resp.status_code, 302)
+
+        self.assertTrue(self.user.rankedlist)
+        self.assertTrue(self.user.rankedlist.annotated_candidates.get().candidate, candidate)

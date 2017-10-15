@@ -16,13 +16,26 @@ class RankedListManager(models.Manager):
 
 class RankedList(models.Model):
     objects = RankedListManager()
+
+    last_modified = models.DateTimeField(auto_now=True)
     owner = models.OneToOneField(settings.AUTH_USER_MODEL)
     name = models.CharField(max_length=200)
     slug = models.SlugField()
     public = models.BooleanField(default=False)
 
 
+class RankedElementManager(models.Manager):
+    def overwrite_list(self, candidates):
+        self.all().delete()  # I thought set would do this...
+        print(list(enumerate(candidates)))
+        self.set(
+            [RankedElement(candidate=c, order=i) for i, c in enumerate(candidates)],
+            bulk=False)
+
+
 class RankedElement(models.Model):
+    objects = RankedElementManager()
+
     ranked_list = models.ForeignKey(RankedList, related_name="annotated_candidates")
     candidate = models.ForeignKey("overview.Candidate")
     comment = models.TextField()
@@ -33,3 +46,4 @@ class RankedElement(models.Model):
             ("ranked_list", "candidate"),
             ("ranked_list", "order"),
         )
+        ordering = "order",  # required for overwriting
