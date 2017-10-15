@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Sum, Count, Max
 
+import decimal
+
 
 # information about the actual committee
 class Committee(models.Model):
@@ -184,8 +186,14 @@ def get_candidate_2017_spent(candidate_cpf_id):
         .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
 
     if max_num_reports > 1:
-        print("oh noes!")
-        return None
+        # this is such a hack.
+        # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
+        # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
+        if (candidate_cpf_id == 16062):
+            return agg['expenditure_total_display__sum'] - decimal.Decimal("13472.25")
+        else:
+            print("two bank reports found for the same period! investigate! fix!")
+            return None
 
     return agg['expenditure_total_display__sum']
 
@@ -207,7 +215,13 @@ def get_candidate_2017_raised(candidate_cpf_id):
         .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
 
     if max_num_reports > 1:
-        print("oh noes!")
-        return None
+        # this is such a hack.
+        # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
+        # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
+        if (candidate_cpf_id == 16062):
+            return agg['receipt_total_display__sum'] - decimal.Decimal("13472.25")
+        else:
+            print("two bank reports found for the same period! investigate! fix!")
+            return None
 
     return agg['receipt_total_display__sum']
