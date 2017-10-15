@@ -152,6 +152,18 @@ class Endorsement(models.Model):
     link = models.URLField(max_length=150, blank=True)
 
 
+class PastContribution(models.Model):
+    # who donated
+    candidate = models.ForeignKey(Candidate)
+
+    # to what
+    date = models.DateField(blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True)
+    # this can be complicated but we're keeping it simple for now
+    recipient = models.CharField(max_length=400, null=True, blank=True)
+    note = models.CharField(max_length=400, null=True, blank=True)
+
+
 class Questionnaire(models.Model):
     name = models.CharField(max_length=40, unique=True)
     topic = models.CharField(max_length=40)

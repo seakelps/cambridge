@@ -384,6 +384,46 @@ ul.endorsements {
     <div class="col-md-12">
         To see how this candidate compares, check out <a href="{% url 'finance_comparison' %}">finance comparison</a>.
     </div>
+
+    <!-- money they have given -->
+    <div class="col-md-12">
+        <h3>MA Campaign Donations</h3>
+        <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems">Office of Campaign and Political Finance</a>.</p>
+    </div>
+
+    <div class="col-md-12 table-responsive">
+        <table class="table" style="table-layout: fixed">
+            <tbody>
+                {% for contribution in candidate.pastcontribution_set.all %}
+                <tr>
+                    <td>{% if contribution.date %}
+                            {{ contribution.date|date:"c" }}
+                        {% endif %}
+                    </td>
+                    
+                    <td>{% if contribution.amount %}
+                            ${{ contribution.amount|floatformat:0|intcomma }}
+                        {% endif %}
+                    </td>
+
+                    <td>{% if contribution.recipient %}
+                            {{ contribution.recipient }}
+                        {% endif %}
+                    </td>
+
+                    <td>{% if contribution.note %}
+                            {{ contribution.note }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% empty %}
+                <caption class="text-muted">This candidate has not donated that we know about.</caption>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 {% if candidate.previous_results_map %}

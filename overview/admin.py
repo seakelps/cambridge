@@ -2,11 +2,15 @@ import re
 from django.contrib import admin
 from django.forms import ModelForm
 
-from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo
+from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
 
 
 class QuestionnaireResponseInline(admin.TabularInline):
     model = QuestionnaireResponse
+
+
+class PastContributionInline(admin.TabularInline):
+    model = PastContribution
 
 
 class EndorsementInline(admin.TabularInline):
@@ -87,7 +91,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb)
     prepopulated_fields = {"slug": ("fullname",)}
 
-    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin]
+    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin, PastContributionInline]
 
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
@@ -106,6 +110,10 @@ class OrganizationAdmin(admin.ModelAdmin):
     def has_logo(self, obj):
         return bool(obj.logo)
     has_logo.boolean = True
+
+
+class PastContributionAdmin(admin.ModelAdmin):
+    inlines = [PastContributionInline]
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
