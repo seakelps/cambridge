@@ -11,8 +11,18 @@ function initMap() {
      * it before the id=map exists */
     $(function() {
         var mapDiv = document.getElementById('map');
+
+        center = {lat: 42.3767926, lng: -71.1064153};
+        for (let location of initialLocations) {
+            if (location.main) {
+              center.lat = (center.lat + location.lat) / 2
+              center.lng = (center.lng + location.lng) / 2
+              break
+            }
+        }
+
         map = new google.maps.Map(mapDiv, {
-            center: {lat: 42.3767926, lng: -71.1064153},
+            center,
             navigationControl: false,
             mapTypeControl: false,
             scaleControl: false,
