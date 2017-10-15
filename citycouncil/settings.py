@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'comparison',
     'voting_history',
     'campaign_finance',
+    'ranking',
     # others
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,6 +86,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'overview.context_processors.header',
                 'overview.context_processors.constants',
+                'ranking.context_processors.sidebar',
             ],
         },
     },

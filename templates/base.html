@@ -15,6 +15,7 @@
         <!-- Bootstrap core CSS -->
         <!-- <link href="../../dist/css/bootstrap.min.css" rel="stylesheet"> -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
         <!-- Custom styles for this template -->
         <link href="{% static 'base.css' %}" rel="stylesheet">
@@ -61,6 +62,11 @@
                 </button>
                 <a class="navbar-brand" href="{% url 'index' %}"><span class="header-text">Cambridge Council Candidates</span></a>
             </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="rankCandidates"><span class="fa fa-sort-numeric-asc fa-2x"></span></a></li>
+            </ul>
+
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="{% if request.resolver_match.url_name == 'all' %} active {% endif %}"><a href="{% url 'all' %}">All</a></li>
@@ -133,12 +139,93 @@
         </footer>
     </div> <!-- /container -->
 
+    <div id="candidateRankerSidebar" class="panel panel-info" style="position:relative">
+        <div  class="panel-heading">
+            <a href="#" class="close">&times;</a>
+            <h3>Rank Candidates</h3>
+            <p>Rank candidates as you learn more about them</p>
+        </div>
+
+        <div class="panel-body">
+            <table class="ordered table">
+                <tbody id="candidateList" class="sortable">
+                    {% for element in my_ranking.annotated_candidates.all %}
+                        <tr>
+                            <td class="sorter"><span class="fa fa-unsorted"></span></td>
+                            <td>{{ element.candidate.fullname }} <a href="{% url "candidate_detail" element.candidate.slug %}" style="float:right" class="fa fa-external-link"></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% comment %}
+            <ol class="sortable">
+                <li>Dan Lenke</li>
+                <li>Fabian Andreson</li>
+                <li>Test MgGee</li>
+                <li>Sudo McKenziface</li>
+            </ol>
+            {% endcomment %}
+
+			{# placeholder doesn't work and data-placeholder only work with multiple #}
+			<select id="addCandidate" class="btn btn-primary">
+				{# value="" matches when we reset so it reselects the disabled option #}
+				<option value="" selected disabled>+ Add Candidate</option>
+                {% for candidate in runners %}
+                    <option value="{{ candidate.slug }}">{{ candidate.fullname }}</option>
+                {% endfor %}
+			</select>
+        </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideReveal/1.1.2/jquery.slidereveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.6.3/html.sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js"></script>
+
+    <script>
+        $('#candidateRankerSidebar').slideReveal({
+          overlay: true,
+          push: false,
+          position: "right",
+          trigger: $("#rankCandidates")
+        });
+
+        $("#candidateRankerSidebar .close").click(function() {
+            $("#candidateRankerSidebar").slideReveal("hide")
+        });
+
+        $('#candidateRankerSidebar').slideReveal("show");
+
+        sortable('.sortable', {
+          placeholder: '<tr class="fade"><td colspan="7">&nbsp;</td></tr>',
+          handle: ".sorter",
+        });
+
+		$("#addCandidate").chosen({
+			width: "100%",
+    		// inherit_select_class: true,
+			classes: "btn btn-primary",
+		}).change(function(_event, selected) {
+			$("#candidateList").append($(`<tr><td>${selected.selected}</td></tr>`));
+			sortable(".sortable");
+			$("#addCandidate").val('').trigger("chosen:updated");
+		});
+
+		// $("#candidateRankerSidebar .chosen-single").removeClass("chosen-single").addClass("btn btn-primary btn-block");
+		// really need to use something like sass or less and @extend btn, btn-primary, btn-block for this
+
+		// Need to open the candidates page from the the scroller
+		// "definitlely not" bucket
+		// remove the candidate from chosen list
+		// clear the chosen input on select
+		// style the chosen input more?
+    </script>
 
     {% block endscripts %}{% endblock %}
     </body>

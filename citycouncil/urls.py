@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^history/', include('voting_history.urls')),
     url(r'^finance/', include('campaign_finance.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^ranking/', include('ranking.urls')),
 ]
 
 if settings.DEBUG:
