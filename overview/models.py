@@ -5,6 +5,7 @@ from django.utils.functional import cached_property
 
 
 class Candidate(models.Model):
+    timestamp_modified = models.DateTimeField(auto_now=True)
 
     ##### section: campaign, free text about
     # very very basics
