@@ -44,6 +44,11 @@
           return t;
         }(document, "script", "twitter-wjs"));</script>
 
+        <script>
+            const LOGGED_IN = {{ request.user.is_authenticated|yesno:"true,false" }};
+            const allCandidates = JSON.parse("{{ runnerJson|escapejs }}");
+        </script>
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" media="screen" title="no title" charset="utf-8">
         {% block head_extra %}{% endblock %}
     </head>
@@ -178,13 +183,14 @@
             {% endcomment %}
 
 			{# placeholder doesn't work and data-placeholder only work with multiple #}
-			<select id="addCandidate" class="btn btn-primary">
+			<select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
+            {% comment %}
 				{# value="" matches when we reset so it reselects the disabled option #}
 				<option value="" selected disabled>+ Add Candidate</option>
                 {% for candidate in runners %}
                     <option value="{{ candidate.slug }}">{{ candidate.fullname }}</option>
                 {% endfor %}
-			</select>
+            {% endcomment %}
         </div>
     </div>
 
@@ -200,6 +206,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-sortable/1.1.0/knockout-sortable.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="{% static "candidate_sidebar.js" %}"></script>
 
     <script>
@@ -213,10 +220,6 @@
 		// remove the candidate from chosen list
 		// clear the chosen input on select
 		// style the chosen input more?
-
-        {% for element in my_ranking.annotated_candidates.all %}
-        {% endfor %}
-
     </script>
 
     {% block endscripts %}{% endblock %}
