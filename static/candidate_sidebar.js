@@ -40,6 +40,7 @@ $('#candidateRankerSidebar').slideReveal("show");
 var view_model = new function() {
   var self = this;
   self.allCandidates = allCandidates;
+  self.trash = ko.observableArray(["Drag here to delete"]);
 
   // Using this to avoid re-saving from server update. Couldn't find a better way
   self.serverUpdate = ko.observable(false);

@@ -160,7 +160,7 @@
                     <col style=""></col>
                     <col style="width: 4em"></col>
                 </colgroup>
-                <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
+                <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { containment: '#candidateRankerSidebar', handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
                     <tr>
                         <td class="sorter"><span class="fa fa-unsorted"></span></td>
                         <td> 
@@ -173,24 +173,19 @@
                 </tbody>
             </table>
 
-            {% comment %}
-            <ol class="sortable">
-                <li>Dan Lenke</li>
-                <li>Fabian Andreson</li>
-                <li>Test MgGee</li>
-                <li>Sudo McKenziface</li>
-            </ol>
-            {% endcomment %}
-
-			{# placeholder doesn't work and data-placeholder only work with multiple #}
 			<select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
-            {% comment %}
-				{# value="" matches when we reset so it reselects the disabled option #}
-				<option value="" selected disabled>+ Add Candidate</option>
-                {% for candidate in runners %}
-                    <option value="{{ candidate.slug }}">{{ candidate.fullname }}</option>
-                {% endfor %}
-            {% endcomment %}
+
+			<div style="position: relative">
+				<div id="removeCandidate" data-bind="sortable: { data: trash, options: { handle: '.sorter' }}" style="z-index: 20; min-height: 40px; position: absolute; width: 100%; opacity: 0.5;" class="alert alert-danger">
+					<div style="padding: 0px 10px;">
+						<!-- ko if: typeof($data) == "string" -->
+							<span data-bind="text:name"></span>
+						<!-- /ko -->
+					</div>
+				</div>
+
+				<div style="z-index: 10; position:absolute; left: 20px; top: 10px;">Drag here to delete <i class="pull-right fa fa-trash"></i></div>
+			</div>
         </div>
     </div>
 
@@ -211,15 +206,6 @@
 
     <script>
         ko.applyBindings(view_model);
-
-		// $("#candidateRankerSidebar .chosen-single").removeClass("chosen-single").addClass("btn btn-primary btn-block");
-		// really need to use something like sass or less and @extend btn, btn-primary, btn-block for this
-
-		// Need to open the candidates page from the the scroller
-		// "definitlely not" bucket
-		// remove the candidate from chosen list
-		// clear the chosen input on select
-		// style the chosen input more?
     </script>
 
     {% block endscripts %}{% endblock %}
