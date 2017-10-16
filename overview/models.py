@@ -112,6 +112,9 @@ class Candidate(models.Model):
         help_text="previous election results from Davi",
         blank=True, null=True)
 
+    checked_ocpf_for_contributions = models.NullBooleanField()
+    checked_fec_for_contributions = models.NullBooleanField()
+
     ##### finally, defined functions
     @cached_property
     def headshot(self):
@@ -163,6 +166,9 @@ class PastContribution(models.Model):
     # this can be complicated but we're keeping it simple for now
     recipient = models.CharField(max_length=400, null=True, blank=True)
     note = models.CharField(max_length=400, null=True, blank=True)
+
+    # which state, federal
+    level = models.CharField(max_length=4, null=True, blank=True)
 
 
 class Questionnaire(models.Model):
