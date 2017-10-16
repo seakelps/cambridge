@@ -388,7 +388,7 @@ ul.endorsements {
     <!-- money they have given -->
     <div class="col-md-12">
         <h3>MA Campaign Donations</h3>
-        <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems">Office of Campaign and Political Finance</a>.</p>
+        <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems">Office of Campaign and Political Finance</a> and the <a href="http://classic.fec.gov/finance/disclosure/norindsea.shtml">FEC</a>.</p>
     </div>
 
     <div class="col-md-12 table-responsive">
@@ -418,7 +418,11 @@ ul.endorsements {
                 </tr>
 
                 {% empty %}
-                <caption class="text-muted">This candidate has not donated that we know about.</caption>
+                    {% if candidate.checked_ocpf_for_contributions and candidate.checked_fec_for_contributions %}
+                        <caption class="text-muted">{{ candidate.fullname }} either has not donated or has donated in a way not tracked by the FEC or ocpf.us.</caption>
+                    {% else %}
+                        <caption class="text-muted">We have not yet researched campaign donations by {{ candidate.fullname }}.</caption>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
