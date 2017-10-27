@@ -285,8 +285,8 @@ ul.endorsements {
         <h2 id="questionnaires">Questionnaires</h2>
     </div>
 
-    <div class="col-md-12 table-responsive">
-        <table class="table" style="table-layout: fixed">
+    <div class="col-md-12">
+        <table class="table table-responsive" style="table-layout: fixed">
             <colgroup>
                 <col style="width: 3em"></col>
             </colgroup>
@@ -406,8 +406,8 @@ ul.endorsements {
         <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems">Office of Campaign and Political Finance</a> and the <a href="http://classic.fec.gov/finance/disclosure/norindsea.shtml">FEC</a>.</p>
     </div>
 
-    <div class="col-md-12 table-responsive">
-        <table class="table" style="table-layout: fixed">
+    <div class="col-md-12">
+        <table class="table table-responsive" style="table-layout: fixed">
             <tbody>
                 {% for contribution in candidate.pastcontribution_set.all %}
                 <tr>
