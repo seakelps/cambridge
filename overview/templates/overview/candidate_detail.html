@@ -187,6 +187,21 @@ ul.endorsements {
                 {% endif %}
             </dd>
 
+            {% if candidate.date_of_registration %}
+            <dt>Voter Registration</dt>
+                <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
+                           href="#!"
+                           data-toggle="popover"
+                           data-trigger="focus"
+                           data-html="true"
+                           data-container="body"
+                           data-content='Date candidate first registered to vote in Cambridge.'>
+                       </a>
+                    <br>
+                </dd>
+            {% endif %}
+
+
             {% if endorsements or object.endorsements_link %}
                 <dt>Endorsements</dt>
                 <dd>
