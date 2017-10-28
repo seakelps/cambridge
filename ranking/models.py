@@ -52,7 +52,7 @@ class RankedElement(models.Model):
 
     ranked_list = models.ForeignKey(RankedList, related_name="annotated_candidates")
     candidate = models.ForeignKey("overview.Candidate")
-    comment = models.TextField()
+    comment = models.TextField(blank=True, default="")
     order = models.PositiveSmallIntegerField(blank=True)
 
     class Meta:
