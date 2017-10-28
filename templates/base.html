@@ -175,9 +175,9 @@
         <div class="panel-body">
             <table class="ordered table" style="table-layout: fixed">
                 <colgroup>
-                    <col style="width: 4em"></col>
-                    <col style=""></col>
-                    <col style="width: 4em"></col>
+                    <col style="width: 3em"></col>
+                    <col></col>
+                    <col style="width: 1em"></col>
                 </colgroup>
                 <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { containment: '#candidateRankerSidebar', handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
                     <tr data-bind="attr: {id: 'candidate_' + slug }">
@@ -189,36 +189,49 @@
                             <span data-bind="text:name"></span>
                         </td>
                         <td>
-                            <span data-bind="text:comment().length"></span>
-                            <a data-toggle="modal" data-bind="attr: {'data-target': '#candidate_' + slug + ' .commentModal' }" style="float:right" class="fa fa-address-book-o"></a>
+                            <a data-toggle="modal" data-bind="attr: {'data-target': '#candidate_' + slug + ' .commentModal' }" style="float:right" class="btn btn-link fa fa-address-book-o"></a>
                             
                             <div class="commentModal modal fade" role="dialog">
+                                {# e.keyCode === 13 && e.ctrlKey #}
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
                                             <h4 class="modal-title">
-                                                <span data-bind="text:order"></span>
-                                                <span data-bind="text:name"></span>
+                                                <strong>
+                                                    #<span data-bind="text:order"></span>
+                                                    <span data-bind="text:name"></span>
+                                                </strong>
+                                                <a class="btn btn-link" data-bind="attr: {href: '/candidates/' + slug }">View Profile</a>
+
+                                                <div class="pull-right">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Save</button>
+                                                </div>
                                             </h4>
                                         </div>
 
                                         <form data-bind="submit: updateComment, attr: { action: `/ranking/notes/${slug}/` }" method="POST">
-                                            {% csrf_token %}
                                             <div class="modal-body">
+                                                {% csrf_token %}
                                                 <div class="form-group">
-                                                    <label for="comment">Notes:</label>
+                                                    <label for="comment">My Notes</label>
 
                                                     {# Should this save immeidately to comment? #}
-                                                    <textarea data-bind="value:comment" class="form-control" name="comment"></textarea>
+                                                    <textarea rows=5 placeholder="Why do you like or dislike this candidate?&#10;Anything you want to remember when you're voting?" data-bind="value:comment" class="form-control" name="comment"></textarea>
+                                                </div>
+
+                                                <div class="well">
+                                                    <a data-bind="attr: {href: '/candidates/' + slug }">
+                                                        <img style="max-width:200px; width:20%; float: left; margin: 20px" class="img-circle img-responsive" data-bind="attr: {src: 'http://cambridgecouncilcandidates.com/static/headshots/alanna-mallon.411ea3e08568.png'}">
+                                                    </a>
+                                                    <div style="text-align:left" data-bind="html:'<p>Alanna Mallon was born and raised in Massachusetts, and has lived in Cambridge since 2004.</p><p>She founded the Cambridge Weekend Backpack Program, a service that sends food home with food insecure students, in 2013, and has been a program director at Food For Free since January 2016. She was also an Education Liaison for Cambridge&rsquo;s Office of the Mayor from 2014-2015.</p><p>Before working full time on activism and for nonprofits, she was a designer at companies such as FP Girl and TJX. She is a graduate of Ohio State University.</p>'"></div>
                                                 </div>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="submit" class="btn btn-primary">Save</button>
-                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                                <a class="btn btn-link" data-bind="attr: {href: '/candidates/' + slug }" style="float:right">Profile &raquo;</a>
-                                            </div>
                                         </form>
+
+                                        <div class="modal-footer" style="text-align:center">
+                                            <button class="btn btn-link" style="color:darkred">Delete</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
