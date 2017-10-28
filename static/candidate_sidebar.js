@@ -25,14 +25,12 @@ $('#candidateRankerSidebar').slideReveal({
   overlay: true,
   push: false,
   position: "right",
-  trigger: $("#rankCandidates")
+  trigger: $("#rankCandidates,#grippy")
 });
 
 $("#candidateRankerSidebar .close").click(function() {
   $("#candidateRankerSidebar").slideReveal("hide")
 });
-
-$('#candidateRankerSidebar').slideReveal("show");
 
 
 /* Within sidebar lists */
