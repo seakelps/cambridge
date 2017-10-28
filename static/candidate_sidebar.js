@@ -88,6 +88,10 @@ class Sidebar {
       sidebar.candidates(replacement);
     }
 
+    sidebar.candidates().forEach(function(candidate, order) {
+      candidate.order(order + 1);
+    })
+
     sidebar.serverUpdate(false);
     sidebar.startPolling();
   }

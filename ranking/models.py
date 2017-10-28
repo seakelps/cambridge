@@ -36,7 +36,7 @@ class RankedElementManager(models.Manager):
 
         for ranking in self.all():
             try:
-                ranking.order = candidates.index(ranking.candidate)
+                ranking.order = candidates.index(ranking.candidate) + 1
             except ValueError:
                 ranking.delete()  # TODO keep these around but hide them
             else:

@@ -154,23 +154,6 @@ a.headshot {
     background-color: #ddd;  /* not working */
 }
 
-/* table numbering from https://stackoverflow.com/a/17012547/3208419 */
-#candidateRankerSidebar sortable table.ordered {
-    counter-reset: rowNumber;
-}
-
-#candidateRankerSidebar table.ordered tr {
-    counter-increment: rowNumber;
-}
-
-#candidateRankerSidebar table.ordered tr td:first-child::after{
-    content: counter(rowNumber);
-    min-width: 1em;
-    margin-right: 0.5em;
-    text-align: right;
-    float:right;
-}
-
 .selected {
     border: thin solid black;
     background: lightyellow;

@@ -181,7 +181,10 @@
                 </colgroup>
                 <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { containment: '#candidateRankerSidebar', handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
                     <tr data-bind="attr: {id: 'candidate_' + slug }">
-                        <td class="sorter"><span class="fa fa-unsorted"></span></td>
+                        <td class="sorter">
+                            <span class="fa fa-unsorted"></span>
+                            <span data-bind="text:order"></span>
+                        </td>
                         <td> 
                             <span data-bind="text:name"></span>
                         </td>
@@ -194,7 +197,10 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title" data-bind="text:name"></h4>
+                                            <h4 class="modal-title">
+                                                <span data-bind="text:order"></span>
+                                                <span data-bind="text:name"></span>
+                                            </h4>
                                         </div>
 
                                         <form data-bind="submit: updateComment, attr: { action: `/ranking/notes/${slug}/` }" method="POST">
