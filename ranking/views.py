@@ -3,9 +3,9 @@ from django.utils.decorators import method_decorator
 from django.utils import timezone
 from django.views.decorators.http import last_modified
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django import forms
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -111,12 +111,26 @@ class MyList(LoginRequiredMixin, UpdateView):
 
 
 class UpdateNote(UpdateView):
+    fields = ['comment']
+    model = RankedElement
+
     def get_queryset(self):
-        return self.request.user.annotated_candidates.all()
+        return self.request.user.rankedlist.annotated_candidates.all()
 
     def get_object(self):
         try:
-            return self.get_queryset().get(candidate__slug=self.request.kwargs['slug'])
+            return self.get_queryset().get(candidate__slug=self.kwargs['slug'])
         except RankedElement.DoesNotExist:
-            candidate = Candidate.objects.get(slug=self.request.kwargs['slug'])
+            # not sure if we'll ever need this
+            candidate = Candidate.objects.get(slug=self.kwargs['slug'])
             return self.get_queryset().create(candidate=candidate)
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        if self.request.is_ajax():
+            return HttpResponse("OK", 200)
+        else:
+            return ret
+
+    def get_success_url(self):
+        return reverse("candidate_detail", args=[self.object.candidate.slug])

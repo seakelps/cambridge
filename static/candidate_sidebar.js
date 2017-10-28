@@ -37,14 +37,34 @@ $('#candidateRankerSidebar').slideReveal("show");
 
 /* Within sidebar lists */
 class Candidate {
+  constructor(candidate) {
+    this.slug = candidate.slug;
+    this.name = candidate.name;
+    this.comment = ko.observable(candidate.comment);  // TODO should this already be observable?
 
+    // was hoping to imply the order by position in array, but I think this
+    // will be easier
+    this.order = ko.observable(candidate.order);  // TODO should this already be observable?
+  }
+
+  updateComment() {
+    var candidate = this;
+    $.post({
+      url: `/ranking/notes/${candidate.slug}/`,
+      data: { comment: candidate.comment() },
+    }).success(function() {
+      $(`#candidate_${candidate.slug} .modal`).modal("hide");
+    }).fail(function() {
+      alert("Couldn't save");
+    });
+  }
 }
 
 
 class Sidebar {
   addCandidate(candidate) {
     // Add candidate to "on" list
-    this.candidates.push(candidate);
+    this.candidates.push(new Candidate(candidate));
   }
 
   updateFromResponse(candidates) {
@@ -132,7 +152,8 @@ class Sidebar {
 
   constructor() {
     const sidebar = this;
-    sidebar.allCandidates = allCandidates;
+
+    sidebar.allCandidates = allCandidates.map(x => new Candidate(x));
 
     // Using this to avoid re-saving from server update. Couldn't find a better way
     sidebar.serverUpdate = ko.observable(false);
@@ -161,7 +182,7 @@ class Sidebar {
       return candidates;
     });
 
-    this.startPolling();
+    sidebar.startPolling();
   }
 }
 

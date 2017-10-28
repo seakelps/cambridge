@@ -186,6 +186,7 @@
                             <span data-bind="text:name"></span>
                         </td>
                         <td>
+                            <span data-bind="text:comment().length"></span>
                             <a data-toggle="modal" data-bind="attr: {'data-target': '#candidate_' + slug + ' .commentModal' }" style="float:right" class="fa fa-address-book-o"></a>
                             
                             <div class="commentModal modal fade" role="dialog">
@@ -196,16 +197,18 @@
                                             <h4 class="modal-title" data-bind="text:name"></h4>
                                         </div>
 
-                                        <form data-bind="attr: { action: `/ranking/notes/${slug}/` }" method="POST">
+                                        <form data-bind="submit: updateComment, attr: { action: `/ranking/notes/${slug}/` }" method="POST">
                                             {% csrf_token %}
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                     <label for="comment">Notes:</label>
-                                                    <textarea class="form-control" name="comment"></textarea>
+
+                                                    {# Should this save immeidately to comment? #}
+                                                    <textarea data-bind="value:comment" class="form-control" name="comment"></textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                                                <button type="submit" class="btn btn-primary">Save</button>
                                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                                                 <a class="btn btn-link" data-bind="attr: {href: '/candidates/' + slug }" style="float:right">Profile &raquo;</a>
                                             </div>

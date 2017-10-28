@@ -27,6 +27,18 @@ class ListViewTest(TestCase):
         self.assertEqual(resp.status_code, 200)
 
 
+class OverwriteListTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = factories.RankedList().owner
+
+    def test_swap(self):
+        c1, c2, c3 = overview_factories.Candidate.create_batch(3)
+
+        self.user.rankedlist.annotated_candidates.overwrite_list([c1, c2, c3])
+        self.user.rankedlist.annotated_candidates.overwrite_list([c3, c1, c2])
+
+
 class MyListTest(TestCase):
     def setUp(self):
         super().setUp()
@@ -92,3 +104,21 @@ class MyListTest(TestCase):
 
         self.assertEquals(ranking2.candidate, candidate1)
         self.assertEquals(ranking2.comment, "My spoon is too big")
+
+
+class UpdateNotes(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = factories.RankedList().owner
+        self.client.force_login(self.user)
+        self.candidate = overview_factories.Candidate()
+
+    def test_add_note(self):
+        self.user.rankedlist.annotated_candidates.create(candidate=self.candidate, order=0)
+
+        resp = self.client.post(
+            reverse("update_note", args=[self.candidate.slug]),
+            {"comment": "No Comment"})
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(self.user.rankedlist.annotated_candidates.get().comment, "No Comment")

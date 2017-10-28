@@ -27,6 +27,13 @@ class RankedList(models.Model):
 class RankedElementManager(models.Manager):
     def overwrite_list(self, candidates):
         updated = set()
+
+        # hack to make sure that when we assign something like order=1, there
+        # are no elements on the list have order=1 before they get reassigned
+        for order, ranking in enumerate(self.all(), start=1000):
+            ranking.order = order
+            ranking.save()
+
         for ranking in self.all():
             try:
                 ranking.order = candidates.index(ranking.candidate)
