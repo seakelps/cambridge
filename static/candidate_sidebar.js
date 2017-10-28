@@ -40,6 +40,10 @@ class Candidate {
   constructor(candidate) {
     this.slug = candidate.slug;
     this.name = candidate.name;
+    this.blurb = candidate.blurb;
+    this.img_url = candidate.img_url;
+    this.img_alt = candidate.img_alt;
+
     this.comment = ko.observable(candidate.comment);  // TODO should this already be observable?
 
     // was hoping to imply the order by position in array, but I think this
