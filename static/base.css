@@ -138,3 +138,8 @@ a.headshot {
 .data_gathered_from:focus .data_highlight {
     color: blue;
 }
+
+/* data table paragraph tweaking */
+.contributions p {
+    margin-bottom: 0;
+}

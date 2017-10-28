@@ -2,6 +2,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.db.models import Sum
 
 
 class Candidate(models.Model):
@@ -139,6 +140,11 @@ class Candidate(models.Model):
     def twitter_url(self):
         if self.twitter:
             return "https://twitter.com/{}".format(self.twitter)
+
+    @property
+    def total_contributions_less_fees(self):
+        contributions = PastContribution.objects.filter(candidate=self).exclude(note__contains='access fee').aggregate(Sum('amount'))
+        return contributions["amount__sum"]
 
 
 class Organization(models.Model):
