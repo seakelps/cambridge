@@ -49,6 +49,8 @@ class CandidateListField(forms.Field):
 
 
 class EditForm(forms.ModelForm):
+    """ Only used for reordering candidates! """
+
     candidates = CandidateListField()
 
     def save(self):

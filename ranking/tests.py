@@ -44,7 +44,7 @@ class MyListTest(TestCase):
         candidate = overview_factories.Candidate()
 
         resp = self.client.post(reverse("my_ranking"), {
-            "candidates": [candidate.slug]
+            "candidates": candidate.slug
         })
         self.assertEqual(resp.status_code, 302)
 
@@ -61,9 +61,34 @@ class MyListTest(TestCase):
         candidate = overview_factories.Candidate()
 
         resp = self.client.post(reverse("my_ranking"), {
-            "candidates": [candidate.slug]
+            "candidates": candidate.slug
         })
         self.assertEqual(resp.status_code, 302)
 
         self.assertTrue(self.user.rankedlist)
         self.assertTrue(self.user.rankedlist.annotated_candidates.get().candidate, candidate)
+
+    def test_keep_comment(self):
+        self.client.get(reverse("my_ranking"))
+
+        candidate1, candidate2 = overview_factories.Candidate.create_batch(2)
+
+        self.user.rankedlist.annotated_candidates.create(
+            order=1,
+            comment="My spoon is too big",
+            candidate=candidate1)
+
+        resp = self.client.post(reverse("my_ranking"), {
+            "candidates": ','.join([candidate2.slug, candidate1.slug])
+        })
+        self.assertEqual(resp.status_code, 302)
+
+        self.assertTrue(self.user.rankedlist)
+
+        ranking1, ranking2 = self.user.rankedlist.annotated_candidates.all()
+
+        self.assertEquals(ranking1.candidate, candidate2)
+        self.assertFalse(ranking1.comment)
+
+        self.assertEquals(ranking2.candidate, candidate1)
+        self.assertEquals(ranking2.comment, "My spoon is too big")

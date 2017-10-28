@@ -26,11 +26,18 @@ class RankedList(models.Model):
 
 class RankedElementManager(models.Manager):
     def overwrite_list(self, candidates):
-        self.all().delete()  # I thought set would do this...
-        print(list(enumerate(candidates)))
-        self.set(
-            [RankedElement(candidate=c, order=i) for i, c in enumerate(candidates)],
-            bulk=False)
+        updated = set()
+        for ranking in self.all():
+            try:
+                ranking.order = candidates.index(ranking.candidate)
+            except ValueError:
+                ranking.delete()  # TODO keep these around but hide them
+            else:
+                updated.add(ranking.candidate)
+                ranking.save()
+
+        for new_candidate in set(candidates) - updated:
+            self.create(candidate=new_candidate, order=candidates.index(new_candidate))
 
 
 class RankedElement(models.Model):
