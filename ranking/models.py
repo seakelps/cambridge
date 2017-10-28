@@ -30,9 +30,7 @@ class RankedElementManager(models.Manager):
 
         # hack to make sure that when we assign something like order=1, there
         # are no elements on the list have order=1 before they get reassigned
-        for order, ranking in enumerate(self.all(), start=1000):
-            ranking.order = order
-            ranking.save()
+        self.all().update(order=models.F("order") + 1000)
 
         for ranking in self.all():
             try:
@@ -44,7 +42,7 @@ class RankedElementManager(models.Manager):
                 ranking.save()
 
         for new_candidate in set(candidates) - updated:
-            self.create(candidate=new_candidate, order=candidates.index(new_candidate))
+            self.create(candidate=new_candidate, order=candidates.index(new_candidate) + 1)
 
 
 class RankedElement(models.Model):
