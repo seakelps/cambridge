@@ -66,7 +66,7 @@ class Candidate {
 class Sidebar {
   addCandidate(candidate) {
     // Add candidate to "on" list
-    this.candidates.push(new Candidate(candidate));
+    this.candidates.push(candidate);
   }
 
   updateFromResponse(candidates) {
