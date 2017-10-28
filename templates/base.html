@@ -149,8 +149,27 @@
     <div id="candidateRankerSidebar" class="panel panel-info" style="position:relative">
         <div  class="panel-heading">
             <a href="#" class="close">&times;</a>
-            <h3>Rank Candidates</h3>
-            <p>Rank candidates as you learn more about them</p>
+            <h3>Build Your Ballet</h3>
+
+            <a data-toggle="collapse" data-target="#instructions">learn more&hellip;</a>
+            <div id="instructions" class="collapse">
+                <dl>
+                    <dt>Adding</dt>
+                    <dd>{% lorem 10 w %}</dd>
+
+                    <dt>Ranking</dt>
+                    <dd>{% lorem 10 w %}</dd>
+
+                    <dt>Deleting</dt>
+                    <dd>Click the <i class="fa fa-address-book-o"></i> to open the detail view and delete the candidate from your list</dd>
+
+                    <dt>Notes</dt>
+                    <dd>Click the <i class="fa fa-address-book-o"></i> to add a note</dd>
+
+                    <dt>Our Data Policy</dt>
+                    <dd>{% lorem 10 w %}</dd>
+                </dl>
+            </div>
         </div>
 
         <div class="panel-body">
@@ -161,31 +180,46 @@
                     <col style="width: 4em"></col>
                 </colgroup>
                 <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { containment: '#candidateRankerSidebar', handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
-                    <tr>
+                    <tr data-bind="attr: {id: 'candidate_' + slug }">
                         <td class="sorter"><span class="fa fa-unsorted"></span></td>
                         <td> 
                             <span data-bind="text:name"></span>
                         </td>
                         <td>
-                            <a data-bind="attr: {href: '/candidates/' + slug }" style="float:right" class="fa fa-external-link"></a>
+                            <a data-toggle="modal" data-bind="attr: {'data-target': '#candidate_' + slug + ' .commentModal' }" style="float:right" class="fa fa-address-book-o"></a>
+                            
+                            <div class="commentModal modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title" data-bind="text:name"></h4>
+                                        </div>
+
+                                        <form data-bind="attr: { action: `/ranking/notes/${slug}/` }" method="POST">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="comment">Notes:</label>
+                                                    <textarea class="form-control" name="comment"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                                <a class="btn btn-link" data-bind="attr: {href: '/candidates/' + slug }" style="float:right">Profile &raquo;</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </td>
                     </tr>
                 </tbody>
             </table>
 
 			<select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
-
-			<div style="position: relative">
-				<div id="removeCandidate" data-bind="sortable: { data: trash, options: { handle: '.sorter' }}" style="z-index: 20; min-height: 40px; position: absolute; width: 100%; opacity: 0.5;" class="alert alert-danger">
-					<div style="padding: 0px 10px;">
-						<!-- ko if: typeof($data) == "string" -->
-							<span data-bind="text:name"></span>
-						<!-- /ko -->
-					</div>
-				</div>
-
-				<div style="z-index: 10; position:absolute; left: 20px; top: 10px;">Drag here to delete <i class="pull-right fa fa-trash"></i></div>
-			</div>
         </div>
     </div>
 

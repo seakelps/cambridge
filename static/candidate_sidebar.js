@@ -36,73 +36,53 @@ $('#candidateRankerSidebar').slideReveal("show");
 
 
 /* Within sidebar lists */
+class Candidate {
 
-var view_model = new function() {
-  var self = this;
-  self.allCandidates = allCandidates;
-  self.trash = ko.observableArray(["Drag here to delete"]);
+}
 
-  // Using this to avoid re-saving from server update. Couldn't find a better way
-  self.serverUpdate = ko.observable(false);
-  self.selectedCandidate = ko.observable();
-  self.selectedCandidate.subscribe((new_value) => {
-    // also gets triggered on clearing the input
-    if (new_value) {
-      self.addCandidate(new_value);
+
+class Sidebar {
+  addCandidate(candidate) {
+    // Add candidate to "on" list
+    this.candidates.push(candidate);
+  }
+
+  updateFromResponse(candidates) {
+    // Update full data structure from server data
+    const sidebar = this;
+
+    if (sidebar.pollingId) {
+      // stop polling while updating
+      clearInterval(sidebar.pollingId);
+      sidebar.pollingId = undefined;
     }
-  })
-
-  self.candidates = ko.observableArray()
-  self.candidates.subscribe(new_value => {
-    if (!self.serverUpdate()) {
-      self.save(new_value);
-    }
-  });
-
-  self.remainingCandidates = ko.computed(() => {
-    let candidates = [];
-    for (candidate of self.allCandidates) {
-      if (!self.candidates().find(x => x.slug == candidate.slug)) {
-        candidates.push(candidate);
-      }
-    }
-    return candidates;
-  });
-
-  self.addCandidate = function(candidate) {
-    self.candidates.push(candidate);
-  };
-
-  self.updateFromResponse = function(candidates) {
-    if (self.pollingId) {
-      clearInterval(self.pollingId);
-      self.pollingId = undefined;
-    }
-    self.serverUpdate(true);
+    sidebar.serverUpdate(true);
 
     let replacement = candidates.map(slug => {
-			return self.allCandidates.find(c => c.slug == slug)
+      return sidebar.allCandidates.find(c => c.slug == slug)
     })
 
     // knockout will trigger update even if nothing's changed, but that screws up the draggable
-    if (!_.isEqual(self.candidates(), replacement)) {
+    if (!_.isEqual(sidebar.candidates(), replacement)) {
       console.log('replacing');
-      self.candidates(replacement);
+      sidebar.candidates(replacement);
     }
 
-    self.serverUpdate(false);
-    self.startPolling();
-  };
-
-  // refresh from server every 1 second
-  self.startPolling = function() {
-    // returns id of interval
-    self.pollingId = setInterval(() => {
-      self.loadFromServer();
-    }, 1000);
+    sidebar.serverUpdate(false);
+    sidebar.startPolling();
   }
 
-  self.save = function(new_value) {
+  startPolling() {
+    // refresh from server every 1 second
+    const sidebar = this;
+
+    // returns id of interval for later cancelling
+    sidebar.pollingId = setInterval(() => sidebar.loadFromServer(), 1000);
+  }
+
+  save(new_value) {
+    /* save list ordering */
+    const sidebar = this;
     if (LOGGED_IN) {
       $.post({
         url: "/ranking/mine/",
@@ -110,7 +90,7 @@ var view_model = new function() {
           candidates: new_value.map(x => x.slug).join(',')
         },
       }).done(function(response){
-        self.updateFromResponse(response.candidates)
+        sidebar.updateFromResponse(response.candidates)
       });
     } else {
       localStorage.setItem('candidateList', JSON.stringify((
@@ -118,9 +98,11 @@ var view_model = new function() {
         new_value.map(x => x.slug)
       )));
     }
-  };
+  }
 
-  self.loadFromServer = function(){
+  loadFromServer() {
+    const sidebar = this;
+
     if (LOGGED_IN) {
       return $.get({
         url: "/ranking/mine/",
@@ -128,7 +110,7 @@ var view_model = new function() {
       }).done(function(response, status){
         // don't update when not modified
         if (status == "success") {
-          self.updateFromResponse(response.candidates);
+          sidebar.updateFromResponse(response.candidates);
         }
       });
     } else {
@@ -144,9 +126,43 @@ var view_model = new function() {
       }
 
       // triggers update regardless of whether there is a change for now
-      self.updateFromResponse(candidates);
+      sidebar.updateFromResponse(candidates);
     }
   }
 
-  self.startPolling();
+  constructor() {
+    const sidebar = this;
+    sidebar.allCandidates = allCandidates;
+
+    // Using this to avoid re-saving from server update. Couldn't find a better way
+    sidebar.serverUpdate = ko.observable(false);
+    sidebar.selectedCandidate = ko.observable();
+    sidebar.selectedCandidate.subscribe((new_value) => {
+      // also gets triggered on clearing the input
+      if (new_value) {
+        sidebar.addCandidate(new_value);
+      }
+    })
+
+    sidebar.candidates = ko.observableArray()
+    sidebar.candidates.subscribe(new_value => {
+      if (!sidebar.serverUpdate()) {
+        sidebar.save(new_value);
+      }
+    });
+
+    sidebar.remainingCandidates = ko.computed(() => {
+      let candidates = [];
+      for (let candidate of sidebar.allCandidates) {
+        if (!sidebar.candidates().find(x => x.slug == candidate.slug)) {
+          candidates.push(candidate);
+        }
+      }
+      return candidates;
+    });
+
+    this.startPolling();
+  }
 }
+
+var view_model = new Sidebar();

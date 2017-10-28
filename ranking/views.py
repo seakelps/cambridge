@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-from .models import RankedList
+from .models import RankedList, RankedElement
 from overview.models import Candidate
 
 
@@ -108,3 +108,15 @@ class MyList(LoginRequiredMixin, UpdateView):
             return JsonResponse(self.get_json(form.instance))
         else:
             return ret
+
+
+class UpdateNote(UpdateView):
+    def get_queryset(self):
+        return self.request.user.annotated_candidates.all()
+
+    def get_object(self):
+        try:
+            return self.get_queryset().get(candidate__slug=self.request.kwargs['slug'])
+        except RankedElement.DoesNotExist:
+            candidate = Candidate.objects.get(slug=self.request.kwargs['slug'])
+            return self.get_queryset().create(candidate=candidate)
