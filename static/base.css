@@ -160,14 +160,20 @@ a.headshot {
 }
 
 #grippy {
-        /* above navbar or looks weird with border color but below sidebar when revealed */
-        z-index: 1048; 
+    /* above navbar or looks weird with border color but below sidebar when revealed */
+    z-index: 1048; 
 
-        position:fixed; 
-        right: 0px; 
-        top: 0px; 
-        height:100vh; 
-        width: 10px; 
-        background: linear-gradient(90deg, #bce8f1, #d9edf7, #eee);
-        border-left: thin solid lightblue;
+    position:fixed; 
+    right: 0px; 
+    top: 0px; 
+    height:100vh; 
+    width: 15px; 
+    background: #d9edf7;
+    border-left: thin solid #bce8f1;
+    transition: all .2s ease-in-out;
+    box-shadow: -2px 0px 5px #dedede;
+}
+
+#grippy:hover {
+    transform: scaleX(2);
 }
