@@ -150,8 +150,6 @@
     </div> <!-- /container -->
 
     {% if user.is_authenticated %}
-        <div id="grippy" class="slideInRight animated">&nbsp;</div>
-
         <div id="candidateRankerSidebar" class="panel panel-info" style="position:relative">
             <div class="panel-heading">
                 <a href="#" class="close">&times;</a>
@@ -253,6 +251,8 @@
                 <select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
             </div>
         </div>
+
+        <div id="grippy">&nbsp;</div>
     {% endif %}
 
 

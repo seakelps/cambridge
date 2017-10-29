@@ -169,12 +169,7 @@ a.headshot {
     width: 15px; 
     background: #d9edf7;
     border-left: thin solid #bce8f1;
-    transition: all .2s ease-in-out;
     box-shadow: -2px 0px 5px #dedede;
-}
-
-#grippy:hover {
-    transform: scaleX(2);
 }
   
 /* data table paragraph tweaking */

@@ -32,6 +32,8 @@ $("#candidateRankerSidebar .close").click(function() {
   $("#candidateRankerSidebar").slideReveal("hide")
 });
 
+$("#grippy").addClass("animated slideInRight");
+
 
 /* Within sidebar lists */
 class Candidate {
