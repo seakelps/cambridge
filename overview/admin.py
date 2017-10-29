@@ -2,11 +2,15 @@ import re
 from django.contrib import admin
 from django.forms import ModelForm
 
-from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo
+from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
 
 
 class QuestionnaireResponseInline(admin.TabularInline):
     model = QuestionnaireResponse
+
+
+class PastContributionInline(admin.TabularInline):
+    model = PastContribution
 
 
 class EndorsementInline(admin.TabularInline):
@@ -80,6 +84,7 @@ class CandidateAdmin(admin.ModelAdmin):
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'political_party']}),
         ('Housing',               {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_status_note', 'housing_sell_value', 'housing_sale_date', 'housing_sale_price', 'housing_sale_price_inflation']}),
         ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist', 'job', 'previous_results_map']}),
+        ('Todos',                 {'fields': ['checked_ocpf_for_contributions', 'checked_fec_for_contributions']}),
     ]
 
     readonly_fields = ('headshot', 'has_blurb')
@@ -87,7 +92,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb)
     prepopulated_fields = {"slug": ("fullname",)}
 
-    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin]
+    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin, PastContributionInline]
 
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
@@ -106,6 +111,10 @@ class OrganizationAdmin(admin.ModelAdmin):
     def has_logo(self, obj):
         return bool(obj.logo)
     has_logo.boolean = True
+
+
+class PastContributionAdmin(admin.ModelAdmin):
+    inlines = [PastContributionInline]
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):

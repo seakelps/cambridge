@@ -2,6 +2,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.db.models import Sum
 
 
 class Candidate(models.Model):
@@ -112,6 +113,9 @@ class Candidate(models.Model):
         help_text="previous election results from Davi",
         blank=True, null=True)
 
+    checked_ocpf_for_contributions = models.NullBooleanField()
+    checked_fec_for_contributions = models.NullBooleanField()
+
     ##### finally, defined functions
     @cached_property
     def headshot(self):
@@ -137,6 +141,11 @@ class Candidate(models.Model):
         if self.twitter:
             return "https://twitter.com/{}".format(self.twitter)
 
+    @property
+    def total_contributions_less_fees(self):
+        contributions = PastContribution.objects.filter(candidate=self).exclude(note__contains='access fee').aggregate(Sum('amount'))
+        return contributions["amount__sum"]
+
 
 class Organization(models.Model):
     name = models.CharField(max_length=40, unique=True)
@@ -151,6 +160,21 @@ class Endorsement(models.Model):
     candidate = models.ForeignKey(Candidate)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
+
+
+class PastContribution(models.Model):
+    # who donated
+    candidate = models.ForeignKey(Candidate)
+
+    # to what
+    date = models.DateField(blank=True, null=True)
+    amount = models.FloatField(null=True, blank=True)
+    # this can be complicated but we're keeping it simple for now
+    recipient = models.CharField(max_length=400, null=True, blank=True)
+    note = models.CharField(max_length=400, null=True, blank=True)
+
+    # which state, federal
+    level = models.CharField(max_length=4, null=True, blank=True)
 
 
 class Questionnaire(models.Model):

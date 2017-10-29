@@ -139,7 +139,6 @@ a.headshot {
     color: blue;
 }
 
-
 /* Sorting Sidebar */
 .sortable tr {
     margin: 5px;
@@ -176,4 +175,9 @@ a.headshot {
 
 #grippy:hover {
     transform: scaleX(2);
+}
+  
+/* data table paragraph tweaking */
+.contributions p {
+    margin-bottom: 0;
 }
