@@ -336,6 +336,92 @@ ul.endorsements {
     </div>
 </div>
 
+{% if user.is_staff %}
+<div class="row">
+    <div class="col-md-6">
+        <h2 id="">Quotes</h2>
+            {% for quote in candidate.quote_set.all %}
+                {% if quote.display %}
+                    <blockquote> 
+                        <p>{{ quote.quote|markdown }}</p>
+                            <footer>
+                                {% if quote.by %} {{ quote.by }} {% else %} {{ candidate.fullname }}{% endif %}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                            </footer>
+                        </blockquote>
+                {% endif %}
+            {% endfor %}
+    </div>
+    <div class="col-md-6">
+        <h2 id="">Press</h2>
+        {% if candidate.pressarticlecandidate_set.all %}
+            <ul>
+            {% for article in candidate.pressarticlecandidate_set.all %}
+                {% if article.display and not article.candidate_is_the_author %}
+                    <li><p>
+                        {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
+                        {% if article.pressarticle.link %}
+                            <a href="{{ article.pressarticle.link }}" target="_blank">
+                            {{ article.pressarticle.title }}.
+                            <span class="fa fa-external-link">
+                        {% else %}
+                            {{ article.pressarticle.title }}.
+                        {% endif %}
+                        </a>
+                        <br>
+                        <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
+                        {% if article.sample %}
+                            <a href="#!" 
+                               data-toggle="popover" 
+                               data-trigger="focus"
+                               data-html="true" 
+                               data-container="body" 
+                               data-content='{{ article.sample }}'>
+                               <span class="fa fa-newspaper-o"></span> Excerpt
+                           </a>
+                       {% endif %}
+                    </p></li>
+                {% endif %}
+            {% endfor %}
+
+            <h4>Authored:</h4>
+
+            {% for article in candidate.pressarticlecandidate_set.all %}
+                {% if article.display and article.candidate_is_the_author %}
+                    <li><p>
+                        {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
+                        {% if article.pressarticle.link %}
+                            <a href="{{ article.pressarticle.link }}" target="_blank">
+                            {{ article.pressarticle.title }}.
+                            <span class="fa fa-external-link">
+                        {% else %}
+                            {{ article.pressarticle.title }}.
+                        {% endif %}
+                        </a>
+                        <br>
+                        <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
+                        {% if article.sample %}
+                            <a href="#!" 
+                               data-toggle="popover" 
+                               data-trigger="focus"
+                               data-html="true" 
+                               data-container="body" 
+                               data-content='{{ article.sample }}'>
+                               <span class="fa fa-newspaper-o"></span> Excerpt
+                           </a>
+                       {% endif %}
+                    </p></li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+
+        {% else %}
+            <p class="text-muted">We have not found any press about or authored by this candidate.</p>
+        {% endif %}
+
+    </div>
+</div>
+{% endif %}
+
 
 <div class="row">
     <div class="col-md-12">
@@ -412,7 +498,7 @@ ul.endorsements {
     <!-- money they have given -->
     <div class="col-md-12">
         <h3>Campaign Donations</h3>
-        <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems">Office of Campaign and Political Finance</a> and the <a href="http://classic.fec.gov/finance/disclosure/norindsea.shtml">FEC</a>.</p>
+        <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems" target="_blank">Office of Campaign and Political Finance <span class="fa fa-external-link"></span></a> and the </span><a href="http://classic.fec.gov/finance/disclosure/norindsea.shtml" target="_blank">FEC <span class="fa fa-external-link"></span></a>.</p>
     </div>
 
     {% if candidate.pastcontribution_set.all %}
