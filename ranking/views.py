@@ -1,8 +1,9 @@
 import logging
 from django.views.generic import DetailView, UpdateView, ListView
-from django.utils.decorators import method_decorator
+# from django.utils.decorators import method_decorator
 from django.utils import timezone
-from django.views.decorators.http import last_modified
+# from django.views.decorators.http import last_modified
+# from django.views.decorators.vary import vary_on_headers
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django import forms
@@ -78,7 +79,8 @@ def my_last_edit(request):
     return view.get_object().last_modified
 
 
-@method_decorator(last_modified(my_last_edit), "get")
+# @method_decorator(vary_on_headers('HTTP_X_REQUESTED_WITH'), "get")
+# @method_decorator(last_modified(my_last_edit), "get")
 class MyList(LoginRequiredMixin, UpdateView):
     form_class = EditForm
     model = RankedList
