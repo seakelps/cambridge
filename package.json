@@ -1,0 +1,32 @@
+{
+  "name": "cambridge",
+  "version": "1.0.0",
+  "description": "This is a django project!",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "webpack --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seakelps/cambridge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seakelps/cambridge/issues"
+  },
+  "homepage": "https://github.com/seakelps/cambridge#readme",
+  "dependencies": {
+    "animate.css": "^3.5.2",
+    "bootstrap": "^3.3.7",
+    "copy-webpack-plugin": "^4.2.0",
+    "expose-loader": "^0.7.3",
+    "knockout": "^3.4.2",
+    "knockout-sortable": "^1.1.0",
+    "slidereveal": "github:nnattawat/slideReveal",
+    "underscore": "^1.8.3",
+    "webpack": "^3.8.1",
+    "webpack-jquery-ui": "^1.0.0"
+  }
+}
