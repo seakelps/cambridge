@@ -25,7 +25,9 @@ $('#candidateRankerSidebar').slideReveal({
   overlay: true,
   push: false,
   position: "right",
-  trigger: $("#rankCandidates,#grippy")
+  trigger: $("#rankCandidates,#grippy"),
+  show: function() { view_model.startPolling(); },
+  hide: function() { view_model.stopPolling(); },
 });
 
 $("#candidateRankerSidebar .close").click(function() {
@@ -75,11 +77,8 @@ class Sidebar {
     // Update full data structure from server data
     const sidebar = this;
 
-    if (sidebar.pollingId) {
-      // stop polling while updating
-      clearInterval(sidebar.pollingId);
-      sidebar.pollingId = undefined;
-    }
+    // stop polling while updating
+    sidebar.stopPolling();
     sidebar.serverUpdate(true);
 
     let replacement = candidates.map(slug => {
@@ -105,7 +104,19 @@ class Sidebar {
     const sidebar = this;
 
     // returns id of interval for later cancelling
-    sidebar.pollingId = setInterval(() => sidebar.loadFromServer(), 1000);
+    sidebar.pollingId = setInterval(() => {
+      if (!document.hidden) {
+        sidebar.loadFromServer()
+      }
+    }, 1000);
+  }
+
+  stopPolling() {
+    const sidebar = this;
+    if (sidebar.pollingId) {
+      clearInterval(sidebar.pollingId);
+      sidebar.pollingId = undefined;
+    }
   }
 
   save(new_value) {
@@ -189,8 +200,6 @@ class Sidebar {
       }
       return candidates;
     });
-
-    sidebar.startPolling();
   }
 }
 

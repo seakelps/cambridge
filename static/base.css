@@ -149,10 +149,6 @@ a.headshot {
     cursor: move;
 }
 
-.sortable tr.fade {
-    background-color: #ddd;  /* not working */
-}
-
 .selected {
     border: thin solid black;
     background: lightyellow;

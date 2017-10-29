@@ -55,11 +55,6 @@ class CandidateListField(forms.Field):
             raise forms.ValidationError("unable to find candidate")
         return candidates
 
-    def bound_dsata(self, data, initial):
-        if self.disabled:
-            return ','.join(i.slug for i in initial)
-        return data
-
 
 class EditForm(forms.ModelForm):
     """ Only used for reordering candidates! """
