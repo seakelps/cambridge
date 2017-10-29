@@ -18,15 +18,27 @@ class RankedListExplore(ListView):
     model = RankedList
 
     def get_queryset(self):
-        filters = Q(public=True)
-        if self.request.user.is_authenticated:
-            filters = filters | Q(owner=self.request.user)
-        return super().get_queryset().filter(filters)
+        if self.request.user.is_staff:
+            return super().get_queryset()
+        else:
+            filters = Q(public=True)
+            if self.request.user.is_authenticated:
+                filters = filters | Q(owner=self.request.user)
+            return super().get_queryset().filter(filters)
 
 
 class RankedListDetail(DetailView):
     template_name = "ranking/detail.html"
     model = RankedList
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return super().get_queryset()
+        else:
+            filters = Q(public=True)
+            if self.request.user.is_authenticated:
+                filters = filters | Q(owner=self.request.user)
+            return super().get_queryset().filter(filters)
 
 
 class CandidateListField(forms.Field):

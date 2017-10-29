@@ -3,6 +3,19 @@
 {% block content %}
 
 <div class="container">
+
+    {% if not object.public %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                This list is not currently public and only be viewed by <em>you</em>.
+                <a href="mailto:admin@cambridge.vote">Email us</a> if you'd like to make it public.
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
     <div class="row">
         <div class="col-md-12">
             <h1>{{ object.name }}</h1>
