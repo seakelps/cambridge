@@ -9,7 +9,9 @@ class RankedListManager(models.Manager):
         except RankedList.DoesNotExist:
             ranked_list = RankedList.objects.create(owner=user)
             ranked_list.save()
+            ranked_list.name = "{}'s Slate".format(user.get_full_name())
             ranked_list.owner = user
+            ranked_list.slug = user.username
             ranked_list.save()
             return ranked_list
 
