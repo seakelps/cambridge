@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.forms import ModelForm
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
+from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
 
 
 class QuestionnaireResponseInline(admin.TabularInline):
@@ -15,6 +16,18 @@ class PastContributionInline(admin.TabularInline):
 
 class EndorsementInline(admin.TabularInline):
     model = Endorsement
+
+
+class QuoteInline(admin.TabularInline):
+    model = Quote
+
+
+class PressArticleInline(admin.TabularInline):
+    model = PressArticle
+
+
+class PressArticleCandidateInline(admin.TabularInline):
+    model = PressArticleCandidate
 
 
 class VideoInlineAdmin(admin.TabularInline):
@@ -92,7 +105,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb)
     prepopulated_fields = {"slug": ("fullname",)}
 
-    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin, PastContributionInline]
+    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin, PastContributionInline, QuoteInline, PressArticleCandidateInline]
 
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
@@ -113,6 +126,20 @@ class OrganizationAdmin(admin.ModelAdmin):
     has_logo.boolean = True
 
 
+class PressOutletAdmin(admin.ModelAdmin):
+    readonly_fields = ['has_logo']
+    list_display = ('name', 'has_logo')
+    inlines = [PressArticleInline]
+
+    def has_logo(self, obj):
+        return bool(obj.logo)
+    has_logo.boolean = True
+
+
+class PressArticleAdmin(admin.ModelAdmin):
+    inlines = [PressArticleCandidateInline]
+
+
 class PastContributionAdmin(admin.ModelAdmin):
     inlines = [PastContributionInline]
 
@@ -121,7 +148,17 @@ class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = [QuestionnaireResponseInline]
 
 
+class QuoteAdmin(admin.ModelAdmin):
+    inlines = [QuoteInline]
+
+
+class PressArticleCandidateAdmin(admin.ModelAdmin):
+    inlines = [PressArticleCandidateInline]
+
+
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 admin.site.register(QuestionnaireResponse)
+admin.site.register(PressOutlet, PressOutletAdmin)
+admin.site.register(PressArticle, PressArticleAdmin)

@@ -224,3 +224,43 @@ class InterviewVideo(models.Model):
 
     class Meta:
         ordering = ["sort_order"]
+
+
+class Quote(models.Model):
+    candidate = models.ForeignKey(Candidate)
+    quote = models.TextField(help_text="Text to display. Publically readable!", blank=True)
+    by = models.CharField(max_length=100, help_text="Leave blank if candidate", blank=True, default="")
+    cite = models.CharField(max_length=100, blank=True)
+    display = models.BooleanField(default=False)
+
+
+# ex., The Boston Globe; Cambridge Day
+class PressOutlet(models.Model):
+    name = models.CharField(max_length=50)
+    homepage = models.URLField(max_length=100, blank=True)
+    logo = models.URLField(blank=True, max_length=150)
+
+    def __str__(self):
+        return self.name
+
+
+# ex., "Record number of women running for Council"
+class PressArticle(models.Model):
+    pressoutlet = models.ForeignKey(PressOutlet)
+    title = models.CharField(max_length=100)
+    author = models.CharField(max_length=100, blank=True)
+    link = models.URLField(max_length=500, blank=True)
+    date = models.DateField(blank=True, null=True)
+    full_text = models.TextField(help_text="possibility to allow full text search later", blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+
+# ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"
+class PressArticleCandidate(models.Model):
+    pressarticle = models.ForeignKey(PressArticle)
+    candidate = models.ForeignKey(Candidate)
+    candidate_is_the_author = models.BooleanField(default=False)
+    sample = models.TextField(help_text="if there's something particularly noteworthy about this candidate and press article", blank=True)
+    display = models.BooleanField(default=False)
