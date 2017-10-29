@@ -361,21 +361,22 @@ ul.endorsements {
                         {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
                         {% if article.pressarticle.link %}
                             <a href="{{ article.pressarticle.link }}" target="_blank">
-                            {{ article.pressarticle.title }}.
-                            <span class="fa fa-external-link"></span>
+                                {{ article.pressarticle.title }}.
+                                <span class="fa fa-external-link"></span>
+                            </a>
                         {% else %}
                             {{ article.pressarticle.title }}.
                         {% endif %}
-                        </a>
                         <br>
                         <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
                         {% if article.sample %}
                             <a href="#!" 
-                               data-toggle="popover" 
+                               data-toggle="popover"
                                data-trigger="focus"
-                               data-html="true" 
-                               data-container="body" 
-                               data-content='{{ article.sample }}'>
+                               data-container="body"
+                               data-placement="bottom"
+                               data-html="true"
+                               data-content='{{ article.sample|linebreaksbr }}'>
                                <span class="fa fa-newspaper-o"></span> Excerpt
                            </a>
                        {% endif %}
@@ -391,21 +392,22 @@ ul.endorsements {
                         {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
                         {% if article.pressarticle.link %}
                             <a href="{{ article.pressarticle.link }}" target="_blank">
-                            {{ article.pressarticle.title }}.
-                            <span class="fa fa-external-link"></span>
+                                {{ article.pressarticle.title }}.
+                                <span class="fa fa-external-link"></span>
+                            </a>
                         {% else %}
                             {{ article.pressarticle.title }}.
                         {% endif %}
-                        </a>
                         <br>
                         <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
                         {% if article.sample %}
                             <a href="#!" 
-                               data-toggle="popover" 
+                               data-toggle="popover"
                                data-trigger="focus"
-                               data-html="true" 
-                               data-container="body" 
-                               data-content='{{ article.sample }}'>
+                               data-container="body"
+                               data-placement="bottom"
+                               data-html="true"
+                               data-content='{{ article.sample|linebreaksbr }}'>
                                <span class="fa fa-newspaper-o"></span> Excerpt
                            </a>
                        {% endif %}
