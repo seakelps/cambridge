@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    {% if not object.public %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-warning">
+                This list is not currently public and only be viewed by <em>you</em>.
+                <a href="mailto:admin@cambridge.vote">Email us</a> if you'd like to make it public.
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ object.name }}</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% for element in object.annotated_candidates.all %}
+            <div class="col-md-4">
+                <div class="panel panel-default" style="height:300px">
+                    <div class="panel-heading">
+                        <strong>{{ forloop.counter }}.</strong>
+                        <a href="{% url "candidate_detail" element.candidate.slug %}">
+                            {{ element.candidate.fullname}}
+                        </a>
+                    </div>
+
+                    <div class="panel-body">
+                        {{ element.comment|linebreaks }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

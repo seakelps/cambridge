@@ -13,9 +13,12 @@ def PopulateData(apps, schema_editor):
     with open('overview/migrations/donations.tsv', 'r') as fp:
         tsv = csv.DictReader(fp, delimiter="\t")
         for row in tsv:
-            print(row)
-            cand = Candidate.objects.get(fullname=row['doner'])
-            cand.pastcontribution_set.create(date=(datetime.datetime.strptime(row['date'], '%m/%d/%Y')), recipient=row['recipient'], amount=row['amount'], note=row['note'])
+            try:
+                cand = Candidate.objects.get(fullname=row['doner'])
+            except Candidate.DoesNotExist:
+                pass
+            else:
+                cand.pastcontribution_set.create(date=(datetime.datetime.strptime(row['date'], '%m/%d/%Y')), recipient=row['recipient'], amount=row['amount'], note=row['note'])
 
 
 def UnPopulateData(apps, schema_editor):

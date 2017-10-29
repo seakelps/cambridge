@@ -26,6 +26,7 @@ SECRET_KEY = 'cf=_&u(m$icl*#0e_u0!=n_9$073xqf65(vi**=j-kxju6r8ff'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+ATOMIC_REQUESTS = True
 
 FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'comparison',
     'voting_history',
     'campaign_finance',
+    'ranking',
     # others
     'django.contrib.admin',
     'django.contrib.auth',
@@ -91,6 +93,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'overview.context_processors.header',
                 'overview.context_processors.constants',
+                'ranking.context_processors.sidebar',
             ],
         },
     },
