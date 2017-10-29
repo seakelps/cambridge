@@ -1,3 +1,4 @@
+import logging
 from django.views.generic import DetailView, UpdateView, ListView
 from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -108,9 +109,7 @@ class MyList(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         ret = super().form_invalid(form)
         if self.request.is_ajax():
-            import ipdb
-            ipdb.set_trace()
-            pass
+            logging.warning("uh oh", extra={"errors": form.errors})
         else:
             ret
 
