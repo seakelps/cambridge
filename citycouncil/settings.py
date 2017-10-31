@@ -157,7 +157,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    # '/var/www/static/',
+    os.path.join(BASE_DIR, "static_compiled"),
 ]
 
 MEDIA_URL = '/media/'

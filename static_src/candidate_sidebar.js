@@ -1,9 +1,10 @@
-/* global: LOGGED_IN */
+/* global: LOGGED_IN, allCandidates */
+import { isEqual } from 'underscore'
 
 
 /* Cookie handler from https://docs.djangoproject.com/en/1.11/ref/csrf/ */
+var csrftoken;
 
-const csrftoken = $("[name=csrfmiddlewaretoken]").val();
 ko.bindingHandlers.sortable.strategyMove = true;
 
 function csrfSafeMethod(method) {
@@ -20,21 +21,24 @@ $.ajaxSetup({
 
 
 /* Slider reveal logic */
+$(document).ready(function() {
+  csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
-$('#candidateRankerSidebar').slideReveal({
-  overlay: true,
-  push: false,
-  position: "right",
-  trigger: $("#rankCandidates,#grippy"),
-  show: function() { view_model.startPolling(); },
-  hide: function() { view_model.stopPolling(); },
+  $('#candidateRankerSidebar').slideReveal({
+    overlay: true,
+    push: false,
+    position: "right",
+    trigger: $("#rankCandidates,#grippy"),
+    show: function() { view_model.startPolling(); },
+    hide: function() { view_model.stopPolling(); },
+  });
+
+  $("#candidateRankerSidebar .close").click(function() {
+    $("#candidateRankerSidebar").slideReveal("hide")
+  });
+
+  $("#grippy").addClass("animated slideInRight");
 });
-
-$("#candidateRankerSidebar .close").click(function() {
-  $("#candidateRankerSidebar").slideReveal("hide")
-});
-
-$("#grippy").addClass("animated slideInRight");
 
 
 /* Within sidebar lists */
@@ -86,7 +90,7 @@ class Sidebar {
     })
 
     // knockout will trigger update even if nothing's changed, but that screws up the draggable
-    if (!_.isEqual(sidebar.candidates(), replacement)) {
+    if (!isEqual(sidebar.candidates(), replacement)) {
       console.log('replacing');
       sidebar.candidates(replacement);
     }
@@ -203,4 +207,5 @@ class Sidebar {
   }
 }
 
-var view_model = new Sidebar();
+const view_model = new Sidebar();
+export default view_model;

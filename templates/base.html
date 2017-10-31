@@ -11,14 +11,6 @@
         <!-- <link rel="icon" href="../../favicon.ico"> -->
 
         <title>{% block title %}{% if title %}{{ title }}{% else %}Vote Local!{% endif %}{% endblock %}</title>
-
-        <!-- Bootstrap core CSS -->
-        <!-- <link href="../../dist/css/bootstrap.min.css" rel="stylesheet"> -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
-
-        <!-- Custom styles for this template -->
         <link href="{% static 'base.css' %}" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -49,8 +41,8 @@
             const LOGGED_IN = {{ request.user.is_authenticated|yesno:"true,false" }};
             const allCandidates = JSON.parse("{{ runnerJson|escapejs }}");
         </script>
+        <script src="{% static "bundle.js" %}"></script>
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" media="screen" title="no title" charset="utf-8">
         {% block head_extra %}{% endblock %}
     </head>
 
@@ -255,28 +247,9 @@
         <div id="grippy">&nbsp;</div>
     {% endif %}
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/slideReveal/1.1.2/jquery.slidereveal.min.js"></script>
-
-    {# must be before bootstrap.min.js so we don't end up with jquery-ui tooltips #}
-    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-    {# <script src="https://cdnjs.cloudflare.com/ajax/libs/html5sortable/0.6.3/html.sortable.min.js"></script> #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.2/chosen.jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-sortable/1.1.0/knockout-sortable.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-
     {% if user.is_authenticated %}
-        <script src="{% static "candidate_sidebar.js" %}"></script>
-
         <script>
-            ko.applyBindings(view_model);
+            ko.applyBindings(cambridge.view_model);
         </script>
     {% endif %}
 
