@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^finance/', include('campaign_finance.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^ranking/', include('ranking.urls')),
+    # to support having users - login, logout, password management
+    url(r'^accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:
