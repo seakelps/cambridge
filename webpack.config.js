@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 
 module.exports = {
@@ -14,7 +15,8 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: "node_modules/bootstrap/dist/", to: "bootstrap"},
       { from: "node_modules/animate.css/animate.min.css" }
-    ])
+    ]),
+    new UglifyJSPlugin()  // heroku has NODE_ENV=production by default
   ],
   module: {
     rules: [

@@ -25,6 +25,7 @@
     "knockout": "^3.4.2",
     "knockout-sortable": "^1.1.0",
     "slidereveal": "github:nnattawat/slideReveal",
+    "uglifyjs-webpack-plugin": "^1.0.1",
     "underscore": "^1.8.3",
     "webpack": "^3.8.1",
     "webpack-jquery-ui": "^1.0.0"
