@@ -71,7 +71,7 @@ class Candidate {
 }
 
 
-export default class Sidebar {
+class Sidebar {
   addCandidate(candidate) {
     // Add candidate to "on" list
     this.candidates.push(candidate);
@@ -206,3 +206,6 @@ export default class Sidebar {
     });
   }
 }
+
+const view_model = new Sidebar();
+export default view_model;

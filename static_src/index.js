@@ -3,6 +3,6 @@ import './jquery.ui.touch-punch.min.js'
 import 'knockout-sortable'
 import 'slidereveal'
 import 'bootstrap'
-import Sidebar from './candidate_sidebar'
+import view_model from './candidate_sidebar'
 
-export { Sidebar }
+export { view_model }
