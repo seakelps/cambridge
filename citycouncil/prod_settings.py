@@ -23,3 +23,18 @@ LOGGING = {
         },
     },
 }
+
+# sending emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.privateemail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'admin@cambridge.vote'
+DEFAULT_FROM_EMAIL = 'admin@cambridge.vote'
+EMAIL_HOST_PASSWORD = os.environ.get('PRIVATEEMAIL_ADMIN_PASS')
+
+# SSL/HTTPS and other security-related settings
+ALLOWED_HOSTS = ['.cambridgecouncilcandidates.com']
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True

@@ -25,7 +25,7 @@ SECRET_KEY = 'cf=_&u(m$icl*#0e_u0!=n_9$073xqf65(vi**=j-kxju6r8ff'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 ATOMIC_REQUESTS = True
 
 FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
@@ -171,13 +171,7 @@ CONTACT_EMAIL = "admin@cambridge.vote"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# if in dev and don't want to send real emails, comment out the next 7 "EMAIL_" settings...
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.privateemail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'admin@cambridge.vote'
-DEFAULT_FROM_EMAIL = 'admin@cambridge.vote'
-EMAIL_HOST_PASSWORD = os.environ.get('PRIVATEEMAIL_ADMIN_PASS')
-# ... and uncomment this one
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# this is only for dev; production is configured differently.
+# that said, production's configurations work in dev, so you can test them
+# by commenting out EMAIL_BACKEND and copying all the production email settings.
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
