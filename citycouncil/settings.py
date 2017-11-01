@@ -174,6 +174,6 @@ EMAIL_HOST = 'smtp.privateemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'admin@cambridge.vote'
 DEFAULT_FROM_EMAIL = 'admin@cambridge.vote'
-EMAIL_HOST_PASSWORD = os.environ['PRIVATEEMAIL_ADMIN_PASS'] or 'uhoh'
+EMAIL_HOST_PASSWORD = os.environ.get('PRIVATEEMAIL_ADMIN_PASS')
 # ... and uncomment this one
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
