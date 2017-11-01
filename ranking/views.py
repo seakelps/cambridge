@@ -6,8 +6,10 @@ from django.utils import timezone
 # from django.views.decorators.vary import vary_on_headers
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
+from django.views.decorators.http import require_POST
 from django import forms
 from django.core.urlresolvers import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404
 
 
 from .models import RankedList, RankedElement
@@ -135,9 +137,19 @@ class UpdateNote(UpdateView):
     def form_valid(self, form):
         ret = super().form_valid(form)
         if self.request.is_ajax():
-            return HttpResponse("OK", 200)
+            return HttpResponse("OK", status=200)
         else:
             return ret
 
     def get_success_url(self):
         return reverse("candidate_detail", args=[self.object.candidate.slug])
+
+
+@require_POST
+def delete_note(request, slug):
+    """ Deletes note and position in ranking """
+
+    candidate = get_object_or_404(Candidate.objects.all(), slug=slug)
+    ranked_list = RankedList.objects.for_request(request)
+    ranked_list.annotated_candidates.filter(candidate=candidate).delete()
+    return HttpResponse("DELETED", status=201)
