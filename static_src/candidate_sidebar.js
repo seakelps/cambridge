@@ -1,4 +1,4 @@
-/* global: LOGGED_IN, allCandidates */
+/* global: allCandidates */
 import { isEqual } from 'underscore'
 
 
@@ -62,7 +62,7 @@ class Candidate {
     $.post({
       url: `/ranking/notes/${candidate.slug}/`,
       data: { comment: candidate.comment() },
-    }).success(function() {
+    }).done(function() {
       $(`#candidate_${candidate.slug} .modal`).modal("hide");
     }).fail(function() {
       alert("Couldn't save");
@@ -126,51 +126,28 @@ class Sidebar {
   save(new_value) {
     /* save list ordering */
     const sidebar = this;
-    if (LOGGED_IN) {
-      $.post({
-        url: "/ranking/mine/",
-        data: {
-          candidates: new_value.map(x => x.slug).join(',')
-        },
-      }).done(function(response){
-        sidebar.updateFromResponse(response.candidates)
-      });
-    } else {
-      localStorage.setItem('candidateList', JSON.stringify((
-        new Date(),
-        new_value.map(x => x.slug)
-      )));
-    }
+    $.post({
+      url: "/ranking/mine/",
+      data: {
+        candidates: new_value.map(x => x.slug).join(',')
+      },
+    }).done(function(response){
+      sidebar.updateFromResponse(response.candidates)
+    });
   }
 
   loadFromServer() {
     const sidebar = this;
 
-    if (LOGGED_IN) {
-      return $.get({
-        url: "/ranking/mine/",
-        ifModified: true,
-      }).done(function(response, status){
-        // don't update when not modified
-        if (status == "success") {
-          sidebar.updateFromResponse(response.candidates);
-        }
-      });
-    } else {
-      let candidates;
-      try {
-        candidates = JSON.parse(localStorage.getItem('candidateList'));
-      } catch(err) {
-
+    return $.get({
+      url: "/ranking/mine/",
+      ifModified: true,
+    }).done(function(response, status){
+      // don't update when not modified
+      if (status == "success") {
+        sidebar.updateFromResponse(response.candidates);
       }
-
-      if (!candidates) {
-        candidates = [];
-      }
-
-      // triggers update regardless of whether there is a change for now
-      sidebar.updateFromResponse(candidates);
-    }
+    });
   }
 
   constructor() {

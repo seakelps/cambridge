@@ -1,27 +1,46 @@
+import random
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils.text import slugify
 
 
 class RankedListManager(models.Manager):
-    def for_user(self, user):
-        try:
-            return user.rankedlist
-        except RankedList.DoesNotExist:
-            ranked_list = RankedList.objects.create(owner=user)
-            ranked_list.save()
-            ranked_list.name = "{}'s Slate".format(user.get_full_name())
-            ranked_list.owner = user
-            ranked_list.slug = user.username
-            ranked_list.save()
-            return ranked_list
+    def for_request(self, request):
+        user = request.user
+
+        if user.is_authenticated:
+            try:
+                return user.rankedlist
+            except RankedList.DoesNotExist:
+                return RankedList.objects.create(
+                    name="{}'s Slate".format(user.get_full_name()),
+                    slug=user.username,
+                    owner=user)
+        else:
+            try:
+                return RankedList.objects.get(pk=request.session['ranked_list_id'])
+            except (RankedList.DoesNotExist, KeyError):
+                # try hard to find an id
+                for _ in range(5):
+                    name = "Anon {}".format(random.randint(1000000, 2000000))
+
+                    # can't reliably catch IntegrityErrors so get_or_creating here instead
+                    ranked_list, created = RankedList.objects.get_or_create(
+                        {"name": "{}'s Slate".format(name)},
+                        slug=slugify(name))
+
+                    if created:
+                        request.session['ranked_list_id'] = ranked_list.id
+                        return ranked_list
+                raise Exception("couldnt allocate a list id")
 
 
 class RankedList(models.Model):
     objects = RankedListManager()
 
     last_modified = models.DateTimeField(auto_now=True)
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL)
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True)
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     public = models.BooleanField(default=False)

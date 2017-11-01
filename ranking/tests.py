@@ -1,7 +1,51 @@
-from django.test import TestCase
+from django.test import TestCase, RequestFactory
 from django.urls import reverse
+from django.contrib.auth.models import AnonymousUser
+
 from overview import factories as overview_factories
 from . import factories
+from .models import RankedList
+
+
+class GetList(TestCase):
+    def test_logged_in_no_list(self):
+        request = RequestFactory().get('/')
+        request.user = overview_factories.User()
+        request.session = {}
+
+        self.assertEqual(
+            RankedList.objects.for_request(request),
+            request.user.rankedlist)
+
+    def test_logged_in_with_list(self):
+        request = RequestFactory().get('/')
+        ranked_list = factories.RankedList()
+        request.user = ranked_list.owner
+        request.session = {}
+
+        self.assertEqual(
+            RankedList.objects.for_request(request),
+            ranked_list)
+
+    def test_logged_out_no_list(self):
+        request = RequestFactory().get('/')
+        request.user = AnonymousUser()
+        request.session = {}
+
+        ranked_list = RankedList.objects.for_request(request)
+        self.assertTrue(ranked_list)
+        self.assertEqual(ranked_list.id, request.session['ranked_list_id'])
+
+    def test_logged_out_with_list(self):
+        request = RequestFactory().get('/')
+        request.user = AnonymousUser()
+
+        ranked_list = factories.RankedList(owner=None)
+        request.session = {"ranked_list_id": ranked_list.id}
+
+        self.assertEqual(
+            RankedList.objects.for_request(request).id,
+            request.session['ranked_list_id'])
 
 
 class ListViewTest(TestCase):
@@ -107,14 +151,12 @@ class MyListTest(TestCase):
 
 
 class UpdateNotes(TestCase):
-    def setUp(self):
-        super().setUp()
+    def test_add_note(self):
         self.user = factories.RankedList().owner
         self.client.force_login(self.user)
         self.candidate = overview_factories.Candidate()
 
-    def test_add_note(self):
-        self.user.rankedlist.annotated_candidates.create(candidate=self.candidate, order=0)
+        self.user.rankedlist.annotated_candidates.create(candidate=self.candidate, order=1)
 
         resp = self.client.post(
             reverse("update_note", args=[self.candidate.slug]),
@@ -122,3 +164,24 @@ class UpdateNotes(TestCase):
 
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(self.user.rankedlist.annotated_candidates.get().comment, "No Comment")
+
+    def test_add_note_logged_out(self):
+        ranked_list = factories.RankedList(owner=None)
+
+        # everytime you read the client.session, it creates a new one
+        session = self.client.session
+        session["ranked_list_id"] = ranked_list.id
+        session.save()
+
+        self.assertTrue(self.client.session)
+
+        self.candidate = overview_factories.Candidate()
+
+        ranked_list.annotated_candidates.create(candidate=self.candidate, order=1)
+
+        resp = self.client.post(
+            reverse("update_note", args=[self.candidate.slug]),
+            {"comment": "No Comment"})
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(ranked_list.annotated_candidates.get().comment, "No Comment")
