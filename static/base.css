@@ -177,3 +177,9 @@ a.headshot {
 .contributions p {
     margin-bottom: 0;
 }
+
+.well:after {
+  content: "";
+  display: table;
+  clear: both;
+}
