@@ -21,14 +21,19 @@ class RankedListManager(models.Manager):
             try:
                 return RankedList.objects.get(pk=request.session['ranked_list_id'])
             except (RankedList.DoesNotExist, KeyError):
-                name = "Anon {}".format(random.randint(1000000, 2000000))
+                # try hard to find an id
+                for _ in range(5):
+                    name = "Anon {}".format(random.randint(1000000, 2000000))
 
-                ranked_list = RankedList.objects.create(
-                    name="{}'s Slate".format(name),
-                    slug=slugify(name))
+                    # can't reliably catch IntegrityErrors so get_or_creating here instead
+                    ranked_list, created = RankedList.objects.get_or_create(
+                        {"name": "{}'s Slate".format(name)},
+                        slug=slugify(name))
 
-                request.session['ranked_list_id'] = ranked_list.id
-                return ranked_list
+                    if created:
+                        request.session['ranked_list_id'] = ranked_list.id
+                        return ranked_list
+                raise Exception("couldnt allocate a list id")
 
 
 class RankedList(models.Model):
