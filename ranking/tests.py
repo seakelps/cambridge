@@ -200,3 +200,6 @@ class DeleteNote(TestCase):
 
         self.assertEqual(resp.status_code, 201)
         self.assertFalse(self.user.rankedlist.annotated_candidates.exists())
+
+        self.candidate.refresh_from_db()
+        self.assertTrue(self.candidate)
