@@ -62,7 +62,7 @@
                 <a class="navbar-brand" href="{% url 'index' %}"><span class="header-text">Cambridge Council Candidates</span></a>
             </div>
 
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right hidden-xs">
                 <li><a href="#" id="rankCandidates"><span class="fa fa-sort-numeric-asc"></span></a></li>
             </ul>
 
@@ -108,6 +108,7 @@
                             <li><a href="{% url 'full_history' %}">Incumbent Voting</a></li>
                             <li><a href="{% url 'finance_comparison' %}">Campaign Finance</a></li>
                             <li class="disabled"><a href="#">Press Coverage</a></li>
+                            <li><a href="{% url 'my_ranking' %}">My Candidates</a></li>
                         </ul>
                     </li>
                 </ul>
