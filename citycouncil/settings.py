@@ -51,7 +51,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'fullurl',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 
 SITE_ID = 1
@@ -166,6 +169,7 @@ CONTACT_EMAIL = "admin@cambridge.vote"
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # this is only for dev; production is configured differently.
 # that said, production's configurations work in dev, so you can test them

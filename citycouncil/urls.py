@@ -32,8 +32,10 @@ urlpatterns = [
     url(r'^finance/', include('campaign_finance.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^ranking/', include('ranking.urls')),
+
     # to support having users - login, logout, password management
-    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^accounts/', include('citycouncil.registration_urls')),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
 ]
 
 if settings.DEBUG:

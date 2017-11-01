@@ -62,8 +62,13 @@
                 <a class="navbar-brand" href="{% url 'index' %}"><span class="header-text">Cambridge Council Candidates</span></a>
             </div>
 
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right hidden-xs">
                 <li><a href="#" id="rankCandidates"><span class="fa fa-sort-numeric-asc"></span></a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url "auth_logout" %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url "auth_login" %}">Login</a></li>
+                {% endif %}
             </ul>
 
             <div id="navbar" class="navbar-collapse collapse">
@@ -102,14 +107,22 @@
                             {% endfor %}
                         </ul>
                     </li>
+
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'full_history' %}">Incumbent Voting</a></li>
                             <li><a href="{% url 'finance_comparison' %}">Campaign Finance</a></li>
                             <li class="disabled"><a href="#">Press Coverage</a></li>
+                            <li><a href="{% url 'my_ranking' %}">My Candidates</a></li>
                         </ul>
                     </li>
+
+                    {% if user.is_authenticated %}
+                        <li class="visible-xs"><a href="{% url "auth_logout" %}">Logout</a></li>
+                    {% else %}
+                        <li class="visible-xs"><a href="{% url "auth_login" %}">Login</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
