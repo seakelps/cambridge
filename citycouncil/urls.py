@@ -34,12 +34,8 @@ urlpatterns = [
     url(r'^ranking/', include('ranking.urls')),
 
     # to support having users - login, logout, password management
+    url(r'^accounts/', include('citycouncil.registration_urls')),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-
-    # seems to need this as a fallback
-    # /accounts/password/reset/ reverses password_reset_done
-    # which is only registered under auth_password_reset_done in registration
-    url(r'^accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:
