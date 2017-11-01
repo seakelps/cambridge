@@ -167,11 +167,13 @@ CONTACT_EMAIL = "admin@cambridge.vote"
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/'
 
-# if in dev and don't want to send real emails, comment out the next five "EMAIL_" settings...
+# if in dev and don't want to send real emails, comment out the next 7 "EMAIL_" settings...
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.privateemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'admin@cambridge.vote'
+DEFAULT_FROM_EMAIL = 'admin@cambridge.vote'
 EMAIL_HOST_PASSWORD = os.environ['PRIVATEEMAIL_ADMIN_PASS'] or 'uhoh'
 # ... and uncomment this one
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
