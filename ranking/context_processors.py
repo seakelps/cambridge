@@ -32,7 +32,7 @@ def sidebar(request):
                 "img_alt": c.headshot_description,
                 "comment": ranking_lookup[c]["comment"],
                 "order": ranking_lookup[c]["order"],
-            } for c in Candidate.objects.all()])
+            } for c in Candidate.objects.filter(is_running=True)])
     }
 
     return context
