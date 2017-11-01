@@ -9,3 +9,4 @@ django-fullurl==0.5
 markdown==2.6.6
 factory_boy
 django-crispy-forms
+django-registration

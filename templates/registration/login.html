@@ -29,14 +29,15 @@
                     {% endif %}
                 {% endif %}
 
-                <form class="well" method="post" action="{% url 'login' %}">
+                <form class="well" method="post" action="{% url 'auth_login' %}">
                     {% csrf_token %}
 
                     {{ form|crispy }}
 
-                    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+                    <p><a href="{% url 'auth_password_reset' %}">Lost password?</a></p>
 
                     <div style="margin-top: 30px; text-align:center">
+                        <a href="{% url 'registration_register' %}" type="button" class="btn btn-link">Sign Up</a>
                         <input type="submit" value="Login" class="btn btn-primary"/>
                     </div>
                 </form>
