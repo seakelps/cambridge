@@ -23,17 +23,17 @@
             {% csrf_token %}
 
             <div>
-                <td>{{ form.username.label_tag }}</td>
-                <td>{{ form.username }}</td>
+                {{ form.username.label_tag }}
+                {{ form.username }}
             </div>
             <div>
-                <td>{{ form.password.label_tag }}</td>
-                <td>{{ form.password }}</td>
+                {{ form.password.label_tag }}
+                {{ form.password }}
             </div>
 
             <div>
-              <input type="submit" value="login" class="btn"/>
-              <input type="hidden" name="next" value="{{ next }}" />
+                <input type="submit" value="login" class="btn"/>
+                <input type="hidden" name="next" value="{{ next }}" />
             </div>
             </form>
 
