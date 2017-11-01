@@ -9,16 +9,13 @@ from .models import RankedList
 def sidebar(request):
     ranking_lookup = defaultdict(lambda: {"order": None, "comment": ""})
 
-    if request.user.is_authenticated:
-        ranked_list = RankedList.objects.for_user(request.user)
+    ranked_list = RankedList.objects.for_request(request)
 
-        for ac in ranked_list.annotated_candidates.all():
-            ranking_lookup[ac.candidate] = {
-                "comment": ac.comment,
-                "order": ac.order
-            }
-    else:
-        ranked_list = None
+    for ac in ranked_list.annotated_candidates.all():
+        ranking_lookup[ac.candidate] = {
+            "comment": ac.comment,
+            "order": ac.order
+        }
 
     context = {
         'my_ranking': ranked_list,

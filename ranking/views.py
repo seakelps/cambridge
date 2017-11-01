@@ -8,7 +8,6 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django import forms
 from django.core.urlresolvers import reverse_lazy, reverse
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from .models import RankedList, RankedElement
@@ -81,14 +80,14 @@ def my_last_edit(request):
 
 # @method_decorator(vary_on_headers('HTTP_X_REQUESTED_WITH'), "get")
 # @method_decorator(last_modified(my_last_edit), "get")
-class MyList(LoginRequiredMixin, UpdateView):
+class MyList(UpdateView):
     form_class = EditForm
     model = RankedList
     template_name = "ranking/detail.html"
     success_url = reverse_lazy("my_ranking")
 
     def get_object(self):
-        return RankedList.objects.for_user(self.request.user)
+        return RankedList.objects.for_request(self.request)
 
     def get_json(self, obj):
         return {"candidates": list(
@@ -123,7 +122,7 @@ class UpdateNote(UpdateView):
     model = RankedElement
 
     def get_queryset(self):
-        return self.request.user.rankedlist.annotated_candidates.all()
+        return RankedList.objects.for_request(self.request).annotated_candidates
 
     def get_object(self):
         try:
