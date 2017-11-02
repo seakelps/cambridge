@@ -1,5 +1,6 @@
 /* global: allCandidates */
 import { isEqual } from 'underscore'
+import Hammer from 'hammerjs'
 
 
 /* Cookie handler from https://docs.djangoproject.com/en/1.11/ref/csrf/ */
@@ -28,7 +29,7 @@ $(document).ready(function() {
     overlay: true,
     push: false,
     position: "right",
-    trigger: $("#rankCandidates,#grippy"),
+    trigger: $("#rankCandidates"),
     show: function() { view_model.startPolling(); },
     hide: function() { view_model.stopPolling(); },
   });
@@ -37,7 +38,21 @@ $(document).ready(function() {
     $("#candidateRankerSidebar").slideReveal("hide")
   });
 
-  $("#grippy").addClass("animated slideInRight");
+  const hammer    = new Hammer.Manager(document.body);
+  const swipe     = new Hammer.Swipe();
+  hammer.add(swipe);
+
+  hammer.on('swipeleft', function(e) {
+    e.preventDefault();
+    // open menu
+    $("#candidateRankerSidebar").slideReveal("show")
+  });
+
+  hammer.on('swiperight', function(e) {
+    e.preventDefault();
+    // open menu
+    $("#candidateRankerSidebar").slideReveal("hide")
+  });
 });
 
 
