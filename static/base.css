@@ -169,3 +169,7 @@ a.headshot {
   display: table;
   clear: both;
 }
+
+#candidateRankerSidebar {
+  overflow: auto;  /* allow scrolling within sidebar */
+}
