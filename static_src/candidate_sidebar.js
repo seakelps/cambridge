@@ -1,7 +1,7 @@
 /* global: allCandidates */
 import { isEqual } from 'underscore'
 import Hammer from 'hammerjs'
-
+delete Hammer.defaults.cssProps.userSelect;  // allow text selection even if sometimes users do that by accident
 
 /* Cookie handler from https://docs.djangoproject.com/en/1.11/ref/csrf/ */
 var csrftoken;
