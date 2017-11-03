@@ -185,13 +185,13 @@ a.headshot {
   clear: both;
 }
 
-.panel {
+#candidateRankerSidebar.panel {
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-.panel .panel-body {
+#candidateRankerSidebar.panel .panel-body {
     flex-grow: 1;
     height: 100%;
     overflow: scroll;
