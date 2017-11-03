@@ -152,6 +152,7 @@ a.headshot {
 
 .sortable td.sorter {
     cursor: move;
+    white-space: nowrap;  /* prevent numbers from wrapping to next line */
 }
 
 .selected {
