@@ -73,11 +73,13 @@ class Candidate {
   remove() {
     const candidate = this;
 
-    return $.post({
-      url: `/ranking/delete/${candidate.slug}/`,
-    }).done(function(response, status){
-      candidate.sidebar.loadFromServer();
-    });
+    if (confirm("Deleting is permanent. Delete this note and rank?")) {
+      return $.post({
+        url: `/ranking/delete/${candidate.slug}/`,
+      }).done(function(response, status){
+        candidate.sidebar.loadFromServer();
+      });
+    }
   }
 }
 
