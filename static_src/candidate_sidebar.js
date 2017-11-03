@@ -38,21 +38,19 @@ $(document).ready(function() {
     $("#candidateRankerSidebar").slideReveal("hide")
   });
 
-  const hammer    = new Hammer.Manager(document.body);
-  const swipe     = new Hammer.Swipe();
-  hammer.add(swipe);
+  // const hammer    = new Hammer.Manager(document.body);
+  // const swipe     = new Hammer.Swipe();
+  // hammer.add(swipe);
 
-  hammer.on('swipeleft', function(e) {
-    e.preventDefault();
-    // open menu
-    $("#candidateRankerSidebar").slideReveal("show")
-  });
+  // hammer.on('swipeleft', function(e) {
+  //   // open menu
+  //   $("#candidateRankerSidebar").slideReveal("show")
+  // });
 
-  hammer.on('swiperight', function(e) {
-    e.preventDefault();
-    // open menu
-    $("#candidateRankerSidebar").slideReveal("hide")
-  });
+  // hammer.on('swiperight', function(e) {
+  //   // open menu
+  //   $("#candidateRankerSidebar").slideReveal("hide")
+  // });
 });
 
 
