@@ -1,7 +1,5 @@
 /* global: allCandidates */
 import { isEqual } from 'underscore'
-import Hammer from 'hammerjs'
-delete Hammer.defaults.cssProps.userSelect;  // allow text selection even if sometimes users do that by accident
 
 /* Cookie handler from https://docs.djangoproject.com/en/1.11/ref/csrf/ */
 var csrftoken;
@@ -37,20 +35,6 @@ $(document).ready(function() {
   $("#candidateRankerSidebar .close").click(function() {
     $("#candidateRankerSidebar").slideReveal("hide")
   });
-
-  // const hammer    = new Hammer.Manager(document.body);
-  // const swipe     = new Hammer.Swipe();
-  // hammer.add(swipe);
-
-  // hammer.on('swipeleft', function(e) {
-  //   // open menu
-  //   $("#candidateRankerSidebar").slideReveal("show")
-  // });
-
-  // hammer.on('swiperight', function(e) {
-  //   // open menu
-  //   $("#candidateRankerSidebar").slideReveal("hide")
-  // });
 });
 
 

@@ -59,11 +59,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'index' %}"><span class="header-text">Cambridge Council Candidates</span></a>
+                <a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc navbar-toggle btn btn-link visible-xs"></a>
+                <a class="navbar-brand" href="{% url 'index' %}">
+                    <span class="visible-sm header-text">Cambridge Council Candidates</span>
+                    <span class="visible-xs header-text">Cambridge Candidates</span>
+                </a>
             </div>
 
             <ul class="nav navbar-nav navbar-right hidden-xs">
-                <li><a href="#" id="rankCandidates"><span class="fa fa-sort-numeric-asc"></span></a></li>
+                <li><a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc btn btn-link"></a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url "auth_logout" %}">Logout</a></li>
                 {% else %}
