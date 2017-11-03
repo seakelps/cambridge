@@ -29,7 +29,7 @@ $(document).ready(function() {
     overlay: true,
     push: false,
     position: "right",
-    trigger: $("#rankCandidates"),
+    trigger: $("#rankCandidates,#grippy"),
     show: function() { view_model.startPolling(); },
     hide: function() { view_model.stopPolling(); },
   });
