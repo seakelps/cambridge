@@ -185,6 +185,14 @@ a.headshot {
   clear: both;
 }
 
-#candidateRankerSidebar {
-  overflow: auto;  /* allow scrolling within sidebar */
+.panel {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel .panel-body {
+    flex-grow: 1;
+    height: 100%;
+    overflow: scroll;
 }
