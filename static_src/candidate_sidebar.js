@@ -28,7 +28,10 @@ $(document).ready(function() {
     push: false,
     position: "right",
     trigger: $("#rankCandidates,#grippy"),
-    show: function() { view_model.startPolling(); },
+    show: function() {
+      $("#candidateRankerSidebar").css("visibility", "visible");
+      view_model.startPolling();
+    },
     hide: function() { view_model.stopPolling(); },
   });
 
