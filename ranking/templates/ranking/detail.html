@@ -11,18 +11,6 @@
         font-size: large;
         margin-top: 20px;
     }
-
-    /* https://stackoverflow.com/a/26957959/3208419 */
-    input[type=checkbox] { display:none; } /* to hide the checkbox itself */
-    input[type=checkbox] + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        transition: 0.5s;
-    }
-
-    input[type=checkbox] + label:before { content: "\f204"; color: gray } /* fa-toggle-off icon */
-    input[type=checkbox]:checked + label:before { content: "\f205"; color: #337ab7 } /* fa-toggle-on icon */
-    input[type=checkbox] + label:before { letter-spacing: 10px; }
 </style>
 
 {% endblock %}
