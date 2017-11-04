@@ -185,3 +185,23 @@ class UpdateNotes(TestCase):
 
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(ranked_list.annotated_candidates.get().comment, "No Comment")
+
+
+class ClaimList(TestCase):
+    def test_claim_list(self):
+        ranked_list = factories.RankedList(owner=None)
+        session = self.client.session
+        session["ranked_list_id"] = ranked_list.id
+        session.save()
+
+        resp = self.client.post(reverse("registration_register"), {
+            "username": "kittens",
+            "email": "kittens@example.com",
+            "password1": "more cats",
+            "password2": "more cats",
+        })
+
+        self.assertEqual(resp.status_code, 302)
+
+        ranked_list.refresh_from_db()
+        self.assertEqual(int(self.client.session['_auth_user_id']), ranked_list.owner.id)
