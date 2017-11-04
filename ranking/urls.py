@@ -1,5 +1,5 @@
 from django.conf.urls import url, include
-from .views import RankedListDetail, RankedListExplore, MyList, UpdateNote
+from .views import RankedListDetail, RankedListExplore, MyList, UpdateNote, DownloadRankedList
 
 
 urlpatterns = [
@@ -8,5 +8,8 @@ urlpatterns = [
     url("^explore/", include([
         url(r"^$", view=RankedListExplore.as_view(), name="list_explore"),
         url(r"^(?P<slug>[-_\w]+)/$", view=RankedListDetail.as_view(), name="list_explore"),
+        url(r"^(?P<slug>[-_\w]+)/download/$",
+            view=DownloadRankedList.as_view(),
+            name="list_explore_download"),
     ])),
 ]

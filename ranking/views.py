@@ -5,6 +5,7 @@ from django.utils import timezone
 # from django.views.decorators.http import last_modified
 # from django.views.decorators.vary import vary_on_headers
 from django.db.models import Q
+from django.utils.text import slugify
 from django.http import JsonResponse, HttpResponse
 from django import forms
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -40,6 +41,17 @@ class RankedListDetail(DetailView):
             if self.request.user.is_authenticated:
                 filters = filters | Q(owner=self.request.user)
             return super().get_queryset().filter(filters)
+
+
+class DownloadRankedList(RankedListDetail):
+    content_type = "text/plain"
+    template_name = "ranking/detail.txt"
+
+    def render_to_response(self, *args, **kwargs):
+        resp = super().render_to_response(*args, **kwargs)
+        resp['Content-Disposition'] = 'attachment; filename={name}-ranking.txt'.format(
+            name=slugify(self.object.name))
+        return resp
 
 
 class CandidateListField(forms.Field):
