@@ -74,6 +74,11 @@ class Candidate {
     const candidate = this;
 
     if (confirm("Deleting is permanent. Delete this note and rank?")) {
+      $(".commentModal.in").modal("hide");
+      // hack due to knockout changing containing element
+      $('body').removeClass('modal-open');
+      $('.modal-backdrop').remove();
+
       return $.post({
         url: `/ranking/delete/${candidate.slug}/`,
       }).done(function(response, status){
