@@ -1,4 +1,4 @@
-{% autoescape off %}{{ object.name }}
+{% autoescape off %}{{ object.name }} (expored {% now "DATETIME_FORMAT" %})
 
 
 {% for element in object.annotated_candidates.all %}
