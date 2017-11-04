@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from .views import (
-    RankedListDetail, RankedListExplore, MyList, UpdateNote, delete_note
+    RankedListDetail, RankedListExplore, MyList, UpdateNote, delete_note,
     DownloadRankedList, MakePublic, MakeOrdered)
 
 
