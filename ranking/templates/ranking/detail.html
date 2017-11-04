@@ -24,22 +24,19 @@
 
     <div class="row">
         <div class="col-md-12">
-            {% for element in object.annotated_candidates.all %}
-            <div class="col-md-4">
-                <div class="panel panel-default" style="height:300px">
-                    <div class="panel-heading">
-                        <strong>{{ forloop.counter }}.</strong>
-                        <a href="{% url "candidate_detail" element.candidate.slug %}">
-                            {{ element.candidate.fullname}}
-                        </a>
-                    </div>
-
-                    <div class="panel-body">
-                        {{ element.comment|linebreaks }}
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+            <dl>
+                {% for element in object.annotated_candidates.all %}
+                <dt>
+                    {{ forloop.counter }}.
+                    <a href="{% url "candidate_detail" element.candidate.slug %}">
+                        {{ element.candidate.fullname}}
+                    </a>
+                </dt>
+                <dd>
+                    {{ element.comment|linebreaks }}
+                </dd>
+                {% endfor %}
+            </dl>
         </div>
     </div>
 </div>
