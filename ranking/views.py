@@ -5,6 +5,7 @@ from django.utils import timezone
 # from django.views.decorators.http import last_modified
 # from django.views.decorators.vary import vary_on_headers
 from django.db.models import Q
+from django.utils.text import slugify
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django import forms
@@ -42,6 +43,17 @@ class RankedListDetail(DetailView):
             if self.request.user.is_authenticated:
                 filters = filters | Q(owner=self.request.user)
             return super().get_queryset().filter(filters)
+
+
+class DownloadRankedList(RankedListDetail):
+    content_type = "text/plain"
+    template_name = "ranking/detail.txt"
+
+    def render_to_response(self, *args, **kwargs):
+        resp = super().render_to_response(*args, **kwargs)
+        resp['Content-Disposition'] = 'attachment; filename={name}-ranking.txt'.format(
+            name=slugify(self.object.name))
+        return resp
 
 
 class CandidateListField(forms.Field):
@@ -97,6 +109,24 @@ class MyList(UpdateView):
             .values_list("candidate__slug", flat=True))
         }
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['mine'] = True
+
+        public_setter = MakePublic()
+        public_setter.object = self.object
+        context['public_form'] = public_setter.get_form_class()(
+            instance=self.object,
+            initial=public_setter.get_initial())
+
+        ordered_setter = MakeOrdered()
+        ordered_setter.object = self.object
+        context['ordered_form'] = ordered_setter.get_form_class()(
+            instance=self.object,
+            initial=ordered_setter.get_initial())
+
+        return context
+
     def get(self, request):
         if self.request.is_ajax():
             self.object = self.get_object()
@@ -117,6 +147,36 @@ class MyList(UpdateView):
             return JsonResponse(self.get_json(form.instance))
         else:
             return ret
+
+
+class MakePublic(UpdateView):
+    model = RankedList
+    fields = ['public']
+    success_url = reverse_lazy("my_ranking")
+
+    def get_object(self):
+        # could be super secure and send the slug / uuid to confirm
+        return RankedList.objects.for_request(self.request)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['public'] = not self.object.public
+        return initial
+
+
+class MakeOrdered(UpdateView):
+    model = RankedList
+    fields = ['ordered']
+    success_url = reverse_lazy("my_ranking")
+
+    def get_object(self):
+        # could be super secure and send the slug / uuid to confirm
+        return RankedList.objects.for_request(self.request)
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['ordered'] = not self.object.ordered
+        return initial
 
 
 class UpdateNote(UpdateView):
