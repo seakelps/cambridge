@@ -40,7 +40,8 @@ $(document).ready(function() {
 
 /* Within sidebar lists */
 class Candidate {
-  constructor(candidate) {
+  constructor(candidate, sidebar) {
+    this.sidebar = sidebar;
     this.slug = candidate.slug;
     this.name = candidate.name;
     this.blurb = candidate.blurb;
@@ -64,6 +65,18 @@ class Candidate {
     }).fail(function() {
       alert("Couldn't save");
     });
+  }
+
+  remove() {
+    const candidate = this;
+
+    if (confirm("Deleting is permanent. Delete this note and rank?")) {
+      return $.post({
+        url: `/ranking/delete/${candidate.slug}/`,
+      }).done(function(response, status){
+        candidate.sidebar.loadFromServer();
+      });
+    }
   }
 }
 
@@ -150,7 +163,7 @@ class Sidebar {
   constructor() {
     const sidebar = this;
 
-    sidebar.allCandidates = allCandidates.map(x => new Candidate(x));
+    sidebar.allCandidates = allCandidates.map(x => new Candidate(x, sidebar));
 
     // Using this to avoid re-saving from server update. Couldn't find a better way
     sidebar.serverUpdate = ko.observable(false);
