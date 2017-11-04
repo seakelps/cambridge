@@ -185,3 +185,21 @@ class UpdateNotes(TestCase):
 
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(ranked_list.annotated_candidates.get().comment, "No Comment")
+
+
+class DeleteNote(TestCase):
+
+    def test_delete_note(self):
+        self.user = factories.RankedList().owner
+        self.client.force_login(self.user)
+        self.candidate = overview_factories.Candidate()
+
+        self.user.rankedlist.annotated_candidates.create(candidate=self.candidate, order=1)
+
+        resp = self.client.post(reverse("delete_note", args=[self.candidate.slug]))
+
+        self.assertEqual(resp.status_code, 201)
+        self.assertFalse(self.user.rankedlist.annotated_candidates.exists())
+
+        self.candidate.refresh_from_db()
+        self.assertTrue(self.candidate)
