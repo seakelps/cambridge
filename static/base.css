@@ -196,3 +196,7 @@ a.headshot {
     height: 100%;
     overflow: scroll;
 }
+
+#instructions dt {
+    margin-top: 1.1em;
+}
