@@ -185,3 +185,41 @@ class UpdateNotes(TestCase):
 
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(ranked_list.annotated_candidates.get().comment, "No Comment")
+
+
+class ClaimList(TestCase):
+    def test_claim_list(self):
+        ranked_list = factories.RankedList(owner=None)
+        session = self.client.session
+        session["ranked_list_id"] = ranked_list.id
+        session.save()
+
+        resp = self.client.post(reverse("registration_register"), {
+            "username": "kittens",
+            "email": "kittens@example.com",
+            "password1": "more cats",
+            "password2": "more cats",
+        })
+
+        self.assertEqual(resp.status_code, 302)
+
+        ranked_list.refresh_from_db()
+        self.assertEqual(int(self.client.session['_auth_user_id']), ranked_list.owner.id)
+
+
+class DeleteNote(TestCase):
+
+    def test_delete_note(self):
+        self.user = factories.RankedList().owner
+        self.client.force_login(self.user)
+        self.candidate = overview_factories.Candidate()
+
+        self.user.rankedlist.annotated_candidates.create(candidate=self.candidate, order=1)
+
+        resp = self.client.post(reverse("delete_note", args=[self.candidate.slug]))
+
+        self.assertEqual(resp.status_code, 201)
+        self.assertFalse(self.user.rankedlist.annotated_candidates.exists())
+
+        self.candidate.refresh_from_db()
+        self.assertTrue(self.candidate)

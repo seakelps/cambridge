@@ -155,7 +155,7 @@
         </footer>
     </div> <!-- /container -->
 
-    <div id="candidateRankerSidebar" class="panel panel-info" style="position:relative">
+    <div id="candidateRankerSidebar" class="panel panel-info" style="visibility:hidden; position:relative">
         <div class="panel-heading">
             <a href="#" class="close">&times;</a>
             <h3>Build Your Ballot</h3>
@@ -238,13 +238,8 @@
                                                     </div>
                                                 </div>
                                             </form>
-
-                                            {% comment %}
-                                            <div class="modal-footer" style="text-align:center">
-                                                {# TODO implement this for real! #}
-                                                <button class="btn btn-link" style="color:darkred">Delete</button>
-                                            </div>
-                                            {% endcomment %}
+                                        <div class="modal-footer" style="text-align:center">
+                                            <button type="button" data-bind="click:remove" class="btn btn-link" style="color:darkred">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -255,6 +250,13 @@
             </div>
 
             <select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
+
+            {% if request.user.is_anonymous %}
+            <br>
+            <div class="alert alert-warning">
+                Your list is currently tied to your browser. To permanently save it, signup <a href="{% url "registration_register" %}">here</a>.
+            </div>
+            {% endif %}
         </div>
     </div>
 
