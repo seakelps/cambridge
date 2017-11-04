@@ -250,6 +250,13 @@
             </div>
 
             <select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
+
+            {% if request.user.is_anonymous %}
+            <br>
+            <div class="alert alert-warning">
+                Your list is currently tied to your browser. To permanently save it, signup <a href="{% url "registration_register" %}">here</a>.
+            </div>
+            {% endif %}
         </div>
     </div>
 
