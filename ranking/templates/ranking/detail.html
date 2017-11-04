@@ -44,9 +44,9 @@
 
                 {{ object.ordered|yesno:"Ordered,Unordered" }}:
                 {% if ordered_form.ordered.value %}
-                    <button class="btn btn-default btn-sm">Display as Unordered</button>
-                {% else %}
                     <button class="btn btn-default btn-sm">Display as Ordered</button>
+                {% else %}
+                    <button class="btn btn-default btn-sm">Display as Unordered</button>
                 {% endif %}
             </form>
         </div>
@@ -58,7 +58,7 @@
             <dl>
                 {% for element in object.annotated_candidates.all %}
                 <dt>
-                    {{ forloop.counter }}.
+                    {% if object.ordered %}{{ forloop.counter }}.{% endif %}
                     <a href="{% url "candidate_detail" element.candidate.slug %}">
                         {{ element.candidate.fullname}}
                     </a>
