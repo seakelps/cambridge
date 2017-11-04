@@ -14,7 +14,7 @@ class RankedListManager(models.Manager):
                 return user.rankedlist
             except RankedList.DoesNotExist:
                 return RankedList.objects.create(
-                    name="{}'s Slate".format(user.get_full_name()),
+                    name="{}'s Slate".format(user.get_full_name() or user.username),
                     slug=user.username,
                     owner=user)
         else:
