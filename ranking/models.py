@@ -44,6 +44,7 @@ class RankedList(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     public = models.BooleanField(default=False)
+    ordered = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

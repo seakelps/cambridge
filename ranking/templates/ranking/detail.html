@@ -1,25 +1,68 @@
 {% extends "base.html" %}
 
+{% block head_extra %}
+<style type="text/css" media="screen">
+    #management form { 
+        display: inline; 
+        margin-right: 20px;
+    }
+
+    dt {
+        font-size: large;
+        margin-top: 20px;
+    }
+
+    /* https://stackoverflow.com/a/26957959/3208419 */
+    input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+    input[type=checkbox] + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        transition: 0.5s;
+    }
+
+    input[type=checkbox] + label:before { content: "\f204"; color: gray } /* fa-toggle-off icon */
+    input[type=checkbox]:checked + label:before { content: "\f205"; color: #337ab7 } /* fa-toggle-on icon */
+    input[type=checkbox] + label:before { letter-spacing: 10px; }
+</style>
+
+{% endblock %}
+
 {% block content %}
 
 <div class="container">
-
-    {% if not object.public %}
     <div class="row">
         <div class="col-md-12">
-            <div class="alert alert-warning">
-                This list is not currently public and only be viewed by <em>you</em>.
-                <a href="mailto:admin@cambridge.vote">Email us</a> if you'd like to make it public.
-            </div>
+            <h1>{{ object.name|title }} <a download href="{% url "list_explore_download" object.slug %}" class="fa fa-download"></a></h1>
         </div>
-    </div>
-    {% endif %}
 
+        {% if mine %}
+        <div class="col-md-12" id="management">
+            <form action="{% url "make_public" %}" method="post">
+                {% csrf_token %}
 
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{ object.name }}</h1>
+                {{ public_form.public.as_hidden }}
+
+                {{ object.public|yesno:"Public,Private" }}:
+                {% if public_form.public.value %}
+                    <button class="btn btn-default btn-sm">Make Publically Visible</button>
+                {% else %}
+                    <button class="btn btn-default btn-sm">Make Private</button>
+                {% endif %}
+            </form>
+
+            <form action="{% url "make_ordered" %}" method="post">
+                {% csrf_token %}
+                {{ ordered_form.ordered.as_hidden }}
+
+                {{ object.ordered|yesno:"Ordered,Unordered" }}:
+                {% if ordered_form.ordered.value %}
+                    <button class="btn btn-default btn-sm">Display as Unordered</button>
+                {% else %}
+                    <button class="btn btn-default btn-sm">Display as Ordered</button>
+                {% endif %}
+            </form>
         </div>
+        {% endif %}
     </div>
 
     <div class="row">
