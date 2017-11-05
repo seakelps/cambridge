@@ -1,7 +1,6 @@
 import json
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
-from django.db.models.functions import Length
 
 from .models import Candidate
 from .utils import get_candidate_locations
@@ -56,6 +55,13 @@ class CandidateDetail(DetailView):
             })
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
         context['videos'] = self.object.interviewvideo_set(manager="active").all()
+
+        context['others_articles'] = self.object.pressarticlecandidate_set\
+            .filter(display=True, candidate_is_the_author=False)\
+            .select_related("pressarticle")
+        context['own_articles'] = self.object.pressarticlecandidate_set\
+            .filter(display=True, candidate_is_the_author=True)\
+            .select_related("pressarticle")
 
         if self.object.cpf_id:
             try:

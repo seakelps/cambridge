@@ -355,8 +355,37 @@ ul.endorsements {
         <h2 id="">Press</h2>
         {% if candidate.pressarticlecandidate_set.all %}
             <ul>
-            {% for article in candidate.pressarticlecandidate_set.all %}
-                {% if article.display and not article.candidate_is_the_author %}
+            {% for article in others_articles %}
+                <li><p>
+                    {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
+                    {% if article.pressarticle.link %}
+                        <a href="{{ article.pressarticle.link }}" target="_blank">
+                            {{ article.pressarticle.title }}.
+                            <span class="fa fa-external-link"></span>
+                        </a>
+                    {% else %}
+                        {{ article.pressarticle.title }}.
+                    {% endif %}
+                    <br>
+                    <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
+                    {% if article.sample %}
+                        <a href="#!" 
+                           data-toggle="popover"
+                           data-trigger="focus"
+                           data-container="body"
+                           data-placement="bottom"
+                           data-html="true"
+                           data-content='{{ article.sample|linebreaksbr }}'>
+                           <span class="fa fa-newspaper-o"></span> Excerpt
+                       </a>
+                   {% endif %}
+                </p></li>
+            {% endfor %}
+
+            {% if own_articles %}
+                <h4>Authored:</h4>
+
+                {% for article in own_articles %}
                     <li><p>
                         {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
                         {% if article.pressarticle.link %}
@@ -381,41 +410,9 @@ ul.endorsements {
                            </a>
                        {% endif %}
                     </p></li>
-                {% endif %}
-            {% endfor %}
-
-            <h4>Authored:</h4>
-
-            {% for article in candidate.pressarticlecandidate_set.all %}
-                {% if article.display and article.candidate_is_the_author %}
-                    <li><p>
-                        {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
-                        {% if article.pressarticle.link %}
-                            <a href="{{ article.pressarticle.link }}" target="_blank">
-                                {{ article.pressarticle.title }}.
-                                <span class="fa fa-external-link"></span>
-                            </a>
-                        {% else %}
-                            {{ article.pressarticle.title }}.
-                        {% endif %}
-                        <br>
-                        <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
-                        {% if article.sample %}
-                            <a href="#!" 
-                               data-toggle="popover"
-                               data-trigger="focus"
-                               data-container="body"
-                               data-placement="bottom"
-                               data-html="true"
-                               data-content='{{ article.sample|linebreaksbr }}'>
-                               <span class="fa fa-newspaper-o"></span> Excerpt
-                           </a>
-                       {% endif %}
-                    </p></li>
-                {% endif %}
-            {% endfor %}
-            </ul>
-
+                {% endfor %}
+                </ul>
+            {% endif %}
         {% else %}
             <p class="text-muted">We have not found any press about or authored by this candidate.</p>
         {% endif %}
