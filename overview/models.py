@@ -254,7 +254,7 @@ class PressArticle(models.Model):
     full_text = models.TextField(help_text="possibility to allow full text search later", blank=True, null=True)
 
     def __str__(self):
-        return self.title
+        return "{} ({})".format(self.title, self.pressoutlet)
 
 
 # ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"

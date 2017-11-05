@@ -26,7 +26,7 @@ class PressArticleInline(admin.TabularInline):
     model = PressArticle
 
 
-class PressArticleCandidateInline(admin.TabularInline):
+class PressArticleCandidateInline(admin.StackedInline):
     model = PressArticleCandidate
 
 
