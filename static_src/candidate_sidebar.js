@@ -22,6 +22,7 @@ $.ajaxSetup({
 /* Slider reveal logic */
 $(document).ready(function() {
   csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  view_model.loadFromServer();
 
   $('#candidateRankerSidebar').slideReveal({
     overlay: true,
