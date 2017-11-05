@@ -58,10 +58,10 @@ class CandidateDetail(DetailView):
 
         context['others_articles'] = self.object.pressarticlecandidate_set\
             .filter(display=True, candidate_is_the_author=False)\
-            .select_related("pressarticle").order_by("-date")
+            .select_related("pressarticle").order_by("-pressarticle__date")
         context['own_articles'] = self.object.pressarticlecandidate_set\
             .filter(display=True, candidate_is_the_author=True)\
-            .select_related("pressarticle").order_by("-date")
+            .select_related("pressarticle").order_by("-pressarticle__date")
 
         if self.object.cpf_id:
             try:
