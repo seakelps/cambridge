@@ -185,6 +185,10 @@ a.headshot {
   clear: both;
 }
 
+#candidateRankerSidebar {
+    z-index: 1050;
+}
+
 #candidateRankerSidebar.panel {
     height: 100vh;
     display: flex;

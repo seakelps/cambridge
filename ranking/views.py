@@ -17,6 +17,16 @@ from .models import RankedList, RankedElement
 from overview.models import Candidate
 
 
+@require_POST
+def update_shown_preference(request):
+    request.session['sidebar_visible'] = request.POST['shown'] == "true"
+
+    if request.session['sidebar_visible']:
+        return HttpResponse("Shown", status=201)
+    else:
+        return HttpResponse("Hidden", status=201)
+
+
 class RankedListExplore(ListView):
     template_name = "ranking/explore_lists.html"
     model = RankedList

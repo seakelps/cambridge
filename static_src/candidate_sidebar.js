@@ -25,7 +25,7 @@ $(document).ready(function() {
   view_model.loadFromServer();
 
   $('#candidateRankerSidebar').slideReveal({
-    overlay: true,
+    overlay: false,
     push: false,
     position: "right",
     trigger: $("#rankCandidates,#grippy"),
@@ -33,7 +33,9 @@ $(document).ready(function() {
       $("#candidateRankerSidebar").css("visibility", "visible");
       view_model.startPolling();
     },
+    shown: function() { view_model.updateShownPreference(true); },
     hide: function() { view_model.stopPolling(); },
+    hidden: function() { view_model.updateShownPreference(false); },
   });
 
   $("#candidateRankerSidebar .close").click(function() {
@@ -200,6 +202,10 @@ class Sidebar {
       }
       return candidates;
     });
+  }
+
+  updateShownPreference(shown) {
+    $.post({ url: "/ranking/sidebar-preference/", data: { shown }});
   }
 }
 
