@@ -40,8 +40,7 @@ class RankedListAdmin(admin.ModelAdmin):
     raw_id_fields = ['owner']
     list_filter = ['public', LengthFilter]
     date_hierarchy = 'last_modified'
-    list_display = ['name', 'owner', 'last_modified', 'public']
-    inlines = [CandidateInline]
+    list_display = ['name', 'owner', 'last_modified', 'public', 'ordered']
 
 
 admin.site.register(RankedList, RankedListAdmin)
