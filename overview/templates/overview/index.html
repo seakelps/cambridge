@@ -40,9 +40,13 @@
                     <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                     {% trans num_runners noop as num_runners %}
                     <p>{% blocktrans %}We're compiling everything we can find about 2017 Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!{% endblocktrans %}</p>
-                    <p style="text-align:center">
-                    <a class="btn btn-lg btn-primary" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %} &raquo;</a>
-                    </p>
+
+                    <div class="col-md-12" style="text-align: center">
+                        <div class="btn-group">
+                            <a class="btn btn-lg btn-default" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
+                            <a class="btn btn-lg btn-primary" href="{% url 'all' %}?sidebar=true" role="button">{% blocktrans %}Build Your Ballot{% endblocktrans %}</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div id="map" class="map-container">
