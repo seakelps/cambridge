@@ -54,7 +54,7 @@
 
         <div class="col-md-12">
             {% if object.public %}
-                You can share this information at this url: {% fullurl "list_explore" object.slug %}
+                You can share this information at this url: <a href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
             {% endif %}
         </div>
         {% endif %}
