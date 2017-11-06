@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load fullurl %}
 
 {% block head_extra %}
 <style type="text/css" media="screen">
@@ -49,6 +50,12 @@
                     <button class="btn btn-default btn-sm">Display as Unordered</button>
                 {% endif %}
             </form>
+        </div>
+
+        <div class="col-md-12">
+            {% if object.public %}
+                You can share this information at this url: <a href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
+            {% endif %}
         </div>
         {% endif %}
     </div>
