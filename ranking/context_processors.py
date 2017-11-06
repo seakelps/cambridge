@@ -32,4 +32,7 @@ def sidebar(request):
             } for c in Candidate.objects.filter(is_running=True)])
     }
 
+    if request.GET.get('sidebar') == "true":
+        context['sidebar_visible'] = True
+
     return context
