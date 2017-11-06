@@ -264,6 +264,12 @@
 
     <script>
         ko.applyBindings(cambridge.view_model);
+
+        {% if sidebar_visible %}
+        $(document).ready(function() {
+            $("#candidateRankerSidebar").slideReveal("show");
+        });
+        {% endif %}
     </script>
 
     {% block endscripts %}{% endblock %}
