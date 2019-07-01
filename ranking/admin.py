@@ -1,7 +1,35 @@
 from django.contrib import admin
-from django.db.models import Count
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from django.db.models import Count, F
+from django.utils import timezone
 
 from .models import RankedList, RankedElement
+
+
+class LoggedInSince(admin.SimpleListFilter):
+    title = 'Seen since'
+    parameter_name = 'seen_since'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('since', 'Has come back'),
+            ('not since', 'Never came back'),
+        )
+
+    def queryset(self, request, queryset):
+        if not self.value():
+            return queryset.all()
+        elif self.value() == 'since':
+            return queryset.filter(last_login__gt=F("date_joined") + timezone.timedelta(days=1))
+        elif self.value() == 'not since':
+            return queryset.exclude(last_login__gt=F("date_joined") + timezone.timedelta(days=1))
+        else:
+            raise ValueError(self.value())
+
+
+class UserAdmin(BaseUserAdmin):
+    list_filter = BaseUserAdmin.list_filter + (LoggedInSince, )
 
 
 class CandidateInline(admin.StackedInline):
@@ -44,3 +72,5 @@ class RankedListAdmin(admin.ModelAdmin):
 
 
 admin.site.register(RankedList, RankedListAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
