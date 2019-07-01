@@ -1,7 +1,7 @@
 import random
 from django.db import models
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -40,7 +40,10 @@ class RankedList(models.Model):
     objects = RankedListManager()
 
     last_modified = models.DateTimeField(auto_now=True)
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True)
+    owner = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL)
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     public = models.BooleanField(default=False)
@@ -77,8 +80,13 @@ class RankedElementManager(models.Manager):
 class RankedElement(models.Model):
     objects = RankedElementManager()
 
-    ranked_list = models.ForeignKey(RankedList, related_name="annotated_candidates")
-    candidate = models.ForeignKey("overview.Candidate")
+    ranked_list = models.ForeignKey(
+        RankedList,
+        related_name="annotated_candidates",
+        on_delete=models.CASCADE)
+
+    # probably need to reorder on delete
+    candidate = models.ForeignKey("overview.Candidate", on_delete=models.CASCADE)
     comment = models.TextField(blank=True, default="")
     order = models.PositiveSmallIntegerField(blank=True)
 

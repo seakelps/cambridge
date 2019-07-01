@@ -156,15 +156,15 @@ class Organization(models.Model):
 
 
 class Endorsement(models.Model):
-    organization = models.ForeignKey(Organization)
-    candidate = models.ForeignKey(Candidate)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
 
 
 class PastContribution(models.Model):
     # who donated
-    candidate = models.ForeignKey(Candidate)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
     # to what
     date = models.DateField(blank=True, null=True)
@@ -189,8 +189,8 @@ class Questionnaire(models.Model):
 
 
 class QuestionnaireResponse(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire)
-    candidate = models.ForeignKey(Candidate)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
 
@@ -208,7 +208,7 @@ class VisibleManager(models.Manager):
 
 
 class InterviewVideo(models.Model):
-    candidate = models.ForeignKey(Candidate)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     sort_order = models.FloatField(blank=True)
     link = models.URLField(max_length=500, blank=True)
     visible = models.BooleanField(default=True)
@@ -227,7 +227,7 @@ class InterviewVideo(models.Model):
 
 
 class Quote(models.Model):
-    candidate = models.ForeignKey(Candidate)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     quote = models.TextField(help_text="Text to display. Publically readable!", blank=True)
     by = models.CharField(max_length=100, help_text="Leave blank if candidate", blank=True, default="")
     cite = models.CharField(max_length=100, blank=True)
@@ -246,7 +246,7 @@ class PressOutlet(models.Model):
 
 # ex., "Record number of women running for Council"
 class PressArticle(models.Model):
-    pressoutlet = models.ForeignKey(PressOutlet)
+    pressoutlet = models.ForeignKey(PressOutlet, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100, blank=True)
     link = models.URLField(max_length=500, blank=True)
@@ -259,8 +259,8 @@ class PressArticle(models.Model):
 
 # ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"
 class PressArticleCandidate(models.Model):
-    pressarticle = models.ForeignKey(PressArticle)
-    candidate = models.ForeignKey(Candidate)
+    pressarticle = models.ForeignKey(PressArticle, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     candidate_is_the_author = models.BooleanField(default=False)
     sample = models.TextField(help_text="if there's something particularly noteworthy about this candidate and press article", blank=True)
     display = models.BooleanField(default=False)

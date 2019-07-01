@@ -1,5 +1,5 @@
 from django.dispatch import receiver
-from registration.signals import user_registered
+from django_registration.signals import user_registered
 from .models import RankedList
 
 

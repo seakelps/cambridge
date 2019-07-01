@@ -9,7 +9,7 @@ from django.utils.text import slugify
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django import forms
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
 
 

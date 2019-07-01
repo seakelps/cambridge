@@ -1,7 +1,7 @@
 from urllib.parse import urlencode
 
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from overview.models import Candidate
 

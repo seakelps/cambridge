@@ -69,9 +69,9 @@
             <ul class="nav navbar-nav navbar-right hidden-xs">
                 <li><a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc btn btn-link"></a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url "auth_logout" %}">Logout</a></li>
+                    <li><a href="{% url "logout" %}">Logout</a></li>
                 {% else %}
-                    <li><a href="{% url "auth_login" %}">Login</a></li>
+                    <li><a href="{% url "login" %}">Login</a></li>
                 {% endif %}
             </ul>
 
@@ -123,9 +123,9 @@
                     </li>
 
                     {% if user.is_authenticated %}
-                        <li class="visible-xs"><a href="{% url "auth_logout" %}">Logout</a></li>
+                        <li class="visible-xs"><a href="{% url "logout" %}">Logout</a></li>
                     {% else %}
-                        <li class="visible-xs"><a href="{% url "auth_login" %}">Login</a></li>
+                        <li class="visible-xs"><a href="{% url "login" %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -254,7 +254,7 @@
             {% if request.user.is_anonymous %}
             <br>
             <div class="alert alert-warning">
-                Your list is currently tied to your browser. To permanently save it, signup <a href="{% url "registration_register" %}">here</a>.
+                Your list is currently tied to your browser. To permanently save it, signup <a href="{% url "django_registration_register" %}">here</a>.
             </div>
             {% endif %}
         </div>

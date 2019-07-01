@@ -34,8 +34,8 @@ urlpatterns = [
     url(r'^ranking/', include('ranking.urls')),
 
     # to support having users - login, logout, password management
-    url(r'^accounts/', include('citycouncil.registration_urls')),
-    url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^accounts/', include('django_registration.backends.one_step.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
 ]
 
 if settings.DEBUG:

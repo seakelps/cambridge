@@ -194,7 +194,7 @@ class ClaimList(TestCase):
         session["ranked_list_id"] = ranked_list.id
         session.save()
 
-        resp = self.client.post(reverse("registration_register"), {
+        resp = self.client.post(reverse("django_registration_register"), {
             "username": "kittens",
             "email": "kittens@example.com",
             "password1": "more cats",
