@@ -50,6 +50,10 @@ class Candidate(models.Model):
     # two boolean fields
     is_running = models.NullBooleanField()
     is_incumbent = models.BooleanField(default=0)
+
+    # manual hiding
+    hide = models.NullBooleanField(default=0)
+
     # number of #1 votes last election?
     # round elected in in last election?
 
