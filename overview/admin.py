@@ -102,7 +102,7 @@ class CandidateAdmin(admin.ModelAdmin):
 
     readonly_fields = ('headshot', 'has_blurb')
     list_display = ('fullname', 'is_running', 'is_incumbent', 'cpf_id', 'has_blurb')
-    list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb)
+    list_filter = ('is_running', 'is_incumbent', 'hide', HasWebsite, HasBlurb)
     prepopulated_fields = {"slug": ("fullname",)}
 
     inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin, PastContributionInline, QuoteInline, PressArticleCandidateInline]
