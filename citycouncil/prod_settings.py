@@ -4,7 +4,7 @@ from .settings import *
 
 DEBUG = False
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
 
@@ -38,3 +38,7 @@ ALLOWED_HOSTS = ['.cambridgecouncilcandidates.com']
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+MIDDLEWARE += [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+]
