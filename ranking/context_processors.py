@@ -19,7 +19,7 @@ def sidebar(request):
 
     context = {
         'my_ranking': ranked_list,
-        'runners': Candidate.objects.filter(is_running=True),
+        'runners': Candidate.objects.filter(is_running=True, hide=False),
         'runnerJson': json.dumps([
             {
                 "slug": c.slug,
@@ -29,7 +29,7 @@ def sidebar(request):
                 "img_alt": c.headshot_description,
                 "comment": ranking_lookup[c]["comment"],
                 "order": ranking_lookup[c]["order"],
-            } for c in Candidate.objects.filter(is_running=True)])
+            } for c in Candidate.objects.filter(is_running=True, hide=False)])
     }
 
     if request.GET.get('sidebar') == "true":
