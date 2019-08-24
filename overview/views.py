@@ -11,7 +11,7 @@ from campaign_finance.models import get_candidate_money_at_start_of_2017, get_ca
 
 # servering the jumbotron page
 def index(request):
-    num_runners = Candidate.objects.exclude(is_running=False).count()
+    num_runners = Candidate.objects.exclude(is_running=False).exclude(hide=True).count()
 
     description = """
         If you want more information before you cast your 2017
