@@ -11,7 +11,6 @@
         <!-- <link rel="icon" href="../../favicon.ico"> -->
 
         <title>{% block title %}{% if title %}{{ title }}{% else %}Vote Local!{% endif %}{% endblock %}</title>
-        <link href="{% static 'base.css' %}" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -50,23 +49,18 @@
     {% csrf_token %}
 
     <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc navbar-toggle btn btn-link visible-xs"></a>
-                <a class="navbar-brand" href="{% url 'index' %}">
-                    <span class="hidden-xs header-text">Cambridge Council Candidates</span>
-                    <span class="visible-xs header-text">Cambridge Candidates</span>
-                </a>
-            </div>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="container-fluid">
+            {# TODO #}
+            {# <a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc navbar-toggle btn btn-link visible-xs"></a> #}
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <span class="d-none d-sm-inline header-text">Cambridge Council Candidates</span>
+                <span class="d-inline d-sm-none header-text">Cambridge Candidates</span>
+            </a>
 
-            <ul class="nav navbar-nav navbar-right hidden-xs">
+            <a aria="Toggle Navigation" class="d-md-none fa fa-bars text-light" data-target="#navbar-tog" data-toggle="collapse">&equiv;</a>
+
+            <ul class="nav navbar-nav navbar-right d-none d-sm-flex">
                 <li><a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc btn btn-link"></a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url "logout" %}">Logout</a></li>
@@ -76,56 +70,56 @@
             </ul>
 
             <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="{% if request.resolver_match.url_name == 'all' %} active {% endif %}"><a href="{% url 'all' %}">All</a></li>
-                    <li class="dropdown {% if request.resolver_match.url_name == 'candidate_detail' %} active {% endif %}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
-                        <ul id="candidate_list" class="dropdown-menu">
-                            <li class="dropdown-header">Incumbents</li>
-                            {% for incumbent in incumbents %}
-                                {% if incumbent.slug %}
-                                    <li>
-                                        {% if incumbent.is_running == False %}
-                                            <a href="{% url "candidate_detail" incumbent.slug %}" class="not_running">{{ incumbent.fullname }}</a>
-                                        {% else %}
-                                            <a href="{% url "candidate_detail" incumbent.slug %}">{{ incumbent.fullname }}</a>
-                                        {% endif %}
-                                    </li>
-                                {% else %}
-                                    <li class="disabled"><a href="#">{{ incumbent.fullname }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-                            <li class="dropdown-header">Challengers</li>
-                            {% for non_incumbent in non_incumbents %}
-                                {% if non_incumbent.slug %}
-                                    <li>
-                                        {% if non_incumbent.is_running == False %}
-                                            <a href="{% url "candidate_detail" non_incumbent.slug %}" class="not_running">{{ non_incumbent.fullname }}</a>
-                                        {% else %}
-                                            <a href="{% url "candidate_detail" non_incumbent.slug %}">{{ non_incumbent.fullname }}</a>
-                                        {% endif %}
-                                    </li>
-                                {% else %}
-                                    <li class="disabled"><a href="#">{{ non_incumbent.fullname }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
+                <div class="div mr-auto"></div>
+                <ul class="nav navbar-nav text-center">
+                    <li class="nav-item {% if request.resolver_match.url_name == 'all' %} active {% endif %}">
+                        <a class="btn btn-link text-light" href="{% url 'all' %}">All</a>
                     </li>
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{% url 'full_history' %}">Incumbent Voting</a></li>
-                            <li><a href="{% url 'finance_comparison' %}">Campaign Finance</a></li>
-                            <li class="disabled"><a href="#">Press Coverage</a></li>
-                            <li><a href="{% url 'my_ranking' %}">My Candidates</a></li>
-                        </ul>
+                    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'candidate_detail' %} active {% endif %}">
+                        <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
+                        <div id="candidate_list" class="dropdown-menu bg-dark">
+                            <h6 class="dropdown-header">Incumbents</h6>
+                            {% for incumbent in incumbents %}
+                                {% if incumbent.slug %}
+                                    {% if incumbent.is_running == False %}
+                                        <a href="{% url "candidate_detail" incumbent.slug %}" class="dropdown-item not_running">{{ incumbent.fullname }}</a>
+                                    {% else %}
+                                        <a href="{% url "candidate_detail" incumbent.slug %}" class="dropdown-item">{{ incumbent.fullname }}</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a class="dropdown-item disabled" href="#">{{ incumbent.fullname }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            <h6 class="dropdown-header">Challengers</h6>
+                            {% for non_incumbent in non_incumbents %}
+                                {% if non_incumbent.slug %}
+                                    {% if non_incumbent.is_running == False %}
+                                        <a href="{% url "candidate_detail" non_incumbent.slug %}" class="dropdown-item not_running">{{ non_incumbent.fullname }}</a>
+                                    {% else %}
+                                        <a href="{% url "candidate_detail" non_incumbent.slug %}" class="dropdown-item">{{ non_incumbent.fullname }}</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a class="dropdown-item disabled" href="#">{{ non_incumbent.fullname }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
+                        <div class="dropdown-menu bg-dark">
+                            <a class="dropdown-item" href="{% url 'full_history' %}">Incumbent Voting</a>
+                            <a class="dropdown-item" href="{% url 'finance_comparison' %}">Campaign Finance</a>
+                            <a class="dropdown-item disabled" href="#">Press Coverage</a>
+                            <a class="dropdown-item" href="{% url 'my_ranking' %}">My Candidates</a>
+                        </div>
                     </li>
 
                     {% if user.is_authenticated %}
-                        <li class="visible-xs"><a href="{% url "logout" %}">Logout</a></li>
+                        <li class="nav-item d-list-item d-sm-none"><a href="{% url "logout" %}">Logout</a></li>
                     {% else %}
-                        <li class="visible-xs"><a href="{% url "login" %}">Login</a></li>
+                        <li class="nav-item d-none d-sm-list-item"><a href="{% url "login" %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -136,24 +130,24 @@
     {% block content %}
     {% endblock %}
 
-    <div class="container">
-        <hr>
-        <footer class="page_footer">
-            <p>
-                <a class="twitter-follow-button"
-                  href="https://twitter.com/cambridge_vote"
-                  target="_blank"
-                  data-show-count=false
-                  data-show-screen-name=false
-                  data-size="large">Follow</a>
+    <footer class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <span class="d-none d-small-inline header-text">Cambridge Council Candidates</span>
+                <span class="d-inline d-small-none header-text">Cambridge Candidates</span>
+            </a>
 
-                <span class="about_us">
-                    <a class="about_us_link" href="{% url "about_us" %}">About us</a>
-                    © 2017
-                </span>
-            </p>
-        </footer>
-    </div> <!-- /container -->
+            <div class="div mr-auto"></div>
+            <ul class="nav navbar-nav">
+                <li class="nav-item ml-2">
+                    <a class="text-light" href="about">About</a>
+                </li>
+                <li class="nav-item ml-2">
+                    <a class="text-light" href="about#team">Contact Us</a>
+                </li>
+            </ul>
+        </div> <!-- /container -->
+    </footer>
 
     <div id="candidateRankerSidebar" class="panel panel-info" style="visibility:hidden; position:relative">
         <div class="panel-heading">
