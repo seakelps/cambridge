@@ -1,0 +1,354 @@
+main
+  @include media-breakpoint-up(lg)
+    padding-top: 117px
+    padding-bottom: 117px
+
+  @include media-breakpoint-down(md)
+    padding-top: 57px
+    padding-bottom: 57px
+
+  @include media-breakpoint-down(sm)
+    padding-top: 51px
+    padding-bottom: 51px
+
+
+section
+  text-align: center
+
+  padding-top: 1.5rem
+  padding-bottom: 1.5rem
+
+  // @include media-breakpoint-up(lg)
+  //   padding-top: 70px
+  //   padding-bottom: 70px
+
+  // @include media-breakpoint-down(md)
+  //   padding-top: 57px
+  //   padding-bottom: 57px
+
+  // @include media-breakpoint-down(sm)
+  //   padding-top: 26px
+  //   padding-bottom: 26px
+
+  p
+    text-align: left
+
+  .card
+    text-align: left
+
+.card
+  margin: 9px 0
+  padding: 63px 85px
+
+.press-article
+  text-align: left
+
+  h4, .h4
+    display: block
+    color: $other-red
+    font-size: 18px
+    font-weight: bold
+    line-height: 24px
+
+  h3, .h3
+    display: block
+    color: $body-color
+    font-family: Heebo
+    font-weight: bold
+
+    line-height: 34px
+    font-size: 1rem
+    @include media-breakpoint-down(sm)
+      line-height: 24px
+      font-size: 1.125rem
+
+  p
+    font-size: 0.75rem
+    @include media-breakpoint-down(sm)
+      font-size: 1rem
+
+
+.survey
+  text-align: left
+
+  h4, .h4
+    display: block
+    font-size: 1rem
+    font-weight: bold
+
+    @include media-breakpoint-down(sm)
+      font-size: 1.125rem
+
+
+@include bg-variant(".bg-black", $black)
+@include bg-variant(".bg-gray", #eeeeef)
+
+.btn-red
+  @include button-variant($secondary, $secondary)
+
+.btn-website
+  @include button-variant(#494949, #494949)
+
+.btn-facebook
+  @include button-variant(#3b5899, #3b5899)
+
+.btn-twitter
+  @include button-variant(#089fea, #089fea)
+
+.border-green
+  // bootstrap puts important on all borders
+  border-color: #d1dcd8 !important
+
+h1
+  font-family: Heebo
+  font-size: 1.5rem
+  font-weight: bold
+
+  @include media-breakpoint-down(md)
+    font-size: 1rem
+
+h2
+  font-family: Heebo
+  font-weight: bold
+  line-height: 48px
+
+  font-size: 1.5rem
+
+  @include media-breakpoint-down(md)
+    font-size: 1.2rem
+
+h2 + h3
+  // subheader
+  color: #262626
+  text-align: center
+
+  @include media-breakpoint-up(lg)
+    font-size: 36px
+    margin-bottom: 2em
+
+  @include media-breakpoint-down(md)
+    font-size: 1.2rem
+    margin-bottom: 1.1em
+
+#socials .btn
+  font-family: Montserrat
+  font-size: 16px
+  font-weight: bold
+
+  .fa, .fab, .fas
+    @include media-breakpoint-down(sm)
+      font-size: 1.5em
+
+    font-size: 1.87em
+    line-height: inherit
+
+dl 
+  line-height: 2rem
+
+  @include media-breakpoint-down(sm)
+    line-height: 1.5rem
+
+dt
+  font-weight: normal
+  float: left
+  clear: left
+  margin-right: 0.5em
+
+  &:after
+    content: ":"
+
+
+.candidate-info-body
+  display: flex
+
+// styles for the headshot & party icon
+
+// headshot
+.rounded-circle
+  border: 3px solid white
+
+.avatar
+  height: 235px
+  width: 235px
+
+  // size of the headshort for <=sm, <=md, <=lg
+  @include media-breakpoint-down(lg)
+    height: 235px
+    width: 235px
+
+  @include media-breakpoint-down(md)
+    height: 155px
+    width: 155px
+
+  @include media-breakpoint-down(sm)
+    height: 155px
+    width: 155px
+
+.no-avatar
+  border: 0px solid white
+  background: #FFFFFF
+  max-height: 100%
+
+// party icon
+.party-icon-circle
+  position: absolute
+  border-radius: 50%
+  display: inline-block
+
+  // sizing by viewport
+  height: 100px
+  width: 100px
+  bottom: -10px
+
+  @include media-breakpoint-down(lg)
+    height: 100px
+    width: 100px
+    bottom: -10px
+
+  @include media-breakpoint-down(md)
+    height: 75px
+    width: 75px
+    bottom: -8px
+
+  @include media-breakpoint-down(sm)
+    height: 75px
+    width: 75px
+    bottom: -5px
+
+.elephant-icon
+  height: 55px
+  margin-top: 22px
+  margin-left: 15px
+
+  @include media-breakpoint-down(lg)
+    height: 55px
+    margin-top: 22px
+    margin-left: 15px
+
+  @include media-breakpoint-down(md)
+    height: 40px
+    margin-top: 18px
+    margin-left: 11px
+
+  @include media-breakpoint-down(sm)
+    height: 40px
+    margin-top: 18px
+    margin-left: 11px
+
+.donkey-icon
+  height: 65px
+  margin-top: 14px
+  margin-left: 18px
+
+  @include media-breakpoint-down(lg)
+    height: 65px
+    margin-top: 14px
+    margin-left: 18px
+
+  @include media-breakpoint-down(md)
+    height: 49px
+    margin-top: 10px
+    margin-left: 13px
+
+  @include media-breakpoint-down(sm)
+    height: 49px
+    margin-top: 10px
+    margin-left: 13px
+
+// end styles for the headshot & party icon
+.name-and-info
+  margin-left: 55px
+
+  @include media-breakpoint-down(lg)
+    margin-left: 38px
+
+  @include media-breakpoint-down(md)
+    margin-left: 38px
+
+  @include media-breakpoint-down(sm)
+    margin-left: 25px
+
+
+.stats
+  margin-top: 69px
+
+  > div
+    font-weight: bold
+
+    div
+      font-size: 18px
+      font-weight: bold
+      line-height: 32px
+      // TODO fix vertical align
+
+    strong
+      font-size: 36px
+      font-weight: bold
+      line-height: 26px
+
+    &:first-child
+      strong
+        font-size: 56px
+        font-weight: 900
+
+  @include media-breakpoint-down(sm)
+    > div
+      margin-top: 20px
+
+  @include media-breakpoint-up(md)
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr
+    grid-row-gap: 2em
+
+    > div
+      position: relative
+
+      grid-row: 2
+
+      &:first-child
+        grid-row: 1
+        grid-column: 2
+
+#socials
+  .fa-button
+    span
+      @include media-breakpoint-down(sm)
+        display: none
+
+.btn-bold
+  font-family: heebo
+  font-weight: bold
+
+.split
+  display: flex
+  justify-content: space-between
+
+  > *
+    width: 49.5%
+    display: block
+
+  .btn
+    font-family: heebo
+    font-weight: bold
+
+    white-space: normal
+    padding: 40px
+
+    font-size: 24px
+    line-height: 34px
+
+    display: flex
+    align-items: center
+
+    .fa
+      width: 77px
+      text-align: right
+      padding-right: 10px
+
+    span
+      text-align: left
+
+#policies
+  display: grid
+  grid-template-columns: 1fr auto
+  grid-gap: 2em

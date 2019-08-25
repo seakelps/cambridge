@@ -1,0 +1,214 @@
+// styles for the all candidates list view
+
+main
+  @include media-breakpoint-up(lg)
+    padding-top: 54px
+    padding-bottom: 54px
+
+  @include media-breakpoint-down(md)
+    padding-top: 63px
+    padding-bottom: 63px
+
+  @include media-breakpoint-down(sm)
+    padding-top: 55px
+    padding-bottom: 55px
+
+
+h1, .h1
+  font-size: 36px
+
+  @include media-breakpoint-down(md)
+    font-size: 24px
+
+  @include media-breakpoint-down(sm)
+    font-size: 18px
+
+
+#address_search
+  flex-wrap: nowrap
+
+  .form-control
+    flex-grow: 1
+    margin-right: 10px
+
+  @include media-breakpoint-up(lg)
+    padding-top: 45px
+    padding-bottom: 45px
+
+  @include media-breakpoint-up(md)
+    padding-top: 44px
+    padding-bottom: 44px
+
+  @include media-breakpoint-up(sm)
+    padding-top: 38px
+    padding-bottom: 38px
+
+  padding-top: 31px
+  padding-bottom: 31px
+
+#filters
+  > * + *
+    margin-left: 35px
+
+.btn-other-red
+  @include button-variant($other-red, $other-red)
+
+.pos
+  border: 1px solid #E5E5E5
+  border-radius: 4px
+  background-color: #F9F9F9
+
+  padding: 54px 92px
+
+  @include media-breakpoint-down(lg)
+    padding: 54px 76px
+
+  @include media-breakpoint-down(md)
+    padding: 34px 37px
+
+  @include media-breakpoint-down(sm)
+    padding: 23px 30px
+
+
+  margin-bottom: 21px
+
+  h2
+    font-family: Heebo
+    font-weight: bold
+
+    font-size: 36px
+    @include media-breakpoint-down(md)
+      font-size: 1rem
+
+    @include media-breakpoint-down(sm)
+      font-size: 18px
+
+  p
+    font-size: 24px
+    @include media-breakpoint-down(md)
+      font-size: 18px
+
+.candidate 
+  margin-bottom: 10px
+
+  p > a 
+    font-style: italic
+    color: inherit
+    padding-left: 0.25em
+
+    &:after
+      content: ">"
+      font-style: normal
+      padding-left: 0.25em
+
+  .candidate-card-body
+    display: flex
+
+  // styles for the headshot & party icon
+
+  // headshot
+  .avatar
+    height: 140px
+    width: 140px
+
+    // size of the headshort for <=sm, <=md, <=lg
+    @include media-breakpoint-down(lg)
+      height: 125px
+      width: 125px
+
+    @include media-breakpoint-down(md)
+      height: 120px
+      width: 120px
+
+    @include media-breakpoint-down(sm)
+      height: 60px
+      width: 60px
+
+  .avatar-circle
+    border: 0px solid white
+
+  // party icon
+  .party-icon-circle
+    position: absolute
+    border-radius: 50%
+    display: inline-block
+
+    // sizing by viewport
+    height: 50px
+    width: 50px
+    bottom: -10px
+
+    @include media-breakpoint-down(lg)
+      height: 50px
+      width: 50px
+      bottom: -10px
+
+    @include media-breakpoint-down(md)
+      height: 40px
+      width: 40px
+      bottom: -8px
+
+    @include media-breakpoint-down(sm)
+      height: 20px
+      width: 20px
+      bottom: -5px
+
+  .elephant-icon
+    height: 27px
+    margin-top: 7px
+    margin-left: 10px
+
+    @include media-breakpoint-down(lg)
+      height: 27px
+      margin-top: 7px
+      margin-left: 10px
+
+    @include media-breakpoint-down(md)
+      height: 20px
+      margin-top: 0px
+      margin-left: 7px
+
+    @include media-breakpoint-down(sm)
+      height: 10px
+      margin-top: -8px
+      margin-left: 4px
+
+  .donkey-icon
+    height: 30px
+    margin-top: 7px
+    margin-left: 10px
+
+    @include media-breakpoint-down(lg)
+      height: 30px
+      margin-top: 7px
+      margin-left: 10px
+
+    @include media-breakpoint-down(md)
+      height: 25px
+      margin-top: 0px
+      margin-left: 7px
+
+    @include media-breakpoint-down(sm)
+      height: 12px
+      margin-top: -8px
+      margin-left: 4px
+
+  // end styles for the headshot & party icon
+  .name-and-blurb
+    margin-left: 40px
+
+    @include media-breakpoint-down(lg)
+      margin-left: 20px
+
+    @include media-breakpoint-down(md)
+      margin-left: 10px
+
+  @include media-breakpoint-down(sm)
+    .name
+      font-size: 18px
+
+.btn-add-big
+  background-color: transparent
+  color: #4A4A4A
+
+  font-weight: bold
