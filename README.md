@@ -1,15 +1,26 @@
 # cambridge
 
-This is a django project!
+This is a django + webpack project, styled with bootstrap!
 
-To work on it, you will probably need python 3.4 or later and django 1.11 or later.
+# Setup
 
-I recommend pyenv.
+```
+npm install
 
+pip install -r requirements.txt
+python manage.py migrate
+```
+
+# Running the site
+
+```
+npm run build  # generates javascript bundles and puts css in place for django to serve
+python manage.py runserver  # launches django server
+```
 
 # Adding Translations
 
-When writing new strings, surround blocks of text with `{% blocktrans %}...{% endblocktrans %}`. 
+When writing new strings, surround blocks of text with `{% blocktrans %}...{% endblocktrans %}`.
 If any variables appear within the text, they should be translated (or `{% trans $var noop %}`) independently.
 
     python manage.py makemessages  # add blocks to translation file
