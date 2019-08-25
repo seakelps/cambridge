@@ -35,7 +35,7 @@ class CandidateList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.order_by("fullname")
+        candidates = Candidate.objects.exclude(hide=True).order_by("fullname")
         context['runners'] = candidates.exclude(is_running=False)
         context['not_runners'] = candidates.filter(is_running=False)
         return context
