@@ -10,7 +10,7 @@ class Command(BaseCommand):
         empty_lists = RankedList.objects \
             .exclude(public=True) \
             .filter(owner_id=None,annotated_candidates__isnull=True) \
-            .filter(last_modified__gte=datetime.now()-timedelta(days=7)) \
+            .filter(last_modified__lte=datetime.now() - timedelta(days=7)) \
             .delete()
 
         self.stdout.write(self.style.SUCCESS('Successfully deleted %s ranked lists' % empty_lists[0]))
