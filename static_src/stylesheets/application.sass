@@ -32,8 +32,10 @@ $container-max-widths: (sm: 540px, md: 720px, lg: 871px, xl: 872px)
 /* shouldn't need the extension right? */
 $fa-font-path: '../../node_modules/@fortawesome/fontawesome-free/webfonts';
 
-@import "@fortawesome/fontawesome-free/scss/fontawesome.scss"
-@import "@fortawesome/fontawesome-free/scss/regular.scss"
+// couldn't figure out how to make the sass version below work, always broken icon
+@import "../../node_modules/@fortawesome/fontawesome-free/css/all.css"
+/* @import "@fortawesome/fontawesome-free/scss/fontawesome.scss" */
+/* @import "@fortawesome/fontawesome-free/scss/regular.scss" */
 @import "bootstrap/scss/bootstrap.scss"
 
 .font-weight-bolder

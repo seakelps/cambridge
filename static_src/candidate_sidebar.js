@@ -1,5 +1,5 @@
 /* global: allCandidates */
-import { isEqual } from 'underscore'
+import { isEqual } from 'underscore';
 
 /* Cookie handler from https://docs.djangoproject.com/en/1.11/ref/csrf/ */
 var csrftoken;

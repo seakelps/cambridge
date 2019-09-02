@@ -39,13 +39,21 @@ module.exports = {
       },
 
       {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
         test: /\.(jpe?g|png|gif|svg)$/i,
         loader: "file-loader",
-        query:{
+        options:{
           name:'[name].[ext]',
           outputPath:'images/'
-          //the images will be emmited to public/assets/images/ folder
-          //the images will be put in the DOM <style> tag as eg. background: url(assets/images/image.png);
         }
       },
       {
@@ -54,7 +62,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
+        loader: [
           // Creates `style` nodes from JS strings
           'style-loader',
           // Translates CSS into CommonJS
@@ -65,19 +73,18 @@ module.exports = {
       },
       {
         test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        // loader: 'url-loader?limit=10000',
-        loader: 'file-loader',
-        query:{
-          outputPath:'fonts/',
-          publicPath:'static/'
+        loader: 'url-loader?limit=10000',
+        options: {
+          outputPath:'fonts',
+          publicPath:'static'
         }
       },
       {
         test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
         loader: 'file-loader',
-        query:{
-          outputPath:'fonts/',
-          publicPath:'static/'
+        options:  {
+          outputPath:'fonts',
+          publicPath:'static'
         }
       },
     ]
