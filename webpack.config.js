@@ -13,7 +13,6 @@ module.exports = {
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: "node_modules/bootstrap/dist/", to: "bootstrap"},
       { from: "node_modules/animate.css/animate.min.css" }
     ]),
     new UglifyJSPlugin()  // heroku has NODE_ENV=production by default
