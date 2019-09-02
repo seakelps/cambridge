@@ -39,8 +39,8 @@ module.exports = {
       },
 
       {
-        test: /\.(jpe?g|png|gif)$/i,
-        loader:"file-loader",
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: "file-loader",
         query:{
           name:'[name].[ext]',
           outputPath:'images/'
@@ -62,6 +62,23 @@ module.exports = {
           // Compiles Sass to CSS
           'sass-loader',
         ],
+      },
+      {
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        // loader: 'url-loader?limit=10000',
+        loader: 'file-loader',
+        query:{
+          outputPath:'fonts/',
+          publicPath:'static/'
+        }
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        loader: 'file-loader',
+        query:{
+          outputPath:'fonts/',
+          publicPath:'static/'
+        }
       },
     ]
   }
