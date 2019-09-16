@@ -44,7 +44,7 @@
         {% block head_extra %}{% endblock %}
     </head>
 
-    <body>
+    <body id="{% block body_id %}{% endblock %}">
 
     {% csrf_token %}
 
@@ -148,123 +148,6 @@
             </ul>
         </div> <!-- /container -->
     </footer>
-
-    <div id="candidateRankerSidebar" class="panel panel-info" style="visibility:hidden; position:relative">
-        <div class="panel-heading">
-            <a href="#" class="close">&times;</a>
-            <h3>Build Your Ballot</h3>
-
-            <a data-toggle="collapse" data-target="#instructions">learn more&hellip;</a>
-            <div id="instructions" class="collapse">
-                <dl>
-                    <dt>Adding</dt>
-                    <dd>Click the <code>+ Add a Candidate</code> dropdown, and select the candidate you wish to add.</dd>
-
-                    <dt>Ranking</dt>
-                    <dd>Double click the <code class="fa fa-unsorted"></code> arrows to select a candidate (after added to your list), and then drag up or down to re-rank.</dd>
-
-                    <dt>Deleting</dt>
-                    <dd>Click the <code class="fa fa-address-book-o"></code> to open the detail view and delete the candidate from your list.</dd>
-
-                    <dt>Notes</dt>
-                    <dd>Click the <code class="fa fa-address-book-o"></code> to open the detail view and add a note.</dd>
-
-                    <dt>Our Data Policy</dt>
-                    <dd>For details, please check out the <a class="about_us_link" href="{% url "about_us" %}">about us</a> page!</dd>
-                </dl>
-            </div>
-        </div>
-
-        <div class="panel-body">
-            <div id="candidateTableWrapper">
-                <table class="ordered table" style="table-layout: fixed">
-                    <colgroup>
-                        <col style="width: 3em"></col>
-                        <col></col>
-                        <col style="width: 1em"></col>
-                    </colgroup>
-                    <tbody id="candidateList" class="sortable" data-bind="sortable:{ data: candidates, options: { containment: '#candidateRankerSidebar', handle: '.sorter', placeholder: { element: function(clone, ui) { return $('<tr class=\'selected\'>'+clone[0].innerHTML+'</tr>'); }, update: function() { return; } } } }">
-                        <tr data-bind="attr: {id: 'candidate_' + slug }">
-                            <td class="sorter">
-                                <span class="fa fa-unsorted"></span>
-                                <span data-bind="text:order"></span>
-                            </td>
-                            <td> 
-                                <span data-bind="text:name"></span>
-                            </td>
-                            <td>
-                                <a data-toggle="modal" data-bind="attr: {'data-target': '#candidate_' + slug + ' .commentModal' }" style="float:right" class="btn btn-link fa fa-address-book-o"></a>
-                                
-                                <div class="commentModal modal fade" role="dialog">
-                                    {# e.keyCode === 13 && e.ctrlKey #}
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <form data-bind="submit: updateComment, attr: { action: `/ranking/notes/${slug}/` }" method="POST">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title">
-                                                        <strong>
-                                                            #<span data-bind="text:order"></span>
-                                                            <span data-bind="text:name"></span>
-                                                        </strong>
-                                                        <a class="btn btn-link" data-bind="attr: {href: '/candidates/' + slug }">View Profile</a>
-
-                                                        <div class="pull-right">
-                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                                            <button type="submit" class="btn btn-primary">Save</button>
-                                                        </div>
-                                                    </h4>
-                                                </div>
-
-                                                <div class="modal-body">
-                                                    {% csrf_token %}
-                                                    <div class="form-group">
-                                                        <label for="comment">My Notes</label>
-
-                                                        {# Should this save immeidately to comment? #}
-                                                        <textarea autofocus rows=5 placeholder="Why do you like or dislike this candidate?&#10;Anything you want to remember when you're voting?" data-bind="value:comment" class="form-control" name="comment"></textarea>
-                                                    </div>
-
-                                                    <div class="well" style="margin-bottom: 0px">
-                                                        <a data-bind="attr: {href: '/candidates/' + slug }">
-                                                            <img style="max-width:200px; width:20%; float: left; margin: 20px" class="img-circle img-responsive" data-bind="attr: {src: img_url, alt: img_alt}">
-                                                        </a>
-                                                        <div style="text-align:left" data-bind="html:blurb"></div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        <div class="modal-footer" style="text-align:center">
-                                            <button type="button" data-bind="click:remove" class="btn btn-link" style="color:darkred">Delete</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <select id="addCandidate" class="form-control" data-bind="optionsCaption: '+ Add Candidate', value: selectedCandidate, options: remainingCandidates, optionsText: 'name'"></select>
-
-            {% if request.user.is_anonymous %}
-            <br>
-            <div class="alert alert-warning">
-                Your list is currently tied to your browser. To permanently save it, signup <a href="{% url "django_registration_register" %}">here</a>.
-            </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <div id="grippy">&nbsp;</div>
-
-    <script>
-        ko.applyBindings(cambridge.view_model);
-
-        {% if sidebar_visible %}
-        $(document).ready(function() {
-            $("#candidateRankerSidebar").slideReveal("show");
-        });
-        {% endif %}
-    </script>
 
     {% block endscripts %}{% endblock %}
     </body>

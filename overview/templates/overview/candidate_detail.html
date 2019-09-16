@@ -3,6 +3,8 @@
 {% load static %}
 {% load humanize %}
 
+{% block body_id %}candidate_detail{% endblock %}
+
 {% block title %}Learn More About {{ candidate.fullname }}{% endblock %}
 
 {% block meta_description %}{{ candidate.blurb|markdown|striptags }}{% endblock %}
@@ -19,76 +21,269 @@
 
 <script>
     // data for candidate_map.js
-    var initialLocations = {{ candidate_locations|safe }};
+    {# var initialLocations = {{ candidate_locations|safe }}; #}
 </script>
-<script>{% include "overview/candidate_map.js" %}</script>
+{# <script>{% include "overview/candidate_map.js" %}</script> #}
 
-<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script>
+{# <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script> #}
 <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script defer src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-
-<style>
-#map {
-    height: 350px;  /* hehehehe */
-    width: 100%;
-}
-
-.candidate-img img {
-    width: 70%; 
-    margin-top: 20px;
-}
-
-.endorsement img {
-    max-height: 30px;
-    max-width: 100px;
-}
-
-ul.endorsements {
-    list-style: none;
-    padding-left: 0px;
-}
-
-#theCarousel {
-    overflow-x: scroll;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    overflow-scrolling: touch;
-}
-
-#theCarousel .video {
-    display: inline-block;
-}
-
-.questionnaire_link {
-    display: block;
-    margin-top: 0.75em;
-}
-
-
-@media(max-width:768px) {
-    .dl-horizontal dd {
-        padding-bottom: 20px;
-    }
-}
-</style>
-
 {% endblock %}
 
 
 {% block content %}
+
+<div class="bg-black text-light">
+    <main class="container">
+        <div class="row">
+            <div class="col-12 candidate-info-body">
+                <div class="avatar-and-icon">
+                    <div style="position: relative">
+                        <div class="avatar">
+                            <picture>
+                                <img 
+                                    class="rounded-circle avatar-circle img-fluid" 
+                                    height=500 
+                                    width=500 
+                                    src="{{ candidate.headshot }}" 
+                                    alt="{{ candidate.headshot_description }}">
+                            </picture>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="name-and-info">
+                    <h1>{{ candidate.fullname }}</h1>
+
+                    <dl class="text-left">
+                        {% if candidate.job %}
+                            <dt>Currently</dt>
+                            <dd>{{ candidate.job }}</dd>
+                        {% else if candidate.is_incumbent %}
+                            <dt>Currently</dt>
+                            <dd>City Councilor</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+{% comment %}TODO convert from ruby to django implementation
+<section class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2>More about #{@candidate.short_name}</h2>
+    </div>
+    <div class="col-12 text-center">
+      <ul class="list-inline" id="socials">
+        <% if @candidate.website.present? %>
+          <li class="list-inline-item">
+            <%= link_to @candidate.website, target: "_blank", class: "btn btn-website fa-button" do %>
+              <i class="fa fa-globe-americas"></i>
+              <span>Website</span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if @candidate.facebook.present? %>
+          <li class="list-inline-item">
+            <%= link_to "https://facebook.com/#{@candidate.facebook}", target: "_blank", class: "btn btn-facebook fa-button" do %>
+              <i class="fab fa-facebook"></i>
+              <span>Facebook</span>
+            <% end %>
+          </li>
+        <% end %>
+        <% if @candidate.twitter.present? %>
+          <li class="list-inline-item">
+            <%= link_to "https://twitter.com/@#{@candidate.twitter}", target: "_blank", class: "btn btn-twitter fa-button" do %>
+              <i class="fab fa-twitter"></i>
+              <span>Twitter</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div class="col-12">
+      <%= simple_format(@candidate.blurb) %>
+    </div>
+  </div>
+</section>
+{% endcomment %}
+
+{% comment %}TODO convert from ruby to django implementation
+<section class="container">
+  <div class="row">
+    <section class="col">
+      <h2>Where is #{@candidate.short_name} running?</h2>
+      <div class="img">
+        <%= # image_tag("map-sample.png", class: "img-fluid") %>
+      </div>
+    </section>
+  </div>
+</section>
+{% endcomment %}
+
+{% comment %}TODO convert from ruby to django implementation
+<div class="bg-gray">
+  <section class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Q&amp;A</h2>
+        <h3>Interviews with the candidate</h3>
+      </div>
+      <% @candidate.survey_responses.each do |response| %>
+        <div class="col-12">
+          <div class="card border border-green d-none d-md-block survey">
+            <div class="card-body">
+              <h4>
+                <% if response.response_link.present? %>
+                  <%= link_to response.survey.survey_name, response.response_link %>
+                <% elsif response.survey.survey_link.present? %>
+                  <%= link_to response.survey.survey_name, response.survey.survey_link %>
+                <% else %>
+                  <%= response.survey.survey_name %>
+                <% end %>
+                <i class="fas fa-external-link-alt"></i>
+              </h4>
+              <p>#{response.survey.description}</p>
+            </div>
+          </div>
+          <section class="bg-white border border-green d-md-none row survey">
+            <div class="col">
+              <h4>
+                <% if response.response_link.present? %>
+                  <%= link_to response.survey.survey_name, response.response_link %>
+                <% elsif response.survey.survey_link.present? %>
+                  <%= link_to response.survey.survey_name, response.survey.survey_link %>
+                <% else %>
+                  <%= response.survey.survey_name %>
+                <% end %>
+                <i class="fas fa-external-link-alt"></i>
+              </h4>
+              <p>#{response.survey.description}</p>
+            </div>
+          </section>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>
+{% endcomment %}
+
+{% comment %}TODO convert from ruby to django implementation
+<section class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2>Policy</h2>
+      <h3>Where the candidate stands on certain issues</h3>
+    </div>
+    <div class="col-12" id="policies">
+      <% @candidate.candidate_policies.each do |position| %>
+        <div class="d-block">
+          <i class="<%= position.policy.icon_class %> fa fa-2x text-success"></i>
+          <strong class="montserrat">
+            <%= position.policy.name %>
+          </strong>
+        </div>
+        <div class="text-left">
+          <%= position.position %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+{% endcomment %}
+
+{% comment %}TODO convert from ruby to django implementation
+<% if @candidate.finance_snapshot %>
+  <section class="container">
+    <div class="row">
+      <div class="col">
+        <h2>Campaign finance</h2>
+        <h3>How much the candidate has raised and spent</h3>
+        <div class="stats">
+          <div>
+            <strong>
+              <%= number_to_currency @candidate.finance_snapshot.account_total, precision: 0 %>
+            </strong>
+            <div>Current balance</div>
+          </div>
+          <div>
+            <strong>
+              <%= number_to_currency @candidate.finance_snapshot.started_this_year_with, precision: 0 %>
+            </strong>
+            <div>Balance at the start of 2018</div>
+          </div>
+          <div>
+            <i class="fa fa-plus text-success"></i>
+            <strong>
+              <%= number_to_currency @candidate.finance_snapshot.raised_this_year, precision: 0 %>
+            </strong>
+            <div>Raised in 2018</div>
+          </div>
+          <div>
+            <i class="fa fa-minus text-danger"></i>
+            <strong>
+              <%= number_to_currency @candidate.finance_snapshot.spent_this_year, precision: 0 %>
+            </strong>
+            <div>Spent in 2018</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>
+{% endcomment %}
+
+{% comment %}TODO convert from ruby to django implementation
+<div class="bg-gray">
+  <section class="container" id="press">
+    <div class="row">
+      <div class="col-12">
+        <h2>Press</h2>
+        <h3>Articles about the candidate</h3>
+      </div>
+      <% @press.each do |quote| %>
+        <div class="col-12">
+          <div class="card border border-green d-none d-md-block press-article">
+            <div class="card-body">
+              <%= link_to quote.press_article.press_outlet.homepage, class: "h4" do %>
+                <%= quote.press_article.press_outlet.press_outlet_name %>
+              <% end %>
+              <%= link_to quote.press_article.article_link, class: "h3" do %>
+                <%= quote.press_article.headline %>
+                <i class="fa fa-external-link-alt"></i>
+              <% end %>
+              <%= simple_format(quote.sample) %>
+            </div>
+          </div>
+          <section class="bg-white border border-green d-md-none row press-article">
+            <div class="col">
+              <%= link_to quote.press_article.press_outlet.homepage, class: "h4" do %>
+                <%= quote.press_article.press_outlet.press_outlet_name %>
+              <% end %>
+              <%= link_to quote.press_article.article_link, class: "h3" do %>
+                <%= quote.press_article.headline %>
+                <i class="fa fa-external-link-alt"></i>
+              <% end %>
+              <%= simple_format(quote.sample) %>
+            </div>
+          </section>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>
+{% endcomment %}
+
+{% endblock %}
+
+{% block content2 %}{# NOTE: hidden while converting, delete me! #}
 <div class="container">
 <div class="row">
-    <div class="col-md-4 text-center">
-        <picture class="candidate-img img-responsive">
-            <img
-                class="img-circle"
-                src="{{ candidate.headshot }}"
-                alt="{{ candidate.headshot_description }}">
-        </picture>
-    </div>
-
     <div class="col-md-8">
         <h1>{{ candidate.fullname }}</h1>
 
@@ -571,7 +766,7 @@ ul.endorsements {
 {% endblock %}
 
 
-{% block endscripts %}
+{% comment %}TODO reimplement
     <script>
         $("[data-toggle=tooltip]").tooltip();
         $("[data-toggle=popover]").popover();
@@ -599,4 +794,4 @@ ul.endorsements {
             });
         });
     </script>
-{% endblock %}
+{% endcomment %}
