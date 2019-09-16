@@ -145,13 +145,13 @@ class CleanCampaignReceipt(models.Model):
 # potential table: cleaning operation/note
 
 
-# returns either 0 if they had no 2017-1-1 report, or the # from that report
-def get_candidate_money_at_start_of_2017(candidate_cpf_id):
-    # jan 1 2017 report for this candidate
+# returns either 0 if they had no 2019-1-1 report, or the # from that report
+def get_candidate_money_at_start_of_2019(candidate_cpf_id):
+    # jan 1 2019 report for this candidate
     try:
         bank_report = RawBankReport.objects.filter(
             cpf_id=candidate_cpf_id,
-            beginning_date_display__year=2017,
+            beginning_date_display__year=2019,
             beginning_date_display__month=1,
             beginning_date_display__day=1
             ).latest("filing_date")
@@ -161,7 +161,7 @@ def get_candidate_money_at_start_of_2017(candidate_cpf_id):
     return bank_report.beginning_balance_display
 
 
-# all the money the candidate has spent in 2017
+# all the money the candidate has spent in 2019
 #
 # note: if a candidate has two bank accounts, they have two bank reports...
 # and transferring money from one to the other counts as a receipt/expenditure.
@@ -171,23 +171,24 @@ def get_candidate_money_at_start_of_2017(candidate_cpf_id):
 #   - receipt = expenditure
 #   - receipt from = expenditure to
 #
-def get_candidate_2017_spent(candidate_cpf_id):
+def get_candidate_2019_spent(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
         cpf_id=candidate_cpf_id,
-        beginning_date_display__year=2017
+        beginning_date_display__year=2019
     ).aggregate(Sum("expenditure_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
     max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2017)\
+        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2019)\
         .values("beginning_date_display")\
         .annotate(Count("beginning_date_display"))\
         .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
 
     if max_num_reports > 1:
+        # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
-        # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
+        # transfer from closing bank account: $13,472.25, 4/6/2019   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
         if (candidate_cpf_id == 16062):
             return agg['expenditure_total_display__sum'] - decimal.Decimal("13472.25")
@@ -198,23 +199,24 @@ def get_candidate_2017_spent(candidate_cpf_id):
     return agg['expenditure_total_display__sum']
 
 
-# all the money the candidate has raised in 2017
-# (doesn't include money candidate started 2017 with)
-def get_candidate_2017_raised(candidate_cpf_id):
+# all the money the candidate has raised in 2019
+# (doesn't include money candidate started 2019 with)
+def get_candidate_2019_raised(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
         cpf_id=candidate_cpf_id,
-        beginning_date_display__year=2017
+        beginning_date_display__year=2019
         ).aggregate(Sum("receipt_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
     max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2017)\
+        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2019)\
         .values("beginning_date_display")\
         .annotate(Count("beginning_date_display"))\
         .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
 
     if max_num_reports > 1:
+        # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
