@@ -72,46 +72,50 @@
     </main>
 </div>
 
-{% comment %}TODO convert from ruby to django implementation
 <section class="container">
-  <div class="row">
-    <div class="col-12">
-      <h2>More about #{@candidate.short_name}</h2>
+    <div class="row">
+        <div class="col-12">
+            <h2>More about {{candidate.fullname}}</h2>
+        </div>
+
+        <div class="col-12 text-center">
+            <ul class="list-inline" id="socials">
+                {% if candidate.website %}
+                    <li class="list-inline-item">
+                        <a class="btn btn-website fa-button" target="_blank" href="{{ candidate.website }}">
+                            <i class="fa fa-globe-americas"></i>
+                            {# {{ candidate.website|truncate_website }} #}
+                            <span>Website</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if candidate.facebook %}
+                <li class="list-inline-item">
+                    <a class="btn btn-facebook fa-button" target="_blank" href="https://facebook.com/{{ candidate.facebook_url }}">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if candidate.twitter %}
+                <li class="list-inline-item">
+                    <a class="btn btn-twitter fa-button" target="_blank" href="https://twitter.com/{{ candidate.twitter }}">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="col-12">
+            {{ candidate.blurb|markdown }}
+        </div>
     </div>
-    <div class="col-12 text-center">
-      <ul class="list-inline" id="socials">
-        <% if @candidate.website.present? %>
-          <li class="list-inline-item">
-            <%= link_to @candidate.website, target: "_blank", class: "btn btn-website fa-button" do %>
-              <i class="fa fa-globe-americas"></i>
-              <span>Website</span>
-            <% end %>
-          </li>
-        <% end %>
-        <% if @candidate.facebook.present? %>
-          <li class="list-inline-item">
-            <%= link_to "https://facebook.com/#{@candidate.facebook}", target: "_blank", class: "btn btn-facebook fa-button" do %>
-              <i class="fab fa-facebook"></i>
-              <span>Facebook</span>
-            <% end %>
-          </li>
-        <% end %>
-        <% if @candidate.twitter.present? %>
-          <li class="list-inline-item">
-            <%= link_to "https://twitter.com/@#{@candidate.twitter}", target: "_blank", class: "btn btn-twitter fa-button" do %>
-              <i class="fab fa-twitter"></i>
-              <span>Twitter</span>
-            <% end %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-    <div class="col-12">
-      <%= simple_format(@candidate.blurb) %>
-    </div>
-  </div>
 </section>
-{% endcomment %}
+
+
 
 {% comment %}TODO convert from ruby to django implementation
 <div class="bg-gray">
