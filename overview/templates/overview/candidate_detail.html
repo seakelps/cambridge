@@ -225,47 +225,51 @@
 <% end %>
 {% endcomment %}
 
-{% comment %}TODO convert from ruby to django implementation
 <div class="bg-gray">
-  <section class="container" id="press">
-    <div class="row">
-      <div class="col-12">
-        <h2>Press</h2>
-        <h3>Articles about the candidate</h3>
-      </div>
-      <% @press.each do |quote| %>
-        <div class="col-12">
-          <div class="card border border-green d-none d-md-block press-article">
-            <div class="card-body">
-              <%= link_to quote.press_article.press_outlet.homepage, class: "h4" do %>
-                <%= quote.press_article.press_outlet.press_outlet_name %>
-              <% end %>
-              <%= link_to quote.press_article.article_link, class: "h3" do %>
-                <%= quote.press_article.headline %>
-                <i class="fa fa-external-link-alt"></i>
-              <% end %>
-              <%= simple_format(quote.sample) %>
+    <section class="container" id="press">
+        <div class="row">
+            <div class="col-12">
+                <h2>Press</h2>
+                <h3>Articles about the candidate</h3>
             </div>
-          </div>
-          <section class="bg-white border border-green d-md-none row press-article">
-            <div class="col">
-              <%= link_to quote.press_article.press_outlet.homepage, class: "h4" do %>
-                <%= quote.press_article.press_outlet.press_outlet_name %>
-              <% end %>
-              <%= link_to quote.press_article.article_link, class: "h3" do %>
-                <%= quote.press_article.headline %>
-                <i class="fa fa-external-link-alt"></i>
-              <% end %>
-              <%= simple_format(quote.sample) %>
-            </div>
-          </section>
-        </div>
-      <% end %>
-    </div>
-  </section>
-</div>
-{% endcomment %}
 
+            {% for article_snippet in articles %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block press-article">
+                    <div class="card-body">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row press-article">
+                    <div class="col">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
 {% endblock %}
 
 {% block content2 %}{# NOTE: hidden while converting, delete me! #}
@@ -563,37 +567,6 @@
                 </p></li>
             {% endfor %}
 
-            {% if own_articles %}
-                <h4>Authored:</h4>
-
-                {% for article in own_articles %}
-                    <li><p>
-                        {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
-                        {% if article.pressarticle.link %}
-                            <a href="{{ article.pressarticle.link }}" target="_blank">
-                                {{ article.pressarticle.title }}.
-                                <span class="fa fa-external-link"></span>
-                            </a>
-                        {% else %}
-                            {{ article.pressarticle.title }}.
-                        {% endif %}
-                        <br>
-                        <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
-                        {% if article.sample %}
-                            <a href="#!" 
-                               data-toggle="popover"
-                               data-trigger="focus"
-                               data-container="body"
-                               data-placement="bottom"
-                               data-html="true"
-                               data-content='{{ article.sample|linebreaksbr }}'>
-                               <span class="fa fa-newspaper-o"></span> Excerpt
-                           </a>
-                       {% endif %}
-                    </p></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
         {% else %}
             <p class="text-muted">We have not found any press about or authored by this candidate.</p>
         {% endif %}
