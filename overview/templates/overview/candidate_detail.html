@@ -21,11 +21,11 @@
 
 <script>
     // data for candidate_map.js
-    {# var initialLocations = {{ candidate_locations|safe }}; #}
+    var initialLocations = {{ candidate_locations|safe }};
 </script>
-{# <script>{% include "overview/candidate_map.js" %}</script> #}
+<script>{% include "overview/candidate_map.js" %}</script>
 
-{# <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script> #}
+<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyAEvfFrHVngbhqmwUbmZIGrxJpTNReCIeY"></script>
 <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script defer src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> -->
@@ -115,6 +115,19 @@
     </div>
 </section>
 
+
+<section class="container">
+  <div class="row">
+    <section class="col">
+      <h2>Where does {{ candidate.shortname }} live?</h2>
+      <div id="map" class="img map-container">
+        <div class="map-alert">
+            <div class="alert alert-warning"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
 
 
 {% comment %}TODO convert from ruby to django implementation
@@ -286,46 +299,6 @@
 {% endblock %}
 
 {% block content2 %}{# NOTE: hidden while converting, delete me! #}
-<div class="container">
-<div class="row">
-    <div class="col-md-8">
-        <h1>{{ candidate.fullname }}</h1>
-
-        {{ candidate.blurb|markdown }}
-
-        <ul class="list-inline">
-            {% if candidate.website %}
-            <li>
-                <a class="candidate_website" target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website }}</a>
-            </li>
-            {% endif %}
-
-            {% if candidate.email %}
-            <li>
-                <a class="candidate_website" target="_blank" href="mailto:{{ candidate.email}}">{{ candidate.email }}</a>
-            </li>
-            {% endif %}
-
-            {% if candidate.facebook %}
-            <li>
-                <a target="_blank" href="{{ candidate.facebook_url }}">
-                    <span class="fa fa-facebook"></span>
-                    {{ candidate.facebook }}
-                </a>
-            </li>
-            {% endif %}
-
-            {% if candidate.twitter %}
-            <li>
-                <a target="_blank" href="{{ candidate.twitter_url }}">
-                    <span class="fa fa-twitter"></span>
-                    {{ candidate.twitter }}
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -454,14 +427,6 @@
                 </dd>
             {% endif %}
         </dl>
-    </div>
-
-    <div class="col-md-6">
-        <div id="map" class="map-container">
-            <div class="map-alert">
-                <div class="alert alert-warning"></div>
-            </div>
-        </div>
     </div>
 </div>
 
