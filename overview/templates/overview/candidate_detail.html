@@ -131,19 +131,6 @@
 
 
 {% comment %}TODO convert from ruby to django implementation
-<section class="container">
-  <div class="row">
-    <section class="col">
-      <h2>Where is #{@candidate.short_name} running?</h2>
-      <div class="img">
-        <%= # image_tag("map-sample.png", class: "img-fluid") %>
-      </div>
-    </section>
-  </div>
-</section>
-{% endcomment %}
-
-{% comment %}TODO convert from ruby to django implementation
 <div class="bg-gray">
   <section class="container">
     <div class="row">
@@ -214,88 +201,104 @@
 </section>
 {% endcomment %}
 
-{% comment %}TODO convert from ruby to django implementation
-<% if @candidate.finance_snapshot %>
-  <section class="container">
-    <div class="row">
-      <div class="col">
-        <h2>Campaign finance</h2>
-        <h3>How much the candidate has raised and spent</h3>
-        <div class="stats">
-          <div>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.account_total, precision: 0 %>
-            </strong>
-            <div>Current balance</div>
-          </div>
-          <div>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.started_this_year_with, precision: 0 %>
-            </strong>
-            <div>Balance at the start of 2018</div>
-          </div>
-          <div>
-            <i class="fa fa-plus text-success"></i>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.raised_this_year, precision: 0 %>
-            </strong>
-            <div>Raised in 2018</div>
-          </div>
-          <div>
-            <i class="fa fa-minus text-danger"></i>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.spent_this_year, precision: 0 %>
-            </strong>
-            <div>Spent in 2018</div>
-          </div>
-        </div>
+<section class="container">
+<div class="row">
+  <div class="col">
+    <h2>Campaign finance</h2>
+    <h3>How much the candidate has raised and spent</h3>
+    <div class="stats">
+      <div>
+        <strong>
+          {% if latest_bank_report.ending_balance_display is not None %}
+              ${{ latest_bank_report.ending_balance_display|intcomma }}
+          {% else %}
+              <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Current balance</div>
+      </div>
+      <div>
+        <strong>
+          {% if money_2017_start is not None %}
+            ${{ money_2017_start|intcomma }}
+          {% else %}
+            <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Balance at the start of 2018</div>
+      </div>
+      <div>
+        <i class="fa fa-plus text-success"></i>
+        <strong>
+          {% if money_2017_raised is not None %}
+            ${{ money_2017_raised|intcomma }}
+          {% else %}
+            <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Raised in 2018</div>
+      </div>
+      <div>
+        <i class="fa fa-minus text-danger"></i>
+        <strong>
+          {% if money_2017_spent is not None %}
+            ${{ money_2017_spent|intcomma }}
+          {% else %}
+            <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Spent in 2018</div>
       </div>
     </div>
-  </section>
-<% end %>
-{% endcomment %}
-
-{% comment %}TODO convert from ruby to django implementation
-<div class="bg-gray">
-  <section class="container" id="press">
-    <div class="row">
-      <div class="col-12">
-        <h2>Press</h2>
-        <h3>Articles about the candidate</h3>
-      </div>
-      <% @press.each do |quote| %>
-        <div class="col-12">
-          <div class="card border border-green d-none d-md-block press-article">
-            <div class="card-body">
-              <%= link_to quote.press_article.press_outlet.homepage, class: "h4" do %>
-                <%= quote.press_article.press_outlet.press_outlet_name %>
-              <% end %>
-              <%= link_to quote.press_article.article_link, class: "h3" do %>
-                <%= quote.press_article.headline %>
-                <i class="fa fa-external-link-alt"></i>
-              <% end %>
-              <%= simple_format(quote.sample) %>
-            </div>
-          </div>
-          <section class="bg-white border border-green d-md-none row press-article">
-            <div class="col">
-              <%= link_to quote.press_article.press_outlet.homepage, class: "h4" do %>
-                <%= quote.press_article.press_outlet.press_outlet_name %>
-              <% end %>
-              <%= link_to quote.press_article.article_link, class: "h3" do %>
-                <%= quote.press_article.headline %>
-                <i class="fa fa-external-link-alt"></i>
-              <% end %>
-              <%= simple_format(quote.sample) %>
-            </div>
-          </section>
-        </div>
-      <% end %>
-    </div>
-  </section>
+  </div>
 </div>
-{% endcomment %}
+</section>
 
+<div class="bg-gray">
+    <section class="container" id="press">
+        <div class="row">
+            <div class="col-12">
+                <h2>Press</h2>
+                <h3>Articles about the candidate</h3>
+            </div>
+
+            {% for article_snippet in articles %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block press-article">
+                    <div class="card-body">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row press-article">
+                    <div class="col">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
 {% endblock %}
 
 {% block content2 %}{# NOTE: hidden while converting, delete me! #}
@@ -545,37 +548,6 @@
                 </p></li>
             {% endfor %}
 
-            {% if own_articles %}
-                <h4>Authored:</h4>
-
-                {% for article in own_articles %}
-                    <li><p>
-                        {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
-                        {% if article.pressarticle.link %}
-                            <a href="{{ article.pressarticle.link }}" target="_blank">
-                                {{ article.pressarticle.title }}.
-                                <span class="fa fa-external-link"></span>
-                            </a>
-                        {% else %}
-                            {{ article.pressarticle.title }}.
-                        {% endif %}
-                        <br>
-                        <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
-                        {% if article.sample %}
-                            <a href="#!" 
-                               data-toggle="popover"
-                               data-trigger="focus"
-                               data-container="body"
-                               data-placement="bottom"
-                               data-html="true"
-                               data-content='{{ article.sample|linebreaksbr }}'>
-                               <span class="fa fa-newspaper-o"></span> Excerpt
-                           </a>
-                       {% endif %}
-                    </p></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
         {% else %}
             <p class="text-muted">We have not found any press about or authored by this candidate.</p>
         {% endif %}
@@ -607,15 +579,15 @@
         <div class="panel panel-money">
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
-                    {% if money_2017_raised is not None %}
-                        $&nbsp;{{ money_2017_raised|intcomma }}
+                    {% if money_2019_raised is not None %}
+                        $&nbsp;{{ money_2019_raised|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
                 </h3>
             </div>
             <div class="panel-body">
-                Raised in 2017
+                Raised in 2019
             </div>
         </div>
     </div>
@@ -623,15 +595,15 @@
         <div class="panel panel-money">
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
-                    {% if money_2017_spent is not None %}
-                        $&nbsp;{{ money_2017_spent|intcomma }}
+                    {% if money_2019_spent is not None %}
+                        $&nbsp;{{ money_2019_spent|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
                 </h3>
             </div>
             <div class="panel-body">
-                Spent in 2017
+                Spent in 2019
             </div>
         </div>
     </div>
@@ -639,15 +611,15 @@
         <div class="panel panel-money">
             <div class="panel-heading panel-heading-money">
                 <h3 class="money-amount">
-                    {% if money_2017_start is not None %}
-                        $&nbsp;{{ money_2017_start|intcomma }}
+                    {% if money_2019_start is not None %}
+                        $&nbsp;{{ money_2019_start|intcomma }}
                     {% else %}
                         <i>TBD</i>
                     {% endif %}
                 </h3>
             </div>
             <div class="panel-body">
-                Jan 1, 2017 Balance
+                Jan 1, 2019 Balance
             </div>
         </div>
     </div>
