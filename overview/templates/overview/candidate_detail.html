@@ -112,6 +112,53 @@
         <div class="col-12">
             {{ candidate.blurb|markdown }}
         </div>
+
+
+        <div class="col-12 text-center">
+            <dl class="dl-horizontal">
+                <dt>Incumbent</dt>
+                    <dd>
+                        {{ candidate.is_incumbent|yesno:"Yes,No" }}
+                    </dd>
+
+
+
+                {% if candidate.education %}
+                    <dt>Education</dt>
+                    <dd>{{ candidate.education }}</dd>
+                {% endif %}
+
+
+                <dt>Age</dt>
+                <dd>{{ candidate.date_of_birth|timesince }}
+                    {% if candidate.date_of_birth or candidate.place_of_birth %}
+                    <br>
+                    <span class="text-muted">
+                        Born
+                        {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
+                        {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
+                    </span>
+                    {% endif %}
+                </dd>
+
+                {% if candidate.date_of_registration %}
+                <dt>Voter Registration</dt>
+                    <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
+                               href="#!"
+                               data-toggle="popover"
+                               data-trigger="focus"
+                               data-html="true"
+                               data-container="body"
+                               data-content='Date candidate first registered to vote in Cambridge.'>
+                           </a>
+                        <br>
+                    </dd>
+                {% endif %}
+
+
+            </dl>
+        </div>
+
     </div>
 </section>
 
@@ -120,6 +167,44 @@
   <div class="row">
     <section class="col">
       <h2>Where does {{ candidate.shortname }} live?</h2>
+                    <dl class="dl-horizontal">
+
+
+                <dt>Address</dt>
+                <dd>
+                    {{ candidate.get_housing_status_display|title }}s
+                    {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
+                    at
+                    <strong>{{ candidate.address }}</strong>
+                    {% if candidate.housing_sell_value %}
+                        <br>
+                        <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
+                            <a class="fa fa-info-circle"
+                               href="#!"
+                               data-toggle="popover"
+                               data-trigger="focus"
+                               data-html="true"
+                               data-container="body"
+                               data-content='Housing value estimated from last assessed property tax value and public real estate estimates (like Zillow). In a couple of cases, that data was not available; it was then estimated based on neighboring properties.'>
+                           </a>
+                        </span>
+                    {% endif %}
+                    {% if candidate.housing_sale_date %}
+                        <br>
+                        <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
+                            {% if candidate.housing_sale_price %}
+                                for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
+                            {% endif %}
+                            {% if candidate.housing_sale_price_inflation %}
+                            <br>
+                            inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </dd>
+
+            </dl>
+
       <div id="map" class="img map-container">
         <div class="map-alert">
             <div class="alert alert-warning"></div>
@@ -130,7 +215,7 @@
 </section>
 
 
-{% comment %}TODO convert from ruby to django implementation
+
 <div class="bg-gray">
   <section class="container">
     <div class="row">
@@ -138,21 +223,27 @@
         <h2>Q&amp;A</h2>
         <h3>Interviews with the candidate</h3>
       </div>
-      <% @candidate.survey_responses.each do |response| %>
+      {% for response in candidate.questionnaireresponse_set.all %}
         <div class="col-12">
+          {% comment %}
           <div class="card border border-green d-none d-md-block survey">
             <div class="card-body">
+
               <h4>
-                <% if response.response_link.present? %>
-                  <%= link_to response.survey.survey_name, response.response_link %>
-                <% elsif response.survey.survey_link.present? %>
-                  <%= link_to response.survey.survey_name, response.survey.survey_link %>
-                <% else %>
-                  <%= response.survey.survey_name %>
-                <% end %>
+                {% if response.response_link.present? %}
+                  <a href="{{ response.response_link }}">
+                      response.survey.survey_name
+                  </a>
+                {% elif response.survey.survey_link.present? %}
+                  <a href="{{ response.survey.survey_link  }}">
+                    response.survey.survey_name
+                  </a>
+                {% else %}
+                  {{ response.survey.survey_name }}
+                {% endif %}
                 <i class="fas fa-external-link-alt"></i>
               </h4>
-              <p>#{response.survey.description}</p>
+              <p>{{response.survey.description}}</p>
             </div>
           </div>
           <section class="bg-white border border-green d-md-none row survey">
@@ -170,12 +261,42 @@
               <p>#{response.survey.description}</p>
             </div>
           </section>
+
+        {% endcomment %}
         </div>
-      <% end %>
+      {% empty %}
+        <caption class="text-muted">This candidate has not filled out any questionnaires that we know about.</caption>
+      {% endfor %}
     </div>
   </section>
 </div>
-{% endcomment %}
+
+
+{% if videos %}
+<section class="container">
+  <div class="row">
+            <div class="col-md-12">
+                <h2 id="videos">Videos</h2>
+            </div>
+
+            <div class="col-md-12">
+                {% comment %}
+                <div id="theCarousel" data-interval="false">
+                {% endcomment %}
+
+                    {% for video in videos %}
+                        <div class="video"><a href="#1">
+                            <object data="{{ video.link }}" style="width:100%" height="225"></object>
+                        </a></div>
+                    {% endfor %}
+                {% comment %}
+                </div>
+                {% endcomment %}
+            </div>
+    </div>
+</section>
+{% endif %}
+
 
 {% comment %}TODO convert from ruby to django implementation
 <section class="container">
@@ -185,7 +306,7 @@
       <h3>Where the candidate stands on certain issues</h3>
     </div>
     <div class="col-12" id="policies">
-      <% @candidate.candidate_policies.each do |position| %>
+        {% for policy in candidate.candidate_policies %}
         <div class="d-block">
           <i class="<%= position.policy.icon_class %> fa fa-2x text-success"></i>
           <strong class="montserrat">
@@ -195,11 +316,135 @@
         <div class="text-left">
           <%= position.position %>
         </div>
-      <% end %>
+        {% endfor %}
     </div>
   </div>
 </section>
 {% endcomment %}
+
+
+<section class="container" id="press">
+    <div class="row">
+        <div class="col-12">
+        <h2 id="">Quotes</h2>
+        {% for quote in candidate.quote_set.all %}
+            {% if quote.display %}
+                <blockquote> 
+                    <p>{{ quote.quote|markdown }}</p>
+                        <footer>
+                            {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        </footer>
+                    </blockquote>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+</section>
+
+
+<div class="bg-gray">
+    <section class="container" id="press">
+        <div class="row">
+            <div class="col-12">
+                <h2>Press</h2>
+                <h3>Articles about the candidate</h3>
+            </div>
+
+            {% for article_snippet in articles %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block press-article">
+                    <div class="card-body">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row press-article">
+                    <div class="col">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Endorsements</h2>
+        </div>
+
+            {% if endorsements or object.endorsements_link %}
+                <dd>
+                    {% for endorsement in endorsements %}
+                        {% if endorsement.organization.logo %}
+                            {% spaceless %}
+                                {% if endorsement.link %}
+                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    <img src="{{ endorsement.organization.logo }}" />
+                                </a>
+                                {% else %}
+                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    <img src="{{ endorsement.organization.logo }}" />
+                                </span>
+                                {% endif %}
+                            {% endspaceless %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <ul class="endorsements">
+                    {% for endorsement in endorsements %}
+                        {% if not endorsement.organization.logo %}
+                            {% spaceless %}
+                            <li>
+                                {% if endorsement.link %}
+                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {{ endorsement.organization.name }}
+                                </a>
+                                {% else %}
+                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                                    {# div because display:block for new lines #}
+                                    {{ endorsement.organization.name }}
+                                </span>
+                                {% endif %}
+                            {% endspaceless %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+
+                    {% if object.endorsements_link %}
+                        <hr/>
+                        <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
+                    {% endif %}
+                </dd>
+            {% endif %}
+
+
+    </div>
+</section>
+
 
 <section class="container">
 <div class="row">
@@ -254,207 +499,14 @@
 </div>
 </section>
 
-<div class="bg-gray">
-    <section class="container" id="press">
-        <div class="row">
-            <div class="col-12">
-                <h2>Press</h2>
-                <h3>Articles about the candidate</h3>
-            </div>
-
-            {% for article_snippet in articles %}
-            <div class="col-12">
-                <div class="card border border-green d-none d-md-block press-article">
-                    <div class="card-body">
-                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
-                            {{ article_snippet.pressarticle.pressoutlet.name }}
-                        </a>
-
-                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
-                            {{ article_snippet.pressarticle.title }}
-                            <i class="fa fa-external-link-alt"></i>
-                        </a>
-
-                        {{ article_snippet.sample|linebreaks }}
-                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
-                    </div>
-                </div>
-                <section class="bg-white border border-green d-md-none row press-article">
-                    <div class="col">
-                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
-                            {{ article_snippet.pressarticle.pressoutlet.name }}
-                        </a>
-
-                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
-                            {{ article_snippet.pressarticle.title }}
-                            <i class="fa fa-external-link-alt"></i>
-                        </a>
-
-                        {{ article_snippet.sample|linebreaks }}
-                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
-                    </div>
-                </section>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-</div>
 {% endblock %}
+
 
 {% block content2 %}{# NOTE: hidden while converting, delete me! #}
 
-<div class="row">
-    <div class="col-md-12">
-        <h2 id="about">About</h2>
-    </div>
-
-    <div class="col-md-6">
-        <dl class="dl-horizontal">
-            <dt>Incumbent</dt>
-            <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
-            
-            {% if candidate.job %}
-                <dt>Job</dt>
-                <dd>{{ candidate.job }}</dd>
-            {% endif %}
-            
-            {% if candidate.education %}
-                <dt>Education</dt>
-                <dd>{{ candidate.education }}</dd>
-            {% endif %}
-
-            <dt>Address</dt>
-            <dd>
-                {{ candidate.get_housing_status_display|title }}s
-                {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
-                at
-                <strong>{{ candidate.address }}</strong>
-                {% if candidate.housing_sell_value %}
-                    <br>
-                    <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
-                        <a class="fa fa-info-circle"
-                           href="#!"
-                           data-toggle="popover"
-                           data-trigger="focus"
-                           data-html="true"
-                           data-container="body"
-                           data-content='Housing value estimated from last assessed property tax value and public real estate estimates (like Zillow). In a couple of cases, that data was not available; it was then estimated based on neighboring properties.'>
-                       </a>
-                    </span>
-                {% endif %}
-                {% if candidate.housing_sale_date %}
-                    <br>
-                    <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
-                        {% if candidate.housing_sale_price %}
-                            for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
-                        {% endif %}
-                        {% if candidate.housing_sale_price_inflation %}
-                        <br>
-                        inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
-                        {% endif %}
-                    </span>
-                {% endif %}
-            </dd>
-
-            <dt>Age</dt>
-            <dd>{{ candidate.date_of_birth|timesince }}
-                {% if candidate.date_of_birth or candidate.place_of_birth %}
-                <br>
-                <span class="text-muted">
-                    Born
-                    {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
-                    {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
-                </span>
-                {% endif %}
-            </dd>
-
-            {% if candidate.date_of_registration %}
-            <dt>Voter Registration</dt>
-                <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
-                           href="#!"
-                           data-toggle="popover"
-                           data-trigger="focus"
-                           data-html="true"
-                           data-container="body"
-                           data-content='Date candidate first registered to vote in Cambridge.'>
-                       </a>
-                    <br>
-                </dd>
-            {% endif %}
 
 
-            {% if endorsements or object.endorsements_link %}
-                <dt>Endorsements</dt>
-                <dd>
-                    {% for endorsement in endorsements %}
-                        {% if endorsement.organization.logo %}
-                            {% spaceless %}
-                                {% if endorsement.link %}
-                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    <img src="{{ endorsement.organization.logo }}" />
-                                </a>
-                                {% else %}
-                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    <img src="{{ endorsement.organization.logo }}" />
-                                </span>
-                                {% endif %}
-                            {% endspaceless %}
-                        {% endif %}
-                    {% endfor %}
 
-                    <ul class="endorsements">
-                    {% for endorsement in endorsements %}
-                        {% if not endorsement.organization.logo %}
-                            {% spaceless %}
-                            <li>
-                                {% if endorsement.link %}
-                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {{ endorsement.organization.name }}
-                                </a>
-                                {% else %}
-                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {# div because display:block for new lines #}
-                                    {{ endorsement.organization.name }}
-                                </span>
-                                {% endif %}
-                            {% endspaceless %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-
-                    {% if object.endorsements_link %}
-                        <hr/>
-                        <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
-                    {% endif %}
-                </dd>
-            {% endif %}
-        </dl>
-    </div>
-</div>
-
-{% if videos %}
-<div class="row">
-    <div class="col-md-12">
-        <h2 id="interviews">Interviews</h2>
-    </div>
-
-    {% if videos %}
-    <div class="col-md-12">
-        <div id="theCarousel" data-interval="false">
-            {% for video in videos %}
-                <div class="video"><a href="#1">
-                    <object data="{{ video.link }}" style="width:100%" height="225"></object>
-                </a></div>
-            {% endfor %}
-        </div>
-        <div style="text-align:center;">
-            <p class="text-muted">&lt; Scroll &gt;</p>
-        </div>
-    </div>
-    {% endif %}
-</div>
-{% endif %}
 
 <div class="row">
     <div class="col-md-12">
@@ -504,19 +556,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
-        <h2 id="">Quotes</h2>
-        {% for quote in candidate.quote_set.all %}
-            {% if quote.display %}
-                <blockquote> 
-                    <p>{{ quote.quote|markdown }}</p>
-                        <footer>
-                            {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
-                        </footer>
-                    </blockquote>
-            {% endif %}
-        {% endfor %}
-    </div>
+
     <div class="col-md-6">
         <h2 id="">Press</h2>
         {% if candidate.pressarticlecandidate_set.all %}
