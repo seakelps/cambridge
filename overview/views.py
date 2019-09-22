@@ -6,7 +6,7 @@ from .models import Candidate
 from .utils import get_candidate_locations
 
 from campaign_finance.models import RawBankReport
-from campaign_finance.models import get_candidate_money_at_start_of_2017, get_candidate_2017_spent, get_candidate_2017_raised
+from campaign_finance.models import get_candidate_money_at_start_of_2019, get_candidate_2019_spent, get_candidate_2019_raised
 
 
 # servering the jumbotron page
@@ -14,7 +14,7 @@ def index(request):
     num_runners = Candidate.objects.exclude(is_running=False).exclude(hide=True).count()
 
     description = """
-        If you want more information before you cast your 2017
+        If you want more information before you cast your 2019
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1 vote - or your #{num_runners}!
@@ -67,14 +67,14 @@ class CandidateDetail(DetailView):
                     .latest("filing_date")
             except RawBankReport.DoesNotExist:
                 context['latest_bank_report'] = None
-            context['money_2017_start'] = get_candidate_money_at_start_of_2017(self.object.cpf_id)
-            context['money_2017_spent'] = get_candidate_2017_spent(self.object.cpf_id)
-            context['money_2017_raised'] = get_candidate_2017_raised(self.object.cpf_id)
+            context['money_2019_start'] = get_candidate_money_at_start_of_2019(self.object.cpf_id)
+            context['money_2019_spent'] = get_candidate_2019_spent(self.object.cpf_id)
+            context['money_2019_raised'] = get_candidate_2019_raised(self.object.cpf_id)
         else:
             context['latest_bank_report'] = None
-            context['money_2017_start'] = None
-            context['money_2017_spent'] = None
-            context['money_2017_raised'] = None
+            context['money_2019_start'] = None
+            context['money_2019_spent'] = None
+            context['money_2019_raised'] = None
 
         context['endorsements'] = self.object.endorsement_set\
             .order_by("-organization__logo")\
