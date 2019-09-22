@@ -53,111 +53,90 @@ tr[role=row] td:nth-child(2) {
 {% block content %}
 
 <div class="container">
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        What matters to you?
-    </div>
-    <div class="panel-body">
-        <div class="col-md-4">
-            <span>{# also included in og:description #}
-            Search through recent City Council votes.
-            See where current councillors stand on your issues.
-            </span>
+    <div class="card my-4">
+        <div class="card-header">
+            What matters to you?
         </div>
-        <div class="col-md-8">
-            <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
+        <div class="card-body">
+            <h6 class="card-subtitle">{# also included in og:description #}
+                Search through recent City Council votes.
+                See where current councillors stand on your issues.
+            </h6>
 
-            <div style="margin-top: 0.5em">
-                <label class="radio-inline"><input type="radio" name="vote-split" value="all" checked>All</label>
-                {# TODO unhardcode these! #}
-                <label class="radio-inline"><input type="radio" name="vote-split" value="contested">Contested (16)</label>
-                <label class="radio-inline"><input type="radio" name="vote-split" value="unanimous">Unanimous (405)</label>
-            </div>
+            <fieldset class="py-2">
+                <input type="search" id="voteSearch" name="search" class="form-control" placeholder="Bikes...?">
 
-            {% comment %}
-            <div class="row">
-                <div class="col-md-4">
-                    <select type="select" name="split" class="form-control" style="display: inline-block">
-                        <option value="all" selected disabled>Vote Split</option>
-                        <option value="unanimous">Unanimous</option>
-                        <option value="contested">Contested</option>
-                        <option value="all">All</option>
-                    </select>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="vote-split" id="vote-split-all" value="all" checked>
+                        <label class="form-check-label" for="vote-split-all">All</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="vote-split" id="vote-split-contested" value="contested" checked>
+                        <label class="form-check-label" for="vote-split-contested">Contested</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="vote-split" id="vote-split-unanimous" value="unanimous" checked>
+                        <label class="form-check-label" for="vote-split-unanimous">Unanimous</label>
+                    </div>
                 </div>
-            </div>
-            {% endcomment %}
+            </fieldset>
+        </div>
 
+        <div class="card-footer">
+            <span class="data_highlight">Data</span> gathered from 
+            <a href="http://cambridgema.iqm2.com/" target="_blank">
+                Cambridge Open Meetings Portal
+            </a> individual voting history pages
+            <a title="Download our data" data-placement="bottom" data-toggle="tooltip" href="{% static "voting_record.csv" %}" download target="_black">(last scraped 2017-11-06)</a>
         </div>
     </div>
 
-    <div class="panel-footer">
-        <cite class="text-muted">
-            <details>
-                <summary class="data_gathered_from">
-                    <span class="data_highlight">Data</span> gathered from
-                    <a href="http://cambridgema.iqm2.com/" target="_blank">
-                        Cambridge Open Meetings Portal
-                    </a>
 
-                    <small class="pull-right">
-                        Last scraped on <time>2017-11-06</time>
-                        <a class="fa fa-download" title="Download our data" data-placement="bottom" data-toggle="tooltip" href="{% static "voting_record.csv" %}" download target="_black"></a>
-                    </small>
-                </summary>
+    <table id="myTable" class="table table-condensed table-striped" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Item Id</th>
+                <th>Item Description</th>
+                <th>Item Body</th>
+                <th>Date</th>
+                <th>Ordinance</th>
 
-                Data aggregated from
-                <a target="_blank" href="http://cambridgema.iqm2.com/Citizens/Detail_BoardMember.aspx?ID=1020">
-                    individual candidate voting histories
-                </a> for all active City Councillors.
+                <th>Description</th>
+                <th>Devereux</th>
+                <th>Carlone</th>
+                <th>Mazen</th>
+                <th>Simmons</th>
+                <th>Toomey</th>
+                <th>Kelley</th>
+                <th>Cheung</th>
+                <th>McGovern</th>
+                <th>Maher</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Item Id</th>
+                <th>Item Description</th>
+                <th>Item Body</th>
+                <th>Date</th>
+                <th>Vote Split</th>
 
-                <br/>
-        </cite>
-    </div>
-</div>
-
-
-<table id="myTable" class="table table-condensed table-striped" cellspacing="0" width="100%">
-    <thead>
-        <tr>
-            <th>Item Id</th>
-            <th>Item Description</th>
-            <th>Item Body</th>
-            <th>Date</th>
-            <th>Vote Split</th>
-
-            <th>Description</th>
-            <th>Devereux</th>
-            <th>Carlone</th>
-            <th>Mazen</th>
-            <th>Simmons</th>
-            <th>Toomey</th>
-            <th>Kelley</th>
-            <th>Cheung</th>
-            <th>McGovern</th>
-            <th>Maher</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <th>Item Id</th>
-            <th>Item Description</th>
-            <th>Item Body</th>
-            <th>Date</th>
-            <th>Vote Split</th>
-
-            <th>Description</th>
-            <th>Devereux</th>
-            <th>Carlone</th>
-            <th>Mazen</th>
-            <th>Simmons</th>
-            <th>Toomey</th>
-            <th>Kelley</th>
-            <th>Cheung</th>
-            <th>McGovern</th>
-            <th>Maher</th>
-        </tr>
-    </tfoot>
-</table>
+                <th>Description</th>
+                <th>Devereux</th>
+                <th>Carlone</th>
+                <th>Mazen</th>
+                <th>Simmons</th>
+                <th>Toomey</th>
+                <th>Kelley</th>
+                <th>Cheung</th>
+                <th>McGovern</th>
+                <th>Maher</th>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 {% endblock %}
 
