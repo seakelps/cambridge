@@ -188,46 +188,58 @@
 </section>
 {% endcomment %}
 
-{% comment %}TODO convert from ruby to django implementation
-<% if @candidate.finance_snapshot %>
-  <section class="container">
-    <div class="row">
-      <div class="col">
-        <h2>Campaign finance</h2>
-        <h3>How much the candidate has raised and spent</h3>
-        <div class="stats">
-          <div>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.account_total, precision: 0 %>
-            </strong>
-            <div>Current balance</div>
-          </div>
-          <div>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.started_this_year_with, precision: 0 %>
-            </strong>
-            <div>Balance at the start of 2018</div>
-          </div>
-          <div>
-            <i class="fa fa-plus text-success"></i>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.raised_this_year, precision: 0 %>
-            </strong>
-            <div>Raised in 2018</div>
-          </div>
-          <div>
-            <i class="fa fa-minus text-danger"></i>
-            <strong>
-              <%= number_to_currency @candidate.finance_snapshot.spent_this_year, precision: 0 %>
-            </strong>
-            <div>Spent in 2018</div>
-          </div>
-        </div>
+<section class="container">
+<div class="row">
+  <div class="col">
+    <h2>Campaign finance</h2>
+    <h3>How much the candidate has raised and spent</h3>
+    <div class="stats">
+      <div>
+        <strong>
+          {% if latest_bank_report.ending_balance_display is not None %}
+              ${{ latest_bank_report.ending_balance_display|intcomma }}
+          {% else %}
+              <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Current balance</div>
+      </div>
+      <div>
+        <strong>
+          {% if money_2017_start is not None %}
+            ${{ money_2017_start|intcomma }}
+          {% else %}
+            <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Balance at the start of 2018</div>
+      </div>
+      <div>
+        <i class="fa fa-plus text-success"></i>
+        <strong>
+          {% if money_2017_raised is not None %}
+            ${{ money_2017_raised|intcomma }}
+          {% else %}
+            <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Raised in 2018</div>
+      </div>
+      <div>
+        <i class="fa fa-minus text-danger"></i>
+        <strong>
+          {% if money_2017_spent is not None %}
+            ${{ money_2017_spent|intcomma }}
+          {% else %}
+            <i>TBD</i>
+          {% endif %}
+        </strong>
+        <div>Spent in 2018</div>
       </div>
     </div>
-  </section>
-<% end %>
-{% endcomment %}
+  </div>
+</div>
+</section>
 
 <div class="bg-gray">
     <section class="container" id="press">
