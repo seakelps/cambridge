@@ -41,7 +41,7 @@
                         <div class="col-md-6">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                             {% trans num_runners noop as num_runners %}
-                            <p>{% blocktrans %}We're compiling everything we can find about 2019 Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!{% endblocktrans %}</p>
+                            <p>{% blocktrans with year=2019 %}We're compiling everything we can find about {{ year }} Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!{% endblocktrans %}</p>
 
                             <div class="col-md-12" style="text-align: center">
                                 <div class="btn-group-vertical d-flex d-sm-none py-5">

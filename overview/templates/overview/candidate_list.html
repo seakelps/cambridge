@@ -5,16 +5,13 @@
 
 {% block title %}Candidates Running in 2019{% endblock %}
 {% block meta_description %}{{ runners.count }} candidates are running for 9 seats in 2019. Determine who deserves your #1, #2, or #9 vote on November 7th.{% endblock %}
+{% block body_id %}all_candidates{% endblock %}
 
 {% block head_extra %}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:domain" value="cambridgecouncilcandidates.com" />
-    <meta name="twitter:title" value="Candidates Running in 2017" />
+    <meta name="twitter:title" value="Candidates Running in 2019" />
     <meta name="twitter:description" value="{{ runners.count }} candidates are running for 9 seats in 2019. Determine who deserves your #1, #2, or #9 vote on November 7th." />
-
-    {# video of all candidates saying hi #}
-    <meta property='og:video' content='https://www.youtube.com/v/RlIhgnolRxs' />
-    <meta property="og:type" content="video"> 
 
     <meta name="twitter:image" content="{% fullstatic "candidate_grid.png" %}"/>
     <meta name="twitter:label1" value="Candidates Running" />
@@ -26,37 +23,52 @@
 
 
 {% block content %}
-<div class="container">
-<section class="candidates">
+<div class="container py-5">
     <div class="row">
-        {% for runner in runners %}
-            <div class="col-sm-6 col-md-3">
-                {% include "overview/candidate_card.html" with candidate=runner only %}
-            </div>
-        {% endfor %}
-    </div>
+        <div class="col-12">
+            <span>
+                <div class="section pos">
+                    <h2>City Council</h2>
 
-    <div class="row">
-        <div class="col-md-12">
-            <h2>Not Running</h2>
+                    <p>{# TODO description of position? #}</p>
+
+                    <div>
+                        <strong>Cambridge</strong>
+
+                        {% for candidate in runners %}
+                        <div class="candidate card">
+                            <div class="card-body candidate-card-body">
+                                <div class="avatar-and-icon">
+                                    <div style="position: relative">
+                                        <div class="avatar">
+                                            <img
+                                                class="rounded-circle avatar-cirlce img-fluid"
+                                                height="500" width="500"  {# all 1:1 #}
+                                                src="{{ candidate.headshot }}"
+                                                alt="{{ candidate.headshot_description }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="name-and-blurb">
+                                    <div class="font-weight-bold name">
+                                        {{ candidate.fullname }}
+                                    </div>
+                                    <p>
+                                        {{ candidate.blurb|truncatechars:120 }}
+                                        <a href="{{ candidate.get_absolute_url }}">Learn more</a>
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div class="card-footer p-0">
+                                <ballot-button></ballot-button>{# TODO think this was ko'd #}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </span>
         </div>
     </div>
-
-    <div class="row">
-        {% for not_runner in not_runners %}
-            <div class="col-sm-6 col-md-3">
-                {% include "overview/candidate_card.html" with candidate=not_runner only %}
-            </div>
-        {% endfor %}
-    </div>
-</section>
 </div>
-{% endblock %}
-
-{% block endscripts %}
-<script>
-$(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip(); 
-});
-</script>
 {% endblock %}
