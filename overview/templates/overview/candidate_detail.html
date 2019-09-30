@@ -439,4 +439,32 @@
         </div>
     </div>
 </section>
+
+<div class="bg-gray sticky-footer shadow">
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <div class="d-none d-md-flex">
+                    <a class="col btn btn-red btn-bold fa-button" href="{% url "my_ranking" %}">
+                        <i class="fa fa-list-ol"></i>
+                        <span>View my ballot</span>
+                    </a>
+                    <a class="disabled col btn btn-dark btn-bold fa-button" href="#">
+                        <i class="fa fa-plus"></i>
+                        <span>Add this candidate to ballot</span>
+                    </a>
+                </div>
+                <div class="d-md-none">
+                    <a class="btn btn-red btn-bold fa-button btn-block" href="{% url "my_ranking" %}">
+                        <i class="fa fa-list-ol"></i>
+                        <span>View my ballot</span>
+                    </a><a class="disabled btn btn-dark btn-bold fa-button btn-block" href="#">
+                        <i class="fa fa-plus"></i>
+                        <span>Add candidate to your ballot</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock %}
