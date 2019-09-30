@@ -155,185 +155,55 @@
     </div>
 </section>
 
-
-<section class="container">
-    <div class="row">
-        <section class="col">
-            <h2>Where does {{ candidate.shortname }} live?</h2>
-            <dl class="dl-horizontal">
-                <dt>Address</dt>
-                <dd>
-                {{ candidate.get_housing_status_display|title }}s
-                {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
-                at
-                <strong>{{ candidate.address }}</strong>
-                {% if candidate.housing_sell_value %}
-                <br>
-                <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
-                    <a class="fa fa-info-circle"
-                       href="#!"
-                       data-toggle="popover"
-                       data-trigger="focus"
-                       data-html="true"
-                       data-container="body"
-                       data-content='Housing value estimated from last assessed property tax value and public real estate estimates (like Zillow). In a couple of cases, that data was not available; it was then estimated based on neighboring properties.'>
-                    </a>
-                </span>
-                {% endif %}
-                {% if candidate.housing_sale_date %}
-                <br>
-                <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
-                    {% if candidate.housing_sale_price %}
-                    for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
-                    {% endif %}
-                    {% if candidate.housing_sale_price_inflation %}
-                    <br>
-                    inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
-                    {% endif %}
-                </span>
-                {% endif %}
-                </dd>
-            </dl>
-
-            <div id="map" class="img map-container">
-                <div class="map-alert">
-                    <div class="alert alert-warning"></div>
-                </div>
-            </div>
-        </section>
-    </div>
-</section>
-
-
 <div class="bg-gray">
     <section class="container">
         <div class="row">
-            <div class="col-12">
-                <h2>Q&amp;A</h2>
-                <h3>Interviews with the candidate</h3>
-            </div>
+            <section class="col">
+                <h2>Where does {{ candidate.shortname }} live?</h2>
+                <dl class="dl-horizontal">
+                    <dt>Address</dt>
+                    <dd>
+                    {{ candidate.get_housing_status_display|title }}s
+                    {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
+                    at
+                    <strong>{{ candidate.address }}</strong>
+                    {% if candidate.housing_sell_value %}
+                    <br>
+                    <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
+                        <a class="fa fa-info-circle"
+                           href="#!"
+                           data-toggle="popover"
+                           data-trigger="focus"
+                           data-html="true"
+                           data-container="body"
+                           data-content='Housing value estimated from last assessed property tax value and public real estate estimates (like Zillow). In a couple of cases, that data was not available; it was then estimated based on neighboring properties.'>
+                        </a>
+                    </span>
+                    {% endif %}
+                    {% if candidate.housing_sale_date %}
+                    <br>
+                    <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
+                        {% if candidate.housing_sale_price %}
+                        for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
+                        {% endif %}
+                        {% if candidate.housing_sale_price_inflation %}
+                        <br>
+                        inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
+                        {% endif %}
+                    </span>
+                    {% endif %}
+                    </dd>
+                </dl>
 
-            {% for response in candidate.questionnaireresponse_set.all %}
-            <div class="col-12">
-                <div class="card border border-green d-none d-md-block survey">
-                    <div class="card-body">
-                        <h4>
-                            <a target="_blank" href="{{response.questionnaire_link }}">
-                                {{ response.questionnaire.name }}
-                            </a>
-                            <i class="fas fa-external-link-alt"></i>
-                        </h4>
-                        <p>{{ response.questionnaire.description }}</p>
+                <div id="map" class="img map-container">
+                    <div class="map-alert">
+                        <div class="alert alert-warning"></div>
                     </div>
                 </div>
-                <section class="bg-white border border-green d-md-none row survey">
-                    <div class="col">
-                        <h4>
-                            <a target="_blank" href="{{response.questionnaire_link }}">
-                                {{ response.questionnaire.name }}
-                            </a>
-                            <i class="fas fa-external-link-alt"></i>
-                        </h4>
-                        <p>{{ response.questionnaire.description }}</p>
-                    </div>
-                </section>
-            </div>
-            {% endfor %}
+            </section>
         </div>
     </section>
 </div>
-
-
-{% comment %}TODO convert from ruby to django implementation
-<section class="container">
-    <div class="row">
-        <div class="col-12">
-            <h2>Policy</h2>
-            <h3>Where the candidate stands on certain issues</h3>
-        </div>
-        <div class="col-12" id="policies">
-            {% for policy in candidate.candidate_policies %}
-            <div class="d-block">
-                <i class="<%= position.policy.icon_class %> fa fa-2x text-success"></i>
-                <strong class="montserrat">
-                    <%= position.policy.name %>
-                </strong>
-            </div>
-            <div class="text-left">
-                <%= position.position %>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endcomment %}
-
-
-<section class="container" id="press">
-    <div class="row">
-        <div class="col-12">
-            <h2 id="">Quotes</h2>
-            {% for quote in candidate.quote_set.all %}
-            {% if quote.display %}
-            <blockquote>
-                <p>{{ quote.quote|markdown }}</p>
-                <footer>
-                    {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
-                </footer>
-            </blockquote>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-
-<div class="bg-gray">
-    <section class="container" id="press">
-        <div class="row">
-            <div class="col-12">
-                <h2>Press</h2>
-                <h3>Articles about the candidate</h3>
-            </div>
-
-            {% for article_snippet in articles %}
-            <div class="col-12">
-                <div class="card border border-green d-none d-md-block press-article">
-                    <div class="card-body">
-                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
-                            {{ article_snippet.pressarticle.pressoutlet.name }}
-                        </a>
-
-                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
-                            {{ article_snippet.pressarticle.title }}
-                            <i class="fa fa-external-link-alt"></i>
-                        </a>
-
-                        {{ article_snippet.sample|linebreaks }}
-                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
-                    </div>
-                </div>
-                <section class="bg-white border border-green d-md-none row press-article">
-                    <div class="col">
-                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
-                            {{ article_snippet.pressarticle.pressoutlet.name }}
-                        </a>
-
-                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
-                            {{ article_snippet.pressarticle.title }}
-                            <i class="fa fa-external-link-alt"></i>
-                        </a>
-
-                        {{ article_snippet.sample|linebreaks }}
-                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
-                    </div>
-                </section>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-</div>
-
 
 <section class="container">
     <div class="row">
@@ -391,6 +261,131 @@
     </div>
 </section>
 
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Q&amp;A</h2>
+                <h3>Interviews with the candidate</h3>
+            </div>
+
+            {% for response in candidate.questionnaireresponse_set.all %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block survey">
+                    <div class="card-body">
+                        <h4>
+                            <a target="_blank" href="{{response.questionnaire_link }}">
+                                {{ response.questionnaire.name }}
+                            </a>
+                            <i class="fas fa-external-link-alt"></i>
+                        </h4>
+                        <p>{{ response.questionnaire.description }}</p>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row survey">
+                    <div class="col">
+                        <h4>
+                            <a target="_blank" href="{{response.questionnaire_link }}">
+                                {{ response.questionnaire.name }}
+                            </a>
+                            <i class="fas fa-external-link-alt"></i>
+                        </h4>
+                        <p>{{ response.questionnaire.description }}</p>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+{% comment %}TODO convert from ruby to django implementation
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Policy</h2>
+            <h3>Where the candidate stands on certain issues</h3>
+        </div>
+        <div class="col-12" id="policies">
+            {% for policy in candidate.candidate_policies %}
+            <div class="d-block">
+                <i class="<%= position.policy.icon_class %> fa fa-2x text-success"></i>
+                <strong class="montserrat">
+                    <%= position.policy.name %>
+                </strong>
+            </div>
+            <div class="text-left">
+                <%= position.position %>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endcomment %}
+
+<section class="container" id="press">
+    <div class="row">
+        <div class="col-12">
+            <h2 id="">Quotes</h2>
+            {% for quote in candidate.quote_set.all %}
+            {% if quote.display %}
+            <blockquote>
+                <p>{{ quote.quote|markdown }}</p>
+                <footer>
+                    {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                </footer>
+            </blockquote>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<div class="bg-gray">
+    <section class="container" id="press">
+        <div class="row">
+            <div class="col-12">
+                <h2>Press</h2>
+                <h3>Articles about the candidate</h3>
+            </div>
+
+            {% for article_snippet in articles %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block press-article">
+                    <div class="card-body">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row press-article">
+                    <div class="col">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
 
 <section class="container">
     <div class="row">
