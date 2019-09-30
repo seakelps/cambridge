@@ -38,27 +38,13 @@
             <div class="jumbotron bg-transparent text-center text-light font-weight-bold col-lg-8 col-xs-6">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                             {% trans num_runners noop as num_runners %}
                             <p>{% blocktrans with year=2019 %}We're compiling everything we can find about {{ year }} Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!{% endblocktrans %}</p>
 
-                            <div class="col-md-12" style="text-align: center">
-                                <div class="btn-group-vertical d-flex d-sm-none py-5">
-                                    <a class="btn btn-secondary" href="{% url 'all' %}?sidebar=true" role="button">{% blocktrans %}Build Your Ballot{% endblocktrans %}</a>
-                                    <a class="btn btn-info" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
-                                </div>
-                                <div class="btn-group d-none d-sm-flex">
-                                    <a class="btn btn-info" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
-                                    <a class="btn btn-secondary" href="{% url 'all' %}?sidebar=true" role="button">{% blocktrans %}Build Your Ballot{% endblocktrans %}</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="map" class="map-container">
-                                <div class="map-alert">
-                                    <div class="alert alert-warning"></div>
-                                </div>
+                            <div class="col" style="text-align: center">
+                                <a class="btn btn-info" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
                             </div>
                         </div>
                     </div>
@@ -66,6 +52,18 @@
             </div>
         </div>
     </main>
+
+    <section class="container-fluid bg-light p-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div id="map" class="map-container">
+                    <div class="map-alert">
+                        <div class="alert alert-warning"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <section class="container-fluid bg-light p-5">
         <div class="row justify-content-center">
