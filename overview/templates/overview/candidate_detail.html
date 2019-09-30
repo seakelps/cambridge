@@ -410,35 +410,35 @@
                 </div>
                 <div>
                     <strong>
-                        {% if money_2017_start is not None %}
-                        ${{ money_2017_start|intcomma }}
+                        {% if money_2019_start is not None %}
+                        ${{ money_2019_start|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
                     </strong>
-                    <div>Balance at the start of 2018</div>
+                    <div>Balance at the start of 2019</div>
                 </div>
                 <div>
                     <i class="fa fa-plus text-success"></i>
                     <strong>
-                        {% if money_2017_raised is not None %}
-                        ${{ money_2017_raised|intcomma }}
+                        {% if money_2019_raised is not None %}
+                        ${{ money_2019_raised|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
                     </strong>
-                    <div>Raised in 2018</div>
+                    <div>Raised in 2019</div>
                 </div>
                 <div>
                     <i class="fa fa-minus text-danger"></i>
                     <strong>
-                        {% if money_2017_spent is not None %}
-                        ${{ money_2017_spent|intcomma }}
+                        {% if money_2019_spent is not None %}
+                        ${{ money_2019_spent|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
                     </strong>
-                    <div>Spent in 2018</div>
+                    <div>Spent in 2019</div>
                 </div>
             </div>
         </div>
