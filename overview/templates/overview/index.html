@@ -38,27 +38,13 @@
             <div class="jumbotron bg-transparent text-center text-light font-weight-bold col-lg-8 col-xs-6">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                             {% trans num_runners noop as num_runners %}
                             <p>{% blocktrans with year=2019 %}We're compiling everything we can find about {{ year }} Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!{% endblocktrans %}</p>
 
-                            <div class="col-md-12" style="text-align: center">
-                                <div class="btn-group-vertical d-flex d-sm-none py-5">
-                                    <a class="btn btn-secondary" href="{% url 'all' %}?sidebar=true" role="button">{% blocktrans %}Build Your Ballot{% endblocktrans %}</a>
-                                    <a class="btn btn-info" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
-                                </div>
-                                <div class="btn-group d-none d-sm-flex">
-                                    <a class="btn btn-info" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
-                                    <a class="btn btn-secondary" href="{% url 'all' %}?sidebar=true" role="button">{% blocktrans %}Build Your Ballot{% endblocktrans %}</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div id="map" class="map-container">
-                                <div class="map-alert">
-                                    <div class="alert alert-warning"></div>
-                                </div>
+                            <div class="col" style="text-align: center">
+                                <a class="btn btn-secondary" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
                             </div>
                         </div>
                     </div>
@@ -67,30 +53,69 @@
         </div>
     </main>
 
-    <section class="container-fluid bg-light p-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <h2>{% blocktrans %}Voting{% endblocktrans %}</h2>
-                <p>{% blocktrans %}Cambridge has a ranked choice system, which might be different than what you're used to. We've made an illustration of how it works as well as collected other explanations.{% endblocktrans %}</p>
-                <p>
-                    <a class="btn btn-default" href="{% url 'how_to_vote' %}" role="button">{% blocktrans %}Learn More{% endblocktrans %} &raquo;</a>
-                    <a class="btn btn-default" href="https://www.sec.state.ma.us/ovr/" role="button">{% blocktrans %}Register to vote{% endblocktrans %} &raquo;</a>
-                </p>
+    <div>
+        <section class="container-fluid bg-light p-5">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <h2 class="header">{% blocktrans %}Where the Candidates Are{% endblocktrans %}</h2>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h2>{% blocktrans %}Exploring{% endblocktrans %}</h2>
-                <p>{% blocktrans %}In addition to the individual candidate views, we're providing tools to see the whole field. Click on the Explore tab in the above navigation bar, or start with:{% endblocktrans %}</p>
-                <p>
-                    <a class="btn btn-default" href="{% url 'full_history' %}" role="button">{% blocktrans %}Votes{% endblocktrans %} &raquo;</a>
-                    <a class="btn btn-default" href="{% url 'finance_comparison' %}" role="button">{% blocktrans %}Finance{% endblocktrans %} &raquo;</a>
-                </p>
+
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div id="map" class="map-container">
+                        <div class="map-alert">
+                            <div class="alert alert-warning"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <h2>{% blocktrans %}Comparing{% endblocktrans %}</h2>
-                <p>Click the blue side bar or the <span class="fa fa-sort-numeric-asc"></span> button in the header to rank and take notes on candidates. You can save your notes or even share them (if you want to).</p>
-                <p><a class="btn btn-default" href="{% url 'my_ranking' %}" role="button">See Mine &raquo;</a></p>
-                <!-- <a class="btn btn-default" href="#" role="button">Sign up for email updates</a> -->
+        </section>
+    <div>
+
+    <div class="bg-gray">
+        <section class="container-fluid p-5">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <h2 class="header">{% blocktrans %}Build Your Ballot{% endblocktrans %}</h2>
+                </div>
             </div>
-        </div>
-    </section>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h4>{% blocktrans %}Compare{% endblocktrans %}</h4>
+                    <p>
+                        We let you rank the candidates, just like you'll do in the voting booth. You can even share your choices - if you want to.
+                    </p>
+                    <p>
+                        <a class="btn btn-info" href="{% url 'my_ranking' %}" role="button">See my candidates &raquo;</a>
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h4>{% blocktrans %}Vote{% endblocktrans %}</h4>
+                    <p>{% blocktrans %}Cambridge has a ranked choice system, which might be different than what you're used to. We've made an illustration of how it works as well as collected other explanations.{% endblocktrans %}</p>
+                    <p>
+                        <a class="btn btn-info" href="{% url 'how_to_vote' %}" role="button">{% blocktrans %}Learn More{% endblocktrans %} &raquo;</a>
+                        <a class="btn btn-info" href="https://www.sec.state.ma.us/ovr/" role="button">{% blocktrans %}Register to vote{% endblocktrans %} &raquo;</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <h4>{% blocktrans %}Explore{% endblocktrans %}</h4>
+                    <p>{% blocktrans %}Tools to see the whole field.{% endblocktrans %}</p>
+                    <p>
+                        <a class="btn btn-info" href="{% url 'full_history' %}" role="button">{% blocktrans %}Votes{% endblocktrans %} &raquo;</a>
+                        <a class="btn btn-info" href="{% url 'finance_comparison' %}" role="button">{% blocktrans %}Finance{% endblocktrans %} &raquo;</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
 {% endblock %}
