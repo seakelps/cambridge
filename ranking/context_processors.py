@@ -19,6 +19,7 @@ def sidebar(request):
 
     context = {
         'my_ranking': ranked_list,
+        'my_candidates': [element.candidate for element in ranked_list.annotated_candidates.all()],
         'runners': Candidate.objects.filter(is_running=True, hide=False),
         'runnerJson': json.dumps([
             {
