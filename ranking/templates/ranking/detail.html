@@ -62,17 +62,22 @@
 
     <div class="row">
         <div class="col-md-12">
-            <dl>
+            <dl id="ranked_list" class="list-group">
+                {# help #}
                 {% for element in object.annotated_candidates.all %}
-                <dt>
-                    {% if object.ordered %}{{ forloop.counter }}.{% endif %}
-                    <a href="{% url "candidate_detail" element.candidate.slug %}">
-                        {{ element.candidate.fullname}}
-                    </a>
-                </dt>
-                <dd>
-                    {{ element.comment|linebreaks }}
-                </dd>
+                <div class="list-group-item">
+                    <span aria-hidden="true"></span>
+                    <dt>
+                        <i class="fas fa-bars"></i>
+                        {% if object.ordered %}{{ forloop.counter }}.{% endif %}
+                        <a href="{% url "candidate_detail" element.candidate.slug %}">
+                            {{ element.candidate.fullname}}
+                        </a>
+                    </dt>
+                    <dd>
+                        {{ element.comment|linebreaks }}
+                    </dd>
+                </div>
                 {% endfor %}
             </dl>
         </div>
