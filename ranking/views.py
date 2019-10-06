@@ -59,7 +59,7 @@ class DownloadRankedList(RankedListDetail):
 class CandidateListField(forms.Field):
     def clean(self, value):
         if not value:
-            raise forms.ValidationError('noooooo')
+            raise forms.ValidationError('Something went wrong. Please reload and try again.')
 
         slugs = value.split(',')  # order is important!
 
