@@ -94,7 +94,7 @@ class CandidateAdmin(admin.ModelAdmin):
         ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'endorsements_link']}),
         ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
-        ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party']}),
+        ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party', 'cpf_id']}),
         ('Housing',               {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_status_note', 'housing_sell_value', 'housing_sale_date', 'housing_sale_price', 'housing_sale_price_inflation']}),
         ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist', 'job', 'previous_results_map']}),
         ('Todos',                 {'fields': ['checked_ocpf_for_contributions', 'checked_fec_for_contributions']}),
