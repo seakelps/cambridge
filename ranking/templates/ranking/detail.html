@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% load fullurl %}
 
+{% block body_id %}all_candidates{% endblock %}
+
 {% block head_extra %}
 <style type="text/css" media="screen">
-    #management form { 
-        display: inline; 
+    #management form {
+        display: inline;
         margin-right: 20px;
     }
 
@@ -69,7 +71,7 @@
                     <span aria-hidden="true"></span>
                     <dt>
                         <i class="fas fa-bars"></i>
-                        {% if object.ordered %}{{ forloop.counter }}.{% endif %}
+                        {% if object.ordered %}<span class="counter"></span>{% endif %}
                         <a href="{% url "candidate_detail" element.candidate.slug %}">
                             {{ element.candidate.fullname}}
                         </a>

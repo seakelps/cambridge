@@ -212,3 +212,10 @@ h1, .h1
   color: #4A4A4A
 
   font-weight: bold
+
+#ranked_list
+  counter-reset: section
+
+  .counter::before
+    counter-increment: section
+    content: counter(section) ". "
