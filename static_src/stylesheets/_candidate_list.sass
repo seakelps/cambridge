@@ -212,3 +212,22 @@ h1, .h1
   color: #4A4A4A
 
   font-weight: bold
+
+#ranked_list
+  counter-reset: section
+
+  .counter::before
+    counter-increment: section
+    content: counter(section) ". "
+
+
+#management form
+  display: inline
+  margin-right: 20px
+
+  dt
+    font-size: large
+    margin-top: 20px
+
+candidate
+  display: block
