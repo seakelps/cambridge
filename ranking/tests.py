@@ -223,3 +223,15 @@ class DeleteNote(TestCase):
 
         self.candidate.refresh_from_db()
         self.assertTrue(self.candidate)
+
+
+class AppendToList(TestCase):
+    def test_append(self):
+        user = factories.RankedList().owner
+        self.client.force_login(user)
+
+        candidate = overview_factories.Candidate(is_running=True)
+
+        self.client.post(reverse("append_to_ballot", args=[candidate.slug]))
+
+        self.assertEqual(user.rankedlist.annotated_candidates.get().candidate, candidate)

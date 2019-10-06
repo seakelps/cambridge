@@ -4,13 +4,13 @@ from django.views.generic import DetailView, UpdateView, ListView
 from django.utils import timezone
 # from django.views.decorators.http import last_modified
 # from django.views.decorators.vary import vary_on_headers
-from django.db.models import Q
+from django.db.models import Q, Max
 from django.utils.text import slugify
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django import forms
 from django.urls import reverse_lazy, reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 
 from .models import RankedList, RankedElement
@@ -90,6 +90,17 @@ def my_last_edit(request):
     view = MyList()
     view.request = request
     return view.get_object().last_modified
+
+
+# @require_POST
+def append_to_ballot(request, slug):
+    candidate = Candidate.objects.get(is_running=True, hide=False, slug=slug)
+
+    ballot = RankedList.objects.for_request(request)
+    max_order = ballot.annotated_candidates.aggregate(Max("order"))['order__max'] or -1
+
+    ballot.annotated_candidates.create(candidate=candidate, order=max_order + 1)
+    return redirect(candidate)
 
 
 # @method_decorator(vary_on_headers('HTTP_X_REQUESTED_WITH'), "get")

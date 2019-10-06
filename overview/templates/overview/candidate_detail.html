@@ -449,7 +449,7 @@
                         <i class="fa fa-list-ol"></i>
                         <span>View my ballot</span>
                     </a>
-                    <a class="disabled col btn btn-dark btn-bold fa-button" href="#">
+                    <a class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} col btn btn-dark btn-bold fa-button" href="{% url "append_to_ballot" object.slug %}">
                         <i class="fa fa-plus"></i>
                         <span>Add this candidate to ballot</span>
                     </a>
@@ -458,7 +458,8 @@
                     <a class="btn btn-red btn-bold fa-button btn-block" href="{% url "my_ranking" %}">
                         <i class="fa fa-list-ol"></i>
                         <span>View my ballot</span>
-                    </a><a class="disabled btn btn-dark btn-bold fa-button btn-block" href="#">
+                    </a>
+                    <a class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button btn-block" href="{% url "append_to_ballot" object.slug %}">
                         <i class="fa fa-plus"></i>
                         <span>Add candidate to your ballot</span>
                     </a>
