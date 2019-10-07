@@ -11,4 +11,5 @@ def header(request):
 def constants(request):
     return {
         "CONTACT_EMAIL": settings.CONTACT_EMAIL,
+        "GOOGLE_EMBED_API_KEY": settings.GOOGLE_EMBED_API_KEY,
     }
