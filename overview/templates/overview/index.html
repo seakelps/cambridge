@@ -17,7 +17,7 @@
     var initialLocations = {{ candidate_locations|safe }};
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
-<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key=AIzaSyCcioP2q-I1l11gotDDN7-suOclEmR5eVo"></script>
+<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}"></script>
 
 <style>
 #map {
