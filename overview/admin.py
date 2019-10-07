@@ -50,6 +50,8 @@ class VideoInlineAdmin(admin.TabularInline):
             if vid_id_match:
                 return "https://www.youtube.com/embed/{}".format(vid_id_match.group())
 
+            return link
+
         class Meta:
             model = InterviewVideo
             exclude = []

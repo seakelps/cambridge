@@ -5,15 +5,17 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 
 module.exports = {
-  entry: './static_src/index.js',
+  entry: {
+    main: './static_src/main.js',
+    drag_list: './static_src/drag_list.js'
+  },
   output: {
     path: path.resolve(__dirname, 'static_compiled'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     library: 'cambridge'
   },
   plugins: [
     new CopyWebpackPlugin([
-      { from: "node_modules/bootstrap/dist/", to: "bootstrap"},
       { from: "node_modules/animate.css/animate.min.css" }
     ]),
     new UglifyJSPlugin()  // heroku has NODE_ENV=production by default
@@ -40,19 +42,54 @@ module.exports = {
       },
 
       {
-        test: /\.(jpe?g|png|gif)$/i,
-        loader:"file-loader",
-        query:{
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: "file-loader",
+        options:{
           name:'[name].[ext]',
           outputPath:'images/'
-          //the images will be emmited to public/assets/images/ folder
-          //the images will be put in the DOM <style> tag as eg. background: url(assets/images/image.png);
         }
       },
       {
         test: /\.css$/,
         loaders: ["style-loader","css-loader"]
-      }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        loader: [
+          // Creates `style` nodes from JS strings
+          'style-loader',
+          // Translates CSS into CommonJS
+          'css-loader',
+          // Compiles Sass to CSS
+          'sass-loader',
+        ],
+      },
+      {
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000',
+        options: {
+          outputPath:'fonts',
+          publicPath:'static'
+        }
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+        loader: 'file-loader',
+        options:  {
+          outputPath:'fonts',
+          publicPath:'static'
+        }
+      },
     ]
   }
 };

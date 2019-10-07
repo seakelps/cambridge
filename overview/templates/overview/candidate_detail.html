@@ -3,6 +3,8 @@
 {% load static %}
 {% load humanize %}
 
+{% block body_id %}candidate_detail{% endblock %}
+
 {% block title %}Learn More About {{ candidate.fullname }}{% endblock %}
 
 {% block meta_description %}{{ candidate.blurb|markdown|striptags }}{% endblock %}
@@ -13,7 +15,7 @@
 {% for video in videos %}
     {% if forloop.first %}
         <meta property='og:video' content='{{ video.link|yt_direct }}' />
-        <meta property="og:type" content="video"> 
+        <meta property="og:type" content="video">
     {% endif %}
 {% endfor %}
 
@@ -28,133 +30,144 @@
 <script defer src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-
-<style>
-#map {
-    height: 350px;  /* hehehehe */
-    width: 100%;
-}
-
-.candidate-img img {
-    width: 70%; 
-    margin-top: 20px;
-}
-
-.endorsement img {
-    max-height: 30px;
-    max-width: 100px;
-}
-
-ul.endorsements {
-    list-style: none;
-    padding-left: 0px;
-}
-
-#theCarousel {
-    overflow-x: scroll;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-    overflow-scrolling: touch;
-}
-
-#theCarousel .video {
-    display: inline-block;
-}
-
-.questionnaire_link {
-    display: block;
-    margin-top: 0.75em;
-}
-
-
-@media(max-width:768px) {
-    .dl-horizontal dd {
-        padding-bottom: 20px;
-    }
-}
-</style>
-
 {% endblock %}
 
 
 {% block content %}
-<div class="container">
-<div class="row">
-    <div class="col-md-4 text-center">
-        <picture class="candidate-img img-responsive">
-            <img
-                class="img-circle"
-                src="{{ candidate.headshot }}"
-                alt="{{ candidate.headshot_description }}">
-        </picture>
+<div class="bg-black text-light">
+    <main class="container">
+    <div class="row">
+        <div class="col-12 candidate-info-body">
+            <div class="avatar-and-icon">
+                <div style="position: relative">
+                    <div class="avatar">
+                        <picture>
+                        <img
+                         class="rounded-circle avatar-circle img-fluid"
+                         height=500
+                         width=500
+                         src="{{ candidate.headshot }}"
+                         alt="{{ candidate.headshot_description }}">
+                        </picture>
+                    </div>
+                </div>
+            </div>
+
+            <div class="name-and-info">
+                <h1>{{ candidate.fullname }}</h1>
+
+                <dl class="text-left">
+                    {% if candidate.job %}
+                    <dt>Currently</dt>
+                    <dd>{{ candidate.job }}</dd>
+                    {% elif candidate.is_incumbent %}
+                    <dt>Currently</dt>
+                    <dd>City Councilor</dd>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
     </div>
-
-    <div class="col-md-8">
-        <h1>{{ candidate.fullname }}</h1>
-
-        {{ candidate.blurb|markdown }}
-
-        <ul class="list-inline">
-            {% if candidate.website %}
-            <li>
-                <a class="candidate_website" target="_blank" href="{{ candidate.website }}">{{ candidate.website|truncate_website }}</a>
-            </li>
-            {% endif %}
-
-            {% if candidate.email %}
-            <li>
-                <a class="candidate_website" target="_blank" href="mailto:{{ candidate.email}}">{{ candidate.email }}</a>
-            </li>
-            {% endif %}
-
-            {% if candidate.facebook %}
-            <li>
-                <a target="_blank" href="{{ candidate.facebook_url }}">
-                    <span class="fa fa-facebook"></span>
-                    {{ candidate.facebook }}
-                </a>
-            </li>
-            {% endif %}
-
-            {% if candidate.twitter %}
-            <li>
-                <a target="_blank" href="{{ candidate.twitter_url }}">
-                    <span class="fa fa-twitter"></span>
-                    {{ candidate.twitter }}
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
+    </main>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <h2 id="about">About</h2>
-    </div>
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>More about {{candidate.fullname}}</h2>
+        </div>
 
-    <div class="col-md-6">
-        <dl class="dl-horizontal">
-            <dt>Incumbent</dt>
-            <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
-            
-            {% if candidate.job %}
-                <dt>Job</dt>
-                <dd>{{ candidate.job }}</dd>
-            {% endif %}
-            
-            {% if candidate.education %}
+        <div class="col-12 text-center">
+            <ul class="list-inline" id="socials">
+                {% if candidate.website %}
+                <li class="list-inline-item">
+                    <a class="btn btn-website fa-button" target="_blank" href="{{ candidate.website }}">
+                        <i class="fa fa-globe-americas"></i>
+                        {# {{ candidate.website|truncate_website }} #}
+                        <span>Website</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if candidate.facebook %}
+                <li class="list-inline-item">
+                    <a class="btn btn-facebook fa-button" target="_blank" href="https://facebook.com/{{ candidate.facebook_url }}">
+                        <i class="fab fa-facebook"></i>
+                        <span>Facebook</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if candidate.twitter %}
+                <li class="list-inline-item">
+                    <a class="btn btn-twitter fa-button" target="_blank" href="https://twitter.com/{{ candidate.twitter }}">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="col-12">
+            {{ candidate.blurb|markdown }}
+        </div>
+
+
+        <div class="col-12 text-center">
+            <dl class="dl-horizontal">
+                <dt>Incumbent</dt>
+                <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
+
+                {% if candidate.education %}
                 <dt>Education</dt>
                 <dd>{{ candidate.education }}</dd>
-            {% endif %}
+                {% endif %}
 
-            <dt>Address</dt>
-            <dd>
-                {{ candidate.get_housing_status_display|title }}s
-                {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
-                at
-                <strong>{{ candidate.address }}</strong>
-                {% if candidate.housing_sell_value %}
+                <dt>Age</dt>
+                <dd>{{ candidate.date_of_birth|timesince }}
+                {% if candidate.date_of_birth or candidate.place_of_birth %}
+                <br>
+                <span class="text-muted">
+                    Born
+                    {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
+                    {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
+                </span>
+                {% endif %}
+                </dd>
+
+                {% if candidate.date_of_registration %}
+                <dt>Voter Registration</dt>
+                <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
+                                                            href="#!"
+                                                            data-toggle="popover"
+                                                            data-trigger="focus"
+                                                            data-html="true"
+                                                            data-container="body"
+                                                            data-content='Date candidate first registered to vote in Cambridge.'>
+                </a>
+                <br>
+                </dd>
+                {% endif %}
+
+
+            </dl>
+        </div>
+    </div>
+</section>
+
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <section class="col">
+                <h2>Where does {{ candidate.shortname }} live?</h2>
+                <dl class="dl-horizontal">
+                    <dt>Address</dt>
+                    <dd>
+                    {{ candidate.get_housing_status_display|title }}s
+                    {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
+                    at
+                    <strong>{{ candidate.address }}</strong>
+                    {% if candidate.housing_sell_value %}
                     <br>
                     <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
                         <a class="fa fa-info-circle"
@@ -164,439 +177,295 @@ ul.endorsements {
                            data-html="true"
                            data-container="body"
                            data-content='Housing value estimated from last assessed property tax value and public real estate estimates (like Zillow). In a couple of cases, that data was not available; it was then estimated based on neighboring properties.'>
-                       </a>
+                        </a>
                     </span>
-                {% endif %}
-                {% if candidate.housing_sale_date %}
+                    {% endif %}
+                    {% if candidate.housing_sale_date %}
                     <br>
                     <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
                         {% if candidate.housing_sale_price %}
-                            for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
+                        for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
                         {% endif %}
                         {% if candidate.housing_sale_price_inflation %}
                         <br>
                         inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
                         {% endif %}
                     </span>
-                {% endif %}
-            </dd>
+                    {% endif %}
+                    </dd>
+                </dl>
 
-            <dt>Age</dt>
-            <dd>{{ candidate.date_of_birth|timesince }}
-                {% if candidate.date_of_birth or candidate.place_of_birth %}
-                <br>
-                <span class="text-muted">
-                    Born
-                    {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
-                    {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
+                <div id="map" class="img map-container">
+                    <div class="map-alert">
+                        <div class="alert alert-warning"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</div>
+
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Endorsements</h2>
+        </div>
+
+        {% if endorsements or object.endorsements_link %}
+        <dd>
+        {% for endorsement in endorsements %}
+        {% if endorsement.organization.logo %}
+        {% spaceless %}
+        {% if endorsement.link %}
+        <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+            <img src="{{ endorsement.organization.logo }}" />
+        </a>
+        {% else %}
+        <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+            <img src="{{ endorsement.organization.logo }}" />
+        </span>
+        {% endif %}
+        {% endspaceless %}
+        {% endif %}
+        {% endfor %}
+
+        <ul class="endorsements">
+            {% for endorsement in endorsements %}
+            {% if not endorsement.organization.logo %}
+            {% spaceless %}
+            <li>
+                {% if endorsement.link %}
+                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                    {{ endorsement.organization.name }}
+                </a>
+                {% else %}
+                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                    {# div because display:block for new lines #}
+                    {{ endorsement.organization.name }}
                 </span>
                 {% endif %}
-            </dd>
-
-            {% if candidate.date_of_registration %}
-            <dt>Voter Registration</dt>
-                <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
-                           href="#!"
-                           data-toggle="popover"
-                           data-trigger="focus"
-                           data-html="true"
-                           data-container="body"
-                           data-content='Date candidate first registered to vote in Cambridge.'>
-                       </a>
-                    <br>
-                </dd>
+                {% endspaceless %}
+            </li>
             {% endif %}
-
-
-            {% if endorsements or object.endorsements_link %}
-                <dt>Endorsements</dt>
-                <dd>
-                    {% for endorsement in endorsements %}
-                        {% if endorsement.organization.logo %}
-                            {% spaceless %}
-                                {% if endorsement.link %}
-                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    <img src="{{ endorsement.organization.logo }}" />
-                                </a>
-                                {% else %}
-                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    <img src="{{ endorsement.organization.logo }}" />
-                                </span>
-                                {% endif %}
-                            {% endspaceless %}
-                        {% endif %}
-                    {% endfor %}
-
-                    <ul class="endorsements">
-                    {% for endorsement in endorsements %}
-                        {% if not endorsement.organization.logo %}
-                            {% spaceless %}
-                            <li>
-                                {% if endorsement.link %}
-                                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {{ endorsement.organization.name }}
-                                </a>
-                                {% else %}
-                                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                                    {# div because display:block for new lines #}
-                                    {{ endorsement.organization.name }}
-                                </span>
-                                {% endif %}
-                            {% endspaceless %}
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-
-                    {% if object.endorsements_link %}
-                        <hr/>
-                        <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
-                    {% endif %}
-                </dd>
-            {% endif %}
-        </dl>
-    </div>
-
-    <div class="col-md-6">
-        <div id="map" class="map-container">
-            <div class="map-alert">
-                <div class="alert alert-warning"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% if videos %}
-<div class="row">
-    <div class="col-md-12">
-        <h2 id="interviews">Interviews</h2>
-    </div>
-
-    {% if videos %}
-    <div class="col-md-12">
-        <div id="theCarousel" data-interval="false">
-            {% for video in videos %}
-                <div class="video"><a href="#1">
-                    <object data="{{ video.link }}" style="width:100%" height="225"></object>
-                </a></div>
             {% endfor %}
-        </div>
-        <div style="text-align:center;">
-            <p class="text-muted">&lt; Scroll &gt;</p>
-        </div>
-    </div>
-    {% endif %}
-</div>
-{% endif %}
+        </ul>
 
-<div class="row">
-    <div class="col-md-12">
-        <h2 id="questionnaires">Questionnaires</h2>
-    </div>
-
-    <div class="col-md-12">
-        <table class="table" id="endorsements_table" style="table-layout: fixed">
-            <colgroup>
-                <col style="width: 3em"></col>
-            </colgroup>
-            <tbody>
-                {% for response in candidate.questionnaireresponse_set.all %}
-                <tr>
-                    <td>
-                        <i class="hidden-xs fa fa-2x fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
-                        <i class="visible-xs fa fa-fw {{ response.questionnaire.icon_class }}" aria-hidden="true"></i>
-                    </td>
-                    <td class="hoverable">
-                        <a class="hoot" data-original="{{ response.questionnaire.topic }}" target="_blank" href="{{response.questionnaire_link }}">
-                            {{ response.questionnaire.topic }}
-                        </a>
-                    </td>
-                    <td>
-                        {{ response.questionnaire.name }}
-                        <a class="fa fa-info-circle" 
-                           href="#!" 
-                           data-toggle="popover" 
-                           data-trigger="focus"
-                           data-html="true" 
-                           data-container="body" 
-                           data-title="{{ response.questionnaire.name }}" 
-                           data-content='{{ response.questionnaire.description }}'></a>
-                    </td>
-
-                    <td>{% if response.date %}
-                            {{ response.date|date:"c" }}
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <caption class="text-muted">This candidate has not filled out any questionnaires that we know about.</caption>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <h2 id="">Quotes</h2>
-        {% for quote in candidate.quote_set.all %}
-            {% if quote.display %}
-                <blockquote> 
-                    <p>{{ quote.quote|markdown }}</p>
-                        <footer>
-                            {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
-                        </footer>
-                    </blockquote>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="col-md-6">
-        <h2 id="">Press</h2>
-        {% if candidate.pressarticlecandidate_set.all %}
-            <ul>
-            {% for article in others_articles %}
-                <li><p>
-                    {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
-                    {% if article.pressarticle.link %}
-                        <a href="{{ article.pressarticle.link }}" target="_blank">
-                            {{ article.pressarticle.title }}.
-                            <span class="fa fa-external-link"></span>
-                        </a>
-                    {% else %}
-                        {{ article.pressarticle.title }}.
-                    {% endif %}
-                    <br>
-                    <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
-                    {% if article.sample %}
-                        <a href="#!" 
-                           data-toggle="popover"
-                           data-trigger="focus"
-                           data-container="body"
-                           data-placement="bottom"
-                           data-html="true"
-                           data-content='{{ article.sample|linebreaksbr }}'>
-                           <span class="fa fa-newspaper-o"></span> Excerpt
-                       </a>
-                   {% endif %}
-                </p></li>
-            {% endfor %}
-
-            {% if own_articles %}
-                <h4>Authored:</h4>
-
-                {% for article in own_articles %}
-                    <li><p>
-                        {% if article.pressarticle.author %}{{article.pressarticle.author}}.{% endif %}
-                        {% if article.pressarticle.link %}
-                            <a href="{{ article.pressarticle.link }}" target="_blank">
-                                {{ article.pressarticle.title }}.
-                                <span class="fa fa-external-link"></span>
-                            </a>
-                        {% else %}
-                            {{ article.pressarticle.title }}.
-                        {% endif %}
-                        <br>
-                        <i>{{ article.pressarticle.pressoutlet.name }}</i> {% if article.pressarticle.date %}{{ article.pressarticle.date }}{% endif %}.
-                        {% if article.sample %}
-                            <a href="#!" 
-                               data-toggle="popover"
-                               data-trigger="focus"
-                               data-container="body"
-                               data-placement="bottom"
-                               data-html="true"
-                               data-content='{{ article.sample|linebreaksbr }}'>
-                               <span class="fa fa-newspaper-o"></span> Excerpt
-                           </a>
-                       {% endif %}
-                    </p></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% else %}
-            <p class="text-muted">We have not found any press about or authored by this candidate.</p>
+        {% if object.endorsements_link %}
+        <hr/>
+        <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
+        {% endif %}
+        </dd>
         {% endif %}
 
+
     </div>
+</section>
+
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Q&amp;A</h2>
+                <h3>Interviews with the candidate</h3>
+            </div>
+
+            {% for response in candidate.questionnaireresponse_set.all %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block survey">
+                    <div class="card-body">
+                        <h4>
+                            <a target="_blank" href="{{response.questionnaire_link }}">
+                                {{ response.questionnaire.name }}
+                            </a>
+                            <i class="fas fa-external-link-alt"></i>
+                        </h4>
+                        <p>{{ response.questionnaire.description }}</p>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row survey">
+                    <div class="col">
+                        <h4>
+                            <a target="_blank" href="{{response.questionnaire_link }}">
+                                {{ response.questionnaire.name }}
+                            </a>
+                            <i class="fas fa-external-link-alt"></i>
+                        </h4>
+                        <p>{{ response.questionnaire.description }}</p>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 </div>
 
-<div class="row">
-    <div class="col-md-12">
-        <h2 id="finance">Campaign Finance</h2>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="panel panel-money">
-            <div class="panel-heading panel-heading-money">
-                <h3 class="money-amount">
-                    {% if latest_bank_report.ending_balance_display is not None %}
-                        $&nbsp;{{ latest_bank_report.ending_balance_display|intcomma }}
-                    {% else %}
-                        <i>TBD</i>
-                    {% endif %}
-                </h3>
+{% comment %}TODO convert from ruby to django implementation
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Policy</h2>
+            <h3>Where the candidate stands on certain issues</h3>
+        </div>
+        <div class="col-12" id="policies">
+            {% for policy in candidate.candidate_policies %}
+            <div class="d-block">
+                <i class="<%= position.policy.icon_class %> fa fa-2x text-success"></i>
+                <strong class="montserrat">
+                    <%= position.policy.name %>
+                </strong>
             </div>
-            <div class="panel-body">
-                Balance
+            <div class="text-left">
+                <%= position.position %>
             </div>
+            {% endfor %}
         </div>
     </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="panel panel-money">
-            <div class="panel-heading panel-heading-money">
-                <h3 class="money-amount">
-                    {% if money_2019_raised is not None %}
-                        $&nbsp;{{ money_2019_raised|intcomma }}
-                    {% else %}
-                        <i>TBD</i>
-                    {% endif %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                Raised in 2019
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="panel panel-money">
-            <div class="panel-heading panel-heading-money">
-                <h3 class="money-amount">
-                    {% if money_2019_spent is not None %}
-                        $&nbsp;{{ money_2019_spent|intcomma }}
-                    {% else %}
-                        <i>TBD</i>
-                    {% endif %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                Spent in 2019
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="panel panel-money">
-            <div class="panel-heading panel-heading-money">
-                <h3 class="money-amount">
-                    {% if money_2019_start is not None %}
-                        $&nbsp;{{ money_2019_start|intcomma }}
-                    {% else %}
-                        <i>TBD</i>
-                    {% endif %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                Jan 1, 2019 Balance
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12">
-        To see how this candidate compares, check out <a href="{% url 'finance_comparison' %}">finance comparison</a>.
-    </div>
+</section>
+{% endcomment %}
 
-    <!-- money they have given -->
-    <div class="col-md-12">
-        <h3>Campaign Donations</h3>
-        <p class="text-muted">What campaign donations this candidate (or campaign) has given, from the <a href="http://www.ocpf.us/Reports/SearchItems" target="_blank">Office of Campaign and Political Finance <span class="fa fa-external-link"></span></a> and the </span><a href="http://classic.fec.gov/finance/disclosure/norindsea.shtml" target="_blank">FEC <span class="fa fa-external-link"></span></a>.</p>
-    </div>
-
-    {% if candidate.pastcontribution_set.all %}
-        <div class="col-md-12">
-            <p>Total donations (less access fees): ${{ candidate.total_contributions_less_fees|floatformat:0|intcomma }}</p>
-        </div>
-        <div class="col-md-12">
-            <table id="contribution-table" class="table table-responsive table-striped contributions">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Recipient</th>
-                        <th>Note</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for contribution in candidate.pastcontribution_set.all %}
-                    <tr>
-                        <td>{% if contribution.date %}
-                                {{ contribution.date|date:"c" }}
-                            {% endif %}
-                        </td>
-                        
-                        <td>{% if contribution.amount %}
-                                ${{ contribution.amount|floatformat:0|intcomma }}
-                            {% endif %}
-                        </td>
-
-                        <td>{% if contribution.recipient %}
-                                {{ contribution.recipient }}
-                            {% endif %}
-                        </td>
-
-                        <td>{% if contribution.note %}
-                                {{ contribution.note|markdown }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-
-    {% else %}
-        <div class="col-md-12">
-            {% if candidate.checked_ocpf_for_contributions and candidate.checked_fec_for_contributions %}
-                <p class="text-muted">{{ candidate.fullname }} either has not donated or has donated in a way not tracked by the FEC or ocpf.us.</p>
-            {% else %}
-                <p class="text-muted">We have not yet researched campaign donations by {{ candidate.fullname }}.</p>
+<section class="container" id="press">
+    <div class="row">
+        <div class="col-12">
+            <h2 id="">Quotes</h2>
+            {% for quote in candidate.quote_set.all %}
+            {% if quote.display %}
+            <blockquote>
+                <p>{{ quote.quote|markdown }}</p>
+                <footer>
+                    {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                </footer>
+            </blockquote>
             {% endif %}
+            {% endfor %}
         </div>
-    {% endif %}
-
-</div>
-
-{% if candidate.previous_results_map %}
-<div class="row">
-    <div class="col-md-12">
-        <h2>
-            Previous Election Results 
-            <a class="fa fa-external-link" href="http://vote2017.mit.edu/2015-election-result-maps/" target="_blank"></a>
-        <h2>
     </div>
-    <div class="col-md-12">
-        <a href="http://vote2017.mit.edu/2015-election-result-maps/" target="_blank">
-            <img class="img-responsive" src="{{ candidate.previous_results_map }}">
-        </a>
+</section>
+
+<div class="bg-gray">
+    <section class="container" id="press">
+        <div class="row">
+            <div class="col-12">
+                <h2>Press</h2>
+                <h3>Articles about the candidate</h3>
+            </div>
+
+            {% for article_snippet in articles %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block press-article">
+                    <div class="card-body">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row press-article">
+                    <div class="col">
+                        <a href="{{ article_snippet.pressarticle.pressoutlet.homepage }}" class="h4">
+                            {{ article_snippet.pressarticle.pressoutlet.name }}
+                        </a>
+
+                        <a href="{{ article_snippet.pressarticle.link }}" class="h3">
+                            {{ article_snippet.pressarticle.title }}
+                            <i class="fa fa-external-link-alt"></i>
+                        </a>
+
+                        {{ article_snippet.sample|linebreaks }}
+                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<section class="container">
+    <div class="row">
+        <div class="col">
+            <h2>Campaign finance</h2>
+            <h3>How much the candidate has raised and spent</h3>
+            <div class="stats">
+                <div>
+                    <strong>
+                        {% if latest_bank_report.ending_balance_display is not None %}
+                        ${{ latest_bank_report.ending_balance_display|intcomma }}
+                        {% else %}
+                        <i>TBD</i>
+                        {% endif %}
+                    </strong>
+                    <div>Current balance</div>
+                </div>
+                <div>
+                    <strong>
+                        {% if money_2019_start is not None %}
+                        ${{ money_2019_start|intcomma }}
+                        {% else %}
+                        <i>TBD</i>
+                        {% endif %}
+                    </strong>
+                    <div>Balance at the start of 2019</div>
+                </div>
+                <div>
+                    <i class="fa fa-plus text-success"></i>
+                    <strong>
+                        {% if money_2019_raised is not None %}
+                        ${{ money_2019_raised|intcomma }}
+                        {% else %}
+                        <i>TBD</i>
+                        {% endif %}
+                    </strong>
+                    <div>Raised in 2019</div>
+                </div>
+                <div>
+                    <i class="fa fa-minus text-danger"></i>
+                    <strong>
+                        {% if money_2019_spent is not None %}
+                        ${{ money_2019_spent|intcomma }}
+                        {% else %}
+                        <i>TBD</i>
+                        {% endif %}
+                    </strong>
+                    <div>Spent in 2019</div>
+                </div>
+            </div>
+        </div>
     </div>
+</section>
+
+<div class="bg-gray sticky-footer shadow">
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <div class="d-none d-md-flex">
+                    <a class="col btn btn-red btn-bold fa-button" href="{% url "my_ranking" %}">
+                        <i class="fa fa-list-ol"></i>
+                        <span>View my ballot</span>
+                    </a>
+                    <a class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} col btn btn-dark btn-bold fa-button" href="{% url "append_to_ballot" object.slug %}">
+                        <i class="fa fa-plus"></i>
+                        <span>Add this candidate to ballot</span>
+                    </a>
+                </div>
+                <div class="d-md-none">
+                    <a class="btn btn-red btn-bold fa-button btn-block" href="{% url "my_ranking" %}">
+                        <i class="fa fa-list-ol"></i>
+                        <span>View my ballot</span>
+                    </a>
+                    <a class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button btn-block" href="{% url "append_to_ballot" object.slug %}">
+                        <i class="fa fa-plus"></i>
+                        <span>Add candidate to your ballot</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
-{% endif %}
-</div>
-{% endblock %}
-
-
-{% block endscripts %}
-    <script>
-        $("[data-toggle=tooltip]").tooltip();
-        $("[data-toggle=popover]").popover();
-
-        $("td.hoverable").hover(function() {
-            let $td = $(this);
-            let $hoot = $td.find(".hoot");
-            $hoot.fadeOut(200, function() {
-                $hoot.text("View their answers").fadeIn(200);
-            });
-        }, function() {
-            let $td = $(this);
-            let $hoot = $td.find(".hoot");
-            $hoot.fadeOut(200, function() {
-                $hoot.text($hoot.data('original')).fadeIn(200);
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#contribution-table').DataTable({
-                "columnDefs": [
-                    { "width": "4em", "targets": 0 }
-                ]
-            });
-        });
-    </script>
 {% endblock %}

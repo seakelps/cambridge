@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css?family=Heebo:400,700|Lato:400,700,900|Montserrat:700')
+
+.heebo
+  font-family: 'Heebo', sans-serif
+
+.lato
+  font-family: 'Lato', sans-serif
+
+.montserrat
+  font-family: 'Montserrat', sans-serif
+
+$font-family-sans-serif: Lato
+$btn-border-radius: 2px
+$btn-border-radius-lg: 2px
+$btn-border-radius-sm: 2px
+
+$primary: #9A77F6
+$secondary: #f71a20
+$other-red: #f80f1c
+$dark: #4D23BC
+$info: #131313
+
+$hr-border-color: black
+$hr-border-width: 2px
+
+$body-color: #0B0B0B
+
+$navbar-padding-y: 34px
+
+$container-max-widths: (sm: 540px, md: 720px, lg: 871px, xl: 872px)
+
+/* shouldn't need the extension right? */
+$fa-font-path: '../../node_modules/@fortawesome/fontawesome-free/webfonts';
+
+// couldn't figure out how to make the sass version below work, always broken icon
+@import "../../node_modules/@fortawesome/fontawesome-free/css/all.css"
+/* @import "@fortawesome/fontawesome-free/scss/fontawesome.scss" */
+/* @import "@fortawesome/fontawesome-free/scss/regular.scss" */
+@import "bootstrap/scss/bootstrap.scss"
+
+.font-weight-bolder
+  font-weight: 900 !important
+
+html
+  @include media-breakpoint-down(sm)
+    font-size: 16px
+  @include media-breakpoint-up(md)
+    font-size: 24px
+
+
+@include media-breakpoint-down(sm)
+  .navbar
+    padding: 14px 30px
+    font-size: 16px
+    line-height: 24px
+
+    .navbar-brand
+      font-size: 16px
+
+// Overrides below
+/* @import "candidate_list" */
+
+body#all_candidates
+  @import "candidate_list"
+
+body#candidate_detail
+  @import "candidate"
+
+body#welcome
+  /* @import "welcome" */
+
+.navbar-brand
+  color: white
+  font-family: Heebo
+  font-size: 24px
+  font-weight: bold
+  line-height: 35px
+
+.nav-item
+  // design has distance ~40px and padding is already 15px on each side
+  margin: 0 5px
+
+  a
+    font-family: Lato
+    font-size: 18px
+    font-weight: bold
+    line-height: 22px
+    color: white
+
+.fa-button
+  @include media-breakpoint-up(md)
+    *+*
+      margin-left: 0.5em
+
+
+// party icon background colors - same for all pages
+.elephant-background
+  background-color: #F80F1C
+
+.donkey-background
+  background-color: #3391f7
+  
+.flat-top
+  border-top-left-radius: 0px
+  border-top-right-radius: 0px
+
+// background options
+@include bg-variant(".bg-gray", #eeeeef)
+@include bg-variant(".bg-black", $black)

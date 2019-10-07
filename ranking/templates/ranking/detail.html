@@ -1,82 +1,85 @@
 {% extends "base.html" %}
 {% load fullurl %}
+{% load static %}
 
-{% block head_extra %}
-<style type="text/css" media="screen">
-    #management form { 
-        display: inline; 
-        margin-right: 20px;
-    }
-
-    dt {
-        font-size: large;
-        margin-top: 20px;
-    }
-</style>
-
-{% endblock %}
+{% block body_id %}all_candidates{% endblock %}
 
 {% block content %}
+<div class="bg-light p-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ object.name|title }} <a download href="{% url "list_explore_download" object.slug %}" class="px-3 fa fa-download"></a></h1>
+            </div>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{ object.name|title }} <a download href="{% url "list_explore_download" object.slug %}" class="fa fa-download"></a></h1>
-        </div>
+            {% if mine %}
+            <div class="col-md-12" id="management">
+                <form action="{% url "make_public" %}" method="post">
+                    {% csrf_token %}
 
-        {% if mine %}
-        <div class="col-md-12" id="management">
-            <form action="{% url "make_public" %}" method="post">
-                {% csrf_token %}
+                    {{ public_form.public.as_hidden }}
 
-                {{ public_form.public.as_hidden }}
+                    {{ object.public|yesno:"Public,Private" }}:
+                    {% if public_form.public.value %}
+                        <button class="btn btn-outline-danger btn-sm">Make Publically Visible</button>
+                    {% else %}
+                        <button class="btn btn-outline-info btn-sm">Make Private</button>
+                    {% endif %}
+                </form>
 
-                {{ object.public|yesno:"Public,Private" }}:
-                {% if public_form.public.value %}
-                    <button class="btn btn-default btn-sm">Make Publically Visible</button>
-                {% else %}
-                    <button class="btn btn-default btn-sm">Make Private</button>
+                <form action="{% url "make_ordered" %}" method="post">
+                    {% csrf_token %}
+                    {{ ordered_form.ordered.as_hidden }}
+
+                    {{ object.ordered|yesno:"Ordered,Unordered" }}:
+                    {% if ordered_form.ordered.value %}
+                        <button class="btn btn-outline-info btn-sm">Display as Ordered</button>
+                    {% else %}
+                        <button class="btn btn-outline-info btn-sm">Display as Unordered</button>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="col-md-12">
+                {% if object.public %}
+                    You can share this information at this url: <a href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
                 {% endif %}
-            </form>
-
-            <form action="{% url "make_ordered" %}" method="post">
-                {% csrf_token %}
-                {{ ordered_form.ordered.as_hidden }}
-
-                {{ object.ordered|yesno:"Ordered,Unordered" }}:
-                {% if ordered_form.ordered.value %}
-                    <button class="btn btn-default btn-sm">Display as Ordered</button>
-                {% else %}
-                    <button class="btn btn-default btn-sm">Display as Unordered</button>
-                {% endif %}
-            </form>
-        </div>
-
-        <div class="col-md-12">
-            {% if object.public %}
-                You can share this information at this url: <a href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
+            </div>
             {% endif %}
         </div>
-        {% endif %}
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <dl>
-                {% for element in object.annotated_candidates.all %}
-                <dt>
-                    {% if object.ordered %}{{ forloop.counter }}.{% endif %}
-                    <a href="{% url "candidate_detail" element.candidate.slug %}">
-                        {{ element.candidate.fullname}}
-                    </a>
-                </dt>
-                <dd>
-                    {{ element.comment|linebreaks }}
-                </dd>
-                {% endfor %}
-            </dl>
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-md-12">
+                <dl id="ranked_list" class="list-group">
+                    {# help #}
+                    {% for element in object.annotated_candidates.all %}
+                    <candidate class="list-group-item" data-slug="{{ element.candidate.slug }}">
+                        <span aria-hidden="true"></span>
+                        <dt>
+                            {% if mine %}
+                                <i class="fas fa-bars"></i>
+                            {% endif %}
+                            {% if object.ordered %}<span class="counter"></span>{% endif %}
+                            <a href="{% url "candidate_detail" element.candidate.slug %}">
+                                {{ element.candidate.fullname}}
+                            </a>
+                        </dt>
+                        <dd>
+                            {{ element.comment|linebreaks }}
+                        </dd>
+                    </candidate>
+                    {% endfor %}
+                </dl>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block endscripts %}
+    {% if mine %}
+    <script src="{% static "drag_list.js" %}" charset="utf-8"></script>
+    {% endif %}
 {% endblock %}
