@@ -175,3 +175,4 @@ LOGOUT_REDIRECT_URL = '/'
 # that said, production's configurations work in dev, so you can test them
 # by commenting out EMAIL_BACKEND and copying all the production email settings.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+GOOGLE_EMBED_API_KEY = os.getenv('GOOGLE_EMBED_API_KEY')
