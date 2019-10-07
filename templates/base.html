@@ -54,7 +54,7 @@
             {# TODO #}
             {# <a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc navbar-toggle btn btn-link visible-xs"></a> #}
             <a class="navbar-brand" href="{% url 'index' %}">
-                <span class="d-none d-sm-inline header-text">Cambridge Council Candidates</span>
+                <span class="d-none d-sm-inline header-text">Cambridge Candidates</span>
                 <span class="d-inline d-sm-none header-text">Cambridge Candidates</span>
             </a>
 
@@ -72,10 +72,6 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <div class="div mr-auto"></div>
                 <ul class="nav navbar-nav text-center">
-                    <li class="nav-item {% if request.resolver_match.url_name == 'all' %} active {% endif %}">
-                        <a class="btn btn-link text-light" href="{% url 'all' %}">All</a>
-                    </li>
-
                     <li class="nav-item dropdown {% if request.resolver_match.url_name == 'candidate_detail' %} active {% endif %}">
                         <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
                         <div id="candidate_list" class="dropdown-menu bg-dark">
@@ -109,11 +105,18 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
                         <div class="dropdown-menu dropdown-menu-right bg-dark">
+                            <a class="dropdown-item" href="{% url 'all' %}">All Candidates</a>
                             <a class="dropdown-item" href="{% url 'full_history' %}">Incumbent Voting</a>
                             <a class="dropdown-item" href="{% url 'finance_comparison' %}">Campaign Finance</a>
                             <a class="dropdown-item disabled" href="#">Press Coverage</a>
                             <a class="dropdown-item" href="{% url 'my_ranking' %}">My Candidates</a>
                         </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{% url 'how_to_vote' %}" role="button">
+                            How to Vote
+                        </a>
                     </li>
 
                     {% if user.is_authenticated %}
@@ -133,7 +136,7 @@
     <footer class="navbar navbar-dark bg-dark navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{% url 'index' %}">
-                <span class="d-none d-small-inline header-text">Cambridge Council Candidates</span>
+                <span class="d-none d-small-inline header-text">Cambridge Candidates</span>
                 <span class="d-inline d-small-none header-text">Cambridge Candidates</span>
             </a>
 
