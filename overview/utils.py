@@ -2,7 +2,7 @@ from django.urls import reverse
 from .models import Candidate
 
 
-def get_candidate_locations(candidates=Candidate.objects.all(), default_color="F00"):
+def get_candidate_locations(candidates=Candidate.objects.filter(hide=False, is_running=True), default_color="F00"):
     has_address = Candidate.objects.exclude(latitude=None).exclude(longitude=None)
 
     return {cand.id: {
