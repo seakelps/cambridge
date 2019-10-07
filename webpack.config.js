@@ -5,10 +5,13 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 
 module.exports = {
-  entry: './static_src/index.js',
+  entry: {
+    main: './static_src/main.js',
+    drag_list: './static_src/drag_list.js'
+  },
   output: {
     path: path.resolve(__dirname, 'static_compiled'),
-    filename: 'bundle.js',
+    filename: '[name].js',
     library: 'cambridge'
   },
   plugins: [
