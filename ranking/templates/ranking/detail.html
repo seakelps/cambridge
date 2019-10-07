@@ -58,7 +58,9 @@
                     <candidate class="list-group-item" data-slug="{{ element.candidate.slug }}">
                         <span aria-hidden="true"></span>
                         <dt>
-                            <i class="fas fa-bars"></i>
+                            {% if mine %}
+                                <i class="fas fa-bars"></i>
+                            {% endif %}
                             {% if object.ordered %}<span class="counter"></span>{% endif %}
                             <a href="{% url "candidate_detail" element.candidate.slug %}">
                                 {{ element.candidate.fullname}}
@@ -77,5 +79,7 @@
 {% endblock %}
 
 {% block endscripts %}
-<script src="{% static "drag_list.js" %}" charset="utf-8"></script>
+    {% if mine %}
+    <script src="{% static "drag_list.js" %}" charset="utf-8"></script>
+    {% endif %}
 {% endblock %}
