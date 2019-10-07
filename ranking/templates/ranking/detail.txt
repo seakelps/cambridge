@@ -3,10 +3,9 @@
 
 
 {% for element in object.annotated_candidates.all %}
-{{ forloop.counter }}. {{ element.candidate.fullname}} {% fullurl "candidate_detail" element.candidate.slug %}
+{% if object.ordered %}{{ forloop.counter }}. {% endif %}{{ element.candidate.fullname}} {% fullurl "candidate_detail" element.candidate.slug %}
 
 {{ element.comment }}
-
 
 {% endfor %}
 {% endautoescape %}
