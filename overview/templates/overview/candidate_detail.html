@@ -25,6 +25,15 @@
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
 
+<style>
+<style>
+#map {
+    height: 350px;
+    width: 100%;
+}
+</style>
+
+
 <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}"></script>
 <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script defer src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -194,14 +203,19 @@
                     {% endif %}
                     </dd>
                 </dl>
+            </section>
+        </div>
 
-                <div id="map" class="img map-container">
+        <div class="row justify-content-center">
+            <section class="col-md-1o">
+                <div id="map" class="map-container">
                     <div class="map-alert">
                         <div class="alert alert-warning"></div>
                     </div>
                 </div>
             </section>
         </div>
+
     </section>
 </div>
 
