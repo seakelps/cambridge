@@ -3,6 +3,8 @@
 {% load static %}
 {% load i18n %}
 
+{% block body_id %}welcome{% endblock %}
+
 {% block head_extra %}
 <meta name="google-site-verification" content="QocdPunJuyzDI6Z00Uw3WHcL5xrcxPVf78_o7f05YvQ" />
 <meta name="twitter:card" content="summary">
@@ -18,17 +20,6 @@
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
 <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}"></script>
-
-<style>
-#map {
-    height: 400px;
-    width: 100%;
-}
-#endorsements_table caption {
-    font-size: 2em;
-    font-weight: bold;
-}
-</style>
 {% endblock %}
 
 {% block content %}
