@@ -99,7 +99,7 @@
 
                 {% if candidate.facebook %}
                 <li class="list-inline-item">
-                    <a class="btn btn-facebook fa-button" target="_blank" href="https://facebook.com/{{ candidate.facebook_url }}">
+                    <a class="btn btn-facebook fa-button" target="_blank" href="{{ candidate.facebook_url }}">
                         <i class="fab fa-facebook"></i>
                         <span>Facebook</span>
                     </a>
@@ -108,7 +108,7 @@
 
                 {% if candidate.twitter %}
                 <li class="list-inline-item">
-                    <a class="btn btn-twitter fa-button" target="_blank" href="https://twitter.com/{{ candidate.twitter }}">
+                    <a class="btn btn-twitter fa-button" target="_blank" href="{{ candidate.twitter_url }}">
                         <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
                     </a>
