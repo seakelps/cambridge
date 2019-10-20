@@ -352,3 +352,14 @@ dl
 .sticky-footer
   position: sticky
   bottom: 0
+
+#my-rankings-footer
+  @include media-breakpoint-down(md)
+    .btn
+      display: block
+
+  @include media-breakpoint-up(md)
+    display: flex
+
+    .btn
+      flex: 1

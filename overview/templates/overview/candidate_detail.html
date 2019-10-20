@@ -462,27 +462,22 @@
 <div class="bg-gray sticky-footer shadow">
     <section class="container">
         <div class="row">
-            <div class="col">
-                <div class="d-none d-md-flex">
-                    <a rel="nofollow" class="col btn btn-red btn-bold fa-button" href="{% url "my_ranking" %}">
-                        <i class="fa fa-list-ol"></i>
-                        <span>View my ballot</span>
-                    </a>
-                    <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} col btn btn-dark btn-bold fa-button" href="{% url "append_to_ballot" object.slug %}">
-                        <i class="fa fa-plus"></i>
-                        <span>Add this candidate to ballot</span>
-                    </a>
-                </div>
-                <div class="d-md-none">
-                    <a rel="nofollow" class="btn btn-red btn-bold fa-button btn-block" href="{% url "my_ranking" %}">
-                        <i class="fa fa-list-ol"></i>
-                        <span>View my ballot</span>
-                    </a>
-                    <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button btn-block" href="{% url "append_to_ballot" object.slug %}">
-                        <i class="fa fa-plus"></i>
-                        <span>Add candidate to your ballot</span>
-                    </a>
-                </div>
+            <div class="col" id="my-rankings-footer">
+                <a rel="nofollow" class="btn btn-red btn-bold fa-button" href="{% url "my_ranking" %}">
+                    <i class="fa fa-list-ol"></i>
+                    <span>View my ballot</span>
+                </a>
+
+                <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" href="{% url "append_to_ballot" object.slug %}">
+                    {% if object.hide or not object.is_running %}
+                    <span>Candidate not running</span>
+                    {% elif object in my_candidates %}
+                    <span>Candidate on ballot</span>
+                    {% else %}
+                    <i class="fa fa-plus"></i>
+                    <span>Add this candidate to ballot</span>
+                    {% endif %}
+                </a>
             </div>
         </div>
     </section>
