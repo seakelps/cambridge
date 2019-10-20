@@ -409,7 +409,7 @@
                 <div>
                     <strong>
                         {% if latest_bank_report.ending_balance_display is not None %}
-                        ${{ latest_bank_report.ending_balance_display|intcomma }}
+                        ${{ latest_bank_report.ending_balance_display|floatformat:0|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
@@ -419,7 +419,7 @@
                 <div>
                     <strong>
                         {% if money_2019_start is not None %}
-                        ${{ money_2019_start|intcomma }}
+                        ${{ money_2019_start|floatformat:0|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
@@ -430,7 +430,7 @@
                     <i class="fa fa-plus text-success"></i>
                     <strong>
                         {% if money_2019_raised is not None %}
-                        ${{ money_2019_raised|intcomma }}
+                        ${{ money_2019_raised|floatformat:0|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
@@ -441,7 +441,7 @@
                     <i class="fa fa-minus text-danger"></i>
                     <strong>
                         {% if money_2019_spent is not None %}
-                        ${{ money_2019_spent|intcomma }}
+                        ${{ money_2019_spent|floatformat:0|intcomma }}
                         {% else %}
                         <i>TBD</i>
                         {% endif %}
