@@ -485,9 +485,16 @@
                     <i class="fa fa-list-ol"></i>
                     <span>View my ballot</span>
                 </a>
+
                 <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" href="{% url "append_to_ballot" object.slug %}">
+                    {% if object.hide or not object.is_running %}
+                    <span>Candidate not running</span>
+                    {% elif object in my_candidates %}
+                    <span>Candidate on ballot</span>
+                    {% else %}
                     <i class="fa fa-plus"></i>
                     <span>Add this candidate to ballot</span>
+                    {% endif %}
                 </a>
             </div>
         </div>
