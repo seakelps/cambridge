@@ -230,8 +230,11 @@ class AppendToList(TestCase):
         user = factories.RankedList().owner
         self.client.force_login(user)
 
-        candidate = overview_factories.Candidate(is_running=True)
+        candidate0 = overview_factories.Candidate(is_running=True)
+        candidate1 = overview_factories.Candidate(is_running=True)
 
-        self.client.post(reverse("append_to_ballot", args=[candidate.slug]))
+        self.client.post(reverse("append_to_ballot", args=[candidate0.slug]))
+        self.client.post(reverse("append_to_ballot", args=[candidate1.slug]))
 
-        self.assertEqual(user.rankedlist.annotated_candidates.get().candidate, candidate)
+        self.assertEqual(user.rankedlist.annotated_candidates.get(order=0).candidate, candidate0)
+        self.assertEqual(user.rankedlist.annotated_candidates.get(order=1).candidate, candidate1)

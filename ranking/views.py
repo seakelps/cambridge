@@ -100,7 +100,9 @@ def append_to_ballot(request, slug):
     candidate = Candidate.objects.get(is_running=True, hide=False, slug=slug)
 
     ballot = RankedList.objects.for_request(request)
-    max_order = ballot.annotated_candidates.aggregate(Max("order"))['order__max'] or -1
+    max_order = ballot.annotated_candidates.aggregate(Max("order"))['order__max']
+    if max_order is None:
+        max_order = -1
 
     ballot.annotated_candidates.create(candidate=candidate, order=max_order + 1)
     return redirect(candidate)
