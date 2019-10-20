@@ -11,4 +11,3 @@ class CandidateListTest(TestCase):
 
         resp = self.client.get(reverse("all"))
         self.assertEqual(resp.status_code, 200)
-        self.assertTemplateUsed(resp, "overview/candidate_card.html", count=2)
