@@ -56,6 +56,10 @@ class CandidateDetail(DetailView):
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
         context['videos'] = self.object.interviewvideo_set(manager="active").all()
 
+        context['questionnaire_responses'] = self.object.questionnaireresponse_set\
+            .filter(display=True, questionnaire__display=True)\
+            .select_related("questionnaire")
+
         context['articles'] = self.object.pressarticlecandidate_set\
             .filter(display=True)\
             .select_related("pressarticle__pressoutlet").order_by("-pressarticle__date")
