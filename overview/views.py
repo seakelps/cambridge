@@ -81,7 +81,7 @@ class CandidateDetail(DetailView):
             context['money_2019_raised'] = None
 
         context['endorsements'] = self.object.endorsement_set\
-            .order_by("-organization__logo")\
+            .filter(display=True)\
             .select_related("organization").all()
 
         return context
