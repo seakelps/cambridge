@@ -187,6 +187,7 @@ class Questionnaire(models.Model):
     icon_class = models.CharField(max_length=40, help_text='icon class like "fa-tree"')
     description = models.CharField(max_length=500)
     link = models.URLField(max_length=500, blank=True)
+    display = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -197,6 +198,7 @@ class QuestionnaireResponse(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
+    display = models.BooleanField(default=False)
 
     @property
     def questionnaire_link(self):
