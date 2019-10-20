@@ -70,9 +70,9 @@
             <ul class="nav navbar-nav navbar-right d-none d-sm-flex">
                 <li><a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc btn btn-link"></a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url "logout" %}">Logout</a></li>
+                    <li><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
                 {% else %}
-                    <li><a href="{% url "login" %}">Login</a></li>
+                    <li><a rel="nofollow" href="{% url "login" %}">Login</a></li>
                 {% endif %}
             </ul>
 
@@ -116,7 +116,7 @@
                             <a class="dropdown-item" href="{% url 'full_history' %}">Incumbent Voting</a>
                             <a class="dropdown-item" href="{% url 'finance_comparison' %}">Campaign Finance</a>
                             <a class="dropdown-item disabled" href="#">Press Coverage</a>
-                            <a class="dropdown-item" href="{% url 'my_ranking' %}">My Candidates</a>
+                            <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' %}">My Candidates</a>
                         </div>
                     </li>
 
@@ -127,9 +127,9 @@
                     </li>
 
                     {% if user.is_authenticated %}
-                        <li class="nav-item d-list-item d-sm-none"><a href="{% url "logout" %}">Logout</a></li>
+                        <li class="nav-item d-list-item d-sm-none"><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item d-none d-sm-list-item"><a href="{% url "login" %}">Login</a></li>
+                        <li class="nav-item d-none d-sm-list-item"><a rel="nofollow" href="{% url "login" %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
