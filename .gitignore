@@ -51,3 +51,6 @@ coverage.xml
 docs/_build/
 static_compiled/
 node_nodules/
+
+# mac
+.DS_Store
