@@ -29,7 +29,7 @@ class RawBankReport(models.Model):
     report_type_description = models.CharField(max_length=200)
 
     # who this report is tied to
-    cpf_id = models.IntegerField()
+    cpf_id = models.IntegerField(db_index=True)
     full_name_reverse = models.CharField(max_length=200)
     report_candidate_first_name = models.CharField(max_length=200)
 
