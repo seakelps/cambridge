@@ -376,7 +376,18 @@
                         </a>
 
                         {{ article_snippet.sample|linebreaks }}
-                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+
+                        {% if article_snippet.pressarticle.date %}
+                            {{ article_snippet.pressarticle.date }}
+                        {% endif %}
+
+                        {% if article_snippet.pressarticle.date and article_snippet.pressarticle.author %}
+                            &mdash;
+                        {% endif %}
+
+                        {% if article_snippet.pressarticle.author %}
+                            {{ article_snippet.pressarticle.author }}
+                        {% endif %}
                     </div>
                 </div>
                 <section class="bg-white border border-green d-md-none row press-article">
@@ -391,7 +402,20 @@
                         </a>
 
                         {{ article_snippet.sample|linebreaks }}
-                        <div class="text-muted small">{{ article_snippet.pressarticle.date }} &mdash; {{ article_snippet.pressarticle.author }}</div>
+
+                        <div class="text-muted small">
+                        {% if article_snippet.pressarticle.date %}
+                            {{ article_snippet.pressarticle.date }}
+                        {% endif %}
+
+                        {% if article_snippet.pressarticle.date and article_snippet.pressarticle.author %}
+                            &mdash;
+                        {% endif %}
+
+                        {% if article_snippet.pressarticle.author %}
+                            {{ article_snippet.pressarticle.author }}
+                        {% endif %}
+                        </div>
                     </div>
                 </section>
             </div>
