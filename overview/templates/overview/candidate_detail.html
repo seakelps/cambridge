@@ -224,53 +224,35 @@
             <h2>Endorsements</h2>
         </div>
 
-        {% if endorsements or object.endorsements_link %}
-        <dd>
-        {% for endorsement in endorsements %}
-        {% if endorsement.organization.logo %}
-        {% spaceless %}
-        {% if endorsement.link %}
-        <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-            <img height="50px" src="{{ endorsement.organization.logo }}" />
-        </a>
-        {% else %}
-        <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-            <img height="50px" src="{{ endorsement.organization.logo }}" />
-        </span>
-        {% endif %}
-        {% endspaceless %}
-        {% endif %}
-        {% endfor %}
-
-        <ul class="endorsements">
-            {% for endorsement in endorsements %}
-            {% if not endorsement.organization.logo %}
-            {% spaceless %}
-            <li>
-                {% if endorsement.link %}
-                <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                    {{ endorsement.organization.name }}
-                </a>
-                {% else %}
-                <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                    {# div because display:block for new lines #}
-                    {{ endorsement.organization.name }}
-                </span>
-                {% endif %}
+        <div class="col-12">
+            {% if endorsements or object.endorsements_link %}
+            <dd>
+            <ul class="endorsements text-left">
+                {% spaceless %}
+                {% for endorsement in endorsements %}
+                <li>
+                    {% if endorsement.link %}
+                    <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                        {{ endorsement.organization.name }}
+                    </a>
+                    {% else %}
+                    <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                        {# div because display:block for new lines #}
+                        {{ endorsement.organization.name }}
+                    </span>
+                    {% endif %}
+                </li>
+                {% endfor %}
                 {% endspaceless %}
-            </li>
+            </ul>
+
+            {% if object.endorsements_link %}
+            <hr/>
+            <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
             {% endif %}
-            {% endfor %}
-        </ul>
-
-        {% if object.endorsements_link %}
-        <hr/>
-        <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
-        {% endif %}
-        </dd>
-        {% endif %}
-
-
+            </dd>
+            {% endif %}
+        </div>
     </div>
 </section>
 
