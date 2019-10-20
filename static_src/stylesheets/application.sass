@@ -107,3 +107,12 @@ body#welcome
 // background options
 @include bg-variant(".bg-gray", #eeeeef)
 @include bg-variant(".bg-black", $black)
+
+.dl-horizontal
+  @extend .row
+  dt
+    @extend .col-3
+    margin-right: 0
+
+  dd
+    @extend .col-9
