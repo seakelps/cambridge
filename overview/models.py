@@ -164,6 +164,7 @@ class Endorsement(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
+    display = models.BooleanField(default=True)
 
 
 class PastContribution(models.Model):
