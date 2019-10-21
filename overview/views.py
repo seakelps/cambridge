@@ -46,6 +46,8 @@ class CandidateDetail(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
+        context['title'] = f'Learn More About {self.object.fullname}'
+
         candidate_locations = get_candidate_locations(default_color='EEE')
         # </script> will make us sad still
         if self.object.id in candidate_locations:
