@@ -80,7 +80,8 @@
 
                     </candidate>
                     {% endfor %}
-
+                </div>
+                <div>
                     {% if not annotations %}
                         <p>
                             You haven't picked any candidates yet! You can add them to your slate on their individual pages.
@@ -90,7 +91,6 @@
                             <a class="btn btn-secondary" href="{% url 'all' %}" role="button">Explore Candidates</a>
                         </div>
                     {% endif %}
-
                 </div>
             </div>
         </div>
