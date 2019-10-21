@@ -5,12 +5,11 @@
 
 {% block body_id %}candidate_detail{% endblock %}
 
-{% block title %}Learn More About {{ candidate.fullname }}{% endblock %}
-
 {% block meta_description %}{{ candidate.blurb|markdown|striptags }}{% endblock %}
 
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
+<meta name="twitter:description" value="{{ description }}" />
 
 {% for video in videos %}
     {% if forloop.first %}
