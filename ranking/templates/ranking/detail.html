@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load fullurl %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block body_id %}all_candidates{% endblock %}
 
@@ -17,10 +18,10 @@
                 <form action="{% url "make_public" %}" method="post">
                     {% csrf_token %}
 
-                    {{ public_form.public.as_hidden }}
+                    {{ visibility_form.public.as_hidden }}
 
                     {{ object.public|yesno:"Public,Private" }}:
-                    {% if public_form.public.value %}
+                    {% if visibility_form.public.value %}
                         <button class="btn btn-outline-danger btn-sm">Make Publically Visible</button>
                     {% else %}
                         <button class="btn btn-outline-info btn-sm">Make Private</button>
@@ -29,10 +30,10 @@
 
                 <form action="{% url "make_ordered" %}" method="post">
                     {% csrf_token %}
-                    {{ ordered_form.ordered.as_hidden }}
+                    {{ ordering_form.ordered.as_hidden }}
 
                     {{ object.ordered|yesno:"Ordered,Unordered" }}:
-                    {% if ordered_form.ordered.value %}
+                    {% if ordering_form.ordered.value %}
                         <button class="btn btn-outline-info btn-sm">Display as Ordered</button>
                     {% else %}
                         <button class="btn btn-outline-info btn-sm">Display as Unordered</button>
@@ -52,26 +53,34 @@
     <div class="container pt-3">
         <div class="row">
             <div class="col-md-12">
-                <dl id="ranked_list" class="list-group">
+                <div id="ranked_list" class="list-group">
                     {# help #}
-                    {% for element in object.annotated_candidates.all %}
-                    <candidate class="list-group-item" data-slug="{{ element.candidate.slug }}">
+                    {% for annotation, comment_form in annotations.items %}
+                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.slug }}">
                         <span aria-hidden="true"></span>
-                        <dt>
+                        <div>
                             {% if mine %}
                                 <i class="fas fa-bars"></i>
                             {% endif %}
                             {% if object.ordered %}<span class="counter"></span>{% endif %}
-                            <a href="{% url "candidate_detail" element.candidate.slug %}">
-                                {{ element.candidate.fullname}}
+                            <a href="{% url "candidate_detail" annotation.candidate.slug %}">
+                                {{ annotation.candidate.fullname}}
                             </a>
-                        </dt>
-                        <dd>
-                            {{ element.comment|linebreaks }}
-                        </dd>
+
+                            <a class="float-right toggle-comment-form" href="#">{% if annotation.comment %}edit notes{% else %}add notes{% endif %}</a>
+                        </div>
+
+                        <div class="d-block stored_comment">
+                            {{ annotation.comment|linebreaks }}
+                        </div>
+
+                        <form class="d-none update_note" action="{% url "update_note" annotation.candidate.slug %}" method="POST">
+                            {% crispy comment_form %}
+                        </form>
+
                     </candidate>
                     {% endfor %}
-                </dl>
+                </div>
             </div>
         </div>
     </div>

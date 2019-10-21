@@ -1,4 +1,5 @@
 import logging
+from typing import List
 from django.views.generic import DetailView, UpdateView, ListView
 # from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -13,6 +14,7 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, redirect
 
 
+from .forms import NoteForm, OrderedForm, VisibilityForm
 from .models import RankedList, RankedElement
 from overview.models import Candidate
 
@@ -86,7 +88,7 @@ class EditForm(forms.ModelForm):
 
     class Meta:
         model = RankedList
-        fields = []
+        fields: List[str] = []
 
 
 def my_last_edit(request):
@@ -129,19 +131,28 @@ class MyList(UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['mine'] = True
 
-        public_setter = MakePublic()
-        public_setter.object = self.object
-        context['public_form'] = public_setter.get_form_class()(
-            instance=self.object,
-            initial=public_setter.get_initial())
+        context['visibility_form'] = self.get_visibility_form()
+        context['ordering_form'] = self.get_ordering_form()
 
-        ordered_setter = MakeOrdered()
-        ordered_setter.object = self.object
-        context['ordered_form'] = ordered_setter.get_form_class()(
-            instance=self.object,
-            initial=ordered_setter.get_initial())
+        context['annotations'] = {
+            ranked_element: self.get_note_form(ranked_element)
+            for ranked_element in self.object.annotated_candidates.select_related('candidate')
+        }
 
         return context
+
+    def get_visibility_form(self):
+        return VisibilityForm(
+            instance=self.object,
+            initial={'public': not self.object.public})
+
+    def get_ordering_form(self):
+        return OrderedForm(
+            instance=self.object,
+            initial={'ordered': not self.object.ordered})
+
+    def get_note_form(self, ranked_element):
+        return NoteForm(instance=ranked_element)
 
     def get(self, request):
         if self.request.is_ajax():
@@ -167,7 +178,7 @@ class MyList(UpdateView):
 
 class MakePublic(UpdateView):
     model = RankedList
-    fields = ['public']
+    form_class = VisibilityForm
     success_url = reverse_lazy("my_ranking")
 
     def get_object(self):
@@ -181,8 +192,7 @@ class MakePublic(UpdateView):
 
 
 class MakeOrdered(UpdateView):
-    model = RankedList
-    fields = ['ordered']
+    form_class = OrderedForm
     success_url = reverse_lazy("my_ranking")
 
     def get_object(self):
@@ -196,7 +206,7 @@ class MakeOrdered(UpdateView):
 
 
 class UpdateNote(UpdateView):
-    fields = ['comment']
+    form_class = NoteForm
     model = RankedElement
 
     def get_queryset(self):
