@@ -107,6 +107,10 @@ class MyListTest(TestCase):
         self.assertTrue(self.user.rankedlist)
         self.assertTrue(self.user.rankedlist.annotated_candidates.all())
 
+    def test_view_list(self):
+        factories.RankedElement(ranked_list__owner=self.user)
+        self.client.get(reverse("my_ranking"))
+
     def test_overwrite(self):
         self.client.get(reverse("my_ranking"))
 

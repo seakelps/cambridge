@@ -1,4 +1,5 @@
 import logging
+from typing import List
 from django.views.generic import DetailView, UpdateView, ListView
 # from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -87,7 +88,7 @@ class EditForm(forms.ModelForm):
 
     class Meta:
         model = RankedList
-        fields = []
+        fields: List[str] = []
 
 
 def my_last_edit(request):
@@ -133,6 +134,11 @@ class MyList(UpdateView):
         context['visibility_form'] = self.get_visibility_form()
         context['ordering_form'] = self.get_ordering_form()
 
+        context['annotations'] = {
+            ranked_element: self.get_note_form(ranked_element)
+            for ranked_element in self.object.annotated_candidates.select_related('candidate')
+        }
+
         return context
 
     def get_visibility_form(self):
@@ -144,6 +150,9 @@ class MyList(UpdateView):
         return OrderedForm(
             instance=self.object,
             initial={'ordered': not self.object.ordered})
+
+    def get_note_form(self, ranked_element):
+        return NoteForm(instance=ranked_element)
 
     def get(self, request):
         if self.request.is_ajax():

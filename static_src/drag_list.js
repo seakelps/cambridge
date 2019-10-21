@@ -36,3 +36,42 @@ async function postCandidates(candidates) {
     });
     return await response.json();
 }
+
+
+$('.toggle-comment-form, .update_note [name=cancel]').on('click', function(event) {
+  let candidate = event.target.closest("candidate")
+
+  let stored_comment = candidate.querySelector(".stored_comment");
+  let comment_form = candidate.querySelector(".update_note");
+
+  stored_comment.classList.toggle('d-block');
+  stored_comment.classList.toggle('d-none');
+
+  comment_form.classList.toggle('d-none');
+  comment_form.classList.toggle('d-block');
+});
+
+
+$('.update_note').on('submit', function(event) {
+  event.preventDefault();
+  let comment_form = event.currentTarget;
+  let form_data = new FormData(comment_form);
+
+  const response = fetch(comment_form.action, {
+      method: comment_form.method,
+      credentials: 'same-origin',
+      headers: {
+          'X-CSRFToken': Cookies.get('csrftoken'),
+          'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: form_data
+  });
+
+  let stored_comment = comment_form.closest("candidate").querySelector(".stored_comment");
+  stored_comment.classList.add('d-block');
+  stored_comment.classList.remove('d-none');
+  stored_comment.innerText = form_data.get('comment');
+
+  comment_form.classList.add('d-none');
+  comment_form.classList.remove('d-block');
+});
