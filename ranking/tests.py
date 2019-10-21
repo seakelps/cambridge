@@ -238,3 +238,39 @@ class AppendToList(TestCase):
 
         self.assertEqual(user.rankedlist.annotated_candidates.get(order=0).candidate, candidate0)
         self.assertEqual(user.rankedlist.annotated_candidates.get(order=1).candidate, candidate1)
+
+
+class MakePublic(TestCase):
+    def test_make_public(self):
+        ranked_list = factories.RankedList(public=False)
+        self.client.force_login(ranked_list.owner)
+        self.client.post(reverse("make_public"), {'public': True})
+
+        ranked_list.refresh_from_db()
+        self.assertTrue(ranked_list.public)
+
+    def test_make_private(self):
+        ranked_list = factories.RankedList(public=True)
+        self.client.force_login(ranked_list.owner)
+        self.client.post(reverse("make_public"), {'public': False})
+
+        ranked_list.refresh_from_db()
+        self.assertFalse(ranked_list.public)
+
+
+class MakeOrdered(TestCase):
+    def test_make_ordered(self):
+        ranked_list = factories.RankedList(ordered=False)
+        self.client.force_login(ranked_list.owner)
+        self.client.post(reverse("make_ordered"), {'ordered': True})
+
+        ranked_list.refresh_from_db()
+        self.assertTrue(ranked_list.ordered)
+
+    def test_make_private(self):
+        ranked_list = factories.RankedList(ordered=True)
+        self.client.force_login(ranked_list.owner)
+        self.client.post(reverse("make_ordered"), {'ordered': False})
+
+        ranked_list.refresh_from_db()
+        self.assertFalse(ranked_list.ordered)
