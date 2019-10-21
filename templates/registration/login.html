@@ -17,7 +17,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid py-5 bg-light">
 
     <div class="row">
         <div class="col-md-12">
@@ -34,14 +34,24 @@
 
                     {{ form|crispy }}
 
-                    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
-
-                    <div style="margin-top: 30px; text-align:center">
-                        <a href="{% url 'django_registration_register' %}" type="button" class="btn btn-link">Sign Up</a>
+                    <div class="text-center mt-2">
                         <input type="submit" value="Login" class="btn btn-primary"/>
                     </div>
+
+                    <p class="py-2 text-center">
+                        <a href="{% url 'password_reset' %}">Lost password?</a>
+                    </p>
+
                 </form>
+
             </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-12 text-center" style="max-width: 330px; margin:auto">
+            <p>Not a user? Register to save your ballot and take notes: </p>
+            <a class="btn btn-info" href="{% url 'django_registration_register' %}" role="button">Sign Up</a>
         </div>
     </div>
 
