@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 
@@ -14,22 +13,14 @@ module.exports = {
     filename: '[name].js',
     library: 'cambridge'
   },
-  plugins: [
-    new CopyWebpackPlugin([
-      { from: "node_modules/animate.css/animate.min.css" }
-    ]),
-    new UglifyJSPlugin()  // heroku has NODE_ENV=production by default
-  ],
+  optimization: {
+    minimizer: [
+      new UglifyJSPlugin()  // heroku has NODE_ENV=production by default
+    ]
+  },
   module: {
     rules: [
       // Using this instead of ProvidePlugin so we can use them in external scripts
-      {
-        test: require.resolve('knockout'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'ko'
-        }]
-      },
       {
         test: require.resolve('jquery'),
         use: [{
