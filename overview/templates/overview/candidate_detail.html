@@ -10,13 +10,6 @@
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
 
-{% for video in videos %}
-    {% if forloop.first %}
-        <meta property='og:video' content='{{ video.link|yt_direct }}' />
-        <meta property="og:type" content="video">
-    {% endif %}
-{% endfor %}
-
 <script>
     // data for candidate_map.js
     var initialLocations = {{ candidate_locations|safe }};
@@ -32,10 +25,6 @@
 
 
 <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}"></script>
-<script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-<!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"> -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 {% endblock %}
 
 
@@ -87,7 +76,7 @@
             <ul class="list-inline" id="socials">
                 {% if candidate.website %}
                 <li class="list-inline-item">
-                    <a class="btn btn-website fa-button" target="_blank" href="{{ candidate.website }}">
+                    <a class="btn btn-website fa-button" rel="noopener" target="_blank" href="{{ candidate.website }}" aria-label="{{ candidate.shortname }}&rsquo;s Website">
                         <i class="fa fa-globe-americas"></i>
                         {# {{ candidate.website|truncate_website }} #}
                         <span>Website</span>
@@ -97,7 +86,7 @@
 
                 {% if candidate.facebook %}
                 <li class="list-inline-item">
-                    <a class="btn btn-facebook fa-button" target="_blank" href="{{ candidate.facebook_url }}">
+                    <a class="btn btn-facebook fa-button" rel="noopener" target="_blank" href="{{ candidate.facebook_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Website">
                         <i class="fab fa-facebook"></i>
                         <span>Facebook</span>
                     </a>
@@ -106,7 +95,7 @@
 
                 {% if candidate.twitter %}
                 <li class="list-inline-item">
-                    <a class="btn btn-twitter fa-button" target="_blank" href="{{ candidate.twitter_url }}">
+                    <a class="btn btn-twitter fa-button" rel="noopener" target="_blank" href="{{ candidate.twitter_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Twitter">
                         <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
                     </a>
@@ -316,7 +305,7 @@
 </section>
 {% endcomment %}
 
-<section class="container" id="press">
+<section class="container" id="quotes">
     <div class="row">
         <div class="col-12">
             <h2 id="">Quotes</h2>

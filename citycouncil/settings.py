@@ -36,7 +36,6 @@ FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
 INSTALLED_APPS = [
     # ours
     'overview',
-    'comparison',
     'voting_history',
     'campaign_finance',
     'ranking',

@@ -8,6 +8,7 @@
 {% block head_extra %}
 <meta name="google-site-verification" content="QocdPunJuyzDI6Z00Uw3WHcL5xrcxPVf78_o7f05YvQ" />
 <meta name="twitter:card" content="summary">
+<meta name="twitter:domain" value="cambridgecouncilcandidates.com" />
 <meta name="twitter:title" value="{{ title }}" />
 <meta name="twitter:description" value="{{ description }}" />
 <meta name="twitter:image" content="{% fullstatic "candidate_grid.png" %}"/>
@@ -33,7 +34,8 @@
                         <div class="col-md-12">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                             {% trans num_runners noop as num_runners %}
-                            <p>{% blocktrans with year=2019 %}We're compiling everything we can find about {{ year }} Cambridge City Council candidates - from op-eds to campaign finance records. Determine who deserves your #1, #2, or #9 vote - you've got {{ num_runners }} options!{% endblocktrans %}</p>
+                            <p>{% blocktrans with year=2019 %}We're compiling everything we can find about the {{ year }} Cambridge City Council candidates&mdash;from op-eds to campaign finance records&mdash;to help you determine who deserves your #1, #2, or #9 vote on November 5th. You've got {{ num_runners }} options!{% endblocktrans %}</p>
+
 
                             <div class="col" style="text-align: center">
                                 <a class="btn btn-secondary" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>

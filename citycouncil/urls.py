@@ -3,6 +3,7 @@
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 """
+from django.urls import path
 from django.conf.urls import include, url
 from django.contrib import admin
 
@@ -27,7 +28,6 @@ urlpatterns = [
     url(r'^', include('overview.urls')),
     url(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
     url(r'^how-to-vote/$', HowToVote.as_view(), name="how_to_vote"),
-    url(r'^compare/', include('comparison.urls')),
     url(r'^history/', include('voting_history.urls')),
     url(r'^finance/', include('campaign_finance.urls')),
     url(r'^admin/', admin.site.urls),
