@@ -17,7 +17,7 @@ def index(request):
         If you want more information before you cast your 2019
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
-        Determine who deserves your #1 vote - or your #{num_runners}!
+        Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(num_runners=num_runners).strip()
 
     return render(request, 'overview/index.html', context={
