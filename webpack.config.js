@@ -31,7 +31,6 @@ module.exports = {
           options: '$'
         }]
       },
-
       {
         test: /\.m?js$/,
         exclude: /node_modules/,
