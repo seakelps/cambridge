@@ -9,12 +9,6 @@
 
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
-
-{% for video in videos %}
-    {% if forloop.first %}
-        <meta property='og:video' content='{{ video.link|yt_direct }}' />
-        <meta property="og:type" content="video">
-    {% endif %}
 {% endfor %}
 
 <script>

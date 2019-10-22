@@ -56,8 +56,6 @@ class CandidateDetail(DetailView):
                 'main': True
             })
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
-        context['videos'] = self.object.interviewvideo_set(manager="active").all()
-
         context['questionnaire_responses'] = self.object.questionnaireresponse_set\
             .filter(display=True, questionnaire__display=True)\
             .select_related("questionnaire")
