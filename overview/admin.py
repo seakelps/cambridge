@@ -92,7 +92,7 @@ class HasBlurb(admin.SimpleListFilter):
 class CandidateAdmin(admin.ModelAdmin):
 
     fieldsets = [
-        (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun']}),
+        (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun', 'short_history_text']}),
         ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'endorsements_link']}),
         ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),

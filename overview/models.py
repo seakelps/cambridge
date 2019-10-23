@@ -22,6 +22,9 @@ class Candidate(models.Model):
     )
     pronoun = models.CharField(max_length=4, choices=pronoun_choices)
 
+    # it's not pretty but it works
+    short_history_text = models.CharField(max_length=200, blank=True)
+
     # contact, campaign info
     email = models.EmailField(blank=True, default="")
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
