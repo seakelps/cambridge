@@ -49,16 +49,34 @@
             </div>
 
             <div class="name-and-info">
-                <h1>{{ candidate.fullname }}</h1>
+                <h1 class="mb-0">{{ candidate.fullname }}</h1>
+
+                <p>
+                    <i>
+                        {% if candidate.pronoun == 'he' %}
+                            He/Him
+                        {% elif  candidate.pronoun == 'she'%}
+                            She/Her
+                        {% elif  candidate.pronoun == 'they'%}
+                            They/Them
+                        {% endif %}
+                    </i>
+                </p>
 
                 <dl class="text-left">
                     {% if candidate.job %}
-                    <dt>Currently</dt>
-                    <dd>{{ candidate.job }}</dd>
+                        <dt>Currently</dt>
+                        <dd>{{ candidate.job }}</dd>
                     {% elif candidate.is_incumbent %}
-                    <dt>Currently</dt>
-                    <dd>City Councilor</dd>
+                        <dt>Currently</dt>
+                        <dd>City Councilor</dd>
                     {% endif %}
+
+                    {% if candidate.short_history_text %}
+                        <dt>Election history</dt>
+                        <dd>{{ candidate.short_history_text }}</dd>
+                    {% endif %}
+
                 </dl>
             </div>
         </div>
