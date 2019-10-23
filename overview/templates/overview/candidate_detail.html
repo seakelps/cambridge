@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <div class="name-and-info">
+            <div class="name-and-info mb-0">
                 <h1 class="mb-0">{{ candidate.fullname }}</h1>
 
                 <p>
@@ -63,20 +63,24 @@
                     </i>
                 </p>
 
-                <dl class="text-left">
-                    {% if candidate.job %}
+                <dl class="text-left mb-0">
+                    {% if candidate.job and candidate.is_incumbent %}
                         <dt>Currently</dt>
-                        <dd>{{ candidate.job }}</dd>
+                        <dd class="mb-0">City Councilor</dd>
+                        <dt class="mt-0" style="line-height: 1rem;">Also</dt>
+                        <dd class="mt-0" style="line-height: 1rem;">{{ candidate.job }}</dd>
                     {% elif candidate.is_incumbent %}
                         <dt>Currently</dt>
                         <dd>City Councilor</dd>
+                    {% elif candidate.job %}
+                        <dt>Currently</dt>
+                        <dd>{{ candidate.job }}</dd>
                     {% endif %}
 
                     {% if candidate.short_history_text %}
                         <dt>Election history</dt>
-                        <dd>{{ candidate.short_history_text }}</dd>
+                        <dd class="mb-0">{{ candidate.short_history_text }}</dd>
                     {% endif %}
-
                 </dl>
             </div>
         </div>
