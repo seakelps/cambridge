@@ -32,6 +32,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'admin@cambridge.vote'
 DEFAULT_FROM_EMAIL = 'admin@cambridge.vote'
 EMAIL_HOST_PASSWORD = os.environ.get('PRIVATEEMAIL_ADMIN_PASS')
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SSL/HTTPS and other security-related settings
 ALLOWED_HOSTS = ['.cambridgecouncilcandidates.com']
