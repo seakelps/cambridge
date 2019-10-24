@@ -46,6 +46,11 @@ class RankedListDetail(DetailView):
                 filters = filters | Q(owner=self.request.user)
             return super().get_queryset().filter(filters)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['annotations'] = self.object.annotated_candidates.select_related('candidate')
+        return context
+
 
 class DownloadRankedList(RankedListDetail):
     content_type = "text/plain"
@@ -134,10 +139,9 @@ class MyList(UpdateView):
         context['visibility_form'] = self.get_visibility_form()
         context['ordering_form'] = self.get_ordering_form()
 
-        context['annotations'] = {
-            ranked_element: self.get_note_form(ranked_element)
-            for ranked_element in self.object.annotated_candidates.select_related('candidate')
-        }
+        context['annotations'] = self.object.annotated_candidates.select_related('candidate')
+        for annotation in context['annotations']:
+            annotation.comment_form = self.get_note_form(annotation)
 
         return context
 

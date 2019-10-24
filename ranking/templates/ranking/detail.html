@@ -55,7 +55,7 @@
             <div class="col-md-12">
                 <div id="ranked_list" class="list-group">
                     {# help #}
-                    {% for annotation, comment_form in annotations.items %}
+                    {% for annotation in annotations %}
                     <candidate class="list-group-item" data-slug="{{ annotation.candidate.slug }}">
                         <span aria-hidden="true"></span>
                         <div>
@@ -67,22 +67,26 @@
                                 {{ annotation.candidate.fullname}}
                             </a>
 
+                            {% if mine %}
                             <a class="float-right toggle-comment-form" href="#">{% if annotation.comment %}edit notes{% else %}add notes{% endif %}</a>
+                            {% endif %}
                         </div>
 
                         <div class="d-block stored_comment">
                             {{ annotation.comment|linebreaks }}
                         </div>
 
+                        {% if mine %}
                         <form class="d-none update_note" action="{% url "update_note" annotation.candidate.slug %}" method="POST">
-                            {% crispy comment_form %}
+                            {% crispy annotation.comment_form %}
                         </form>
+                        {% endif %}
 
                     </candidate>
                     {% endfor %}
                 </div>
                 <div>
-                    {% if not annotations %}
+                    {% if mine and not annotations %}
                         <p>
                             You haven't picked any candidates yet! You can add them to your slate on their individual pages.
                         </p>
