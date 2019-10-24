@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load fullurl %}
+{% load markdown from overview %}
 
 
 {% block title %}Candidates Running in 2019{% endblock %}
@@ -54,8 +55,8 @@
                                         {{ candidate.fullname }}
                                     </div>
                                     <p>
-                                        {{ candidate.blurb|truncatechars:120 }}
-                                        <a href="{{ candidate.get_absolute_url }}">Learn more</a>
+                                        {{ candidate.blurb|markdown|truncatechars_html:120|striptags }}
+                                        <a class="learn-more" href="{{ candidate.get_absolute_url }}">Learn&nbsp;more&nbsp;&raquo;</a>
                                     </p>
                                 </div>
 
