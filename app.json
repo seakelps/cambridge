@@ -2,6 +2,7 @@
   "environments": {
     "test": {
       "scripts": {
+        "test-setup":"psql create role djangouser with password 'something';",
         "test": "python manage.py test"
       },
       "addons": [

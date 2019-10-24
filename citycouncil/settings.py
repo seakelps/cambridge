@@ -119,11 +119,11 @@ DATABASES = {
 }
 
 # TODO: This is a hack while waiting for
-if os.environ.get('CI'):
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'HerokuCI'
-    }
+# if os.environ.get('CI'):
+#     DATABASES['default'] = {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'HerokuCI'
+#     }
 
 
 # Password validation
