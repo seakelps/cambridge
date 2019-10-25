@@ -145,6 +145,7 @@ class PressOutletAdmin(admin.ModelAdmin):
 class PressArticleAdmin(admin.ModelAdmin):
     search_fields = ['pressoutlet__name', 'title']
     inlines = [PressArticleCandidateInline]
+    list_select_related = True
 
 
 class PastContributionAdmin(admin.ModelAdmin):
