@@ -6,6 +6,9 @@ from django.db.models import Sum
 
 
 class Candidate(models.Model):
+    class Meta:
+        ordering = ('fullname', )
+
     timestamp_modified = models.DateTimeField(auto_now=True)
 
     ##### section: campaign, free text about
