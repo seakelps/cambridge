@@ -8,6 +8,7 @@ from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
 
 class QuestionnaireResponseInline(admin.TabularInline):
     model = QuestionnaireResponse
+    autocomplete_fields = ['questionnaire']
 
 
 class PastContributionInline(admin.TabularInline):
@@ -16,6 +17,7 @@ class PastContributionInline(admin.TabularInline):
 
 class EndorsementInline(admin.TabularInline):
     model = Endorsement
+    autocomplete_fields = ['organization']
 
 
 class QuoteInline(admin.TabularInline):
@@ -28,6 +30,7 @@ class PressArticleInline(admin.TabularInline):
 
 class PressArticleCandidateInline(admin.StackedInline):
     model = PressArticleCandidate
+    autocomplete_fields = ['pressarticle']
 
 
 class VideoInlineAdmin(admin.TabularInline):
@@ -122,6 +125,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ['has_logo']
     list_display = ('name', 'has_logo')
     inlines = [EndorsementInline]
+    search_fields = ['name']
 
     def has_logo(self, obj):
         return bool(obj.logo)
@@ -139,6 +143,7 @@ class PressOutletAdmin(admin.ModelAdmin):
 
 
 class PressArticleAdmin(admin.ModelAdmin):
+    search_fields = ['pressoutlet__name', 'title']
     inlines = [PressArticleCandidateInline]
 
 
@@ -148,6 +153,7 @@ class PastContributionAdmin(admin.ModelAdmin):
 
 class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = [QuestionnaireResponseInline]
+    search_fields = ['name']
 
 
 class QuoteAdmin(admin.ModelAdmin):
