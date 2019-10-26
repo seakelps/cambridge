@@ -9,44 +9,55 @@
 <div class="bg-light p-5">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h1>{{ object.name|title }} <a download href="{% url "list_explore_download" object.slug %}" class="px-3 fa fa-download"></a></h1>
-            </div>
-
-            {% if mine %}
-            <div class="col-md-12" id="management">
-                <form action="{% url "make_public" %}" method="post">
-                    {% csrf_token %}
-
-                    {{ visibility_form.public.as_hidden }}
-
-                    {{ object.public|yesno:"Public,Private" }}:
-                    {% if visibility_form.public.value %}
-                        <button class="btn btn-outline-danger btn-sm">Make Publically Visible</button>
-                    {% else %}
-                        <button class="btn btn-outline-info btn-sm">Make Private</button>
-                    {% endif %}
-                </form>
-
-                <form action="{% url "make_ordered" %}" method="post">
-                    {% csrf_token %}
-                    {{ ordering_form.ordered.as_hidden }}
-
-                    {{ object.ordered|yesno:"Ordered,Unordered" }}:
-                    {% if ordering_form.ordered.value %}
-                        <button class="btn btn-outline-info btn-sm">Display as Ordered</button>
-                    {% else %}
-                        <button class="btn btn-outline-info btn-sm">Display as Unordered</button>
-                    {% endif %}
-                </form>
-            </div>
-
-            <div class="col-md-12">
-                {% if object.public %}
-                    You can share this information at this url: <a href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
-                {% endif %}
+            {% if mine and object.public %}
+            <div class="col-md-12 mb-3">
+                <div class="alert alert-warning">
+                    Your ballot is publically viewable. You can share it by linking to
+                    <a class="alert-link" href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
+                </div>
             </div>
             {% endif %}
+
+            <div class="col-md-12">
+                <h1>
+                    {{ object.name }}
+
+                    {% if mine %}
+                        <button data-toggle="collapse" class="ml-2 float-right btn" data-target="#name_form">Edit</button>
+                    {% endif %}
+
+                    {% if mine %}
+                    <form class="form-inline float-right ml-2" action="{% url "make_public" %}" method="post">
+                        {% csrf_token %}
+
+                        {{ visibility_form.public.as_hidden }}
+
+                        {% if visibility_form.public.value %}
+                            <button class="btn btn-outline-danger">Make Public</button>
+                        {% else %}
+                            <button class="btn btn-outline-info">Make Private</button>
+                        {% endif %}
+                    </form>
+
+                    <form class="form-inline float-right" action="{% url "make_ordered" %}" method="post">
+                        {% csrf_token %}
+                        {{ ordering_form.ordered.as_hidden }}
+
+                        {% if ordering_form.ordered.value %}
+                            <button class="btn btn-outline-info">Display Ordered</button>
+                        {% else %}
+                            <button class="btn btn-outline-info">Display Unordered</button>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                </h1>
+
+                {% if mine %}
+                    <form id="name_form" class="collapse" action="{% url "rename_ballot" %}" method="POST">
+                        {% crispy name_form %}
+                    </form>
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -84,6 +95,10 @@
 
                     </candidate>
                     {% endfor %}
+
+                    {% if annotations %}
+                        <a download href="{% url "list_explore_download" object.slug %}" class="m-2">Download this slate</a>
+                    {% endif %}
                 </div>
                 <div>
                     {% if mine and not annotations %}

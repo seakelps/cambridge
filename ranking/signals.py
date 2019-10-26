@@ -11,4 +11,6 @@ def upgrade_anon_ranking(sender, user, request, **kwargs):
         pass
     else:
         ranking.owner = user
+        ranking.name = RankedList.make_name(user)
+        ranking.slug = user.username
         ranking.save()

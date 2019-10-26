@@ -14,9 +14,14 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, redirect
 
 
-from .forms import NoteForm, OrderedForm, VisibilityForm
+from .forms import NoteForm, OrderedForm, VisibilityForm, NameForm
 from .models import RankedList, RankedElement
 from overview.models import Candidate
+
+
+class _MyBallotMixin:
+    def get_object(self):
+        return RankedList.objects.for_request(self.request, force=True)
 
 
 class RankedListExplore(ListView):
@@ -115,16 +120,19 @@ def append_to_ballot(request, slug):
     return redirect(candidate)
 
 
+class RenameBallot(_MyBallotMixin, UpdateView):
+    form_class = NameForm
+    model = RankedList
+    success_url = reverse_lazy("my_ranking")
+
+
 # @method_decorator(vary_on_headers('HTTP_X_REQUESTED_WITH'), "get")
 # @method_decorator(last_modified(my_last_edit), "get")
-class MyList(UpdateView):
+class MyList(_MyBallotMixin, UpdateView):
     form_class = EditForm
     model = RankedList
     template_name = "ranking/detail.html"
     success_url = reverse_lazy("my_ranking")
-
-    def get_object(self):
-        return RankedList.objects.for_request(self.request, force=True)
 
     def get_json(self, obj):
         return {"candidates": list(
@@ -136,6 +144,7 @@ class MyList(UpdateView):
         context = super().get_context_data(*args, **kwargs)
         context['mine'] = True
 
+        context['name_form'] = self.get_name_form()
         context['visibility_form'] = self.get_visibility_form()
         context['ordering_form'] = self.get_ordering_form()
 
@@ -144,6 +153,9 @@ class MyList(UpdateView):
             annotation.comment_form = self.get_note_form(annotation)
 
         return context
+
+    def get_name_form(self):
+        return NameForm(instance=self.object)
 
     def get_visibility_form(self):
         return VisibilityForm(
@@ -169,8 +181,9 @@ class MyList(UpdateView):
         ret = super().form_invalid(form)
         if self.request.is_ajax():
             logging.warning("uh oh", extra={"errors": form.errors})
+            return JsonResponse(form.errors.as_json())
         else:
-            ret
+            return ret
 
     def form_valid(self, form):
         ret = super().form_valid(form)
@@ -180,14 +193,10 @@ class MyList(UpdateView):
             return ret
 
 
-class MakePublic(UpdateView):
+class MakePublic(_MyBallotMixin, UpdateView):
     model = RankedList
     form_class = VisibilityForm
     success_url = reverse_lazy("my_ranking")
-
-    def get_object(self):
-        # could be super secure and send the slug / uuid to confirm
-        return RankedList.objects.for_request(self.request, force=True)
 
     def get_initial(self):
         initial = super().get_initial()
@@ -195,13 +204,9 @@ class MakePublic(UpdateView):
         return initial
 
 
-class MakeOrdered(UpdateView):
+class MakeOrdered(_MyBallotMixin, UpdateView):
     form_class = OrderedForm
     success_url = reverse_lazy("my_ranking")
-
-    def get_object(self):
-        # could be super secure and send the slug / uuid to confirm
-        return RankedList.objects.for_request(self.request, force=True)
 
     def get_initial(self):
         initial = super().get_initial()

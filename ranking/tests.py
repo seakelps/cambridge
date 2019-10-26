@@ -208,6 +208,8 @@ class ClaimList(TestCase):
         self.assertEqual(resp.status_code, 302)
 
         ranked_list.refresh_from_db()
+        self.assertIn("kittens", ranked_list.name)
+        self.assertIn("kittens", ranked_list.slug)
         self.assertEqual(int(self.client.session['_auth_user_id']), ranked_list.owner.id)
 
 
