@@ -13,7 +13,7 @@
             <div class="col-md-12 mb-3">
                 <div class="alert alert-warning">
                     Your ballot is publically viewable. You can share it by linking to
-                    <a class="alert-link" href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
+                    <a class="alert-link ellipsed" href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
                 </div>
             </div>
             {% endif %}
