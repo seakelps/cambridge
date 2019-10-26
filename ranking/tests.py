@@ -14,7 +14,7 @@ class GetList(TestCase):
         request.session = {}
 
         self.assertEqual(
-            RankedList.objects.for_request(request),
+            RankedList.objects.for_request(request, force=True),
             request.user.rankedlist)
 
     def test_logged_in_with_list(self):
@@ -24,7 +24,7 @@ class GetList(TestCase):
         request.session = {}
 
         self.assertEqual(
-            RankedList.objects.for_request(request),
+            RankedList.objects.for_request(request, force=True),
             ranked_list)
 
     def test_logged_out_no_list(self):
@@ -32,7 +32,7 @@ class GetList(TestCase):
         request.user = AnonymousUser()
         request.session = {}
 
-        ranked_list = RankedList.objects.for_request(request)
+        ranked_list = RankedList.objects.for_request(request, force=True)
         self.assertTrue(ranked_list)
         self.assertEqual(ranked_list.id, request.session['ranked_list_id'])
 
@@ -44,7 +44,7 @@ class GetList(TestCase):
         request.session = {"ranked_list_id": ranked_list.id}
 
         self.assertEqual(
-            RankedList.objects.for_request(request).id,
+            RankedList.objects.for_request(request, force=True).id,
             request.session['ranked_list_id'])
 
 

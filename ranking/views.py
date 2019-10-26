@@ -106,7 +106,7 @@ def my_last_edit(request):
 def append_to_ballot(request, slug):
     candidate = Candidate.objects.get(is_running=True, hide=False, slug=slug)
 
-    ballot = RankedList.objects.for_request(request)
+    ballot = RankedList.objects.for_request(request, force=True)
     max_order = ballot.annotated_candidates.aggregate(Max("order"))['order__max']
     if max_order is None:
         max_order = -1
@@ -124,7 +124,7 @@ class MyList(UpdateView):
     success_url = reverse_lazy("my_ranking")
 
     def get_object(self):
-        return RankedList.objects.for_request(self.request)
+        return RankedList.objects.for_request(self.request, force=True)
 
     def get_json(self, obj):
         return {"candidates": list(
@@ -187,7 +187,7 @@ class MakePublic(UpdateView):
 
     def get_object(self):
         # could be super secure and send the slug / uuid to confirm
-        return RankedList.objects.for_request(self.request)
+        return RankedList.objects.for_request(self.request, force=True)
 
     def get_initial(self):
         initial = super().get_initial()
@@ -201,7 +201,7 @@ class MakeOrdered(UpdateView):
 
     def get_object(self):
         # could be super secure and send the slug / uuid to confirm
-        return RankedList.objects.for_request(self.request)
+        return RankedList.objects.for_request(self.request, force=True)
 
     def get_initial(self):
         initial = super().get_initial()
@@ -214,7 +214,7 @@ class UpdateNote(UpdateView):
     model = RankedElement
 
     def get_queryset(self):
-        return RankedList.objects.for_request(self.request).annotated_candidates
+        return RankedList.objects.for_request(self.request, force=True).annotated_candidates
 
     def get_object(self):
         try:
@@ -240,6 +240,6 @@ def delete_note(request, slug):
     """ Deletes note and position in ranking """
 
     candidate = get_object_or_404(Candidate.objects.all(), slug=slug)
-    ranked_list = RankedList.objects.for_request(request)
+    ranked_list = RankedList.objects.for_request(request, force=True)
     ranked_list.annotated_candidates.filter(candidate=candidate).delete()
     return HttpResponse("DELETED", status=201)
