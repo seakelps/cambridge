@@ -12,7 +12,7 @@ class NameForm(forms.ModelForm):
     helper.layout = Layout(
         'name',
         Submit("save", "Save"),
-        Button("cancel", "Cancel"),
+        Button("cancel", "Cancel", data_toggle="collapse", data_target="#name_form")
     )
 
     def __init__(self, *args, **kwargs):
