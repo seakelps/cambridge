@@ -23,30 +23,30 @@
                     {{ object.name }}
 
                     {% if mine %}
-                        <button data-toggle="collapse" class="ml-2 float-right btn" data-target="#name_form">Edit</button>
+                        <button data-toggle="collapse" class="ml-2 d-sm-block float-md-right btn" data-target="#name_form">Edit</button>
                     {% endif %}
 
                     {% if mine %}
-                    <form class="form-inline float-right ml-2" action="{% url "make_public" %}" method="post">
+                    <form class="form-inline d-sm-block float-md-right ml-md-2" action="{% url "make_public" %}" method="post">
                         {% csrf_token %}
 
                         {{ visibility_form.public.as_hidden }}
 
                         {% if visibility_form.public.value %}
-                            <button class="btn btn-outline-danger">Make Public</button>
+                            <button class="w-100 btn btn-outline-danger">Make Public</button>
                         {% else %}
-                            <button class="btn btn-outline-info">Make Private</button>
+                            <button class="w-100 btn btn-outline-info">Make Private</button>
                         {% endif %}
                     </form>
 
-                    <form class="form-inline float-right" action="{% url "make_ordered" %}" method="post">
+                    <form class="form-inline d-sm-block float-md-right" action="{% url "make_ordered" %}" method="post">
                         {% csrf_token %}
                         {{ ordering_form.ordered.as_hidden }}
 
                         {% if ordering_form.ordered.value %}
-                            <button class="btn btn-outline-info">Display Ordered</button>
+                            <button class="w-100 btn btn-outline-info">Display Ordered</button>
                         {% else %}
-                            <button class="btn btn-outline-info">Display Unordered</button>
+                            <button class="w-100 btn btn-outline-info">Display Unordered</button>
                         {% endif %}
                     </form>
                     {% endif %}
