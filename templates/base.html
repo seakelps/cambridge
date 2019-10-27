@@ -68,8 +68,7 @@
                 aria-controls="navbar">
             </button>
 
-            <ul class="nav navbar-nav navbar-right d-none d-sm-flex">
-                <li><a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc btn btn-link"></a></li>
+            <ul class="nav navbar-nav navbar-right d-none d-md-flex">
                 {% if user.is_authenticated %}
                     <li><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
                 {% else %}
@@ -128,9 +127,9 @@
                     </li>
 
                     {% if user.is_authenticated %}
-                        <li class="nav-item d-list-item d-sm-none"><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
+                        <li class="nav-item d-md-none d-list-item"><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item d-none d-sm-list-item"><a rel="nofollow" href="{% url "login" %}">Login</a></li>
+                        <li class="nav-item d-md-none d-list-item"><a rel="nofollow" href="{% url "login" %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
