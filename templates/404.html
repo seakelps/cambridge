@@ -1,8 +1,40 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block head_extra %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
 {% block content %}
 
-Whoops! Either this page does not exist or you do not have access to it.
+<style>
+html, body {
+    height: calc(100% - 118px);
+}
+</style>
+
+<div class="bg-light" style="height: 100%">
+    <main class="container p-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>
+                    This page does not exist.
+                </h1>
+
+                <p>
+                    We're not able to find anything at this location. Sorry about that!
+                </p>
+
+                <p>
+                    If you were looking for someone's public ballot, it's possible they changed their share link or made their ballot private. 
+                </p>
+
+                <div style="display: block" class="text-center">
+                    <a class="btn btn-primary" href="{% url 'all' %}" role="button">All Candidates</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 
 {% endblock %}

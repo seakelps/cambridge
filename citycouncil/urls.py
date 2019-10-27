@@ -36,6 +36,9 @@ urlpatterns = [
     # to support having users - login, logout, password management
     url(r'^accounts/', include('django_registration.backends.one_step.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
+
+    # annoyed django doesn't support this by default
+    url('^404/$', TemplateView.as_view(template_name="404.html")),
 ]
 
 if settings.DEBUG:
