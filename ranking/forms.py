@@ -19,7 +19,7 @@ class NameForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if self.instance.public:
-            self.fields['name'].help_text = 'Changing the name of your ballot will the share link to your ballot'
+            self.fields['name'].help_text = 'Changing the name of your ballot will also change the share link to your ballot'
 
     def save(self):
         obj = super().save(commit=False)
