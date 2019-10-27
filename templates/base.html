@@ -129,7 +129,7 @@
                     {% if user.is_authenticated %}
                         <li class="nav-item d-md-none d-list-item"><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item d-none d-md-list-item"><a rel="nofollow" href="{% url "login" %}">Login</a></li>
+                        <li class="nav-item d-md-none d-list-item"><a rel="nofollow" href="{% url "login" %}">Login</a></li>
                     {% endif %}
                 </ul>
             </div>
