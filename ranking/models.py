@@ -3,24 +3,32 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 from django.utils.text import slugify
+from typing import Optional
 
 
 class RankedListManager(models.Manager):
-    def for_request(self, request):
+    def for_request(self, request, *, force) -> Optional['RankedList']:
         user = request.user
 
         if user.is_authenticated:
             try:
                 return user.rankedlist
             except RankedList.DoesNotExist:
-                return RankedList.objects.create(
-                    name="{}'s Slate".format(user.get_full_name() or user.username),
-                    slug=user.username,
-                    owner=user)
+                if force:
+                    return RankedList.objects.create(
+                        name=RankedList.make_name(user),
+                        slug=user.username,
+                        owner=user)
+                else:
+                    return None
+
         else:
             try:
                 return RankedList.objects.get(pk=request.session['ranked_list_id'])
             except (RankedList.DoesNotExist, KeyError):
+                if not force:
+                    return None
+
                 # try hard to find an id
                 for _ in range(5):
                     name = "Anon {}".format(random.randint(1000000, 2000000))
@@ -54,6 +62,10 @@ class RankedList(models.Model):
 
     def get_absolute_url(self):
         return reverse("list_explore", args=[self.slug])
+
+    @staticmethod
+    def make_name(user):
+        return "{}'s Slate".format(user.get_full_name() or user.username)
 
 
 class RankedElementManager(models.Manager):
