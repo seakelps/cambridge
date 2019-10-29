@@ -3,9 +3,9 @@
 
 {% block title %}Councilmember Voting History{% endblock %}
 
-{% block meta_description %}
+{% block meta_descrilption %}
 Search through recent City Council votes.
-See where current councillors stand on your issues.
+See where current clouncillors stand on your issues.
 {% endblock %}
 
 {% block head_extra %}
@@ -184,10 +184,10 @@ tr[role=row] td:nth-child(2) {
     }
 
     function make_vote_split( d ) {
-        let councilors = ["dennis_carlone", "jan_devereux", "craig_kelley", "alanna_mallon", "marc_mcgovern", "sumbul_siddiqui", "denise_simmons", "tim_toomey", "quinton_zondervan"];
+        let councillors = ["dennis_carlone", "jan_devereux", "craig_kelley", "alanna_mallon", "marc_mcgovern", "sumbul_siddiqui", "denise_simmons", "tim_toomey", "quinton_zondervan"];
 
-        for (i = 0; i < councilors.length; i++) {
-            if (d[councilors[i]] == 'Present' || d[councilors[i]] == 'Nays') {
+        for (i = 0; i < councillors.length; i++) {
+            if (d[councillors[i]] == 'Present' || d[councillors[i]] == 'Nays') {
                 return 'contested';
             }
         }
