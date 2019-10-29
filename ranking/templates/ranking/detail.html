@@ -17,17 +17,35 @@
                 </div>
             </div>
             {% endif %}
+        </div>
 
-            <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12" style="display: flex;">
                 <h1>
                     {{ object.name }}
+                </h1>
 
-                    {% if mine %}
-                        <button data-toggle="collapse" class="ml-2 d-sm-block float-md-right btn" data-target="#name_form">Edit</button>
-                    {% endif %}
+                {% if mine %}
+                    <button data-toggle="collapse" class="form-inline d-sm-block float-md-right btn btn-sm ml-md-2" data-target="#name_form">Edit</button>
+                {% endif %}
+            </div>
+        </div>
 
-                    {% if mine %}
-                    <form class="form-inline d-sm-block float-md-right ml-md-2" action="{% url "make_public" %}" method="post">
+        <div class="row">
+            <div class="col-md-12 md-2">
+                {% if mine %}
+                    <form id="name_form" class="collapse mb-2" action="{% url "rename_ballot" %}" method="POST">
+                        {% crispy name_form %}
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-md-12" style="display: flex;">
+
+                {% if mine %}
+                    <form class="form-inline d-sm-block float-md-right md-2 mr-2" action="{% url "make_public" %}" method="post">
                         {% csrf_token %}
 
                         {{ visibility_form.public.as_hidden }}
@@ -48,13 +66,6 @@
                         {% else %}
                             <button class="w-100 btn btn-outline-info">Display Unordered</button>
                         {% endif %}
-                    </form>
-                    {% endif %}
-                </h1>
-
-                {% if mine %}
-                    <form id="name_form" class="collapse" action="{% url "rename_ballot" %}" method="POST">
-                        {% crispy name_form %}
                     </form>
                 {% endif %}
             </div>
