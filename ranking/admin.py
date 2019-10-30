@@ -29,7 +29,9 @@ class LoggedInSince(admin.SimpleListFilter):
 
 
 class UserAdmin(BaseUserAdmin):
+    list_display = BaseUserAdmin.list_display + ('date_joined', )
     list_filter = BaseUserAdmin.list_filter + (LoggedInSince, )
+    date_hierarchy = 'date_joined'
 
 
 class CandidateInline(admin.StackedInline):
@@ -45,6 +47,7 @@ class LengthFilter(admin.SimpleListFilter):
         return (
             ('empty', 'Empty'),
             ('non-empty', 'Non-Empty'),
+            ('three-or-more', '3+'),
             ('full', 'Full'),
         )
 
@@ -58,6 +61,8 @@ class LengthFilter(admin.SimpleListFilter):
             return with_count.filter(count=0)
         elif self.value() == "non-empty":
             return with_count.filter(count__gt=0)
+        elif self.value() == "three-or-more":
+            return with_count.filter(count__gt=2)
         elif self.value() == "full":
             return with_count.filter(count__gte=9)
         else:
