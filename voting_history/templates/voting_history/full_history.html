@@ -278,7 +278,7 @@ tr[role=row] td:nth-child(2) {
             // Currently only searching body because [1,2] is 1 && 2, not 1 ||
             // 2. Could concat the fields if this isn't good enough.
 
-            dt.columns(2).search(val).draw();
+            dt.columns(3).search(val).draw();
             dt.rows({ filter: "applied" }).every(function() {
                 if (val.length > 3) {  // if they've typed this much, fold results out
                     this.child(childText(this.data())).show();
