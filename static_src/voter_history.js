@@ -32,15 +32,21 @@ function vote( data, type, row ) {
     return `<span class=${data.replace(" ", "_")}>${data.replace(/s$/, "")}</span>`;
 }
 
-function searchValue() {
+function searchValues() {
     return $("#voteSearch").val().split(/\s+/).map($.trim);
 }
 
 function markOpenChildren() {
-  let search_value = searchValue();
+  console.log('hi');
+  let search_value = $("#voteSearch").val();
+
   this.api().rows({ page: "current" }).every(function() {
+    if (search_value.length > 3) {
+      this.child(childText(this.data())).show();
+    }
+
     if (this.child()) { // if folded out
-      if (val.length == 0) {
+      if (search_value.length == 0) {
         // otherwise we leave the last mark() around
         this.child().unmark();
       } else {
@@ -73,7 +79,7 @@ function createTable(voter_file_url) {
     searching: true,
     lengthChange: false,
     order: [[ 0, "desc" ]],
-    // drawCallback: markOpenChildren,
+    drawCallback: markOpenChildren,
     columns: [
       { data: "resolutionid", visible: false },
       { orderable: false, data: "full_text", visible: false },
@@ -108,7 +114,7 @@ function createTable(voter_file_url) {
     else {
       tr.addClass( 'details' );
       row.child( childText( row.data() ) ).show();
-      row.child().mark(searchValue());
+      row.child().mark(searchValues());
     }
   } );
 
