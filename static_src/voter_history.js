@@ -119,14 +119,12 @@ function createTable(voter_file_url) {
 
   $("[name=vote-split]").on("change", () => dt.draw());
 
-  let searchTable = (function(val) {
+  let searchTable = debounce(function(val) {
     // .columns([x, y]).search() must match all columns and .search()
     // matches any but we need vote_split to be searchable too, so
     // using a hidden concat column
-    console.log(`searching for ${val}`);
-
     dt.columns(1).search(val).draw();
-  });
+  }, 250, { "leading": false });
 
   $("#voteSearch").on("input", function() {
     let val = $.trim( $(this).val() );
