@@ -24,6 +24,7 @@ See where current councillors stand on your issues.
 {# <script defer src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script> need to remove dataTables.min.css for this to look decent #}
 <link "https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
 
+<script defer src="{% static "voter_history.js" %}"></script>
 <style>
 #myTable_filter { display: none; }
 
@@ -52,7 +53,7 @@ tr[role=row] td:nth-child(2) {
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
     <div class="card my-4">
         <div class="card-header">
             What matters to you?
@@ -101,9 +102,7 @@ tr[role=row] td:nth-child(2) {
         <thead>
             <tr>
                 <th>Resolution Id</td>
-                <th>aceladescription</th>
-                <th>acelatitle</th>
-                <th>ake_search_field, visible: false },
+                <th>full text</th>
                 <th>Date</th>
 
                 <th>Summary</th>
@@ -123,9 +122,7 @@ tr[role=row] td:nth-child(2) {
         <tfoot>
             <tr>
                 <th>Resolution Id</td>
-                <th>aceladescription</th>
-                <th>acelatitle</th>
-                <th>search,
+                <th>full text</th>
                 <th>Date </th>
 
                 <th>Summary</th>
@@ -149,154 +146,8 @@ tr[role=row] td:nth-child(2) {
 
 {% block endscripts %}
 <script>
-    function truncateDollars(string) {
-        /* find money-like tokens in description text and truncates them
-           truncateDollars("$123,456,789") -> "$0.1b"
-           truncateDollars("anything else") -> "anything else"
-           credit to https://stackoverflow.com/a/10601315
-        */
-        var newValue = Number(string.replace(/[$,]/g, ''));
-        if (string[0] == '$' && newValue >= 1000) {
-            var suffixes = ["", "k", "m", "b","t"];
-            var suffixNum = Math.floor( (""+newValue).length/3 );
-            var shortValue = '';
-            for (var precision = 2; precision >= 1; precision--) {
-                shortValue = parseFloat( (suffixNum != 0 ? (newValue / Math.pow(1000,suffixNum) ) : newValue).toPrecision(precision));
-                var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
-                if (dotLessShortValue.length <= 2) { break; }
-            }
-            if (shortValue % 1 != 0) {
-                shortNum = shortValue.toFixed(1);
-            }
-            return '$' + shortValue+suffixes[suffixNum];
-        } else {
-            return string;
-        }
-    }
-
-    function childText( d ) {
-        /* text (can be html) for foldout row when main row is clicked */
-        return d.aceladescription.replace('\n', '<br>');
-    }
-
-    function make_search_field( d ) {
-        return d.resolutionshorttitle + " " + d.acelatitle + " " + d.aceladescription;
-    }
-
-    function make_vote_split( d ) {
-        let councillors = ["dennis_carlone", "jan_devereux", "craig_kelley", "alanna_mallon", "marc_mcgovern", "sumbul_siddiqui", "denise_simmons", "tim_toomey", "quinton_zondervan"];
-
-        for (i = 0; i < councillors.length; i++) {
-            if (d[councillors[i]] == 'Present' || d[councillors[i]] == 'Nays') {
-                return 'contested';
-            }
-        }
-
-        return 'unanimous';
-    }
-
-    function as_date(d) {
-        return (new Date(d)).toLocaleDateString();
-    }
-
-    function vote( data, type, row ) {
-        data = data || "";
-        return `<span class=${data.replace(" ", "_")}>${data.replace(/s$/, "")}</span>`;
-    }
-
-    function searchValue() {
-        return $("#voteSearch").val().split(/\s+/).map($.trim);
-    }
-
-    var dt;
     $(document).ready(function() {
-        $.fn.dataTable.ext.search.push(
-            function( settings, data, dataIndex ) {
-                var vote_split = $("[name=vote-split]:checked").val();
-                if (vote_split == 'all') {
-                    return true;
-                } else {
-                    return data[6] == vote_split;
-                }
-            }
-        );
-
-        dt = $('#myTable').DataTable( {
-            mark: true,
-            ajax: "{% static  "voting_record.json" %}",
-            searching: true,
-            lengthChange: false,
-            order: [[ 0, "desc" ]],
-            columns: [
-                { data: "resolutionid", visible: false },
-                { orderable: false, data: "aceladescription", visible: false },
-                { orderable: false, data: "acelatitle", visible: false },
-                { orderable: false, data: make_search_field, visible: false },
-                { render: as_date, width: "10ch", orderable: true, data: "meetingdate", visible: true },
-
-                { orderable: false, data: "resolutionshorttitle",  },
-                { searchable: true, visible: false, orderable: false, name: "vote_split", data: make_vote_split },
-
-                { render:vote, searchable: false, data: "dennis_carlone", title: "Carlone" },
-                { render:vote, searchable: false, data: "jan_devereux", title: "Devereux" },
-                { render:vote, searchable: false, data: "craig_kelley", title: "Kelley" },
-                { render:vote, searchable: false, data: "alanna_mallon", title: "Mallon" },
-                { render:vote, searchable: false, data: "marc_mcgovern", title: "McGovern" },
-                { render:vote, searchable: false, data: "sumbul_siddiqui", title: "Siddiqui" },
-                { render:vote, searchable: false, data: "denise_simmons", title: "Simmons" },
-                { render:vote, searchable: false, data: "tim_toomey", title: "Toomey" },
-                { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" }
-            ],
-        } );
-
-        $('#myTable tbody').on( 'click', 'tr[role=row]', function () {
-            /* toggle child row visibility */
-            var tr = $(this);
-            var row = dt.row( tr );
-
-            if ( row.child.isShown() ) {
-                tr.removeClass( 'details' );
-                row.child.hide();
-            }
-            else {
-                tr.addClass( 'details' );
-                row.child( childText( row.data() ) ).show();
-                row.child().mark(searchValue());
-            }
-        } );
-
-        /* table-responsive must wrap the table, but data-tables adds a div
-           before and after the table, so we have to do this after DataTables is
-           applied so the table controls don't also scroll */
-        $("#myTable").wrap("<div class='table-responsive'></div>");
-
-        $("[name=vote-split]").on("change", () => dt.draw());
-
-        $("#voteSearch").on("input", function() {
-            /* search the full item body for the key. fold out descriptions if */
-            let val = $.trim( $(this).val() );
-            // Currently only searching body because [1,2] is 1 && 2, not 1 ||
-            // 2. Could concat the fields if this isn't good enough.
-
-            dt.columns(3).search(val).draw();
-            dt.rows({ filter: "applied" }).every(function() {
-                if (val.length > 3) {  // if they've typed this much, fold results out
-                    this.child(childText(this.data())).show();
-                }
-
-                if (this.child()) { // if folded out
-                    if (val.length == 0) {
-                        // otherwise we leave the last mark() around
-                        this.child().unmark();
-                    } else {
-                        // had some trouble going from $ to $4 without unmarking, but other searches seem to have worked
-                        this.child().unmark();
-                        this.child().mark(searchValue());
-                    }
-                }
-            });
-        });
-        $("[data-toggle=tooltip]").tooltip();
-    } );
+        voter_history.createTable("{% static "voting_record.prepared.json" %}");
+    });
 </script>
 {% endblock %}
