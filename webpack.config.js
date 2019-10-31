@@ -6,12 +6,13 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
   entry: {
     main: './static_src/main.js',
-    drag_list: './static_src/drag_list.js'
+    drag_list: './static_src/drag_list.js',
+    voter_history: './static_src/voter_history.js'
   },
   output: {
     path: path.resolve(__dirname, 'static_compiled'),
     filename: '[name].js',
-    library: 'cambridge'
+    library: '[name]'
   },
   optimization: {
     minimizer: [
