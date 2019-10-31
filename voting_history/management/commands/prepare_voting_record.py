@@ -8,7 +8,7 @@ class Command(BaseCommand):
         with open('static/voting_record.json') as fp:
             voting_history = json.load(fp)
 
-        for row in tqdm.tqdm(voting_history['data']):
+        for row in tqdm.tqdm(voting_history):
             row['full_text'] = ' '.join(filter(None, [
                 row.pop('acelatitle', ''),
                 row['aceladescription'],
@@ -16,4 +16,4 @@ class Command(BaseCommand):
             ]))
 
         with open('static/voting_record.prepared.json', 'w') as fp:
-            json.dump(voting_history, fp)
+            json.dump({'data': voting_history}, fp)
