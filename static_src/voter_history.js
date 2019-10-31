@@ -1,5 +1,5 @@
 import marked from 'marked'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
 
 
 function childText( d ) {
