@@ -29,7 +29,7 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "popper.js": "^1.15.0",
     "regenerator-runtime": "^0.13.3",
     "sass-loader": "^8.0.0",
