@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+import django_heroku
+
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -183,3 +185,5 @@ LOGOUT_REDIRECT_URL = '/'
 # by commenting out EMAIL_BACKEND and copying all the production email settings.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 GOOGLE_EMBED_API_KEY = os.getenv('GOOGLE_EMBED_API_KEY')
+
+django_heroku.settings(locals())
