@@ -1,5 +1,6 @@
 import os.path
 import dj_database_url
+import django_heroku
 from .settings import *
 
 DEBUG = False
@@ -43,3 +44,5 @@ CSRF_COOKIE_SECURE = True
 MIDDLEWARE += [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+django_heroku.settings(locals())
