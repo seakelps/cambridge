@@ -10,3 +10,4 @@ markdown
 factory_boy
 django-crispy-forms
 django-registration
+django_heroku
