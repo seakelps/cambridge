@@ -9,6 +9,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
 
+# TODO: This is a hack while waiting for
+if os.environ.get('CI'):
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'HerokuCI'
+    }
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
