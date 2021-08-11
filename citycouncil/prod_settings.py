@@ -48,8 +48,8 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-MIDDLEWARE += [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
+# MIDDLEWARE += [
+#     'whitenoise.middleware.WhiteNoiseMiddleware',
+# ]
 
 django_heroku.settings(locals())
