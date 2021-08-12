@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const TerserPlugin = require("terser-webpack-plugin");
 
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
   },
   optimization: {
     minimizer: [
-      new UglifyJSPlugin()  // heroku has NODE_ENV=production by default
+      new TerserPlugin()  // heroku has NODE_ENV=production by default
     ]
   },
   module: {
