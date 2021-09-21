@@ -6,7 +6,7 @@ from .models import Candidate
 from .utils import get_candidate_locations
 
 from campaign_finance.models import RawBankReport
-from campaign_finance.models import get_candidate_money_at_start_of_2019, get_candidate_2019_spent, get_candidate_2019_raised
+from campaign_finance.models import get_candidate_money_at_start_of_2021, get_candidate_2021_spent, get_candidate_2021_raised
 
 
 # servering the jumbotron page
@@ -14,7 +14,7 @@ def index(request):
     num_runners = Candidate.objects.exclude(is_running=False).exclude(hide=True).count()
 
     description = """
-        If you want more information before you cast your 2019
+        If you want more information before you cast your 2021
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
@@ -71,14 +71,14 @@ class CandidateDetail(DetailView):
                     .latest("filing_date")
             except RawBankReport.DoesNotExist:
                 context['latest_bank_report'] = None
-            context['money_2019_start'] = get_candidate_money_at_start_of_2019(self.object.cpf_id)
-            context['money_2019_spent'] = get_candidate_2019_spent(self.object.cpf_id)
-            context['money_2019_raised'] = get_candidate_2019_raised(self.object.cpf_id)
+            context['money_2021_start'] = get_candidate_money_at_start_of_2021(self.object.cpf_id)
+            context['money_2021_spent'] = get_candidate_2021_spent(self.object.cpf_id)
+            context['money_2021_raised'] = get_candidate_2021_raised(self.object.cpf_id)
         else:
             context['latest_bank_report'] = None
-            context['money_2019_start'] = None
-            context['money_2019_spent'] = None
-            context['money_2019_raised'] = None
+            context['money_2021_start'] = None
+            context['money_2021_spent'] = None
+            context['money_2021_raised'] = None
 
         context['endorsements'] = self.object.endorsement_set\
             .filter(display=True)\
