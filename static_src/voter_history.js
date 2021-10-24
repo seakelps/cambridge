@@ -89,8 +89,6 @@ function createTable(voter_file_url) {
       { searchable: true, visible: false, orderable: false, name: "vote_split", data: make_vote_split },
 
       { render:vote, searchable: false, data: "dennis_carlone", title: "Carlone" },
-      { render:vote, searchable: false, data: "jan_devereux", title: "Devereux" },
-      { render:vote, searchable: false, data: "craig_kelley", title: "Kelley" },
       { render:vote, searchable: false, data: "alanna_mallon", title: "Mallon" },
       { render:vote, searchable: false, data: "marc_mcgovern", title: "McGovern" },
       { render:vote, searchable: false, data: "sumbul_siddiqui", title: "Siddiqui" },
