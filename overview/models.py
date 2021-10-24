@@ -297,6 +297,8 @@ class SpecificProposal(models.Model):
     shortname = models.CharField(max_length=200, blank=True)
     initial_year = models.IntegerField(null=True, blank=True)
     private_notes = models.TextField(blank=True)
+    blurb = models.TextField(blank=True)
+    order = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
@@ -320,7 +322,8 @@ class CandidateSpecificProposalStance(models.Model):
     specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
 
     display = models.BooleanField(default=True)
-    simple_yes_no = models.BooleanField(default=True)
+    simple_yes_no = models.NullBooleanField(default=True)
+    # todo: NullBooleanField
 
     support_degree_choices = (
         ('supported', 'Strongly Supported'),

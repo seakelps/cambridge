@@ -84,4 +84,8 @@ class CandidateDetail(DetailView):
             .filter(display=True)\
             .select_related("organization").all()
 
+        context['specific_housing_support'] = self.object.candidatespecificproposalstance_set\
+            .filter(display=True, specific_proposal__display=True)\
+            .select_related("specific_proposal").order_by("specific_proposal__order")
+
         return context
