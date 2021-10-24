@@ -296,6 +296,7 @@ class SpecificProposal(models.Model):
     fullname = models.CharField(max_length=200, unique=True)
     shortname = models.CharField(max_length=200, blank=True)
     initial_year = models.IntegerField(null=True, blank=True)
+    private_notes = models.TextField(blank=True)
 
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
@@ -307,6 +308,7 @@ class GeneralProposal(models.Model):
     fullname = models.CharField(max_length=200, unique=True)
     shortname = models.CharField(max_length=200, blank=True)
     initial_year = models.IntegerField(null=True, blank=True)
+    private_notes = models.TextField(blank=True)
 
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
