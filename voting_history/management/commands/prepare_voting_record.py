@@ -13,7 +13,7 @@ class Command(BaseCommand):
                 row.pop('acelatitle', ''),
                 row['aceladescription'],
                 row['resolutionshorttitle'],
-            ]))
+            ])).strip()
 
         with open('static/voting_record.prepared.json', 'w') as fp:
             json.dump({'data': voting_history}, fp)
