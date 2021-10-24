@@ -20,16 +20,17 @@ class Command(BaseCommand):
 
         voting_history = []
         for row in reader:
-            full_text = row["item_description"] + " " + row["item_body"]
-            full_text = re.sub(r"\n+\|?\n*", " ", full_text)
-            full_text = re.sub(r" {2,}", " ", full_text)
-            full_text = full_text.strip()
+            acela_description = row["item_body"]
+            acela_description = re.sub(r"\n+\|?\n*", " ", acela_description)
+            acela_description = re.sub(r" {2,}", " ", acela_description)
+            acela_description = acela_description.strip()
 
             voting_history.append(
                 {
                     "meetingid": row["meeting_id"],
                     "resolutionid": row["item_id"],
-                    "full_text": full_text,
+                    "aceladescription": acela_description,
+                    "full_text": row["item_description"] + " " + acela_description,
                     "meetingdate": row["date"],
                     "resolutionshorttitle": row["item_description"].strip(),
                     "dennis_carlone": row["Dennis J. Carlone"],
