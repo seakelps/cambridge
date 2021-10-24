@@ -287,8 +287,20 @@
                                 {% elif housing.simple_yes_no == False %}
                                     <i class="fa fa-ban text-danger"></i>
                                 {% else %}
-                                    <div class="text-muted">n/a</div>
+                                    <span class="text-muted">n/a</span>
                                 {% endif %}
+
+                                {% if housing.blurb %}
+                                <a  class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ housing.blurb }}">
+                                </a>
+                                {% endif %}
+
                             </td>
                         </tr>
                         {% endfor %}
