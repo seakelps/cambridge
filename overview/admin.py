@@ -4,6 +4,7 @@ from django.forms import ModelForm
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
+from .models import SpecificProposal, GeneralProposal, CandidateSpecificProposalStance, CandidateGeneralProposalStance
 
 
 class QuestionnaireResponseInline(admin.TabularInline):
@@ -19,7 +20,6 @@ class EndorsementInline(admin.TabularInline):
     model = Endorsement
     autocomplete_fields = ['organization']
 
-
 class QuoteInline(admin.TabularInline):
     model = Quote
 
@@ -31,6 +31,24 @@ class PressArticleInline(admin.TabularInline):
 class PressArticleCandidateInline(admin.StackedInline):
     model = PressArticleCandidate
     autocomplete_fields = ['pressarticle']
+
+
+class SpecificProposalInline(admin.TabularInline):
+    model = SpecificProposal
+
+
+class CandidateSpecificProposalStanceInline(admin.StackedInline):
+    model = CandidateSpecificProposalStance
+    autocomplete_fields = ['specific_proposal']
+
+
+class GeneralProposalInline(admin.TabularInline):
+    model = GeneralProposal
+
+
+class CandidateGeneralProposalStanceInline(admin.StackedInline):
+    model = CandidateGeneralProposalStance
+    autocomplete_fields = ['general_proposal']
 
 
 class VideoInlineAdmin(admin.TabularInline):
@@ -100,7 +118,8 @@ class CandidateAdmin(admin.ModelAdmin):
         ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party', 'cpf_id']}),
-        ('Housing',               {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_status_note', 'housing_sell_value', 'housing_sale_date', 'housing_sale_price', 'housing_sale_price_inflation']}),
+        ('Housing - theirs',      {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_status_note', 'housing_sell_value', 'housing_sale_date', 'housing_sale_price', 'housing_sale_price_inflation']}),
+        ('Housing - blurb',       {'fields': ['housing_private_notes', 'housing_blurb']}),
         ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist', 'job', 'previous_results_map']}),
         ('Todos',                 {'fields': ['checked_ocpf_for_contributions', 'checked_fec_for_contributions']}),
     ]
@@ -110,7 +129,16 @@ class CandidateAdmin(admin.ModelAdmin):
     list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb, 'hide')
     prepopulated_fields = {"slug": ("fullname",)}
 
-    inlines = [EndorsementInline, QuestionnaireResponseInline, VideoInlineAdmin, PastContributionInline, QuoteInline, PressArticleCandidateInline]
+    inlines = [
+        EndorsementInline,
+        CandidateSpecificProposalStanceInline,
+        CandidateGeneralProposalStanceInline,
+        QuestionnaireResponseInline,
+        PastContributionInline,
+        QuoteInline,
+        PressArticleCandidateInline,
+        VideoInlineAdmin
+    ]
 
     def headshot(self, instance):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
@@ -165,9 +193,24 @@ class PressArticleCandidateAdmin(admin.ModelAdmin):
     inlines = [PressArticleCandidateInline]
 
 
+class SpecificProposalAdmin(admin.ModelAdmin):
+    list_display = ['fullname', 'initial_year']
+    search_fields = ['fullname', 'shortname']
+    inlines = [CandidateSpecificProposalStanceInline]
+
+
+class GeneralProposalAdmin(admin.ModelAdmin):
+    list_display = ['fullname', 'initial_year']
+    search_fields = ['fullname', 'shortname']
+    inlines = [CandidateGeneralProposalStanceInline]
+
+
+
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 admin.site.register(QuestionnaireResponse)
 admin.site.register(PressOutlet, PressOutletAdmin)
 admin.site.register(PressArticle, PressArticleAdmin)
+admin.site.register(SpecificProposal, SpecificProposalAdmin)
+admin.site.register(GeneralProposal, GeneralProposalAdmin)

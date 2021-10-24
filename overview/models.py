@@ -49,6 +49,9 @@ class Candidate(models.Model):
     private_notes = models.TextField(blank=True)
     blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
 
+    housing_private_notes = models.TextField(blank=True)
+    housing_blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
+
     ##### section: basic abouts
     ## electioning
 
@@ -245,6 +248,7 @@ class Quote(models.Model):
     by = models.CharField(max_length=100, help_text="Leave blank if candidate", blank=True, default="")
     cite = models.CharField(max_length=100, blank=True)
     display = models.BooleanField(default=False)
+    display_housing = models.BooleanField(default=False)
 
 
 # ex., The Boston Globe; Cambridge Day
@@ -277,3 +281,69 @@ class PressArticleCandidate(models.Model):
     candidate_is_the_author = models.BooleanField(default=False)
     sample = models.TextField(help_text="if there's something particularly noteworthy about this candidate and press article", blank=True)
     display = models.BooleanField(default=False)
+
+
+# do I want to deal with this now? I think no, but leave it for future...
+# class ProposalType(models.Model):
+#     choices = ////
+#     classification = models.CharField(max_length=200)
+#
+
+
+# ex., "AHO 2017", "AHO 2019", "MMH", "2072 Mass Ave", "Frost Terrace"
+class SpecificProposal(models.Model):
+    display = models.BooleanField(default=True)
+    fullname = models.CharField(max_length=200, unique=True)
+    shortname = models.CharField(max_length=200, blank=True)
+    initial_year = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} ({})".format(self.fullname, self.initial_year)
+
+
+# ex., "superinclusionary", "reduced parking", "no parking", etc.
+class GeneralProposal(models.Model):
+    display = models.BooleanField(default=True)
+    fullname = models.CharField(max_length=200, unique=True)
+    shortname = models.CharField(max_length=200, blank=True)
+    initial_year = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} ({})".format(self.fullname, self.initial_year)
+
+
+# ex., McGovern strongly supported the AHO
+class CandidateSpecificProposalStance(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
+
+    display = models.BooleanField(default=True)
+    simple_yes_no = models.BooleanField(default=True)
+
+    support_degree_choices = (
+        ('supported', 'Strongly Supported'),
+        ('somewhat supported',  'Somewhat Supported'),
+        ('neither',  'Neither Supported nor Opposed'),
+        ('somewhat opposed', 'Somewhat Opposed'),
+        ('strongly opposed',  'Strongly Opposed'),
+        ('u', 'Unknown'),
+        ('na', 'Not Applicable'),
+        ('o',    'Other'),
+    )
+    degree_of_support = models.CharField(max_length=25, choices=support_degree_choices, default='u', blank=True)
+
+    # blurbs
+    private_notes = models.TextField(blank=True)
+    blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
+
+
+class CandidateGeneralProposalStance(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    general_proposal = models.ForeignKey(GeneralProposal, on_delete=models.CASCADE)
+
+    display = models.BooleanField(default=True)
+    simple_yes_no = models.BooleanField(default=True)
+
+    # blurbs
+    private_notes = models.TextField(blank=True)
+    blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
