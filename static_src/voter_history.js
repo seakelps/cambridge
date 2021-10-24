@@ -83,20 +83,20 @@ function createTable(voter_file_url) {
     columns: [
       { data: "resolutionid", visible: false },
       { orderable: false, data: "full_text", visible: false },
-      { render: as_date, width: "10ch", orderable: true, data: "meetingdate", visible: true },
+      { render: as_date, width: "20ch", orderable: true, data: "meetingdate", visible: true },
 
       { orderable: false, data: "resolutionshorttitle",  },
       { searchable: true, visible: false, orderable: false, name: "vote_split", data: make_vote_split },
 
       { render:vote, searchable: false, data: "dennis_carlone", title: "Carlone" },
-      { render:vote, searchable: false, data: "jan_devereux", title: "Devereux" },
-      { render:vote, searchable: false, data: "craig_kelley", title: "Kelley" },
       { render:vote, searchable: false, data: "alanna_mallon", title: "Mallon" },
       { render:vote, searchable: false, data: "marc_mcgovern", title: "McGovern" },
       { render:vote, searchable: false, data: "sumbul_siddiqui", title: "Siddiqui" },
       { render:vote, searchable: false, data: "denise_simmons", title: "Simmons" },
       { render:vote, searchable: false, data: "tim_toomey", title: "Toomey" },
-      { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" }
+      { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" },
+      { render:vote, searchable: false, data: "jivan_sobrinho-wheeler", title: "Sobrinho-Wheeler" },
+      { render:vote, searchable: false, data: "patty_nolan", title: "Nolan" }
     ],
   } );
 
