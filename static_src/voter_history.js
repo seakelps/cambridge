@@ -94,9 +94,9 @@ function createTable(voter_file_url) {
       { render:vote, searchable: false, data: "sumbul_siddiqui", title: "Siddiqui" },
       { render:vote, searchable: false, data: "denise_simmons", title: "Simmons" },
       { render:vote, searchable: false, data: "tim_toomey", title: "Toomey" },
-      { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" }
-      { render:vote, searchable: false, data: "jivan_sobrinho-wheeler", title: "Sobrinho-Wheeler" }
-      { render:vote, searchable: false, data: "patty_nolan", title: "Nolan" }
+      { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" },
+      { render:vote, searchable: false, data: "jivan_sobrinho-wheeler", title: "Sobrinho-Wheeler" },
+      { render:vote, searchable: false, data: "patty_nolan", title: "Nolan" },
     ],
   } );
 
