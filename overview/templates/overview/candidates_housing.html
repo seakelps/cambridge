@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+
+
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-10">
+                <h2>Housing</h2>
+            </div>
+            <div class="col-10">
+                <p>Affordable Housing is the most frequent answer to the polling question, "What is the single most import issue facing Cambridge?"</p>
+                <p>Here is how the 2021 candidates compare.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>Specific Proposals</h4>
+                <p>Actual bills, developments, or rules - not hypotheticals.</p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Candidate</th>
+                            {% for specific_proposal in specific_proposals %}
+                                <th>
+                                    {% if specific_proposal.shortname %}
+                                        {{ specific_proposal.shortname }}
+                                    {% else %}
+                                        {{ specific_proposal.fullname }}
+                                    {% endif %}
+
+                                    {% if specific_proposal.blurb %}
+                                    <a  class="fa fa-info-circle"
+                                        href="#!"
+                                        data-toggle="popover"
+                                        data-trigger="focus"
+                                        data-html="true"
+                                        data-container="body"
+                                        data-content="{{ specific_proposal.blurb }}">
+                                    </a>
+                                    {% endif %}
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        <tr>
+                            <td>
+                                {{ candidate.shortname }}
+                            </td>
+                            <td>
+                                TBD
+                            </td>
+
+                            <!--
+                            {% for specific_proposal in specific_proposals %}
+
+                            <td>
+                                {% if candidate.specific_proposal.simple_yes_no == True %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% elif housing.simple_yes_no == False %}
+                                    <i class="fa fa-ban text-danger"></i>
+                                {% else %}
+                                    <span class="text-muted">n/a</span>
+                                {% endif %}
+
+                                {% if housing.blurb %}
+                                <a  class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ housing.blurb }}">
+                                </a>
+                                {% endif %}
+
+                            </td>
+
+                            {% endfor %} -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>Housing Situation</h4>
+                <p>Some candidates rent a two-bedroom apartment, others own multi-million dollar single-family homes. </p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Rents?</th>
+                            <!-- <th>Housing type?</th> -->
+                            <th>Value?</th>
+                            <th>Is a Landlord?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        <tr>
+                            <td>
+                                {{ candidate.shortname }}
+                            </td>
+                            <td>
+                                {% if candidate.housing_status == 'rent' %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if candidate.housing_status == 'own' and candidate.housing_sell_value%}
+                                    ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if candidate.housing_is_a_landlord %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+
+
+{% endblock %}

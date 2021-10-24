@@ -2,7 +2,7 @@ import json
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
-from .models import Candidate
+from .models import Candidate, SpecificProposal
 from .utils import get_candidate_locations
 
 from campaign_finance.models import RawBankReport
@@ -87,5 +87,22 @@ class CandidateDetail(DetailView):
         context['specific_housing_support'] = self.object.candidatespecificproposalstance_set\
             .filter(display=True, specific_proposal__display=True)\
             .select_related("specific_proposal").order_by("specific_proposal__order")
+
+        return context
+
+
+# a specific "spreadsheet-like" view of candidates' housing support
+class CandidateHousingList(ListView):
+    model = Candidate
+    template_name = 'overview/candidates_housing.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
+
+        candidates = Candidate.objects.exclude(hide=True, is_running=False).order_by("fullname")
+        specific_proposals = SpecificProposal.objects.exclude(display=False).order_by("order")
+
+        context['candidates'] = candidates
+        context['specific_proposals'] = specific_proposals
 
         return context

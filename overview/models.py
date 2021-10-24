@@ -96,6 +96,17 @@ class Candidate(models.Model):
     housing_sale_date = models.DateField(null=True, blank=True)
     housing_sale_price = models.FloatField(null=True, blank=True)
     housing_sale_price_inflation = models.FloatField(null=True, blank=True)
+    housing_type_choices = (
+        ('single',     'Single-Family'),
+        ('double',     'Two-Family'),
+        ('triple',     'Triple-Decker'),
+        ('apartment', 'Apartment'),
+        ('dorm',       'Dorm'),
+        ('other',      'Other'),
+        ('unknown',    'Unknown')
+    )
+    housing_type = models.CharField(max_length=40, choices=housing_type_choices, default='u', blank=True)
+    housing_is_a_landlord = models.NullBooleanField()
 
     ## demographics
     # birth
