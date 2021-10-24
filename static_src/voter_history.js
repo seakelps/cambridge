@@ -83,7 +83,7 @@ function createTable(voter_file_url) {
     columns: [
       { data: "resolutionid", visible: false },
       { orderable: false, data: "full_text", visible: false },
-      { render: as_date, width: "10ch", orderable: true, data: "meetingdate", visible: true },
+      { render: as_date, width: "20ch", orderable: true, data: "meetingdate", visible: true },
 
       { orderable: false, data: "resolutionshorttitle",  },
       { searchable: true, visible: false, orderable: false, name: "vote_split", data: make_vote_split },
@@ -96,7 +96,7 @@ function createTable(voter_file_url) {
       { render:vote, searchable: false, data: "tim_toomey", title: "Toomey" },
       { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" },
       { render:vote, searchable: false, data: "jivan_sobrinho-wheeler", title: "Sobrinho-Wheeler" },
-      { render:vote, searchable: false, data: "patty_nolan", title: "Nolan" },
+      { render:vote, searchable: false, data: "patty_nolan", title: "Nolan" }
     ],
   } );
 
