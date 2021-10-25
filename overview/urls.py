@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^candidates/$', views.CandidateList.as_view(), name='all'),
     url(r'^candidates/(?P<slug>[-\w]+)/$', views.CandidateDetail.as_view(), name='candidate_detail'),
+    url(r'^candidates/housing', views.CandidateHousingList.as_view(), name="housing_comparison"),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
             "candidates": CandidateSitemap

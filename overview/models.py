@@ -96,6 +96,17 @@ class Candidate(models.Model):
     housing_sale_date = models.DateField(null=True, blank=True)
     housing_sale_price = models.FloatField(null=True, blank=True)
     housing_sale_price_inflation = models.FloatField(null=True, blank=True)
+    housing_type_choices = (
+        ('single',     'Single-Family'),
+        ('double',     'Two-Family'),
+        ('triple',     'Triple-Decker'),
+        ('apartment', 'Apartment'),
+        ('dorm',       'Dorm'),
+        ('other',      'Other'),
+        ('unknown',    'Unknown')
+    )
+    housing_type = models.CharField(max_length=40, choices=housing_type_choices, default='u', blank=True)
+    housing_is_a_landlord = models.NullBooleanField()
 
     ## demographics
     # birth
@@ -297,6 +308,8 @@ class SpecificProposal(models.Model):
     shortname = models.CharField(max_length=200, blank=True)
     initial_year = models.IntegerField(null=True, blank=True)
     private_notes = models.TextField(blank=True)
+    blurb = models.TextField(blank=True)
+    order = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
@@ -320,7 +333,8 @@ class CandidateSpecificProposalStance(models.Model):
     specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
 
     display = models.BooleanField(default=True)
-    simple_yes_no = models.BooleanField(default=True)
+    simple_yes_no = models.NullBooleanField(default=True)
+    # todo: NullBooleanField
 
     support_degree_choices = (
         ('supported', 'Strongly Supported'),
