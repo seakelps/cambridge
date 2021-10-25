@@ -70,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'citycouncil.urls'
@@ -188,8 +187,6 @@ LOGOUT_REDIRECT_URL = '/'
 # by commenting out EMAIL_BACKEND and copying all the production email settings.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 GOOGLE_EMBED_API_KEY = os.getenv('GOOGLE_EMBED_API_KEY')
-
-WHITENOISE_MANIFEST_STRICT = False
 
 django_heroku.settings(
     locals(),
