@@ -98,13 +98,15 @@ class CandidateHousingList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True, is_running=False).order_by("fullname")
+        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
         specific_proposals = SpecificProposal.objects.exclude(display=False).order_by("order")
 
         candidate_specific_proposals = CandidateSpecificProposalStance.objects\
             .select_related('specific_proposal')\
             .select_related('candidate')\
-            .filter(specific_proposal__display=True, candidate__hide=False)
+            .filter(specific_proposal__display=True)\
+            .filter(candidate__hide=False)\
+            .filter(candidate__is_running=True)
 
         cp_map_yes_no = {}
         cp_map_blurb = {}
