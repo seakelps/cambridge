@@ -10,49 +10,61 @@ from .models import SpecificProposal, GeneralProposal, CandidateSpecificProposal
 class QuestionnaireResponseInline(admin.TabularInline):
     model = QuestionnaireResponse
     autocomplete_fields = ['questionnaire']
+    extra = 0
 
 
 class PastContributionInline(admin.TabularInline):
     model = PastContribution
+    extra = 0
 
 
 class EndorsementInline(admin.TabularInline):
     model = Endorsement
     autocomplete_fields = ['organization']
+    extra = 0
+
 
 class QuoteInline(admin.TabularInline):
     model = Quote
+    extra = 0
 
 
 class PressArticleInline(admin.TabularInline):
     model = PressArticle
+    extra = 0
 
 
 class PressArticleCandidateInline(admin.StackedInline):
     model = PressArticleCandidate
     autocomplete_fields = ['pressarticle']
+    extra = 0
 
 
 class SpecificProposalInline(admin.TabularInline):
     model = SpecificProposal
+    extra = 0
 
 
 class CandidateSpecificProposalStanceInline(admin.StackedInline):
     model = CandidateSpecificProposalStance
     autocomplete_fields = ['specific_proposal']
+    extra = 0
 
 
 class GeneralProposalInline(admin.TabularInline):
     model = GeneralProposal
+    extra = 0
 
 
 class CandidateGeneralProposalStanceInline(admin.StackedInline):
     model = CandidateGeneralProposalStance
     autocomplete_fields = ['general_proposal']
+    extra = 0
 
 
 class VideoInlineAdmin(admin.TabularInline):
     model = InterviewVideo
+    extra = 0
 
     class form(ModelForm):
 
@@ -137,7 +149,7 @@ class CandidateAdmin(admin.ModelAdmin):
         PastContributionInline,
         QuoteInline,
         PressArticleCandidateInline,
-        VideoInlineAdmin
+        # VideoInlineAdmin
     ]
 
     def headshot(self, instance):
