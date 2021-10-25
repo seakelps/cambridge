@@ -189,4 +189,4 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 GOOGLE_EMBED_API_KEY = os.getenv('GOOGLE_EMBED_API_KEY')
 
-django_heroku.settings(locals(), database=not os.environ.get('CI'))  # using sqlite instead of postgres for tests
+django_heroku.settings(locals(), databases=not os.environ.get('CI'))  # using sqlite instead of postgres for tests
