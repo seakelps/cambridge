@@ -190,4 +190,5 @@ django_heroku.settings(
     locals(),
     databases=not os.environ.get('CI'),
     staticfiles=not os.environ.get('CI'),
+    test_runner=False,  # doesn't work with sqlite3
 )
