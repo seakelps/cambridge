@@ -116,8 +116,8 @@ class CandidateHousingList(ListView):
             cp_map_blurb[candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
-            cp_map_yes_no[candidate_proposal.candidate.id][candidate_proposal.id] = candidate_proposal.simple_yes_no
-            cp_map_blurb[candidate_proposal.candidate.id][candidate_proposal.id] = candidate_proposal.blurb
+            cp_map_yes_no[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.simple_yes_no
+            cp_map_blurb[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.blurb
 
 
         context['candidates'] = candidates
