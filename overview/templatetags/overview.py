@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 from django import template
 from django.template.defaultfilters import stringfilter
+from django.template.defaulttags import register
 
 
 register = template.Library()
@@ -37,3 +38,9 @@ def yt_direct(video_url):
     # /embed/ link gets read as flash by facebook
     # but /v/ link is read as html5
     return video_url.replace("/embed/", "/v/")
+
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+

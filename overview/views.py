@@ -2,12 +2,11 @@ import json
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
-from .models import Candidate, SpecificProposal
+from .models import Candidate, SpecificProposal, CandidateSpecificProposalStance
 from .utils import get_candidate_locations
 
 from campaign_finance.models import RawBankReport
 from campaign_finance.models import get_candidate_money_at_start_of_2021, get_candidate_2021_spent, get_candidate_2021_raised
-
 
 # servering the jumbotron page
 def index(request):
@@ -102,7 +101,26 @@ class CandidateHousingList(ListView):
         candidates = Candidate.objects.exclude(hide=True, is_running=False).order_by("fullname")
         specific_proposals = SpecificProposal.objects.exclude(display=False).order_by("order")
 
+        candidate_specific_proposals = CandidateSpecificProposalStance.objects\
+            .select_related('specific_proposal')\
+            .select_related('candidate')\
+            .filter(specific_proposal__display=True, candidate__hide=False)
+
+        cp_map_yes_no = {}
+        cp_map_blurb = {}
+
+        for candidate in candidates:
+            cp_map_yes_no[candidate.id] = {}
+            cp_map_blurb[candidate.id] = {}
+
+        for candidate_proposal in candidate_specific_proposals:
+            cp_map_yes_no[candidate_proposal.candidate.id][candidate_proposal.id] = candidate_proposal.simple_yes_no
+            cp_map_blurb[candidate_proposal.candidate.id][candidate_proposal.id] = candidate_proposal.blurb
+
+
         context['candidates'] = candidates
         context['specific_proposals'] = specific_proposals
+        context['cp_map_yes_no'] = cp_map_yes_no
+        context['cp_map_blurb'] = cp_map_blurb
 
         return context

@@ -2,7 +2,9 @@
 
 {% load static %}
 {% load humanize %}
+{% load get_item from overview %}
 
+{% block body_id %}candidate_comparison{% endblock %}
 
 {% block content %}
 
@@ -60,36 +62,29 @@
                             <td>
                                 {{ candidate.shortname }}
                             </td>
-                            <td>
-                                TBD
-                            </td>
 
-                            <!--
                             {% for specific_proposal in specific_proposals %}
-
                             <td>
-                                {% if candidate.specific_proposal.simple_yes_no == True %}
-                                    <i class="fa fa-check text-success"></i>
-                                {% elif housing.simple_yes_no == False %}
-                                    <i class="fa fa-ban text-danger"></i>
-                                {% else %}
-                                    <span class="text-muted">n/a</span>
-                                {% endif %}
+                                    {% if cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == True %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% elif cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == False %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% else %}
+                                        <span class="text-muted">n/a</span>
+                                    {% endif %}
 
-                                {% if housing.blurb %}
-                                <a  class="fa fa-info-circle"
-                                    href="#!"
-                                    data-toggle="popover"
-                                    data-trigger="focus"
-                                    data-html="true"
-                                    data-container="body"
-                                    data-content="{{ housing.blurb }}">
-                                </a>
-                                {% endif %}
-
+                                    {% if cp_map_blurb|get_item:candidate.id|get_item:specific_proposal.id %}
+                                    <a  class="fa fa-info-circle"
+                                        href="#!"
+                                        data-toggle="popover"
+                                        data-trigger="focus"
+                                        data-html="true"
+                                        data-container="body"
+                                        data-content="{{ cp_map_blurb|get_item:candidate.id|get_item:specific_proposal.id }}"></a>
+                                    {% endif %}
                             </td>
+                            {% endfor %}
 
-                            {% endfor %} -->
                         </tr>
                         {% endfor %}
                     </tbody>
