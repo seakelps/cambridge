@@ -70,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'citycouncil.urls'
@@ -173,8 +172,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static_compiled"),
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 CONTACT_EMAIL = "admin@cambridge.vote"
@@ -189,4 +186,9 @@ LOGOUT_REDIRECT_URL = '/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 GOOGLE_EMBED_API_KEY = os.getenv('GOOGLE_EMBED_API_KEY')
 
-django_heroku.settings(locals())
+django_heroku.settings(
+    locals(),
+    databases=not os.environ.get('CI'),
+    staticfiles=not os.environ.get('CI'),
+    test_runner=False,  # doesn't work with sqlite3
+)
