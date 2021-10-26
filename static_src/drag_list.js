@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var el = document.getElementById('ranked_list');
     var sortable = Sortable.create(el, {
         sort: true,
+        handle: ".handle",
 
         onUpdate: async function (evt) {
             let slugs = Array.from(document.querySelectorAll('candidate')).map(x => x.dataset.slug);
