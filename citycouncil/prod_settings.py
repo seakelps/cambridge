@@ -4,8 +4,6 @@ import django_heroku
 from .settings import *
 
 DEBUG = False
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
 
