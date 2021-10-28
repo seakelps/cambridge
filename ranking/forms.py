@@ -12,7 +12,7 @@ class NameForm(forms.ModelForm):
     helper.layout = Layout(
         'name',
         Submit("save", "Save"),
-        Button("cancel", "Cancel", data_toggle="collapse", data_target="#name_form")
+        Button("cancel", "Cancel", data_toggle="collapse", data_target="#name_form"),
     )
 
     def __init__(self, *args, **kwargs):
@@ -32,13 +32,21 @@ class NameForm(forms.ModelForm):
         model = RankedList
 
 
+class Delete(Button):
+    pass
+
+
 class NoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Field("comment", rows=4),
-            FormActions(Submit("save", "Save changes"), Button("cancel", "Cancel")),
+            FormActions(
+                Submit("save", "Save changes"),
+                Button("cancel", "Cancel"),
+                Delete("delete", "Delete", css_class="btn-warning"),
+            ),
         )
 
     class Meta:

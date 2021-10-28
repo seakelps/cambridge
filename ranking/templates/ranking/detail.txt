@@ -1,5 +1,5 @@
 {% load fullurl %}
-{% autoescape off %}{{ object.name }} (expored {% now "DATETIME_FORMAT" %})
+{% autoescape off %}{{ object.name }} (exported {% now "DATETIME_FORMAT" %})
 
 
 {% for element in object.annotated_candidates.all %}

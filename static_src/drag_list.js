@@ -76,3 +76,22 @@ $('.update_note').on('submit', function(event) {
     comment_form.classList.add('d-none');
     comment_form.classList.remove('d-block');
 });
+
+
+$('candidate [name=delete]').on('click', function(event) {
+    event.preventDefault();
+    let candidate = event.currentTarget.closest("candidate");
+    let slug = candidate.dataset.slug;
+    let delete_url = candidate.dataset.delete_url;
+
+    const response = fetch(delete_url, {
+        method: "POST",
+        credentials: 'same-origin',
+        headers: {
+            'X-CSRFToken': Cookies.get('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+    });
+
+    candidate.remove();
+});

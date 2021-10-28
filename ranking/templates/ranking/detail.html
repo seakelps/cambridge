@@ -78,7 +78,7 @@
                 <div id="ranked_list" class="list-group">
                     {# help #}
                     {% for annotation in annotations %}
-                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.slug }}">
+                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.slug }}" data-delete_url="{% url "delete_note" annotation.candidate.slug %}">
                         <span aria-hidden="true"></span>
                         <div>
                             {% if mine %}
