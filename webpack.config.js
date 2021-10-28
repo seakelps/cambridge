@@ -14,23 +14,15 @@ module.exports = {
     filename: '[name].js',
     library: '[name]'
   },
-  optimization: {
-    minimizer: [
-      new TerserPlugin()  // heroku has NODE_ENV=production by default
-    ]
-  },
   module: {
     rules: [
       // Using this instead of ProvidePlugin so we can use them in external scripts
       {
         test: require.resolve('jquery'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'jQuery'
-        },{
-          loader: 'expose-loader',
-          options: '$'
-        }]
+        loader: 'expose-loader',
+        options: {
+          exposes: ['jQuery', '$']
+        }, 
       },
       {
         test: /\.m?js$/,
@@ -52,34 +44,22 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loaders: ["style-loader","css-loader"]
+        use: [
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+        ]
       },
       {
         test: /\.s[ac]ss$/i,
-        loader: [
+        use: [
           // Creates `style` nodes from JS strings
-          'style-loader',
+          "style-loader",
           // Translates CSS into CommonJS
-          'css-loader',
+          "css-loader",
           // Compiles Sass to CSS
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000',
-        options: {
-          outputPath:'fonts',
-          publicPath:'static'
-        }
-      },
-      {
-        test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
-        loader: 'file-loader',
-        options:  {
-          outputPath:'fonts',
-          publicPath:'static'
-        }
+          "sass-loader",
+        ]
       },
     ]
   }
