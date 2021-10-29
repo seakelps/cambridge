@@ -35,3 +35,12 @@ If any variables appear within the text, they should be translated (or `{% trans
     python manage.py makemessages  # add blocks to translation file
     # fill in translations in .po files
     python manage.py compilemessages  # convert .po to .mo optimized format
+    
+    
+# Updating from year to year - 
+Make a PR with a checklist:
+- [ ] update the how to vote page
+- [ ] add new candidates
+- [ ] change the years found in text (landing page, etc.)
+- [ ] change the money functions or finally update them for generic years (sorry)
+- [ ] figure out the new ocpf.us format
