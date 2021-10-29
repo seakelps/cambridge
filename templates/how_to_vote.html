@@ -196,7 +196,7 @@
                     </tr>
                 </table>
 
-                <p><a target="_blank" rel="noopener" href="https://www.cambridgema.gov/Departments/electioncommission/news/2019/10/~/media/EF66630AA8704F9782AD7DA4BAB5CC6E.ashx">Preview an official sample ballot</a></p>
+		<p><a target="_blank" rel="noopener" href="https://www.cambridgema.gov/-/media/Files/electioncommission/2021municipalelection/citycouncilspecimentopost.pdf">{% blocktrans %}Preview an official sample ballot{% endblocktrans %}</a></p>
             </div>
 
             <div class="col-md-12">
@@ -223,7 +223,7 @@
 
                 <p>
                     {% blocktrans %}
-                        <strong>The deadline to register to vote is Wednesday, October 16, 2019 at 8pm.</strong>
+                        <strong>The deadline to register to vote has passed.</strong> But we encourage you to register to be ready for the next election.
                     {% endblocktrans %}
                 </p>
 
@@ -249,12 +249,12 @@
                 <h1 class="text-center">{% blocktrans %}How to Vote{% endblocktrans %}</h1>
 
 
-                <h3>{% blocktrans %}Voting Absentee{% endblocktrans %}</h3>
+<!--                 <h3>{% blocktrans %}Voting Absentee{% endblocktrans %}</h3>
 
                 {% with absentee='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/elepdf/absentee/English-Absentee-Ballot-Application.pdf">' %}
                 <p>{% blocktrans %}
                     You must fill out the absentee {{ absentee }}form</a> and turn it into the Clerk&rsquo;s office.
-                    You can turn it in by mail, in person, by fax, or as a scanned attached to an email by 12 p.m. on the day before the election. (So you must vote absentee before Monday, November 4 at 12 noon.)
+                    You can turn it in by mail, in person, by fax, or as a scanned attached to an email by 12 p.m. on the day before the election. (So you must vote absentee before Monday, November 1 at 12 noon.)
                 {% endblocktrans %}</p>
                 {% endwith %}
 
@@ -266,18 +266,36 @@
                     </p>
                     Phone: <a href="tel:617-349-4361">617-349-4361</a> Fax: <a href="tel:617-349-4366">617-349-4366</a>
                     <br>Email: <a href="mailto:elections2@cambridgema.gov">elections2@cambridgema.gov</a>
-                </address>
+                </address> -->
 
-                <h3>{% blocktrans %}Voting In person{% endblocktrans %}</h3>
+                <h3>{% blocktrans %}Voting in Person{% endblocktrans %}</h3>
                 <ul>
                     {% with lookup='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/wheredoivotema/bal/MyElectionInfo.aspx">' %}
                     <li>{% blocktrans %}Look up your polling location {{ lookup }}here</a>.{% endblocktrans %}</li>
                     {% endwith %}
-                    <li>{% blocktrans %}On November 5th, go there and vote!{% endblocktrans %}</li>
+                    <li>{% blocktrans %}On November 2nd, go there and vote!{% endblocktrans %}</li>
                     <li>{% blocktrans %}An ID is not usually required, but sometimes it is &mdash; bring one if you have it, just in case.{% endblocktrans %}</li>
                 </ul>
 
-                <p><strong>Note</strong>: early voting is <em>not</em> available for municipal elections in Massachusetts!</p>
+                <p><strong>Good news!</strong> Early voting is <strong>now</strong> available for Cambridge municipal elections!</p>
+
+                <h3>Voting by Mail or Dropoff (Early)</h3>
+                <ul>
+                    <li>By now, you must have already requested your ballot and had it mailed to you</li>
+                    <li>Fill it out!</li>
+                    <li>Mail it in - it must <i>arrive</i> by November 2nd</li>
+                    <li>Drop it off at one of Cambridge's <a target="_blank" rel="noopener" href="https://cambridgegis.maps.arcgis.com/apps/View/index.html?appid=02cc8426c3774629b14d76f2283c1d60">secure ballot drop boxes</a></li>
+                    <li>Drop boxes are open  7am - 8pm</li>
+                    <li>The deadline for dropoff is Tuesday, November 2nd, 2021 at 8pm</li>
+                </ul>
+
+                <h3>Voting in Person (Early)</h3>
+                <ul>
+                    <li>Check the <a target="_blank" rel="noopener" href="https://www.cambridgema.gov/Departments/electioncommission/earlyvoting/earlyvotinginperson">early voting schedule and location list</a></li>
+                    <li>Go to the location most convenient for you</li>
+                    <li>vote!</li>
+                </ul>
+
             </div>
 
             <div class="col-md-12">
@@ -294,6 +312,10 @@
                     {% with eleidx='<a target="_blank" rel="noopener" href="http://www.sec.state.ma.us/ele/eleidx.htm">' %}
                     {% blocktrans %}{{ eleidx }}Massachusetts Elections Division</a>{% endblocktrans %}
                     {% endwith %}
+                </p>
+
+                <p>
+                    <a target="_blank" rel="noopener" href="https://www.cambridgema.gov/Departments/electioncommission/news/2021/09/cambridgemunicipalelectionvotingoptions">Cambridge 2021 Voting Options Guide</a>
                 </p>
             </div>
 
