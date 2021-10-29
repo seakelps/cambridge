@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-21 20:34-0400\n"
+"POT-Creation-Date: 2021-10-29 00:38-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,181 +18,204 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: overview/templates/overview/index.html:42
+#: overview/templates/overview/index.html:37
 msgid "Vote Local!"
 msgstr "¡Vote Cerca!"
 
-#: overview/templates/overview/index.html:44
+#: overview/templates/overview/index.html:39
 #, fuzzy, python-format
 #| msgid ""
 #| "We're compiling everything we can find about 2017 Cambridge City Council "
 #| "candidates - from op-eds to campaign finance records. Determine who "
 #| "deserves your #1, #2, or #9 vote - you've got %(num_runners)s options!"
 msgid ""
-"We're compiling everything we can find about %(year)s Cambridge City Council "
-"candidates - from op-eds to campaign finance records. Determine who deserves "
-"your #1, #2, or #9 vote - you've got %(num_runners)s options!"
+"We're compiling everything we can find about the %(year)s Cambridge City "
+"Council candidates&mdash;from op-eds to campaign finance records&mdash;to "
+"help you determine who deserves your #1, #2, or #9 vote on November 2nd, "
+"2021. You've got %(num_runners)s options!"
 msgstr ""
 "Estámos recopilando todo lo que encontramos sobre los candidatos del Consejo "
 "Municipal %(year)s &mdash; hace op-eds a estados de cuenta. Averigüe quién "
 "merece su voto #1, #2, or #9 &mdash; tiene su #%(num_runners)s de opciónes!"
 
-#: overview/templates/overview/index.html:48
-#: overview/templates/overview/index.html:53
-msgid "Build Your Ballot"
-msgstr ""
-
-#: overview/templates/overview/index.html:49
-#: overview/templates/overview/index.html:52
+#: overview/templates/overview/index.html:43
 msgid "Explore Candidates"
 msgstr "Explorar los Candidatos"
 
-#: overview/templates/overview/index.html:73
-msgid "Voting"
-msgstr "Votando"
+#: overview/templates/overview/index.html:56
+#, fuzzy
+#| msgid "Explore Candidates"
+msgid "Where the Candidates Are"
+msgstr "Explorar los Candidatos"
 
-#: overview/templates/overview/index.html:74
+#: overview/templates/overview/index.html:76
+msgid "Build Your Ballot"
+msgstr ""
+
+#: overview/templates/overview/index.html:82
+#, fuzzy
+#| msgid "Comparing"
+msgid "Compare"
+msgstr "Comparar"
+
+#: overview/templates/overview/index.html:95
+#, fuzzy
+#| msgid "Votes"
+msgid "Vote"
+msgstr "Votos"
+
+#: overview/templates/overview/index.html:96
 msgid ""
 "Cambridge has a ranked choice system, which might be different than what "
 "you're used to. We've made an illustration of how it works as well as "
 "collected other explanations."
 msgstr ""
 
-#: overview/templates/overview/index.html:76
+#: overview/templates/overview/index.html:98
 msgid "Learn More"
 msgstr "Aprender Más"
 
-#: overview/templates/overview/index.html:77
+#: overview/templates/overview/index.html:99
 msgid "Register to vote"
 msgstr "Registrarse como votante"
 
-#: overview/templates/overview/index.html:81
-msgid "Exploring"
+#: overview/templates/overview/index.html:106
+#, fuzzy
+#| msgid "Exploring"
+msgid "Explore"
 msgstr "Explorar"
 
-#: overview/templates/overview/index.html:82
-msgid ""
-"In addition to the individual candidate views, we're providing tools to see "
-"the whole field. Click on the Explore tab in the above navigation bar, or "
-"start with:"
+#: overview/templates/overview/index.html:107
+msgid "Tools to see the whole field."
 msgstr ""
-"Además de ver cada candidato, estámos desarrollando herramienta para ver la "
-"totalidad del conjunto."
 
-#: overview/templates/overview/index.html:84
+#: overview/templates/overview/index.html:109
 msgid "Votes"
 msgstr "Votos"
 
-#: overview/templates/overview/index.html:85
+#: overview/templates/overview/index.html:110
 msgid "Finance"
 msgstr "Estados De Cuenta"
 
-#: overview/templates/overview/index.html:89
-msgid "Comparing"
-msgstr "Comparar"
+#: templates/how_to_vote.html:19
+#, fuzzy
+#| msgid "Voting"
+msgid "About Voting"
+msgstr "Votando"
 
-#: templates/how_to_vote.html:20
-msgid "About the System"
-msgstr "Acerca de la Systema"
-
-#: templates/how_to_vote.html:23
+#: templates/how_to_vote.html:21
 msgid ""
 "Cambridge has a ranked choice system, which might be different than what "
 "you&rsquo;re used to.\n"
-"                    See our interactive presentation on the right to learn "
-"more about Ranked Choice Voting."
+"                Essentially, you'll be given a ballot with a list of the "
+"candidates, and you will fill in a bubble for the rank you want to give them."
 msgstr ""
 
-#: templates/how_to_vote.html:26
-msgid "Other resources"
+#: templates/how_to_vote.html:206
+msgid ""
+"See our interactive presentation to learn more about Ranked Choice Voting."
 msgstr ""
 
-#: templates/how_to_vote.html:30
-msgid "Cambridge Election Commission Homepage"
-msgstr ""
-
-#: templates/how_to_vote.html:45
+#: templates/how_to_vote.html:222
 #, fuzzy
 #| msgid "Register to vote"
-msgid "How to Register and Vote"
+msgid "How to Register"
 msgstr "Registrarse como votante"
 
-#: templates/how_to_vote.html:49
-#, python-format
-msgid "Read more from the %(eleidx)sMassachusetts Elections Division</a>"
-msgstr ""
-
-#: templates/how_to_vote.html:56
-msgid "Registration (deadline Oct. 18)"
-msgstr ""
-
-#: templates/how_to_vote.html:58
+#: templates/how_to_vote.html:225
 msgid ""
 "\n"
-"                    Although there was a recent court decision against "
-"Massachusetts's registration deadline, \n"
-"                    it seems unlikely that same-day registration will be "
-"implemented for this election season. \n"
-"                    That means <strong>you should register to vote before "
-"the original deadline &mdash; October 18th.</strong>\n"
-"                "
-msgstr ""
+"                        <strong>The deadline to register to vote has passed."
+"</strong>\n"
+"                    "
+msgstr "El plazo de registrarse para votar ha vencido."
 
-#: templates/how_to_vote.html:64
+#: templates/how_to_vote.html:230
 msgid "There are a couple of ways to register:"
 msgstr ""
 
-#: templates/how_to_vote.html:67
+#: templates/how_to_vote.html:233
 #, python-format
 msgid ""
 "If you have a valid driver&rsquo;s license, learner&rsquo;s permit, or non-"
 "driver ID issued by Massachusetts, you can %(online)sregister online</a>."
 msgstr ""
 
-#: templates/how_to_vote.html:71
+#: templates/how_to_vote.html:237
 #, python-format
 msgid ""
 "If you do not, you must register by mail or in person &mdash; details "
 "%(how_reg)shere</a>."
 msgstr ""
 
-#: templates/how_to_vote.html:78
+#: templates/how_to_vote.html:249
+#, fuzzy
+#| msgid "Register to vote"
+msgid "How to Vote"
+msgstr "Registrarse como votante"
+
+#: templates/how_to_vote.html:252
 msgid "Voting Absentee"
 msgstr ""
 
-#: templates/how_to_vote.html:81
+#: templates/how_to_vote.html:255
 #, python-format
 msgid ""
 "\n"
 "                    You must fill out the absentee %(absentee)sform</a> and "
 "turn it into the Clerk&rsquo;s office.\n"
 "                    You can turn it in by mail, in person, by fax, or as a "
-"scanned attached to an email by 12 p.m. on the day before the election:\n"
+"scanned attached to an email by 12 p.m. on the day before the election. (So "
+"you must vote absentee before Monday, November 4 at 12 noon.)\n"
 "                "
 msgstr ""
 
-#: templates/how_to_vote.html:88
+#: templates/how_to_vote.html:262
 msgid "Election Commission"
 msgstr ""
 
-#: templates/how_to_vote.html:97
+#: templates/how_to_vote.html:271
 msgid "Voting In person"
 msgstr ""
 
-#: templates/how_to_vote.html:100
+#: templates/how_to_vote.html:274
 #, python-format
 msgid "Look up your polling location %(lookup)shere</a>."
 msgstr ""
 
-#: templates/how_to_vote.html:102
-msgid "On November 7th, go there and vote!"
+#: templates/how_to_vote.html:276
+msgid "On November 5th, go there and vote!"
 msgstr ""
 
-#: templates/how_to_vote.html:103
+#: templates/how_to_vote.html:277
 msgid ""
 "An ID is not usually required, but sometimes it is &mdash; bring one if you "
 "have it, just in case."
 msgstr ""
+
+#: templates/how_to_vote.html:285
+msgid "Other resources"
+msgstr ""
+
+#: templates/how_to_vote.html:289
+msgid "Cambridge Election Commission Homepage"
+msgstr ""
+
+#: templates/how_to_vote.html:295
+#, python-format
+msgid "%(eleidx)sMassachusetts Elections Division</a>"
+msgstr ""
+
+#~ msgid ""
+#~ "In addition to the individual candidate views, we're providing tools to "
+#~ "see the whole field. Click on the Explore tab in the above navigation "
+#~ "bar, or start with:"
+#~ msgstr ""
+#~ "Además de ver cada candidato, estámos desarrollando herramienta para ver "
+#~ "la totalidad del conjunto."
+
+#~ msgid "About the System"
+#~ msgstr "Acerca de la Systema"
 
 #~ msgid ""
 #~ "Coming soon: the ability to compare and rank candidates - and save your "
