@@ -86,7 +86,7 @@
                             {% endif %}
                             {% if object.ordered %}<span class="counter"></span>{% endif %}
                             <a href="{% url "candidate_detail" annotation.candidate.slug %}">
-                                {{ annotation.candidate.fullname}}
+                                {{ annotation.candidate.fullname }}
                             </a>
 
                             {% if mine %}
@@ -99,7 +99,7 @@
                         </div>
 
                         {% if mine %}
-                        <form class="d-none update_note" action="{% url "update_note" annotation.candidate.slug %}" method="POST">
+                        <form class="d-none update_note py-1" action="{% url "update_note" annotation.candidate.slug %}" method="POST">
                             {% crispy annotation.comment_form %}
                         </form>
                         {% endif %}

@@ -40,7 +40,8 @@ async function postCandidates(candidates) {
 
 
 $('.toggle-comment-form, .update_note [name=cancel]').on('click', function(event) {
-    let candidate = event.target.closest("candidate")
+    event.preventDefault();
+    let candidate = event.target.closest("candidate");
 
     let stored_comment = candidate.querySelector(".stored_comment");
     let comment_form = candidate.querySelector(".update_note");
