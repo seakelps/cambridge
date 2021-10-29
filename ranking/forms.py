@@ -41,7 +41,7 @@ class NoteForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field("comment", rows=4),
+            Field("comment", rows=4, placeholder="This candidate..."),
             FormActions(
                 Submit("save", "Save changes"),
                 Button("cancel", "Cancel"),
@@ -51,6 +51,9 @@ class NoteForm(forms.ModelForm):
 
     class Meta:
         fields = ["comment"]
+        labels = {
+            "comment" : "",
+        }
         model = RankedElement
 
 
