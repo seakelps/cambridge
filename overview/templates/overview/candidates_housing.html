@@ -102,7 +102,7 @@
         <div class="row">
             <div class="col-12">
                 <h4>Housing Situation</h4>
-                <p>Some candidates rent a two-bedroom apartment, others own multi-million dollar single-family homes. </p>
+                <p>Some candidates rent a two-bedroom apartment, others own multi-million dollar single-family homes.</p>
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead class="thead-dark">
@@ -123,6 +123,16 @@
                                 <td>
                                     {% if candidate.housing_status == 'rent' %}
                                         <i class="fa fa-check text-success"></i>
+                                    {% endif %}
+                                    {% if candidate.housing_status_note %}
+                                        <a  class="fa fa-info-circle"
+                                            href="#!"
+                                            data-toggle="popover"
+                                            data-trigger="focus"
+                                            data-html="true"
+                                            data-container="body"
+                                            data-content="{{ candidate.housing_status_note }}">
+                                        </a>
                                     {% endif %}
                                 </td>
                                 <td>
