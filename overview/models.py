@@ -264,6 +264,9 @@ class Quote(models.Model):
 
 # ex., The Boston Globe; Cambridge Day
 class PressOutlet(models.Model):
+    class Meta:
+        ordering = ('name', )
+
     name = models.CharField(max_length=50)
     homepage = models.URLField(max_length=100, blank=True)
     logo = models.URLField(blank=True, max_length=150)
@@ -274,6 +277,9 @@ class PressOutlet(models.Model):
 
 # ex., "Record number of women running for Council"
 class PressArticle(models.Model):
+    class Meta:
+        ordering = ('date', )
+
     pressoutlet = models.ForeignKey(PressOutlet, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100, blank=True)

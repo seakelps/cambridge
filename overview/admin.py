@@ -1,6 +1,7 @@
 import re
 from django.contrib import admin
 from django.forms import ModelForm
+from django.db.models import Max
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
@@ -171,6 +172,9 @@ class OrganizationAdmin(admin.ModelAdmin):
         return bool(obj.logo)
     has_logo.boolean = True
 
+    # def get_queryset(self, request):
+    #     return Organization.objects.annotate(endorsed_on=Max())
+
 
 class PressOutletAdmin(admin.ModelAdmin):
     readonly_fields = ['has_logo']
@@ -184,8 +188,15 @@ class PressOutletAdmin(admin.ModelAdmin):
 
 class PressArticleAdmin(admin.ModelAdmin):
     search_fields = ['pressoutlet__name', 'title']
+    list_display = ['get_outlet', 'title', 'date']
     inlines = [PressArticleCandidateInline]
     list_select_related = True
+
+    def get_queryset(self, request):
+        return PressArticle.objects.select_related('pressoutlet')
+
+    def get_outlet(self, obj):
+        return obj.pressoutlet.name
 
 
 class PastContributionAdmin(admin.ModelAdmin):
