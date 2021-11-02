@@ -569,7 +569,7 @@
                     <span>View my ballot</span>
                 </a>
 
-		<a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" {% if object.hide or not object.running or object in my_candidates %}href="#"{% else %}href="{% url "append_to_ballot" object.slug %}"{% endif %}>
+                <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" {% if object.hide or not object.running or object in my_candidates %}href="#"{% else %}href="{% url "append_to_ballot" object.slug %}"{% endif %}>
                     {% if object.hide or not object.is_running %}
                     <span>Candidate not running</span>
                     {% elif object in my_candidates %}
