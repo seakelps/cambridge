@@ -6,6 +6,7 @@ from .settings import *
 DEBUG = False
 
 DATABASES['default'].update(dj_database_url.config(conn_max_age=500))
+ADMINS = [(email, email) for email in os.getenv('DJANGO_ADMINS', '').split() if email]
 
 # TODO: This is a hack while waiting for
 if os.environ.get('CI'):
@@ -13,22 +14,6 @@ if os.environ.get('CI'):
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'HerokuCI'
     }
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-        },
-    },
-}
 
 # sending emails
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
