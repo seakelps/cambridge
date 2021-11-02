@@ -245,6 +245,15 @@ class AppendToList(TestCase):
         self.assertEqual(user.rankedlist.annotated_candidates.get(order=0).candidate, candidate0)
         self.assertEqual(user.rankedlist.annotated_candidates.get(order=1).candidate, candidate1)
 
+    def test_append_not_running(self):
+        user = factories.RankedList().owner
+        self.client.force_login(user)
+
+        candidate = overview_factories.Candidate(is_running=False)
+        self.client.post(reverse("append_to_ballot", args=[candidate.slug]))
+
+        self.assertFalse(user.rankedlist.annotated_candidates.count())
+
 
 class MakePublic(TestCase):
     def test_make_public(self):
