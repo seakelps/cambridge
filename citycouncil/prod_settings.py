@@ -50,4 +50,4 @@ CSRF_COOKIE_SECURE = True
 #     'whitenoise.middleware.WhiteNoiseMiddleware',
 # ]
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), logging=False)
