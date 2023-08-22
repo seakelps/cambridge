@@ -9,6 +9,7 @@ django-fullurl
 markdown
 factory_boy
 django-crispy-forms
+crispy-bootstrap4
 django-registration
 django_heroku
 pyyaml  # support fixture file
