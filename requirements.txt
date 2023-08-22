@@ -1,3 +1,5 @@
+# after updating, run `docker compose build web` to install dependencies
+
 dj-database-url
 Django
 gunicorn
