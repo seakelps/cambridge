@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
 
@@ -19,12 +19,12 @@ class CandidateSitemap(Sitemap):
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^candidates/$', views.CandidateList.as_view(), name='all'),
-    url(r'^candidates/(?P<slug>[-\w]+)/$', views.CandidateDetail.as_view(), name='candidate_detail'),
-    url(r'^candidates/housing', views.CandidateHousingList.as_view(), name="housing_comparison"),
+    re_path(r'^$', views.index, name='index'),
+    re_path(r'^candidates/$', views.CandidateList.as_view(), name='all'),
+    re_path(r'^candidates/(?P<slug>[-\w]+)/$', views.CandidateDetail.as_view(), name='candidate_detail'),
+    re_path(r'^candidates/housing', views.CandidateHousingList.as_view(), name="housing_comparison"),
 
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': {
+    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': {
             "candidates": CandidateSitemap
         }},
         name='django.contrib.sitemaps.views.sitemap')
