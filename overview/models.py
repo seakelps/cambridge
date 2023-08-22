@@ -13,7 +13,7 @@ class Candidate(models.Model):
 
     ##### section: campaign, free text about
     # very very basics
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     fullname = models.CharField(max_length=200)
     shortname = models.CharField(max_length=200)
 
@@ -57,11 +57,11 @@ class Candidate(models.Model):
 
     # the status of the candidate can be determined from these
     # two boolean fields
-    is_running = models.NullBooleanField()
+    is_running = models.BooleanField(null=True)
     is_incumbent = models.BooleanField(default=0)
 
     # manual hiding
-    hide = models.NullBooleanField(default=0)
+    hide = models.BooleanField(default=0, null=True)
 
     # number of #1 votes last election?
     # round elected in in last election?
@@ -106,7 +106,7 @@ class Candidate(models.Model):
         ('unknown',    'Unknown')
     )
     housing_type = models.CharField(max_length=40, choices=housing_type_choices, default='u', blank=True)
-    housing_is_a_landlord = models.NullBooleanField()
+    housing_is_a_landlord = models.BooleanField(null=True)
 
     ## demographics
     # birth
@@ -117,7 +117,7 @@ class Candidate(models.Model):
     education = models.CharField(help_text="like what degrees they have", max_length=200, blank=True)
 
     # lifestyle
-    is_cyclist = models.NullBooleanField()
+    is_cyclist = models.BooleanField(null=True)
     job = models.CharField(max_length=200, blank=True)
 
     # and more
@@ -137,8 +137,8 @@ class Candidate(models.Model):
         help_text="previous election results from Davi",
         blank=True, null=True)
 
-    checked_ocpf_for_contributions = models.NullBooleanField()
-    checked_fec_for_contributions = models.NullBooleanField()
+    checked_ocpf_for_contributions = models.BooleanField(null=True)
+    checked_fec_for_contributions = models.BooleanField(null=True)
 
     ##### finally, defined functions
     @cached_property
@@ -339,7 +339,7 @@ class CandidateSpecificProposalStance(models.Model):
     specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
 
     display = models.BooleanField(default=True)
-    simple_yes_no = models.NullBooleanField(default=True)
+    simple_yes_no = models.BooleanField(default=True, null=True)
     # todo: NullBooleanField
 
     support_degree_choices = (
