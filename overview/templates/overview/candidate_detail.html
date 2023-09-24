@@ -227,45 +227,133 @@
     </section>
 </div>
 
-<section class="container">
-    <div class="row">
-        <div class="col-12">
-            <h2>Endorsements</h2>
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>What are their housing positions?</h2>
+            </div>
         </div>
 
-        <div class="col-12">
-            {% if endorsements or object.endorsements_link %}
-            <dd>
-            <ul class="endorsements text-left">
-                {% spaceless %}
-                {% for endorsement in endorsements %}
-                <li>
-                    {% if endorsement.link %}
-                    <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                        {{ endorsement.organization.name }}
-                    </a>
-                    {% else %}
-                    <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                        {# div because display:block for new lines #}
-                        {{ endorsement.organization.name }}
-                    </span>
-                    {% endif %}
-                </li>
+        <div class="row">
+            <div class="col-12">
+                {% for quote in candidate.quote_set.all %}
+                {% if quote.display_housing %}
+                <blockquote>
+                    <p>{{ quote.quote|markdown }}</p>
+                    <footer>
+                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                    </footer>
+                </blockquote>
+                {% endif %}
                 {% endfor %}
-                {% endspaceless %}
-            </ul>
-
-            {% if object.endorsements_link %}
-            <hr/>
-            <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
-            {% endif %}
-            </dd>
-            {% endif %}
+            </div>
         </div>
-    </div>
-</section>
+
+        {% if specific_housing_support %}
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Proposal</th>
+                            <th>Supported?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for housing in specific_housing_support %}
+                        <tr>
+                            <td>
+                                {% if housing.specific_proposal.shortname %}
+                                    {{ housing.specific_proposal.shortname }}
+                                {% else %}
+                                    {{ housing.specific_proposal.fullname }}
+                                {% endif %}
+
+                                {% if housing.specific_proposal.blurb %}
+                                <a  class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ housing.specific_proposal.blurb }}">
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if housing.simple_yes_no == True %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% elif housing.simple_yes_no == False %}
+                                    <i class="fa fa-ban text-danger"></i>
+                                {% else %}
+                                    <span class="text-muted">n/a</span>
+                                {% endif %}
+
+                                {% if housing.blurb %}
+                                <a  class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ housing.blurb }}">
+                                </a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+    </section>
+</div>
 
 <div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Local Endorsements</h2>
+            </div>
+
+            <div class="col-12">
+                {% if endorsements or object.endorsements_link %}
+                <dd>
+                <ul class="endorsements text-left">
+                    {% spaceless %}
+                    {% for endorsement in endorsements %}
+                    <li>
+                        {% if endorsement.link %}
+                        <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                            {{ endorsement.organization.name }}
+                        </a>
+                        {% else %}
+                        <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
+                            {# div because display:block for new lines #}
+                            {{ endorsement.organization.name }}
+                        </span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                    {% endspaceless %}
+                </ul>
+
+                {% if object.endorsements_link %}
+                <hr/>
+                <a href="{{ object.endorsements_link }}" target="_blank">View on their site &raquo;</a>
+                {% endif %}
+                </dd>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+
+<div>
     <section class="container">
         <div class="row">
             <div class="col-12">
@@ -327,25 +415,27 @@
 </section>
 {% endcomment %}
 
-<section class="container" id="quotes">
-    <div class="row">
-        <div class="col-12">
-            <h2 id="">Quotes</h2>
-            {% for quote in candidate.quote_set.all %}
-            {% if quote.display %}
-            <blockquote>
-                <p>{{ quote.quote|markdown }}</p>
-                <footer>
-                    {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
-                </footer>
-            </blockquote>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
 <div class="bg-gray">
+    <section class="container" id="quotes">
+        <div class="row">
+            <div class="col-12">
+                <h2 id="">Quotes</h2>
+                {% for quote in candidate.quote_set.all %}
+                {% if quote.display %}
+                <blockquote>
+                    <p>{{ quote.quote|markdown }}</p>
+                    <footer>
+                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                    </footer>
+                </blockquote>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+
+<div>
     <section class="container" id="press">
         <div class="row">
             <div class="col-12">
@@ -415,60 +505,62 @@
     </section>
 </div>
 
-<section class="container">
-    <div class="row">
-        <div class="col">
-            <h2>Campaign finance</h2>
-            <h3>How much the candidate has raised and spent</h3>
-            <div class="stats">
-                <div>
-                    <strong>
-                        {% if latest_bank_report.ending_balance_display is not None %}
-                        ${{ latest_bank_report.ending_balance_display|floatformat:0|intcomma }}
-                        {% else %}
-                        <i>TBD</i>
-                        {% endif %}
-                    </strong>
-                    <div>Current balance</div>
-                </div>
-                <div>
-                    <strong>
-                        {% if money_2021_start is not None %}
-                        ${{ money_2021_start|floatformat:0|intcomma }}
-                        {% else %}
-                        <i>TBD</i>
-                        {% endif %}
-                    </strong>
-                    <div>Balance at the start of 2021</div>
-                </div>
-                <div>
-                    <i class="fa fa-plus text-success"></i>
-                    <strong>
-                        {% if money_2021_raised is not None %}
-                        ${{ money_2021_raised|floatformat:0|intcomma }}
-                        {% else %}
-                        <i>TBD</i>
-                        {% endif %}
-                    </strong>
-                    <div>Raised in 2021</div>
-                </div>
-                <div>
-                    <i class="fa fa-minus text-danger"></i>
-                    <strong>
-                        {% if money_2021_spent is not None %}
-                        ${{ money_2021_spent|floatformat:0|intcomma }}
-                        {% else %}
-                        <i>TBD</i>
-                        {% endif %}
-                    </strong>
-                    <div>Spent in 2021</div>
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <h2>Campaign finance</h2>
+                <h3>How much the candidate has raised and spent</h3>
+                <div class="stats">
+                    <div>
+                        <strong>
+                            {% if latest_bank_report.ending_balance_display is not None %}
+                            ${{ latest_bank_report.ending_balance_display|floatformat:0|intcomma }}
+                            {% else %}
+                            <i>TBD</i>
+                            {% endif %}
+                        </strong>
+                        <div>Current balance</div>
+                    </div>
+                    <div>
+                        <strong>
+                            {% if money_2021_start is not None %}
+                            ${{ money_2021_start|floatformat:0|intcomma }}
+                            {% else %}
+                            <i>TBD</i>
+                            {% endif %}
+                        </strong>
+                        <div>Balance at the start of 2021</div>
+                    </div>
+                    <div>
+                        <i class="fa fa-plus text-success"></i>
+                        <strong>
+                            {% if money_2021_raised is not None %}
+                            ${{ money_2021_raised|floatformat:0|intcomma }}
+                            {% else %}
+                            <i>TBD</i>
+                            {% endif %}
+                        </strong>
+                        <div>Raised in 2021</div>
+                    </div>
+                    <div>
+                        <i class="fa fa-minus text-danger"></i>
+                        <strong>
+                            {% if money_2021_spent is not None %}
+                            ${{ money_2021_spent|floatformat:0|intcomma }}
+                            {% else %}
+                            <i>TBD</i>
+                            {% endif %}
+                        </strong>
+                        <div>Spent in 2021</div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 
-<div class="bg-gray sticky-footer shadow">
+<div class="sticky-footer shadow bg-white">
     <section class="container">
         <div class="row">
             <div class="col" id="my-rankings-footer">
@@ -477,7 +569,7 @@
                     <span>View my ballot</span>
                 </a>
 
-                <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" href="{% url "append_to_ballot" object.slug %}">
+                <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" {% if object.hide or not object.is_running or object in my_candidates %}href="#"{% else %}href="{% url "append_to_ballot" object.slug %}"{% endif %}>
                     {% if object.hide or not object.is_running %}
                     <span>Candidate not running</span>
                     {% elif object in my_candidates %}

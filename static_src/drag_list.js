@@ -11,6 +11,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     var el = document.getElementById('ranked_list');
     var sortable = Sortable.create(el, {
         sort: true,
+        handle: ".handle",
 
         onUpdate: async function (evt) {
             let slugs = Array.from(document.querySelectorAll('candidate')).map(x => x.dataset.slug);
@@ -39,7 +40,8 @@ async function postCandidates(candidates) {
 
 
 $('.toggle-comment-form, .update_note [name=cancel]').on('click', function(event) {
-    let candidate = event.target.closest("candidate")
+    event.preventDefault();
+    let candidate = event.target.closest("candidate");
 
     let stored_comment = candidate.querySelector(".stored_comment");
     let comment_form = candidate.querySelector(".update_note");
@@ -74,4 +76,23 @@ $('.update_note').on('submit', function(event) {
 
     comment_form.classList.add('d-none');
     comment_form.classList.remove('d-block');
+});
+
+
+$('candidate [name=delete]').on('click', function(event) {
+    event.preventDefault();
+    let candidate = event.currentTarget.closest("candidate");
+    let slug = candidate.dataset.slug;
+    let delete_url = candidate.dataset.delete_url;
+
+    const response = fetch(delete_url, {
+        method: "POST",
+        credentials: 'same-origin',
+        headers: {
+            'X-CSRFToken': Cookies.get('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+    });
+
+    candidate.remove();
 });

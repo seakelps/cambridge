@@ -1,3 +1,6 @@
+"""
+for voting records scraped from mix of cambridge data portal and acela for descriptions
+"""
 import tqdm
 import json
 from django.core.management.base import BaseCommand
@@ -13,7 +16,7 @@ class Command(BaseCommand):
                 row.pop('acelatitle', ''),
                 row['aceladescription'],
                 row['resolutionshorttitle'],
-            ]))
+            ])).strip()
 
         with open('static/voting_record.prepared.json', 'w') as fp:
-            json.dump({'data': voting_history}, fp)
+            json.dump({'data': voting_history}, fp, indent=2)

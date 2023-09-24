@@ -53,6 +53,9 @@ body#all_candidates
 body#candidate_detail
   @import "candidate"
 
+body#candidate_comparison
+  @import "candidate"
+
 body#welcome
   @import "welcome"
 
@@ -100,6 +103,7 @@ body#welcome
 // background options
 @include bg-variant(".bg-gray", #eeeeef)
 @include bg-variant(".bg-black", $black)
+@include bg-variant(".bg-white", #ffffff)
 
 .dl-horizontal
   @extend .row

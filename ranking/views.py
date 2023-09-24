@@ -1,5 +1,6 @@
 import logging
 from typing import List
+from django.http.response import HttpResponseBadRequest
 from django.views.generic import DetailView, UpdateView, ListView
 # from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -109,7 +110,10 @@ def my_last_edit(request):
 
 # @require_POST
 def append_to_ballot(request, slug):
-    candidate = Candidate.objects.get(is_running=True, hide=False, slug=slug)
+    try:
+        candidate = Candidate.objects.get(is_running=True, hide=False, slug=slug)
+    except Candidate.DoesNotExist:
+        return HttpResponseBadRequest()
 
     ballot = RankedList.objects.for_request(request, force=True)
     max_order = ballot.annotated_candidates.aggregate(Max("order"))['order__max']
