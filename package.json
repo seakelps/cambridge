@@ -2,6 +2,9 @@
   "name": "cambridge",
   "version": "1.0.0",
   "description": "This is a django project!",
+  "engines": {
+    "node": "10.9"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --mode=development",
