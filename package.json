@@ -30,6 +30,7 @@
     "lodash": "^4.17.21",
     "marked": "^0.7.0",
     "node-sass": "^4.13.1",
+    "node": "^10.9.0",
     "popper.js": "^1.15.0",
     "regenerator-runtime": "^0.13.3",
     "sass-loader": "^8.0.0",
