@@ -15,6 +15,14 @@ DATABASES = {
 DEBUG = True
 
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+
+    # outside of docker-compose volume
+    "/static_compiled/",
+]
+
+
 class InvalidString(str):
     def __mod__(self, other):
         from django.template.base import TemplateSyntaxError
