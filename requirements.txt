@@ -1,7 +1,9 @@
+# after updating, run `docker compose build web` to install dependencies
+
 dj-database-url
-Django==2.2.24
+Django
 gunicorn
-psycopg2==2.8.6
+psycopg2==2.9.7
 whitenoise
 requests
 Pillow
@@ -9,5 +11,7 @@ django-fullurl
 markdown
 factory_boy
 django-crispy-forms
+crispy-bootstrap4
 django-registration
 django_heroku
+pyyaml  # support fixture file

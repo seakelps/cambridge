@@ -1,7 +1,7 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from . import views
 
 urlpatterns = [
-    url(r'^full/$', views.VotingRecord.as_view(), name='full_history'),
+    re_path(r'^full/$', views.VotingRecord.as_view(), name='full_history'),
 ]

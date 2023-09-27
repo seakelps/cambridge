@@ -3,8 +3,7 @@
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 """
-from django.urls import path
-from django.conf.urls import include, url
+from django.urls import re_path, include
 from django.contrib import admin
 
 from django.conf import settings
@@ -25,20 +24,20 @@ class HowToVote(TemplateView):
 
 
 urlpatterns = [
-    url(r'^', include('overview.urls')),
-    url(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
-    url(r'^how-to-vote/$', HowToVote.as_view(), name="how_to_vote"),
-    url(r'^history/', include('voting_history.urls')),
-    url(r'^finance/', include('campaign_finance.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^ranking/', include('ranking.urls')),
+    re_path(r'^', include('overview.urls')),
+    re_path(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
+    re_path(r'^how-to-vote/$', HowToVote.as_view(), name="how_to_vote"),
+    re_path(r'^history/', include('voting_history.urls')),
+    re_path(r'^finance/', include('campaign_finance.urls')),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^ranking/', include('ranking.urls')),
 
     # to support having users - login, logout, password management
-    url(r'^accounts/', include('django_registration.backends.one_step.urls')),
-    url(r'^accounts/', include('django.contrib.auth.urls')),
+    re_path(r'^accounts/', include('django_registration.backends.one_step.urls')),
+    re_path(r'^accounts/', include('django.contrib.auth.urls')),
 
     # annoyed django doesn't support this by default
-    url('^404/$', TemplateView.as_view(template_name="404.html")),
+    re_path('^404/$', TemplateView.as_view(template_name="404.html")),
 ]
 
 if settings.DEBUG:

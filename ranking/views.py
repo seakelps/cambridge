@@ -175,7 +175,7 @@ class MyList(_MyBallotMixin, UpdateView):
         return NoteForm(instance=ranked_element)
 
     def get(self, request):
-        if self.request.is_ajax():
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             self.object = self.get_object()
             return JsonResponse(self.get_json(self.object))
         else:
@@ -183,7 +183,7 @@ class MyList(_MyBallotMixin, UpdateView):
 
     def form_invalid(self, form):
         ret = super().form_invalid(form)
-        if self.request.is_ajax():
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             logging.warning("uh oh", extra={"errors": form.errors})
             return JsonResponse(form.errors.as_json())
         else:
@@ -191,7 +191,7 @@ class MyList(_MyBallotMixin, UpdateView):
 
     def form_valid(self, form):
         ret = super().form_valid(form)
-        if self.request.is_ajax():
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return JsonResponse(self.get_json(form.instance))
         else:
             return ret
@@ -235,7 +235,7 @@ class UpdateNote(UpdateView):
 
     def form_valid(self, form):
         ret = super().form_valid(form)
-        if self.request.is_ajax():
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
             return HttpResponse("OK", status=200)
         else:
             return ret
