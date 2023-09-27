@@ -8,7 +8,7 @@ COPY ./webpack.config.js /app/
 RUN npm install
 RUN npm run build_release
 
-FROM python:3.10
+FROM python:3.11
 WORKDIR /code
 COPY --from=static /app/static_compiled /static_compiled/
 
