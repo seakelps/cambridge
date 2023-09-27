@@ -6,7 +6,7 @@ from .models import Candidate
 
 class CandidateListTest(TestCase):
     def test_sanity(self):
-        Candidate.objects.create(fullname="R McRunner", slug="runner")
+        Candidate.objects.create(fullname="R McRunner", slug="adriane-musgrave")
         Candidate.objects.create(is_running=False, fullname="N McStationary", slug="non-runner")
 
         resp = self.client.get(reverse("all"))

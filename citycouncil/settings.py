@@ -16,6 +16,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
 # Quick-start development settings - unsuitable for production
@@ -53,8 +54,10 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'fullurl',
     'crispy_forms',
+    'crispy_bootstrap4'
 ]
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
@@ -185,10 +188,3 @@ LOGOUT_REDIRECT_URL = '/'
 # by commenting out EMAIL_BACKEND and copying all the production email settings.
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 GOOGLE_EMBED_API_KEY = os.getenv('GOOGLE_EMBED_API_KEY')
-
-django_heroku.settings(
-    locals(),
-    databases=not os.environ.get('CI'),
-    staticfiles=not os.environ.get('CI'),
-    test_runner=False,  # doesn't work with sqlite3
-)
