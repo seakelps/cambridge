@@ -49,7 +49,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
-static_compiled/
 node_nodules/
 
 # mac
