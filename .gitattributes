@@ -1,2 +1,3 @@
 *.csv binary
 static/*.json binary
+static_compiled/* binary
