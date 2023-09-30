@@ -146,10 +146,6 @@ class ByOrganization(TemplateView):
             for candidate in candidates.prefetch_related("endorsement_set__organization")
         }
 
-        for endorsement_list in endorsements.values():
-            if not endorsement_list:
-                endorsement_list.append("Union")
-
         context["organizations"] = list(sorted(set(org_name for org_list in endorsements.values() for org_name in org_list)))
 
         context["endorsement_table"] = [
