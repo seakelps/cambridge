@@ -6,7 +6,7 @@ function createTable() {
 
   var dt = new DataTable("#myTable", {
     ordering: false,
-    dom: "<'#filterBar.py-5'B>t",
+    dom: "<'#filterBar.py-4'B>t",
     buttons: [
       {
         extend: "columnsToggle",
