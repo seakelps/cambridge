@@ -1,9 +1,18 @@
 function createTable() {
+  $.fn.dataTable.Buttons.defaults.dom.button.className = 'btn btn-light';
+  $.fn.dataTable.Buttons.defaults.dom.split.action.className = 'btn btn-light';
+  $.fn.dataTable.Buttons.defaults.dom.split.dropdown.className = 'btn btn-light';
+  $.fn.dataTable.Buttons.defaults.dom.container.className = 'btn-group-toggle';
+
   var dt = new DataTable("#myTable", {
-    paging: false,
-    searching: false,
-    info: false,
     ordering: false,
+    dom: "<'#filterBar.py-5'B>t",
+    buttons: [
+      {
+        extend: "columnsToggle",
+        columns: ".col-organization",
+      }
+    ],
     columnDefs: [
       {
         targets: 0,
@@ -17,9 +26,15 @@ function createTable() {
       },
       {
         targets: 1,
+        visible: true,
         render: (data, type, row) => {
           return `<a href=${row[2]}>${data}</a>`;
         }
+      },
+      {
+        // detail url
+        targets: [2],
+        visible: false,
       },
       {
         targets: "col-organization",
@@ -35,12 +50,19 @@ function createTable() {
         },
       },
       {
-        // detail url
-        targets: [2],
+        // first few organizations
+        targets: [3, 4, 5],
+        visible: true,
+      },
+      {
+        // rest of organizations
+        targets: "_all",
         visible: false,
       },
     ],
   });
+
+  $("#filterBar").prepend("<label>Click an organization to view the candidates that they've endorsed</label>");
 
   document.querySelectorAll('#org-toggle > label').forEach((el) => {
     el.addEventListener('click', function (e) {

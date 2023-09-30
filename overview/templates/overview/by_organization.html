@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+{{ block.super }}
+<link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap4.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+<script defer src="{% static "by_organization.js" %}"></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="container ">
+  <table id="myTable" class="table table-striped" width="100%">
+    <thead class="thead-dark">
+      <tr>
+        <th></th>
+        <!-- <th>On Ballot</th> -->
+        <th>Candidate</th>{# ideally first column with colspan=2 but has datatables error #}
+        <th>Url</th>
+        {% for org_name in organizations %}
+          <th class="col-organization">{{ org_name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for row in endorsement_table %}
+        <tr>
+          {% for column in row %}
+            <td>{{ column }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+
+{% block endscripts %}
+<script>
+    $(document).ready(function() {
+        by_organization.createTable();
+    });
+</script>
+{% endblock %}
