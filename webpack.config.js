@@ -7,7 +7,8 @@ module.exports = {
   entry: {
     main: './static_src/main.js',
     drag_list: './static_src/drag_list.js',
-    voter_history: './static_src/voter_history.js'
+    voter_history: './static_src/voter_history.js',
+    by_organization: './static_src/by_organization.js'
   },
   output: {
     path: path.resolve(__dirname, 'static_compiled'),
