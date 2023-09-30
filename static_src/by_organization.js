@@ -6,6 +6,8 @@ function createTable() {
 
   var dt = new DataTable("#myTable", {
     ordering: false,
+    paging: false,
+    searching: false,
     dom: "<'#filterBar.py-4'B>t",
     buttons: [
       {
