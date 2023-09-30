@@ -62,7 +62,7 @@ function createTable() {
     ],
   });
 
-  $("#filterBar").prepend("<label>Click an organization to view the candidates that they've endorsed</label>");
+  $("#filterBar").prepend("<label>Click an organization below to show or hide their endorsements in the table.</label>");
 
   document.querySelectorAll('#org-toggle > label').forEach((el) => {
     el.addEventListener('click', function (e) {
