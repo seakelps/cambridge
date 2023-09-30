@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
+from django.urls import reverse
 
 from .models import Candidate, SpecificProposal, CandidateSpecificProposalStance
 from .utils import get_candidate_locations
@@ -124,5 +125,37 @@ class CandidateHousingList(ListView):
         context['specific_proposals'] = specific_proposals
         context['cp_map_yes_no'] = cp_map_yes_no
         context['cp_map_blurb'] = cp_map_blurb
+
+        return context
+
+
+class ByOrganization(TemplateView):
+    template_name = "overview/by_organization.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        candidates = Candidate.objects.filter(is_running=True, hide=False)
+
+        endorsements = {
+            candidate: [
+                endorsement.organization.name 
+                for endorsement in candidate.endorsement_set.all()
+                if endorsement.display
+            ]
+            for candidate in candidates.prefetch_related("endorsement_set__organization")
+        }
+
+        context["organizations"] = list(sorted(set(org_name for org_list in endorsements.values() for org_name in org_list)))
+
+        context["endorsement_table"] = [
+            [
+                reverse("append_to_ballot", args=[candidate.slug]),
+                candidate.fullname,
+                candidate.get_absolute_url(),
+                *[org_name in endorsed_orgs for org_name in context["organizations"]]
+            ]
+            for candidate, endorsed_orgs in endorsements.items()
+        ]
 
         return context
