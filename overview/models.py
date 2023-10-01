@@ -2,6 +2,7 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils import timezone
 from django.db.models import Sum
 
 
@@ -206,6 +207,9 @@ class Questionnaire(models.Model):
     name = models.CharField(max_length=40, unique=True)
     topic = models.CharField(max_length=40)
     icon_class = models.CharField(max_length=40, help_text='icon class like "fa-tree"')
+    organization = models.ForeignKey(Organization, null=True, blank=True, on_delete=models.SET_NULL)
+    year = models.IntegerField(null=True, default=2023)
+
     description = models.CharField(max_length=500)
     link = models.URLField(max_length=500, blank=True)
     display = models.BooleanField(default=False)
