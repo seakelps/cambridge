@@ -1,7 +1,7 @@
 import re
 from django.contrib import admin
 from django.forms import ModelForm
-from django.db.models import Max
+from django.db.models import Max, ManyToOneRel, ManyToManyRel
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
@@ -124,7 +124,7 @@ class HasBlurb(admin.SimpleListFilter):
 
 
 class CandidateAdmin(admin.ModelAdmin):
-
+    ordering = ("hide", "-is_running", "fullname")
     fieldsets = [
         (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun', 'short_history_text']}),
         ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'endorsements_link']}),
@@ -138,7 +138,14 @@ class CandidateAdmin(admin.ModelAdmin):
     ]
 
     readonly_fields = ('headshot', 'has_blurb')
-    list_display = ('fullname', 'is_running', 'is_incumbent', 'cpf_id', 'has_blurb')
+    list_display = (
+        'fullname',
+        'is_running',
+        'is_incumbent',
+        'cpf_id',
+        'content_score',
+        'related_score',
+    )
     list_filter = ('is_running', 'is_incumbent', HasWebsite, HasBlurb, 'hide')
     prepopulated_fields = {"slug": ("fullname",)}
 
@@ -157,9 +164,39 @@ class CandidateAdmin(admin.ModelAdmin):
         return u"<img src='{0}' alt='{0}'>".format(instance.headshot)
     headshot.allow_tags = True
 
+    @admin.display(boolean=True)
     def has_blurb(self, instance):
         return bool(instance.blurb)
-    has_blurb.boolean = True
+
+    @admin.display
+    def content_score(self, instance):
+        missing = 0
+        total = 0
+
+        for field in instance._meta.fields:
+            if field.null or field.blank:
+                total += 1
+
+                field_value = getattr(instance, field.attname)
+                if field_value in (None, ""):
+                    missing += 1
+
+        return "{:.0%}".format(1 - missing / total)
+
+    @admin.display
+    def related_score(self, instance):
+        missing = 0
+        total = 0
+
+        for field in instance._meta.get_fields(include_hidden=True):
+            print(type(field))
+            if isinstance(field, (ManyToOneRel, ManyToManyRel)):
+                total += 1
+                if not getattr(instance, field.get_accessor_name()).exists():
+                    missing += 1
+
+        if total > 0:
+            return "{:.0%}".format(1 - missing / total)
 
 
 class OrganizationAdmin(admin.ModelAdmin):
