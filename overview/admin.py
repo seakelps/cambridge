@@ -242,7 +242,10 @@ class PastContributionAdmin(admin.ModelAdmin):
 
 class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = [QuestionnaireResponseInline]
+    ordering = ("-year", )
     search_fields = ['name']
+    list_display = ['name', 'organization', 'year']
+    list_filter = ('year', )
 
 
 class QuoteAdmin(admin.ModelAdmin):
