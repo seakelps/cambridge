@@ -432,9 +432,9 @@ p:last-of-type {
                 <h2 id="">Quotes</h2>
                 {% for quote in candidate.quote_set.all %}
                 {% if quote.display %}
-                <blockquote>
-                    <p>{{ quote.quote|markdown }}</p>
-                    <footer>
+                <blockquote class="blockquote">
+                    {{ quote.quote|markdown }}
+                    <footer class="blockquote-footer">
                         {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
                     </footer>
                 </blockquote>
