@@ -21,6 +21,11 @@
     height: 350px;
     width: 100%;
 }
+
+p:last-of-type {
+    /* make citation appear immediately below */
+    margin-bottom: 0px;
+}
 </style>
 
 
@@ -129,7 +134,6 @@
             {{ candidate.blurb|markdown }}
         </div>
 
-
         <div class="col-12 text-center">
             <dl class="dl-horizontal">
                 <dt>Incumbent</dt>
@@ -235,21 +239,6 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-12">
-                {% for quote in candidate.quote_set.all %}
-                {% if quote.display_housing %}
-                <blockquote>
-                    <p>{{ quote.quote|markdown }}</p>
-                    <footer>
-                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
-                    </footer>
-                </blockquote>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-
         {% if specific_housing_support %}
         <div class="row">
             <div class="col-12">
@@ -309,6 +298,27 @@
             </div>
         </div>
         {% endif %}
+
+        <div class="row">
+            {% if candidate.housing_blurb %}
+                <div class="col-12 py-3">
+                    {{ candidate.housing_blurb|markdown }}
+                </div>
+            {% endif %}
+
+            <div class="col-12">
+                {% for quote in candidate.quote_set.all %}
+                {% if quote.display_housing %}
+                <blockquote class="blockquote">
+                    {{ quote.quote|markdown }}
+                    <footer class="blockquote-footer">
+                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                    </footer>
+                </blockquote>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
 
     </section>
 </div>
@@ -422,9 +432,9 @@
                 <h2 id="">Quotes</h2>
                 {% for quote in candidate.quote_set.all %}
                 {% if quote.display %}
-                <blockquote>
-                    <p>{{ quote.quote|markdown }}</p>
-                    <footer>
+                <blockquote class="blockquote">
+                    {{ quote.quote|markdown }}
+                    <footer class="blockquote-footer">
                         {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
                     </footer>
                 </blockquote>

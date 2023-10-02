@@ -43,4 +43,3 @@ def yt_direct(video_url):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
-
