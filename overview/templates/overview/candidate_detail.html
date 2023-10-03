@@ -2,6 +2,7 @@
 {% load yt_direct markdown truncate_website from overview %}
 {% load static %}
 {% load humanize %}
+{% load overview %}
 
 {% block body_id %}candidate_detail{% endblock %}
 
@@ -15,6 +16,8 @@
     var initialLocations = {{ candidate_locations|safe }};
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
+
+{{ schema_org|json_ld }} 
 
 <style>
 #map {

@@ -1,10 +1,12 @@
 from markdown import markdown
 from django.utils.safestring import mark_safe
 from urllib.parse import urlparse
+import json
 
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.template.defaulttags import register
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 register = template.Library()
@@ -43,3 +45,9 @@ def yt_direct(video_url):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+
+@register.filter(is_safe=True)
+def json_ld(value):
+    dumped = json.dumps(value, indent=4, cls=DjangoJSONEncoder)
+    return mark_safe('<script type="application/ld+json">{}</script>'.format(dumped))

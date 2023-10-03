@@ -88,6 +88,22 @@ class CandidateDetail(DetailView):
             .filter(display=True, specific_proposal__display=True)\
             .select_related("specific_proposal").order_by("specific_proposal__order")
 
+        context['schema_org'] = {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "name": f"Learn more about {self.object.fullname}",
+            "abstract": self.object.short_history_text,
+            "image": self.object.headshot,
+            "about": {
+                "@type": "Person",
+                "name": self.object.fullname,
+                "birthdate": self.object.date_of_birth,
+                "jobTitle": self.object.job,
+                "image": self.request.build_absolute_uri(self.object.headshot),
+                "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
+            }
+        }
+
         return context
 
 
