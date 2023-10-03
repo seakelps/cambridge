@@ -42,7 +42,7 @@
     "terser-webpack-plugin": "^4",
     "underscore": "^1.12.1",
     "url-loader": "^2.1.0",
-    "webpack": "^4.40"
+    "webpack": "^4.46"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
