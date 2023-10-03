@@ -33,8 +33,10 @@ class Candidate(models.Model):
     email = models.EmailField(blank=True, default="")
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
-    facebook = models.CharField(max_length=100, help_text="Candidate facebook page", blank=True, default="")
-    twitter = models.CharField(max_length=100, blank=True, default="")
+    facebook = models.CharField(max_length=100, help_text="Candidate facebook page, not including facebook url", blank=True, default="")
+    twitter = models.CharField(max_length=100, blank=True, default="", help_text="twitter, not including twitter url")
+    linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
+    instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
 
     # voting
     voter_id_number = models.CharField(max_length=100, blank=True, default="")
@@ -167,6 +169,16 @@ class Candidate(models.Model):
             return "https://twitter.com/{}".format(self.twitter)
 
     @property
+    def linkedin_url(self):
+        if self.linkedin:
+            return "https://www.linkedin.com/in/{}".format(self.twitter)
+
+    @property
+    def instagram_url(self):
+        if self.instagram:
+            return "https://www.instagram.com/p/{}".format(self.instagram)
+
+    @property
     def total_contributions_less_fees(self):
         contributions = PastContribution.objects.filter(candidate=self).exclude(note__contains='access fee').aggregate(Sum('amount'))
         return contributions["amount__sum"]
@@ -175,6 +187,19 @@ class Candidate(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=40, unique=True)
     logo = models.URLField(blank=True, max_length=150)
+
+    website = models.URLField(blank=True, default="")
+    facebook = models.CharField(max_length=100, help_text="facebook page, not including facebook url", blank=True, default="")
+    twitter = models.CharField(max_length=100, blank=True, default="", help_text="twitter, not including twitter url")
+    linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
+    instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
+
+    is_local = models.BooleanField(blank=True, default=None)
+    is_union = models.BooleanField(blank=True, default=None)
+    have_page = models.BooleanField(default=False)
+
+    private_notes = models.TextField(blank=True)
+    blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
 
     def __str__(self):
         return self.name
@@ -304,11 +329,26 @@ class PressArticleCandidate(models.Model):
     display = models.BooleanField(default=False)
 
 
-# do I want to deal with this now? I think no, but leave it for future...
-# class ProposalType(models.Model):
-#     choices = ////
-#     classification = models.CharField(max_length=200)
-#
+proposal_type_choices = (
+    ('housing',  'Housing'),
+    ('biking',   'Biking'),
+    ('environment', 'Environment'),
+    ('climate', 'Climate Change'),
+    ('bigotry', 'Hatred/Bigotry'),
+    ('governance', 'Governance'),
+    ('equity', 'Diversity, Equity, and Inclusion'),
+    ('other', 'Other'),
+    ('police', 'Law Enforcement'),
+    ('justice', 'Racial Justice'),
+    ('business', 'Business'),
+    ('education', 'Education'),
+    ('economy', 'Jobs and Economy'),
+    ('transportation', 'Transportation'),
+)
+
+
+class Topic(models.Model):
+    topic = models.CharField(max_length=200, choices=proposal_type_choices)
 
 
 # ex., "AHO 2017", "AHO 2019", "MMH", "2072 Mass Ave", "Frost Terrace"
@@ -321,8 +361,15 @@ class SpecificProposal(models.Model):
     blurb = models.TextField(blank=True)
     order = models.IntegerField(null=True, blank=True)
 
+    main_topic = models.CharField(max_length=200, blank=True, default="", choices=proposal_type_choices)
+
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
+
+
+class SpecificProposalTopic(models.Model):
+    specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
 # ex., "superinclusionary", "reduced parking", "no parking", etc.
@@ -333,8 +380,15 @@ class GeneralProposal(models.Model):
     initial_year = models.IntegerField(null=True, blank=True)
     private_notes = models.TextField(blank=True)
 
+    main_topic = models.CharField(max_length=200, blank=True, default="", choices=proposal_type_choices)
+
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
+
+
+class GeneralProposalTopic(models.Model):
+    specific_proposal = models.ForeignKey(GeneralProposal, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
 # ex., McGovern strongly supported the AHO
