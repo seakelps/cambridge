@@ -186,7 +186,7 @@ class Candidate(models.Model):
 
 class Organization(models.Model):
     name = models.CharField(max_length=40, unique=True)
-    short_name = models.CharField(max_length=10, unique=True, blank=True, default="")
+    short_name = models.CharField(max_length=10, unique=True, blank=True, null=True, default=None)
     logo = models.URLField(blank=True, max_length=150)
 
     website = models.URLField(blank=True, default="")
