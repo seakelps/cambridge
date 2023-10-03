@@ -56,12 +56,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='organization',
             name='is_local',
-            field=models.BooleanField(blank=True, default=None),
+            field=models.BooleanField(blank=True, default=None, null=True),
         ),
         migrations.AddField(
             model_name='organization',
             name='is_union',
-            field=models.BooleanField(blank=True, default=None),
+            field=models.BooleanField(blank=True, default=None, null=True),
         ),
         migrations.AddField(
             model_name='organization',
