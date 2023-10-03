@@ -195,8 +195,8 @@ class Organization(models.Model):
     linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
     instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
 
-    is_local = models.BooleanField(blank=True, default=None)
-    is_union = models.BooleanField(blank=True, default=None)
+    is_local = models.BooleanField(blank=True, default=None, null=True)
+    is_union = models.BooleanField(blank=True, default=None, null=True)
     have_page = models.BooleanField(default=False)
 
     private_notes = models.TextField(blank=True)
