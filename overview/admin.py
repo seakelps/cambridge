@@ -127,7 +127,7 @@ class CandidateAdmin(admin.ModelAdmin):
     ordering = ("hide", "-is_running", "fullname")
     fieldsets = [
         (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun', 'short_history_text']}),
-        ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'endorsements_link']}),
+        ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'linkedin', 'instagram', 'endorsements_link']}),
         ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party', 'cpf_id']}),
@@ -226,6 +226,8 @@ class PressOutletAdmin(admin.ModelAdmin):
 class PressArticleAdmin(admin.ModelAdmin):
     search_fields = ['pressoutlet__name', 'title']
     list_display = ['get_outlet', 'title', 'date']
+    search_fields = ['pressoutlet__name', 'title']
+    list_filter = ('pressoutlet__name', 'date',)
     inlines = [PressArticleCandidateInline]
     list_select_related = True
 
@@ -245,7 +247,7 @@ class QuestionnaireAdmin(admin.ModelAdmin):
     ordering = ("-year", )
     search_fields = ['name']
     list_display = ['name', 'organization', 'year']
-    list_filter = ('year', )
+    list_filter = ('year', 'organization',)
 
 
 class QuoteAdmin(admin.ModelAdmin):
@@ -257,8 +259,8 @@ class PressArticleCandidateAdmin(admin.ModelAdmin):
 
 
 class SpecificProposalAdmin(admin.ModelAdmin):
-    list_display = ['fullname', 'initial_year']
-    search_fields = ['fullname', 'shortname']
+    list_display = ['fullname', 'initial_year', 'main_topic']
+    search_fields = ['fullname', 'shortname', 'main_topic']
     inlines = [CandidateSpecificProposalStanceInline]
 
 
