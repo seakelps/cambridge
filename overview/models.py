@@ -172,7 +172,7 @@ class Candidate(models.Model):
     @property
     def linkedin_url(self):
         if self.linkedin:
-            return "https://www.linkedin.com/in/{}".format(self.twitter)
+            return "https://www.linkedin.com/in/{}".format(self.linkedin)
 
     @property
     def instagram_url(self):
@@ -182,7 +182,7 @@ class Candidate(models.Model):
     @property
     def nextdoor_url(self):
         if self.nextdoor:
-            return "https://www.nextdoor.com/p/{}".format(self.nextdoor)
+            return "https://nextdoor.com/profile/{}".format(self.nextdoor)
 
     @property
     def total_contributions_less_fees(self):
