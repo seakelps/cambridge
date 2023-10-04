@@ -37,6 +37,7 @@ class Candidate(models.Model):
     twitter = models.CharField(max_length=100, blank=True, default="", help_text="twitter, not including twitter url")
     linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
     instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
+    nextdoor = models.CharField(max_length=100, blank=True, default="")
 
     # voting
     voter_id_number = models.CharField(max_length=100, blank=True, default="")
@@ -179,6 +180,11 @@ class Candidate(models.Model):
             return "https://www.instagram.com/p/{}".format(self.instagram)
 
     @property
+    def nextdoor_url(self):
+        if self.nextdoor:
+            return "https://www.nextdoor.com/p/{}".format(self.nextdoor)
+
+    @property
     def total_contributions_less_fees(self):
         contributions = PastContribution.objects.filter(candidate=self).exclude(note__contains='access fee').aggregate(Sum('amount'))
         return contributions["amount__sum"]
@@ -311,7 +317,7 @@ class PressArticle(models.Model):
         ordering = ('date', )
 
     pressoutlet = models.ForeignKey(PressOutlet, on_delete=models.CASCADE)
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=200)
     author = models.CharField(max_length=100, blank=True)
     link = models.URLField(max_length=500, blank=True)
     date = models.DateField(blank=True, null=True)
