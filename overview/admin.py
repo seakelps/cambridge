@@ -127,7 +127,7 @@ class CandidateAdmin(admin.ModelAdmin):
     ordering = ("hide", "-is_running", "fullname")
     fieldsets = [
         (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun', 'short_history_text']}),
-        ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'linkedin', 'instagram', 'endorsements_link']}),
+        ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'linkedin', 'instagram', 'nextdoor', 'endorsements_link']}),
         ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party', 'cpf_id']}),
