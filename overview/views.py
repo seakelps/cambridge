@@ -92,7 +92,8 @@ class CandidateDetail(DetailView):
 
         context['schema_org'] = {
             "@context": "https://schema.org",
-            "@type": "ProfilePage",
+            # "@type": "ProfilePage",  # not supported by google
+            "@type": "Article",
             "name": f"Learn more about {self.object.fullname}",
             "abstract": self.object.short_history_text,
             "description": BeautifulSoup(self.object.blurb, features='html.parser').get_text(),
