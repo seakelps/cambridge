@@ -1,6 +1,7 @@
 from django.urls import re_path
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 
 
 from . import views
@@ -18,6 +19,22 @@ class CandidateSitemap(Sitemap):
         return obj.timestamp_modified
 
 
+class StaticViewSitemap(Sitemap):
+    changefreq = "weeklyn"
+    priority = 0.4
+
+    def items(self):
+        return [
+            reverse("about_us"),
+            reverse("by-organization"),
+            reverse("housing_comparison"),
+            reverse("how-to-vote"),
+        ]
+
+    def location(self, item):
+        return item
+
+
 urlpatterns = [
     re_path(r'^$', views.index, name='index'),
     re_path(r'^candidates/$', views.CandidateList.as_view(), name='all'),
@@ -26,7 +43,8 @@ urlpatterns = [
     re_path(r'^by-organization/$', views.ByOrganization.as_view(), name='by-organization'),
 
     re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': {
-            "candidates": CandidateSitemap
+            "candidates": CandidateSitemap,
+            "static": StaticViewSitemap,
         }},
         name='django.contrib.sitemaps.views.sitemap')
 ]
