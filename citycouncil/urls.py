@@ -25,6 +25,7 @@ class HowToVote(TemplateView):
 
 urlpatterns = [
     re_path(r'^', include('overview.urls')),
+    re_path(r'^robots.txt/$', TemplateView.as_view(template_name="robots.txt"), name="robots"),
     re_path(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
     re_path(r'^how-to-vote/$', HowToVote.as_view(), name="how_to_vote"),
     re_path(r'^history/', include('voting_history.urls')),
