@@ -177,7 +177,7 @@ class Candidate(models.Model):
     @property
     def instagram_url(self):
         if self.instagram:
-            return "https://www.instagram.com/p/{}".format(self.instagram)
+            return "https://www.instagram.com/{}".format(self.instagram)
 
     @property
     def nextdoor_url(self):
