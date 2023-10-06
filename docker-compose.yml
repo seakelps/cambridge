@@ -9,11 +9,20 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+  static:
+    build:
+      dockerfile: Dockerfile.static
+    command: watch
+    volumes:
+      - .:/static_src
+      - .:/static_compiled
   web:
-    build: .
+    build:
+      dockerfile: Dockerfile.django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
+      - /static_compiled/
     ports:
       - "8000:8000"
     environment:

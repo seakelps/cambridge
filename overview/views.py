@@ -1,4 +1,5 @@
 import json
+from bs4 import BeautifulSoup
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
 from django.urls import reverse
@@ -84,23 +85,27 @@ class CandidateDetail(DetailView):
             .filter(display=True)\
             .select_related("organization").all()
 
+        context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
         context['specific_housing_support'] = self.object.candidatespecificproposalstance_set\
             .filter(display=True, specific_proposal__display=True)\
             .select_related("specific_proposal").order_by("specific_proposal__order")
 
         context['schema_org'] = {
             "@context": "https://schema.org",
+            # "@type": "ProfilePage",  # not supported by google
             "@type": "Article",
             "name": f"Learn more about {self.object.fullname}",
             "abstract": self.object.short_history_text,
+            "description": BeautifulSoup(self.object.blurb, features='html.parser').get_text(),
             "image": self.object.headshot,
-            "about": {
+            "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
+            "thumbnailUrl": self.request.build_absolute_uri(self.object.headshot),
+            "mainEntity": {
                 "@type": "Person",
                 "name": self.object.fullname,
                 "birthdate": self.object.date_of_birth,
                 "jobTitle": self.object.job,
                 "image": self.request.build_absolute_uri(self.object.headshot),
-                "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
             }
         }
 

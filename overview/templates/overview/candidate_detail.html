@@ -10,6 +10,7 @@
 
 {% block head_extra %}
 <meta property="og:image" content="{{ candidate.headshot }}">
+<link rel="canonical" href="{{ canonical_url }}" />
 
 <script>
     // data for candidate_map.js
@@ -153,7 +154,7 @@ p:last-of-type {
                 {% if candidate.nextdoor %}
                 <li class="list-inline-item">
                     <a class="btn btn-nextdoor fa-button" rel="noopener" target="_blank" href="{{ candidate.nextdoor_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Nextdoor">
-                        <i class="fa-solid fa-house"></i>
+                        <i class="fas fa-home"></i>
                         <span>Nextdoor</span>
                     </a>
                 </li>
@@ -165,7 +166,7 @@ p:last-of-type {
         </div>
 
         <div class="col-12 text-center">
-            <dl class="dl-horizontal pt-5">
+            <dl class="dl-horizontal pt-4">
                 <dt>Incumbent</dt>
                 <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
 
