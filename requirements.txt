@@ -2,6 +2,7 @@
 
 dj-database-url
 Django
+bs4
 gunicorn
 psycopg2==2.9.7
 whitenoise

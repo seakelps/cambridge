@@ -1,4 +1,5 @@
 import json
+from bs4 import BeautifulSoup
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
 from django.urls import reverse
@@ -90,17 +91,19 @@ class CandidateDetail(DetailView):
 
         context['schema_org'] = {
             "@context": "https://schema.org",
-            "@type": "Article",
+            "@type": "ProfilePage",
             "name": f"Learn more about {self.object.fullname}",
             "abstract": self.object.short_history_text,
+            "description": BeautifulSoup(self.object.blurb, features='html.parser').get_text(),
             "image": self.object.headshot,
-            "about": {
+            "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
+            "thumbnailUrl": self.request.build_absolute_uri(self.object.headshot),
+            "mainEntity": {
                 "@type": "Person",
                 "name": self.object.fullname,
                 "birthdate": self.object.date_of_birth,
                 "jobTitle": self.object.job,
                 "image": self.request.build_absolute_uri(self.object.headshot),
-                "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
             }
         }
 
