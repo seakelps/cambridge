@@ -7,8 +7,6 @@
 {% block body_id %}candidate_comparison{% endblock %}
 
 {% block content %}
-
-
 <div>
     <section class="container">
         <div class="row">
@@ -23,7 +21,6 @@
     </section>
 </div>
 
-
 <div class="bg-gray">
     <section class="container">
         <div class="row">
@@ -31,7 +28,7 @@
                 <h4>Specific Proposals</h4>
                 <p>Actual bills, developments, or rules - not hypotheticals.</p>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped comparison-table">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Candidate</th>
@@ -61,7 +58,7 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    {{ candidate.fullname }}
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
                                 </td>
 
                                 {% for specific_proposal in specific_proposals %}
@@ -104,7 +101,7 @@
                 <h4>Housing Situation</h4>
                 <p>Some candidates rent a two-bedroom apartment, others own multi-million dollar single-family homes.</p>
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-striped comparison-table">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Candidate</th>
@@ -118,7 +115,7 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    {{ candidate.fullname }}
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
                                 </td>
                                 <td>
                                     {% if candidate.housing_status == 'rent' %}
