@@ -200,6 +200,7 @@ class Organization(models.Model):
     twitter = models.CharField(max_length=100, blank=True, default="", help_text="twitter, not including twitter url")
     linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
     instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
+    reddit = models.CharField(max_length=100, blank=True, default="", help_text="reddit community, not including reddit url")
 
     is_local = models.BooleanField(blank=True, default=None, null=True)
     is_union = models.BooleanField(blank=True, default=None, null=True)
