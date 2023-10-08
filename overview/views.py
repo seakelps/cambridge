@@ -48,7 +48,9 @@ class CandidateDetail(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
-        context['title'] = f'Learn More About {self.object.fullname}'
+        context['title'] = title = f'Learn More About {self.object.fullname}'
+        context["description"] = description = BeautifulSoup(markdown(self.object.blurb), features='html.parser').get_text()
+        context["headshot_url"] = headshot_url = self.request.build_absolute_uri(self.object.headshot)
 
         candidate_locations = get_candidate_locations(default_color='EEE')
         # </script> will make us sad still
@@ -95,18 +97,18 @@ class CandidateDetail(DetailView):
             "@context": "https://schema.org",
             # "@type": "ProfilePage",  # not supported by google
             "@type": "Article",
-            "name": f"Learn more about {self.object.fullname}",
+            "name": title,
             "abstract": self.object.short_history_text,
-            "description": BeautifulSoup(markdown(self.object.blurb), features='html.parser').get_text(),
-            "image": self.object.headshot,
+            "description": description,
+            "image": headshot_url,
             "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
-            "thumbnailUrl": self.request.build_absolute_uri(self.object.headshot),
+            "thumbnailUrl": headshot_url,
             "mainEntity": {
                 "@type": "Person",
                 "name": self.object.fullname,
                 "birthdate": self.object.date_of_birth,
                 "jobTitle": self.object.job,
-                "image": self.request.build_absolute_uri(self.object.headshot),
+                "image": headshot_url,
             }
         }
 
