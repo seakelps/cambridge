@@ -259,8 +259,9 @@ class PressArticleCandidateAdmin(admin.ModelAdmin):
 
 
 class SpecificProposalAdmin(admin.ModelAdmin):
-    list_display = ['fullname', 'initial_year', 'main_topic']
+    list_display = ['fullname', 'initial_year', 'main_topic', 'order']
     search_fields = ['fullname', 'shortname', 'main_topic']
+    list_filter = ('year', 'order',)
     inlines = [CandidateSpecificProposalStanceInline]
 
 
