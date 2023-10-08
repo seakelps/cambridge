@@ -9,8 +9,14 @@
 {% block meta_description %}{{ candidate.blurb|markdown|striptags }}{% endblock %}
 
 {% block head_extra %}
-<meta property="og:image" content="{{ candidate.headshot }}">
 <link rel="canonical" href="{{ canonical_url }}" />
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" value="{{ title }}" />
+<meta name="twitter:description" value="{{ description }}" />
+<meta name="twitter:image" content="{{ headshot_url }}"/>
+<meta name="og:title" value="{{ title }}" />
+<meta name="og:image" content="{{ headshot_url }}"/>
 
 <script>
     // data for candidate_map.js
