@@ -22,11 +22,19 @@ def index(request):
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(num_runners=num_runners).strip()
 
+    schema_org = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Cambridge Council Candidates",
+        "url": request.build_absolute_uri(),
+    }
+
     return render(request, 'overview/index.html', context={
         'title': "Vote Local!",
         'description': description,
         'num_runners': num_runners,
         'candidate_locations': json.dumps(list(get_candidate_locations().values())),
+        'schema_org': schema_org,
     })
 
 

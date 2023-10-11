@@ -2,6 +2,7 @@
 {% load fullurl %}
 {% load static %}
 {% load i18n %}
+{% load overview %}
 
 {% block title %}Cambridge Council Election 2023{% endblock %}
 
@@ -22,6 +23,9 @@
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
 <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}"></script>
+
+{{ schema_org|json_ld }} 
+
 {% endblock %}
 
 {% block content %}
