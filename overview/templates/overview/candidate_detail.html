@@ -364,30 +364,59 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>Local Endorsements</h2>
+                <h2>Endorsements</h2>
             </div>
 
             <div class="col-12">
                 {% if endorsements or object.endorsements_link %}
-                <dd>
-                <ul class="endorsements text-left">
-                    {% spaceless %}
-                    {% for endorsement in endorsements %}
-                    <li>
-                        {% if endorsement.link %}
-                        <a class="endorsement" href="{{ endorsement.link }}" target="_blank" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                            {{ endorsement.organization.name }}
-                        </a>
-                        {% else %}
-                        <span class="endorsement" data-toggle="tooltip" title="{{ endorsement.organization.name }} endorsed {{ object.shortname }}{% if endorsement.date %} on {{ endorsement.date|date }}{% endif %}">
-                            {# div because display:block for new lines #}
-                            {{ endorsement.organization.name }}
-                        </span>
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                    {% endspaceless %}
-                </ul>
+
+
+                    {% if endorsements %}
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Organization</th>
+                                    <th>Cambridge?</th>
+                                    <th>Union?</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for endorsement in endorsements %}
+                                <tr>
+                                    <td>
+                                        {{ endorsement.organization.name }}
+                                    </td>
+                                    <td>
+                                        {% if endorsement.organization.is_local == True %}
+                                        <i class="fa fa-check text-success"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if endorsement.organization.is_union == True %}
+                                        <i class="fa fa-check text-success"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if endorsement.link %}
+                                            <a class="endorsement" href="{{ endorsement.link }}" target="_blank">
+                                                {% if endorsement.date %}
+                                                    on {{endorsement.date|date}}
+                                                {% else %}
+                                                this year
+                                                {% endif %}
+                                            </a>
+                                        {% elif endorsement.date %}
+                                            on {{endorsement.date|date}}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    {% endif %}
 
                 {% if object.endorsements_link %}
                 <hr/>

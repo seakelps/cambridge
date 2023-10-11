@@ -88,9 +88,27 @@ class CandidateDetail(DetailView):
             .filter(display=True)\
             .select_related("organization").all()
 
+        # context['local_endorsements'] = self.object.endorsement_set\
+        #     .filter(display=True, organization__is_local=True, organization__is_union=False)\
+        #     .select_related("organization").all()
+
+        # context['union_endorsements'] = self.object.endorsement_set\
+        #     .filter(display=True, organization__is_union=True)\
+        #     .select_related("organization").all()
+
+        # context['other_endorsements'] = self.object.endorsement_set\
+        #     .filter(display=True)\
+        #     .exclude(organization__is_local=True, organization__is_union=True)\
+        #     .select_related("organization").all()
+
         context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
         context['specific_housing_support'] = self.object.candidatespecificproposalstance_set\
             .filter(display=True, specific_proposal__display=True, specific_proposal__main_topic="housing")\
+            .select_related("specific_proposal").order_by("specific_proposal__order")
+
+        context['specific_other_support'] = self.object.candidatespecificproposalstance_set\
+            .filter(display=True, specific_proposal__display=True)\
+            .exclude(specific_proposal__main_topic="housing")\
             .select_related("specific_proposal").order_by("specific_proposal__order")
 
         context['schema_org'] = {
