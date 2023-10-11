@@ -26,6 +26,7 @@ def index(request):
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Cambridge Council Candidates",
+        "alternateName": ["cambridgecouncilcandidates.com"],
         "url": request.build_absolute_uri(),
     }
 
