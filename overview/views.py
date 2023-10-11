@@ -90,7 +90,7 @@ class CandidateDetail(DetailView):
 
         context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
         context['specific_housing_support'] = self.object.candidatespecificproposalstance_set\
-            .filter(display=True, specific_proposal__display=True)\
+            .filter(display=True, specific_proposal__display=True, specific_proposal__main_topic="housing")\
             .select_related("specific_proposal").order_by("specific_proposal__order")
 
         context['schema_org'] = {
@@ -124,7 +124,7 @@ class CandidateHousingList(ListView):
         context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
 
         candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
-        specific_proposals = SpecificProposal.objects.exclude(display=False).order_by("order")
+        specific_proposals = SpecificProposal.objects.exclude(display=False).filter(main_topic="housing").order_by("order")
 
         candidate_specific_proposals = CandidateSpecificProposalStance.objects\
             .select_related('specific_proposal')\
