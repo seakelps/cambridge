@@ -206,8 +206,6 @@ p:last-of-type {
                 <br>
                 </dd>
                 {% endif %}
-
-
             </dl>
         </div>
     </div>
@@ -217,7 +215,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <section class="col">
-                <h2>Where does {{ candidate.shortname }} live?</h2>
+                <h2>Where {{candidate.shortname}} Lives</h2>
                 <dl class="dl-horizontal">
                     <dt>Address</dt>
                     <dd>
@@ -272,14 +270,14 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>What are their housing positions?</h2>
+                <h2>{{candidate.shortname}} on Housing</h2>
             </div>
         </div>
 
         {% if specific_housing_support %}
         <div class="row">
             <div class="col-12">
-                <table class="table">
+                <table class="table table-sm">
                     <thead class="thead-dark">
                         <tr>
                             <th>Proposal</th>
@@ -360,19 +358,109 @@ p:last-of-type {
     </section>
 </div>
 
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>{{candidate.shortname}} on Other Issues</h2>
+            </div>
+        </div>
+
+        {% if specific_proposal_support %}
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Proposal</th>
+                            <th>Supported?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proposal in specific_proposal_support %}
+                        <tr>
+                            <td>
+                                {% if proposal.specific_proposal.shortname %}
+                                    {{ proposal.specific_proposal.shortname }}
+                                {% else %}
+                                    {{ proposal.specific_proposal.fullname }}
+                                {% endif %}
+
+                                {% if proposal.specific_proposal.blurb %}
+                                <a  class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ proposal.blurb }}">
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if proposal.simple_yes_no == True %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% elif proposal.simple_yes_no == False %}
+                                    <i class="fa fa-ban text-danger"></i>
+                                {% else %}
+                                    <span class="text-muted">n/a</span>
+                                {% endif %}
+
+                                {% if proposal.blurb %}
+                                <a  class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ proposal.blurb }}">
+                                </a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            {% if candidate.proposal_blurb %}
+                <div class="col-12 py-3">
+                    {{ candidate.proposal_blurb|markdown }}
+                </div>
+            {% endif %}
+
+            <div class="col-12">
+                {% for quote in candidate.quote_set.all %}
+                {% if quote.display_proposal %}
+                <blockquote class="blockquote">
+                    {{ quote.quote|markdown }}
+                    <footer class="blockquote-footer">
+                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                    </footer>
+                </blockquote>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </section>
+</div>
+
 <div class="bg-gray">
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>Endorsements</h2>
+                <h2>Endorsements for {{candidate.shortname}}</h2>
             </div>
 
             <div class="col-12">
                 {% if endorsements or object.endorsements_link %}
-
-
                     {% if endorsements %}
-                        <table class="table">
+                        <table class="table table-sm">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Organization</th>
@@ -434,7 +522,7 @@ p:last-of-type {
         <div class="row">
             <div class="col-12">
                 <h2>Q&amp;A</h2>
-                <h3>Interviews with the candidate</h3>
+                <h3>Interviews with {{candidate.shortname}}</h3>
             </div>
 
             {% for response in questionnaire_responses %}
@@ -467,35 +555,11 @@ p:last-of-type {
     </section>
 </div>
 
-{% comment %}TODO convert from ruby to django implementation
-<section class="container">
-    <div class="row">
-        <div class="col-12">
-            <h2>Policy</h2>
-            <h3>Where the candidate stands on certain issues</h3>
-        </div>
-        <div class="col-12" id="policies">
-            {% for policy in candidate.candidate_policies %}
-            <div class="d-block">
-                <i class="<%= position.policy.icon_class %> fa fa-2x text-success"></i>
-                <strong class="montserrat">
-                    <%= position.policy.name %>
-                </strong>
-            </div>
-            <div class="text-left">
-                <%= position.position %>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endcomment %}
-
 <div class="bg-gray">
     <section class="container" id="quotes">
         <div class="row">
             <div class="col-12">
-                <h2 id="">Quotes</h2>
+                <h2 id="">Quotes by or about {{candidate.shortname}}</h2>
                 {% for quote in candidate.quote_set.all %}
                 {% if quote.display %}
                 <blockquote class="blockquote">
@@ -516,7 +580,7 @@ p:last-of-type {
         <div class="row">
             <div class="col-12">
                 <h2>Press</h2>
-                <h3>Articles about the candidate</h3>
+                <h3>Articles about or by {{candidate.shortname}}</h3>
             </div>
 
             {% for article_snippet in articles %}
@@ -586,7 +650,7 @@ p:last-of-type {
         <div class="row">
             <div class="col">
                 <h2>Campaign finance</h2>
-                <h3>How much the candidate has raised and spent</h3>
+                <h3>How much {{candidate.shortname}} has raised and spent</h3>
                 <div class="stats">
                     <div>
                         <strong>

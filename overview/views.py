@@ -93,7 +93,7 @@ class CandidateDetail(DetailView):
             .filter(display=True, specific_proposal__display=True, specific_proposal__main_topic="housing")\
             .select_related("specific_proposal").order_by("specific_proposal__order")
 
-        context['specific_other_support'] = self.object.candidatespecificproposalstance_set\
+        context['specific_proposal_support'] = self.object.candidatespecificproposalstance_set\
             .filter(display=True, specific_proposal__display=True)\
             .exclude(specific_proposal__main_topic="housing")\
             .select_related("specific_proposal").order_by("specific_proposal__order")
