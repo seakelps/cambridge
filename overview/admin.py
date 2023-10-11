@@ -201,7 +201,8 @@ class CandidateAdmin(admin.ModelAdmin):
 
 class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ['has_logo']
-    list_display = ('name', 'has_logo')
+    list_display = ('name', 'is_local', 'is_union', 'has_logo',)
+    list_filter = ('is_local', 'is_union',)
     inlines = [EndorsementInline]
     search_fields = ['name']
 
