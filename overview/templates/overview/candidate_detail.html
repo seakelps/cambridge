@@ -107,7 +107,7 @@ p:last-of-type {
 <section class="container">
     <div class="row">
         <div class="col-12">
-            <h2>More about {{candidate.fullname}}</h2>
+            <h2 id="more">More about {{candidate.fullname}}</h2>
         </div>
 
         <div class="col-12 text-center">
@@ -216,7 +216,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <section class="col">
-                <h2>Where {{candidate.shortname}} Lives</h2>
+                <h2 id="where">Where {{candidate.shortname}} Lives</h2>
                 <dl class="dl-horizontal">
                     <dt>Address</dt>
                     <dd>
@@ -271,7 +271,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>{{candidate.shortname}} on Housing</h2>
+                <h2 id="housing-policies">{{candidate.shortname}} on Housing</h2>
             </div>
         </div>
 
@@ -363,7 +363,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>{{candidate.shortname}} on Other Issues</h2>
+                <h2 id="policies">{{candidate.shortname}} on Other Issues</h2>
             </div>
         </div>
 
@@ -455,7 +455,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>Endorsements for {{candidate.shortname}}</h2>
+                <h2 id="endorsements">Endorsements for {{candidate.shortname}}</h2>
             </div>
 
             <div class="col-12">
@@ -522,7 +522,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2>Q&amp;A</h2>
+                <h2 id="q-and-a">Q&amp;A</h2>
                 <h3>Interviews with {{candidate.shortname}}</h3>
             </div>
 
@@ -560,7 +560,7 @@ p:last-of-type {
     <section class="container" id="quotes">
         <div class="row">
             <div class="col-12">
-                <h2 id="">Quotes by or about {{candidate.shortname}}</h2>
+                <h2 id="quotes">Quotes by or about {{candidate.shortname}}</h2>
                 {% for quote in candidate.quote_set.all %}
                 {% if quote.display %}
                 <blockquote class="blockquote">
@@ -580,7 +580,7 @@ p:last-of-type {
     <section class="container" id="press">
         <div class="row">
             <div class="col-12">
-                <h2>Press</h2>
+                <h2 id="press">Press</h2>
                 <h3>Articles about or by {{candidate.shortname}}</h3>
             </div>
 
@@ -650,7 +650,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col">
-                <h2>Campaign finance</h2>
+                <h2 id="finance">Campaign finance</h2>
                 <h3>How much {{candidate.shortname}} has raised and spent</h3>
                 <div class="stats">
                     <div>
