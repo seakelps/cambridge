@@ -15,6 +15,7 @@ class QuestionnaireResponseInline(admin.TabularInline):
 
 
 class PastContributionInline(admin.TabularInline):
+    ordering = ("-date",)
     model = PastContribution
     extra = 0
 
@@ -240,7 +241,9 @@ class PressArticleAdmin(admin.ModelAdmin):
 
 
 class PastContributionAdmin(admin.ModelAdmin):
-    inlines = [PastContributionInline]
+    ordering = ("-date",)
+    list_display = ['candidate', 'date', 'amount', 'recipient', 'level']
+    list_filter = ('date', 'candidate',)
 
 
 class QuestionnaireAdmin(admin.ModelAdmin):
@@ -281,3 +284,4 @@ admin.site.register(PressOutlet, PressOutletAdmin)
 admin.site.register(PressArticle, PressArticleAdmin)
 admin.site.register(SpecificProposal, SpecificProposalAdmin)
 admin.site.register(GeneralProposal, GeneralProposalAdmin)
+admin.site.register(PastContribution, PastContributionAdmin)
