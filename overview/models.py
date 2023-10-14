@@ -367,7 +367,7 @@ class SpecificProposal(models.Model):
     initial_year = models.IntegerField(null=True, blank=True)
     private_notes = models.TextField(blank=True)
     blurb = models.TextField(blank=True)
-    order = models.IntegerField(null=True, blank=True)
+    order = models.FloatField(null=True, blank=True)
 
     main_topic = models.CharField(max_length=200, blank=True, default="", choices=proposal_type_choices)
 

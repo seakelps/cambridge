@@ -264,7 +264,7 @@ class PressArticleCandidateAdmin(admin.ModelAdmin):
 
 
 class SpecificProposalAdmin(admin.ModelAdmin):
-    ordering = ("initial_year", 'main_topic', 'order')
+    ordering = ("display", 'main_topic', 'order')
     list_display = ['fullname', 'shortname', 'display', 'initial_year', 'main_topic', 'order']
     search_fields = ['fullname', 'shortname', 'main_topic']
     list_filter = ('initial_year', 'order',)
