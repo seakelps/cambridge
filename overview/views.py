@@ -68,7 +68,7 @@ class CandidateDetail(DetailView):
                 'main': True
             })
         context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
-        context['questionnaire_responses'] = self.object.questionnaireresponse_set\
+        context['questionnaire_responses'] = self.object.responses\
             .filter(display=True, questionnaire__display=True)\
             .select_related("questionnaire")
 
@@ -92,7 +92,7 @@ class CandidateDetail(DetailView):
             context['money_2021_spent'] = None
             context['money_2021_raised'] = None
 
-        context['endorsements'] = self.object.endorsement_set\
+        context['endorsements'] = self.object.endorsements\
             .filter(display=True)\
             .select_related("organization").all()
 
@@ -166,6 +166,51 @@ class CandidateHousingList(ListView):
         return context
 
 
+# a specific "spreadsheet-like" view of candidates' biking support
+class CandidateBikingList(ListView):
+    model = Candidate
+    template_name = 'overview/candidates_biking.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
+
+        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname").prefetch_related("endorsements")
+        specific_proposals = SpecificProposal.objects.exclude(display=False).filter(main_topic="biking").order_by("order")
+
+        candidate_specific_proposals = CandidateSpecificProposalStance.objects\
+            .select_related('specific_proposal')\
+            .select_related('candidate')\
+            .filter(specific_proposal__display=True)\
+            .filter(candidate__hide=False)\
+            .filter(candidate__is_running=True)
+
+        cp_map_yes_no = {}
+        cp_map_blurb = {}
+
+        for candidate in candidates:
+            cp_map_yes_no[candidate.id] = {}
+            cp_map_blurb[candidate.id] = {}
+
+        for candidate_proposal in candidate_specific_proposals:
+            cp_map_yes_no[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.simple_yes_no
+            cp_map_blurb[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.blurb
+
+        bike_group_yes_no = {}
+        mass_ave_group_yes_no = {}
+        for candidate in candidates:
+            bike_group_yes_no[candidate.id] = candidate.endorsed_by_group("Cambridge Bicycle Safety")
+            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group("Save Mass Ave")
+
+        context['candidates'] = candidates
+        context['specific_proposals'] = specific_proposals
+        context['cp_map_yes_no'] = cp_map_yes_no
+        context['cp_map_blurb'] = cp_map_blurb
+        context['candidate_bike_group_map'] = bike_group_yes_no
+        context['candidate_mass_group_map'] = mass_ave_group_yes_no
+
+        return context
+
+
 class ByOrganization(TemplateView):
     template_name = "overview/by_organization.html"
 
@@ -177,10 +222,10 @@ class ByOrganization(TemplateView):
         endorsements = {
             candidate: [
                 endorsement.organization.name 
-                for endorsement in candidate.endorsement_set.all()
+                for endorsement in candidate.endorsements.all()
                 if endorsement.display
             ]
-            for candidate in candidates.prefetch_related("endorsement_set__organization")
+            for candidate in candidates.prefetch_related("endorsements__organization")
         }
 
         context["organizations"] = list(sorted(set(org_name for org_list in endorsements.values() for org_name in org_list)))
