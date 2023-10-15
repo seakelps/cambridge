@@ -8,13 +8,41 @@ function createTable() {
     ordering: false,
     paging: false,
     searching: false,
-    dom: "<'#filterBar.py-4'B>t",
     buttons: [
       {
+        extend: 'spacer',
+        style: "d-block h5",
+        text: 'Local Organizations'
+      },
+      {
         extend: "columnsToggle",
-        columns: ".col-organization",
-      }
+        columns: ".col-local-organization",
+      },
+      {
+        extend: 'spacer',
+        style: 'd-block h5',
+        text: 'Unions'
+      },
+      {
+        extend: "columnsToggle",
+        columns: ".col-union-organization",
+      },
+      // {
+      //   text: "All Unions",
+      //   extend: "columnToggle",
+      //   columns: ".col-union-organization",
+      // },
+      {
+        extend: 'spacer',
+        style: 'd-block h5',
+        text: 'Other'
+      },
+      {
+        extend: "columnsToggle",
+        columns: ".col-other-organization",
+      },
     ],
+    dom: "<'#filterBar.py-4'B>t",
     columnDefs: [
       {
         targets: 0,
@@ -42,11 +70,11 @@ function createTable() {
         targets: "col-organization",
         render: (data, type, row) => {
           switch (data) {
-            case "True": 
+            case "True":
               return '<i class="fa fa-check text-success"></i>';
-            case "False": 
+            case "False":
               return '<i class="fa fa-ban text-danger"></i>';
-            default: 
+            default:
               return value;
           }
         },

@@ -26,6 +26,7 @@ def index(request):
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Cambridge Council Candidates",
+        "alternateName": ["cambridgecouncilcandidates.com"],
         "url": request.build_absolute_uri(),
     }
 
@@ -221,21 +222,28 @@ class ByOrganization(TemplateView):
 
         endorsements = {
             candidate: [
-                endorsement.organization.name 
+                endorsement.organization
                 for endorsement in candidate.endorsements.all()
                 if endorsement.display
             ]
             for candidate in candidates.prefetch_related("endorsements__organization")
         }
 
-        context["organizations"] = list(sorted(set(org_name for org_list in endorsements.values() for org_name in org_list)))
+        # extre column for "Any Union" handled in html
+        context["organizations"] = list(
+            sorted(
+                set(org for org_list in endorsements.values() for org in org_list),
+                key=lambda o: o.name
+            )
+        )
 
         context["endorsement_table"] = [
             [
                 reverse("append_to_ballot", args=[candidate.slug]),
                 candidate.fullname,
                 candidate.get_absolute_url(),
-                *[org_name in endorsed_orgs for org_name in context["organizations"]]
+                any(org.is_union for org in endorsed_orgs),
+                *[org in endorsed_orgs for org in context["organizations"]]
             ]
             for candidate, endorsed_orgs in endorsements.items()
         ]

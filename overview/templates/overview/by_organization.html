@@ -13,7 +13,6 @@
 <script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
 
 <script defer src="{% static "by_organization.js" %}"></script>
-
 {% endblock %}
 
 {% block content %}
@@ -25,8 +24,15 @@
         <!-- <th>On Ballot</th> -->
         <th>Candidate</th>{# ideally first column with colspan=2 but has datatables error #}
         <th>Url</th>
-        {% for org_name in organizations %}
-          <th class="col-organization">{{ org_name }}</th>
+        <th class="col-organization col-union-organization">Any Union</th>
+        {% for org in organizations %}
+            {% if org.is_local %}
+	            <th class="col-organization col-local-organization">{{ org.name }}</th>
+            {% elif org.is_union %}
+	            <th class="col-organization col-union-organization">{{ org.name }}</th>
+            {% else %}
+	            <th class="col-organization col-other-organization">{{ org.name }}</th>
+            {% endif %}
         {% endfor %}
       </tr>
     </thead>
