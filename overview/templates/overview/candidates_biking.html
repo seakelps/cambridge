@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+{% load get_item from overview %}
+
+{% block body_id %}candidate_comparison{% endblock %}
+
+{% block content %}
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Biking</h2>
+            </div>
+            <div class="col-12">
+                <p>High-profile bike lanes are popping up over the city - and high-profile fights.</p>
+                <p>Here is how the 2023 candidates compare.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>Specific Proposals</h4>
+                <p>Actual bills, developments, or rules - not hypotheticals.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                {% for specific_proposal in specific_proposals %}
+                                    <th>
+                                        {% if specific_proposal.shortname %}
+                                            {{ specific_proposal.shortname }}
+                                        {% else %}
+                                            {{ specific_proposal.fullname }}
+                                        {% endif %}
+
+                                        {% if specific_proposal.blurb %}
+                                        <a  class="fa fa-info-circle"
+                                            href="#!"
+                                            data-toggle="popover"
+                                            data-trigger="focus"
+                                            data-html="true"
+                                            data-container="body"
+                                            data-content="{{ specific_proposal.blurb }}">
+                                        </a>
+                                        {% endif %}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                </td>
+
+                                {% for specific_proposal in specific_proposals %}
+                                <td>
+                                        {% if cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == True %}
+                                            <i class="fa fa-check text-success"></i>
+                                        {% elif cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == False %}
+                                            <i class="fa fa-ban text-danger"></i>
+                                        {% else %}
+                                            <span class="text-muted">n/a</span>
+                                        {% endif %}
+
+                                        {% if cp_map_blurb|get_item:candidate.id|get_item:specific_proposal.id %}
+                                        <a  class="fa fa-info-circle"
+                                            href="#!"
+                                            data-toggle="popover"
+                                            data-trigger="focus"
+                                            data-html="true"
+                                            data-container="body"
+                                            data-content="{{ cp_map_blurb|get_item:candidate.id|get_item:specific_proposal.id }}"></a>
+                                        {% endif %}
+                                </td>
+                                {% endfor %}
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>Biking Pledge &amp Experience</h4>
+                <p>
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Bikes?</th>
+                                <th>Signed Pledge</th>
+                                <th>CBS Endorsed</th>
+                                <th>Save Mass Ave Endorsed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                </td>
+                                <td>
+                                    {% if candidate.is_cyclist %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate.signed_bike_pledge %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate_bike_group_map|get_item:candidate.id %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate_mass_group_map|get_item:candidate.id %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}
