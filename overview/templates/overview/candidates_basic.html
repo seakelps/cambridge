@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+{% load get_item from overview %}
+
+{% block body_id %}candidate_comparison{% endblock %}
+
+{% block content %}
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Candidate Information</h2>
+            </div>
+            <div class="col-12">
+                <p>Who's the youngest? The oldest? The longest-registered in Cambridge? The one who owns the most expensive house?</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>The Political Basics</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Photo</th>
+                                <th>Incumbent?</th>
+                                <th>Election History</th>
+                                <th>Party</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <p>
+                                        <i>
+                                            {% if candidate.pronoun == 'he' %}
+                                                He/Him
+                                            {% elif  candidate.pronoun == 'she'%}
+                                                She/Her
+                                            {% elif  candidate.pronoun == 'they'%}
+                                                They/Them
+                                            {% endif %}
+                                        </i>
+                                    </p>
+                                </td>
+
+                                <td>
+                                    <div class="avatar-and-icon">
+                                        <div style="position: relative">
+                                            <div class="avatar">
+                                                <picture>
+                                                <img
+                                                 class="rounded-circle avatar-circle img-fluid"
+                                                 height=100
+                                                 width=100
+                                                 src="{{ candidate.headshot }}"
+                                                 alt="{{ candidate.headshot_description }}">
+                                                </picture>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {% if candidate.is_incumbent %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ candidate.short_history_text }}
+                                </td>
+
+                                <td>
+                                    {{ candidate.political_party }}
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>Demographics</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Age</th>
+                                <th>Voter Reg</th>
+                                <th>Home Value</th>
+                                <th>Area</th>
+                                <th>Education</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <p>
+                                        <i>
+                                            {% if candidate.pronoun == 'he' %}
+                                                He/Him
+                                            {% elif  candidate.pronoun == 'she'%}
+                                                She/Her
+                                            {% elif  candidate.pronoun == 'they'%}
+                                                They/Them
+                                            {% endif %}
+                                        </i>
+                                    </p>
+                                </td>
+
+                                <td>
+                                    {{ candidate.date_of_birth|timesince }}
+                                </td>
+
+                                <td>
+                                    {% if candidate.date_of_registration %}
+                                        {{ candidate.date_of_registration }}
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate.housing_sell_value %}
+                                        {{ candidate.housing_sell_value }}
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {{ candidate.neighborhood }}
+                                </td>
+
+                                <td>
+                                    {{ candidate.education }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}
