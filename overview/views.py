@@ -174,7 +174,7 @@ class CandidateBikingList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname").prefetch_related("endorsements")
+        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
         specific_proposals = SpecificProposal.objects.exclude(display=False).filter(main_topic="biking").order_by("order")
 
         candidate_specific_proposals = CandidateSpecificProposalStance.objects\
