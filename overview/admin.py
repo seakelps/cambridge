@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.forms import ModelForm
 from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
-from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
+from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution, Degree
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
 from .models import SpecificProposal, GeneralProposal, CandidateSpecificProposalStance, CandidateGeneralProposalStance
 
@@ -61,6 +61,11 @@ class GeneralProposalInline(admin.TabularInline):
 class CandidateGeneralProposalStanceInline(admin.StackedInline):
     model = CandidateGeneralProposalStance
     autocomplete_fields = ['general_proposal']
+    extra = 0
+
+
+class DegreeInline(admin.TabularInline):
+    model = Degree
     extra = 0
 
 
@@ -127,7 +132,8 @@ class HasBlurb(admin.SimpleListFilter):
 class CandidateAdmin(admin.ModelAdmin):
     ordering = ("hide", "-is_running", "fullname")
     fieldsets = [
-        (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun', 'short_history_text']}),
+        (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun']}),
+        ('Running',               {'fields': ['short_history_text', 'n_time_running_for_council', 'n_terms_in_council', 'n_terms_on_school_committee', 'more_running_info' ]}),
         ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'linkedin', 'instagram', 'nextdoor', 'endorsements_link']}),
         ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
@@ -151,6 +157,7 @@ class CandidateAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("fullname",)}
 
     inlines = [
+        DegreeInline,
         EndorsementInline,
         CandidateSpecificProposalStanceInline,
         CandidateGeneralProposalStanceInline,

@@ -211,6 +211,26 @@ class CandidateBikingList(ListView):
         return context
 
 
+# a specific "spreadsheet-like" view of candidate basic info
+class CandidateBasicList(ListView):
+    model = Candidate
+    template_name = 'overview/candidates_basic.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
+
+        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+
+        # candidate_degrees = Degree.objects\
+        #     .select_related('candidate')\
+        #     .filter(candidate__hide=False)\
+        #     .filter(candidate__is_running=True)
+
+        context['candidates'] = candidates
+
+        return context
+
+
 class ByOrganization(TemplateView):
     template_name = "overview/by_organization.html"
 

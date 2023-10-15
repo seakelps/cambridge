@@ -29,6 +29,12 @@ class Candidate(models.Model):
     # it's not pretty but it works
     short_history_text = models.CharField(max_length=200, blank=True)
 
+    # trying to make the above more regular
+    n_time_running_for_council = models.IntegerField(blank=True, null=True)
+    n_terms_in_council = models.IntegerField(blank=True, null=True)
+    n_terms_on_school_committee = models.IntegerField(blank=True, null=True)
+    more_running_info = models.CharField(max_length=200, blank=True)
+
     # contact, campaign info
     email = models.EmailField(blank=True, default="")
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
@@ -87,6 +93,8 @@ class Candidate(models.Model):
     address = models.CharField(max_length=200, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+    neighborhood = models.CharField(max_length=200, blank=True)
+
     housing_choices = (
         ('rent', 'Rent'),
         ('own',  'Own'),
@@ -443,3 +451,10 @@ class CandidateGeneralProposalStance(models.Model):
     # blurbs
     private_notes = models.TextField(blank=True)
     blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
+
+
+class Degree(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="degrees")
+    letters = models.CharField(blank=True, help_text="BA, BS, MA, etc.")
+    subject = models.CharField(blank=True, help_text="History, etc.")
+    school = models.CharField(blank=True, help_text="Harvard, Tufts, etc.")
