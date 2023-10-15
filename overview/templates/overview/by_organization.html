@@ -25,8 +25,14 @@
         <!-- <th>On Ballot</th> -->
         <th>Candidate</th>{# ideally first column with colspan=2 but has datatables error #}
         <th>Url</th>
-        {% for org_name in organizations %}
-          <th class="col-organization">{{ org_name }}</th>
+        {% for org in organizations %}
+            {% if org.is_local %}
+	            <th class="col-local-organization">{{ org.name }}</th>
+            {% elif org.is_union %}
+	            <th class="col-union-organization">{{ org.name }}</th>
+            {% else %}
+	            <th class="col-organization">{{ org.name }}</th>
+            {% endif %}
         {% endfor %}
       </tr>
     </thead>

@@ -177,21 +177,26 @@ class ByOrganization(TemplateView):
 
         endorsements = {
             candidate: [
-                endorsement.organization.name 
+                endorsement.organization
                 for endorsement in candidate.endorsement_set.all()
                 if endorsement.display
             ]
             for candidate in candidates.prefetch_related("endorsement_set__organization")
         }
 
-        context["organizations"] = list(sorted(set(org_name for org_list in endorsements.values() for org_name in org_list)))
+        context["organizations"] = list(
+            sorted(
+                set(org for org_list in endorsements.values() for org in org_list),
+                key=lambda o: o.name
+            )
+        )
 
         context["endorsement_table"] = [
             [
                 reverse("append_to_ballot", args=[candidate.slug]),
                 candidate.fullname,
                 candidate.get_absolute_url(),
-                *[org_name in endorsed_orgs for org_name in context["organizations"]]
+                *[org in endorsed_orgs for org in context["organizations"]]
             ]
             for candidate, endorsed_orgs in endorsements.items()
         ]
