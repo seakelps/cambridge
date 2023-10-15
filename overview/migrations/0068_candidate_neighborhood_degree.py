@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
             name='Degree',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('letters', models.CharField(blank=True, help_text='BA, BS, MA, etc.')),
-                ('school', models.CharField(blank=True, help_text='Harvard, Tufts, etc.')),
+                ('letters', models.CharField(blank=True, max_length=200, help_text='BA, BS, MA, etc.')),
+                ('school', models.CharField(blank=True, max_length=200, help_text='Harvard, Tufts, etc.')),
                 ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='degrees', to='overview.candidate')),
             ],
         ),

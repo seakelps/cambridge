@@ -455,6 +455,6 @@ class CandidateGeneralProposalStance(models.Model):
 
 class Degree(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="degrees")
-    letters = models.CharField(blank=True, help_text="BA, BS, MA, etc.")
-    subject = models.CharField(blank=True, help_text="History, etc.")
-    school = models.CharField(blank=True, help_text="Harvard, Tufts, etc.")
+    letters = models.CharField(max_length=200, blank=True, help_text="BA, BS, MA, etc.")
+    subject = models.CharField(max_length=200, blank=True, help_text="History, etc.")
+    school = models.CharField(max_length=200, blank=True, help_text="Harvard, Tufts, etc.")

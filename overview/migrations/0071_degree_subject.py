@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='degree',
             name='subject',
-            field=models.CharField(blank=True, help_text='History, etc.'),
+            field=models.CharField(blank=True, max_length=200, help_text='History, etc.'),
         ),
     ]
