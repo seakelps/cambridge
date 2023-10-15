@@ -195,9 +195,7 @@ class Candidate(models.Model):
         return pledge.exists()
 
     def endorsed_by_group(self, org_name):
-        if self.endorsements:
-            return self.endorsements.filter(organization__name=org_name).exists()
-        return False
+        return self.endorsements.filter(organization__name=org_name).exists()
 
 
 class Organization(models.Model):
