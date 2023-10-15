@@ -27,11 +27,11 @@ function createTable() {
         extend: "columnsToggle",
         columns: ".col-union-organization",
       },
-      {
-        text: "All Unions",
-        extend: "columnToggle",
-        columns: ".col-union-organization",
-      },
+      // {
+      //   text: "All Unions",
+      //   extend: "columnToggle",
+      //   columns: ".col-union-organization",
+      // },
       {
         extend: 'spacer',
         style: 'd-block h5',
@@ -39,7 +39,7 @@ function createTable() {
       },
       {
         extend: "columnsToggle",
-        columns: ".col-organization",
+        columns: ".col-other-organization",
       },
     ],
     dom: "<'#filterBar.py-4'B>t",

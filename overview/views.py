@@ -184,6 +184,7 @@ class ByOrganization(TemplateView):
             for candidate in candidates.prefetch_related("endorsement_set__organization")
         }
 
+        # extre column for "Any Union" handled in html
         context["organizations"] = list(
             sorted(
                 set(org for org_list in endorsements.values() for org in org_list),
@@ -196,6 +197,7 @@ class ByOrganization(TemplateView):
                 reverse("append_to_ballot", args=[candidate.slug]),
                 candidate.fullname,
                 candidate.get_absolute_url(),
+                any(org.is_union for org in endorsed_orgs),
                 *[org in endorsed_orgs for org in context["organizations"]]
             ]
             for candidate, endorsed_orgs in endorsements.items()
