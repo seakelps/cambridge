@@ -1,7 +1,7 @@
 import re
 from django.contrib import admin
 from django.forms import ModelForm
-from django.db.models import Max, ManyToOneRel, ManyToManyRel
+from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
@@ -226,6 +226,7 @@ class PressOutletAdmin(admin.ModelAdmin):
 
 
 class PressArticleAdmin(admin.ModelAdmin):
+    ordering = [F("date").desc(nulls_last=True)]
     search_fields = ['pressoutlet__name', 'title']
     list_display = ['get_outlet', 'title', 'date']
     search_fields = ['pressoutlet__name', 'title']
@@ -263,7 +264,8 @@ class PressArticleCandidateAdmin(admin.ModelAdmin):
 
 
 class SpecificProposalAdmin(admin.ModelAdmin):
-    list_display = ['fullname', 'initial_year', 'main_topic', 'order']
+    ordering = ("display", 'main_topic', 'order')
+    list_display = ['fullname', 'shortname', 'display', 'initial_year', 'main_topic', 'order']
     search_fields = ['fullname', 'shortname', 'main_topic']
     list_filter = ('initial_year', 'order',)
     inlines = [CandidateSpecificProposalStanceInline]

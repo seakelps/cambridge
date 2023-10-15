@@ -189,6 +189,14 @@ class Candidate(models.Model):
         contributions = PastContribution.objects.filter(candidate=self).exclude(note__contains='access fee').aggregate(Sum('amount'))
         return contributions["amount__sum"]
 
+    @property
+    def signed_bike_pledge(self):
+        pledge = Questionnaire.objects.filter(name="Cambridge Bike Safety Pledge 2023").first().responses.filter(candidate=self)
+        return pledge.exists()
+
+    def endorsed_by_group(self, org_name):
+        return self.endorsements.filter(organization__name=org_name).exists()
+
 
 class Organization(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -214,8 +222,8 @@ class Organization(models.Model):
 
 
 class Endorsement(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="endorsements")
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="endorsements")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
     display = models.BooleanField(default=True)
@@ -252,8 +260,8 @@ class Questionnaire(models.Model):
 
 
 class QuestionnaireResponse(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE, related_name="responses")
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="responses")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
     display = models.BooleanField(default=False)
@@ -367,7 +375,7 @@ class SpecificProposal(models.Model):
     initial_year = models.IntegerField(null=True, blank=True)
     private_notes = models.TextField(blank=True)
     blurb = models.TextField(blank=True)
-    order = models.IntegerField(null=True, blank=True)
+    order = models.FloatField(null=True, blank=True)
 
     main_topic = models.CharField(max_length=200, blank=True, default="", choices=proposal_type_choices)
 

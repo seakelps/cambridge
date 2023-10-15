@@ -40,6 +40,7 @@ urlpatterns = [
     re_path(r'^candidates/$', views.CandidateList.as_view(), name='all'),
     re_path(r'^candidates/(?P<slug>[-\w]+)/$', views.CandidateDetail.as_view(), name='candidate_detail'),
     re_path(r'^candidates/housing', views.CandidateHousingList.as_view(), name="housing_comparison"),
+    re_path(r'^by-topic/biking/$', views.CandidateBikingList.as_view(), name="biking_comparison"),
     re_path(r'^by-organization/$', views.ByOrganization.as_view(), name='by-organization'),
 
     re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': {
