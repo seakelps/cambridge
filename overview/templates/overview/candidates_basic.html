@@ -33,7 +33,7 @@
                                 <th>Photo</th>
                                 <th>Incumbent?</th>
                                 <th>Election History</th>
-                                <th>Party</th>
+                                <th>Party Registration</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,7 +82,15 @@
                                 </td>
 
                                 <td>
-                                    {{ candidate.political_party }}
+                                    {% if candidate.political_party == "dem" %}
+                                        Democrat
+                                    {% elif candidate.political_party == "rep" %}
+                                        Republican
+                                    {% elif candidate.political_party == "other" %}
+                                        Other
+                                    {% elif candidate.political_party == "" %}
+                                        (Independent)
+                                    {% endif %}
                                 </td>
 
                             </tr>
@@ -131,18 +139,20 @@
                                 </td>
 
                                 <td>
-                                    {{ candidate.date_of_birth|timesince }}
+                                    {% if candidate.date_of_birth %}
+                                        {{ candidate.date_of_birth|timesince }}
+                                    {% endif %}
                                 </td>
 
                                 <td>
                                     {% if candidate.date_of_registration %}
-                                        {{ candidate.date_of_registration }}
+                                        {{ candidate.date_of_registration|timesince }}
                                     {% endif %}
                                 </td>
 
                                 <td>
                                     {% if candidate.housing_sell_value %}
-                                        {{ candidate.housing_sell_value }}
+                                        ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
                                     {% endif %}
                                 </td>
 
