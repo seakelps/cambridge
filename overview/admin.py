@@ -162,7 +162,7 @@ class CandidateAdmin(admin.ModelAdmin):
         CandidateSpecificProposalStanceInline,
         CandidateGeneralProposalStanceInline,
         QuestionnaireResponseInline,
-        PastContributionInline,
+        # PastContributionInline,
         QuoteInline,
         PressArticleCandidateInline,
         # VideoInlineAdmin
