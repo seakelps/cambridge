@@ -177,9 +177,21 @@ p:last-of-type {
                 <dt>Incumbent</dt>
                 <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
 
-                {% if candidate.education %}
-                <dt>Education</dt>
-                <dd>{{ candidate.education }}</dd>
+                {% if candidate_degrees %}
+                    <dt>Education</dt>
+                    <dd>
+                        {% spaceless %}
+                        <ul style="list-style: none; margin: 0; padding: 0">
+                            {% for degree in candidate_degrees %}
+                            <li>
+                                {% if degree.letters %}<span>{{degree.letters}}</span>{% endif %}
+                                {% if degree.letters and degree.school %}<span>, </span>{% endif %}
+                                {% if degree.school %}<span>{{degree.school}}</span>{% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endspaceless %}
+                    </dd>
                 {% endif %}
 
                 <dt>Age</dt>

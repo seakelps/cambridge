@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
 from django.urls import reverse
 
-from .models import Candidate, SpecificProposal, CandidateSpecificProposalStance
+from .models import Candidate, SpecificProposal, CandidateSpecificProposalStance, Degree
 from .utils import get_candidate_locations
 
 from campaign_finance.models import RawBankReport
@@ -106,6 +106,8 @@ class CandidateDetail(DetailView):
             .filter(display=True, specific_proposal__display=True)\
             .exclude(specific_proposal__main_topic="housing")\
             .select_related("specific_proposal").order_by("specific_proposal__order")
+
+        context['candidate_degrees'] = self.object.degrees.all()
 
         context['schema_org'] = {
             "@context": "https://schema.org",
@@ -220,7 +222,11 @@ class CandidateBasicList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname").prefetch_related('degrees')
+
+        candidate_degree_map = {}
+        for candidate in candidates:
+            candidate_degree_map[candidate.id] = candidate.degrees.all()
 
         # candidate_degrees = Degree.objects\
         #     .select_related('candidate')\
@@ -228,6 +234,7 @@ class CandidateBasicList(ListView):
         #     .filter(candidate__is_running=True)
 
         context['candidates'] = candidates
+        context['candidate_degree_map'] = candidate_degree_map
 
         return context
 
