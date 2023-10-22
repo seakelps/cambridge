@@ -492,7 +492,7 @@ class CandidateVan(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="van_history")
     election = models.ForeignKey(VanElection, on_delete=models.CASCADE, related_name="candidate_map")
 
-    voted = models.BooleanField(blank=True, default=None, null=True)
+    voted = models.BooleanField(blank=True, default=True, null=True)
 
     party_choices = (
         ('dem', 'Democrat'),
