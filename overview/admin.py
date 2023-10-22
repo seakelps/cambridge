@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.forms import ModelForm
 from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
-from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution, Degree
+from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution, Degree, CandidateVan, VanElection
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
 from .models import SpecificProposal, GeneralProposal, CandidateSpecificProposalStance, CandidateGeneralProposalStance
 
@@ -134,8 +134,8 @@ class CandidateAdmin(admin.ModelAdmin):
     fieldsets = [
         (None,                    {'fields': ['fullname', 'shortname', 'slug', 'pronoun']}),
         ('Running',               {'fields': ['short_history_text', 'n_time_running_for_council', 'n_terms_in_council', 'n_terms_on_school_committee', 'more_running_info' ]}),
-        ('Campaign and Contact',  {'fields': ['email', 'campaign_manager', 'website', 'facebook', 'twitter', 'linkedin', 'instagram', 'nextdoor', 'endorsements_link']}),
-        ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status']}),
+        ('Campaign and Contact',  {'fields': ['email', 'van_phone', 'campaign_manager', 'website', 'facebook', 'twitter', 'linkedin', 'instagram', 'nextdoor', 'endorsements_link']}),
+        ('Voting',                {'fields': ['voter_id_number', 'date_of_registration', 'voter_status', 'van_id']}),
         ('Our Writing',           {'fields': ['private_notes', 'blurb']}),
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party', 'cpf_id']}),
         ('Housing - theirs',      {'fields': ['address', 'latitude', 'longitude', 'housing_status', 'housing_status_note', 'housing_sell_value', 'housing_sale_date', 'housing_sale_price', 'housing_sale_price_inflation', 'housing_type', 'housing_is_a_landlord']}),
@@ -284,6 +284,26 @@ class GeneralProposalAdmin(admin.ModelAdmin):
     inlines = [CandidateGeneralProposalStanceInline]
 
 
+class CandidateVanAdminInline(admin.TabularInline):
+    model = CandidateVan
+    extra = 0
+
+
+class VanElectionAdmin(admin.ModelAdmin):
+    ordering = ("-year", "subtype")
+    list_display = ['van_name', 'year', 'subtype']
+    list_filter = ('year', 'subtype')
+    search_fields = ['van_name', 'year', 'subtype']
+    inlines = [CandidateVanAdminInline]
+
+
+class CandidateVanAdmin(admin.ModelAdmin):
+    ordering = ("-election__year", "candidate")
+    list_display = ['candidate', 'election', 'voted', 'political_party']
+    list_filter = ('voted', 'political_party', 'election',)
+    search_fields = ['candidate', 'election']
+
+
 
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Organization, OrganizationAdmin)
@@ -294,3 +314,5 @@ admin.site.register(PressArticle, PressArticleAdmin)
 admin.site.register(SpecificProposal, SpecificProposalAdmin)
 admin.site.register(GeneralProposal, GeneralProposalAdmin)
 admin.site.register(PastContribution, PastContributionAdmin)
+admin.site.register(VanElection,VanElectionAdmin)
+admin.site.register(CandidateVan,CandidateVanAdmin)

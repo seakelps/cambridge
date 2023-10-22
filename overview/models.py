@@ -54,6 +54,8 @@ class Candidate(models.Model):
         ('u',  'Unknown'),
     )
     voter_status = models.CharField(max_length=3, choices=voter_status_choices, default='u', blank=True)
+    van_id = models.CharField(max_length=50, blank=True, default="")
+    van_phone = models.CharField(max_length=50, blank=True, default="")
 
     # blurbs
     private_notes = models.TextField(blank=True)
@@ -458,3 +460,49 @@ class Degree(models.Model):
     letters = models.CharField(max_length=200, blank=True, help_text="BA, BS, MA, etc.")
     subject = models.CharField(max_length=200, blank=True, help_text="History, etc.")
     school = models.CharField(max_length=200, blank=True, help_text="Harvard, Tufts, etc.")
+
+
+class VanElection(models.Model):
+    """
+    An election according to VAN/votebuilder.
+    """
+    # data from van
+    van_name = models.CharField(max_length=100, unique=True)
+
+    # data for us, from the above
+    year = models.IntegerField(null=True, blank=True)
+
+    subtype_choices = (
+        ('general',  'General'),
+        ('local',   'Municipal'),
+        ('presidental_primary', 'Presidental Primary'),
+        ('primary', 'Primary'),
+        ('special', 'Special'),
+    )
+    subtype = models.CharField(max_length=20, choices=subtype_choices)
+
+    def __str__(self):
+        return f"{self.van_name}: {self.year} {self.subtype}"
+
+class CandidateVan(models.Model):
+    """
+    If someone voted in an election according to VAN/votebuilder.
+    """
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="van_history")
+    election = models.ForeignKey(VanElection, on_delete=models.CASCADE, related_name="candidate_map")
+
+    voted = models.BooleanField(blank=True, default=None, null=True)
+
+    party_choices = (
+        ('dem', 'Democrat'),
+        ('rep', 'Republican'),
+        ('o',   'Other'),
+        ('u',   'Unknown'),
+    )
+    political_party = models.CharField(max_length=3, choices=party_choices, default='u', blank=True)
+
+    class Meta:
+        unique_together = ('candidate', 'election')
+
+    def __str__(self):
+        return f"{self.candidate} {self.election}"
