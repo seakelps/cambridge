@@ -478,6 +478,7 @@ class VanElection(models.Model):
         ('presidental_primary', 'Presidental Primary'),
         ('primary', 'Primary'),
         ('special', 'Special'),
+        ('special_primary', 'Special Primary')
     )
     subtype = models.CharField(max_length=20, choices=subtype_choices)
 
