@@ -475,10 +475,11 @@ class VanElection(models.Model):
     subtype_choices = (
         ('general',  'General'),
         ('local',   'Municipal'),
+        ('local_primary', 'Municipal Primary'),
         ('presidental_primary', 'Presidental Primary'),
         ('primary', 'Primary'),
         ('special', 'Special'),
-        ('special_primary', 'Special Primary')
+        ('special_primary', 'Special Primary'),
     )
     subtype = models.CharField(max_length=20, choices=subtype_choices)
 
@@ -492,7 +493,7 @@ class CandidateVan(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="van_history")
     election = models.ForeignKey(VanElection, on_delete=models.CASCADE, related_name="candidate_map")
 
-    voted = models.BooleanField(blank=True, default=True, null=True)
+    voted = models.BooleanField(blank=True, default=True, null=True, help_text="van/votebuilder uses various letters for how people voted; we only care that they did")
 
     party_choices = (
         ('dem', 'Democrat'),

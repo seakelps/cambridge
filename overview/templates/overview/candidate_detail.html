@@ -207,7 +207,7 @@ p:last-of-type {
                 </dd>
 
                 {% if candidate.date_of_registration %}
-                <dt>Voter Registration</dt>
+                <dt>Voting</dt>
                 <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
                                                             href="#!"
                                                             data-toggle="popover"
@@ -217,8 +217,66 @@ p:last-of-type {
                                                             data-content='Date candidate first registered to vote in Cambridge.'>
                 </a>
                 <br>
+
+                <details>
+                  <summary>
+                    History <a class="fa fa-info-circle"
+                                href="#!"
+                                data-toggle="popover"
+                                data-trigger="focus"
+                                data-html="true"
+                                data-container="body"
+                                data-content='Voting record since 2012 from MA Votebuilder (may be incomplete, ex. for out-of-state elections or because of errors in reporting).'></a>
+                  </summary>
+
+                  {% if not candidate_voting_history %}
+                    No record
+                  {% else %}
+                        <ul style="list-style: none">
+                        {% for candidate_election in candidate_voting_history %}
+                            {% if candidate_election.voted is True %}
+                            <li>
+                                🗳️
+                                {{candidate_election.election.year}}
+
+                                {% if candidate_election.election.subtype == "general" %}
+                                    General
+                                {% elif candidate_election.election.subtype == "local" %}
+                                    Municipal
+                                {% elif candidate_election.election.subtype == "local_primary" %}
+                                    Municipal Primary (ex., in Boston)
+                                {% elif candidate_election.election.subtype == "presidental_primary" %}
+                                    Presidental Primary
+                                {% elif candidate_election.election.subtype == "primary" %}
+                                    General Primary
+                                {% elif candidate_election.election.subtype == "special" %}
+                                    Special
+                                {% elif candidate_election.election.subtype == "special_primary" %}
+                                    Special Primary
+                                {% endif %}
+
+                                {% if candidate_election.election.subtype == "primary" or candidate_election.election.subtype == "presidental_primary" or candidate_election.election.subtype == "special_primary" %}
+                                    {% if candidate_election.political_party %}
+                                        -
+                                        {% if candidate_election.political_party == "dem" %}
+                                            Democratic
+                                        {% elif candidate_election.political_party == "rep" %}
+                                            Republican
+                                        {% else %}
+                                            Other
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        </ul>
+                  {% endif %}
+                </details>
+
                 </dd>
                 {% endif %}
+
             </dl>
         </div>
     </div>
@@ -227,7 +285,7 @@ p:last-of-type {
 <div class="bg-gray">
     <section class="container">
         <div class="row">
-            <section class="col">
+            <section class="col" style="padding-bottom: 0">
                 <h2 id="where">Where {{candidate.shortname}} Lives</h2>
                 <dl class="dl-horizontal">
                     <dt>Address</dt>

@@ -109,6 +109,8 @@ class CandidateDetail(DetailView):
 
         context['candidate_degrees'] = self.object.degrees.all()
 
+        context['candidate_voting_history'] = self.object.van_history.order_by('-election__year').all()
+
         context['schema_org'] = {
             "@context": "https://schema.org",
             # "@type": "ProfilePage",  # not supported by google
@@ -227,11 +229,6 @@ class CandidateBasicList(ListView):
         candidate_degree_map = {}
         for candidate in candidates:
             candidate_degree_map[candidate.id] = candidate.degrees.all()
-
-        # candidate_degrees = Degree.objects\
-        #     .select_related('candidate')\
-        #     .filter(candidate__hide=False)\
-        #     .filter(candidate__is_running=True)
 
         context['candidates'] = candidates
         context['candidate_degree_map'] = candidate_degree_map
