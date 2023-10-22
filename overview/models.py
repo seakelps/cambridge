@@ -500,7 +500,7 @@ class CandidateVan(models.Model):
         ('o',   'Other'),
         ('u',   'Unknown'),
     )
-    political_party = models.CharField(max_length=3, choices=party_choices, default='u', blank=True)
+    political_party = models.CharField(max_length=3, choices=party_choices, default=None, blank=True, null=True)
 
     class Meta:
         unique_together = ('candidate', 'election')
