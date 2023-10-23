@@ -208,7 +208,7 @@ p:last-of-type {
 
                 {% if candidate.date_of_registration %}
                 <dt>Voting</dt>
-                <dd>{{ candidate.date_of_registration }} <a class="fa fa-info-circle"
+                <dd>Reg. {{ candidate.date_of_registration }} <a class="fa fa-info-circle"
                                                             href="#!"
                                                             data-toggle="popover"
                                                             data-trigger="focus"
@@ -232,7 +232,7 @@ p:last-of-type {
                   {% if not candidate_voting_history %}
                     No record
                   {% else %}
-                        <ul style="list-style: none">
+                        <ul style="list-style: none; text-align: left">
                         {% for candidate_election in candidate_voting_history %}
                             {% if candidate_election.voted is True %}
                             <li>
