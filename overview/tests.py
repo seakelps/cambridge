@@ -4,6 +4,15 @@ from django.urls import reverse
 from . import factories
 
 
+class SiteMapTest(TestCase):
+    def test_sanity(self):
+        factories.Candidate.create()
+        factories.Candidate.create(is_running=False)
+
+        resp = self.client.get(reverse("django.contrib.sitemaps.views.sitemap"))
+        self.assertEqual(resp.status_code, 200)
+
+
 class CandidateListTest(TestCase):
     def test_sanity(self):
         factories.Candidate.create()
