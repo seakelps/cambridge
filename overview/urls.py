@@ -1,8 +1,7 @@
-from django.urls import re_path
-from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
-from django.urls import reverse
-
+from django.contrib.sitemaps.views import sitemap
+from django.urls import re_path, reverse
+from django.views.generic import RedirectView
 
 from . import views
 from .models import Candidate
