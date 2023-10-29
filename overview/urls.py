@@ -28,6 +28,7 @@ class StaticViewSitemap(Sitemap):
             reverse("about_us"),
             reverse("by-organization"),
             reverse("housing_comparison"),
+            # reverse("written-public-comment"),
         ]
 
     def location(self, item):
@@ -35,17 +36,52 @@ class StaticViewSitemap(Sitemap):
 
 
 urlpatterns = [
-    re_path(r'^$', views.index, name='index'),
-    re_path(r'^candidates/$', views.CandidateList.as_view(), name='all'),
-    re_path(r'^candidates/(?P<slug>[-\w]+)/$', views.CandidateDetail.as_view(), name='candidate_detail'),
-    re_path(r'^candidates/housing', views.CandidateHousingList.as_view(), name="housing_comparison"),
-    re_path(r'^by-topic/biking/$', views.CandidateBikingList.as_view(), name="biking_comparison"),
-    re_path(r'^by-topic/basic/$', views.CandidateBasicList.as_view(), name="basic_comparison"),
-    re_path(r'^by-organization/$', views.ByOrganization.as_view(), name='by-organization'),
-
-    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': {
-            "candidates": CandidateSitemap,
-            "static": StaticViewSitemap,
-        }},
-        name='django.contrib.sitemaps.views.sitemap')
+    re_path(r"^$", views.index, name="index"),
+    re_path(r"^candidates/$", views.CandidateList.as_view(), name="all"),
+    re_path(
+        r"^candidates/(?P<slug>[-\w]+)/$",
+        views.CandidateDetail.as_view(),
+        name="candidate_detail",
+    ),
+    re_path(
+        r"^candidates/housing",
+        RedirectView.as_view(
+            pattern_name="housing_comparison",
+            permanent=True,
+        ),
+    ),
+    re_path(
+        r"^by-topic/housing",
+        views.CandidateHousingList.as_view(),
+        name="housing_comparison",
+    ),
+    re_path(
+        r"^by-topic/biking/$",
+        views.CandidateBikingList.as_view(),
+        name="biking_comparison",
+    ),
+    re_path(
+        r"^by-topic/basic/$",
+        views.CandidateBasicList.as_view(),
+        name="basic_comparison",
+    ),
+    re_path(
+        r"^by-organization/$", views.ByOrganization.as_view(), name="by-organization"
+    ),
+    re_path(
+        r"^written-public-comment/$",
+        views.WrittenPublicComment.as_view(),
+        name="written-public-comment",
+    ),
+    re_path(
+        r"^sitemap\.xml$",
+        sitemap,
+        {
+            "sitemaps": {
+                "candidates": CandidateSitemap,
+                "static": StaticViewSitemap,
+            }
+        },
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
 ]

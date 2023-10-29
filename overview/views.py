@@ -272,4 +272,17 @@ class ByOrganization(TemplateView):
             for candidate, endorsed_orgs in endorsements.items()
         ]
 
+
+class WrittenPublicComment(TemplateView):
+    template_name = "overview/candidates_public_comment.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        absolute_path = os.path.dirname(__file__)
+        full_path = os.path.join(absolute_path, "public_comment.csv")
+        with open(full_path, "r") as fp:
+            reader = csv.reader(fp)
+            context["public_comments"] = list(reader)
+
         return context
