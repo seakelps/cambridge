@@ -338,6 +338,7 @@ class ByOrganization(TemplateView):
             ]
             for candidate, endorsed_orgs in endorsements.items()
         ]
+        return context
 
 
 class WrittenPublicComment(TemplateView):
