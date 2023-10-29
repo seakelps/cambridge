@@ -5,7 +5,7 @@ from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
 from .models import Candidate, Endorsement, Organization, QuestionnaireResponse, Questionnaire, InterviewVideo, PastContribution, Degree, CandidateVan, VanElection
 from .models import Quote, PressOutlet, PressArticle, PressArticleCandidate
-from .models import SpecificProposal, GeneralProposal, CandidateSpecificProposalStance, CandidateGeneralProposalStance
+from .models import SpecificProposal, GeneralProposal, CandidateSpecificProposalStance, CandidateGeneralProposalStance, Forum, ForumOrganization, ForumParticipant
 
 
 class QuestionnaireResponseInline(admin.TabularInline):
@@ -304,6 +304,23 @@ class CandidateVanAdmin(admin.ModelAdmin):
     search_fields = ['candidate', 'election']
 
 
+class ForumOrganizationInline(admin.TabularInline):
+    model = ForumOrganization
+    extra = 0
+
+
+class ForumParticipantInline(admin.TabularInline):
+    model = ForumParticipant
+    extra = 0
+
+
+class ForumAdmin(admin.ModelAdmin):
+    inlines = [ForumOrganizationInline, ForumParticipantInline]
+    ordering = ("-year", "name")
+    search_fields = ['name']
+    list_display = ['name', 'date', 'year']
+    list_filter = ('year',)
+
 
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Organization, OrganizationAdmin)
@@ -316,3 +333,4 @@ admin.site.register(GeneralProposal, GeneralProposalAdmin)
 admin.site.register(PastContribution, PastContributionAdmin)
 admin.site.register(VanElection,VanElectionAdmin)
 admin.site.register(CandidateVan,CandidateVanAdmin)
+admin.site.register(Forum, ForumAdmin)

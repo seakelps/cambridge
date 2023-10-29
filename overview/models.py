@@ -508,3 +508,43 @@ class CandidateVan(models.Model):
 
     def __str__(self):
         return f"{self.candidate} {self.election}"
+
+
+class Forum(models.Model):
+    name = models.CharField(max_length=100)
+    date = models.DateField(null=True, blank=True)
+    year = models.IntegerField(null=True, default=2023)
+
+    description = models.CharField(max_length=500, blank=True)
+    link = models.URLField(max_length=500, blank=True)
+    display = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('name', 'year')
+
+    def __str__(self):
+        return f"{self.name} - {self.year}"
+
+
+class ForumOrganization(models.Model):
+    forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('forum', 'organization')
+
+
+class ForumParticipant(models.Model):
+    forum = models.ForeignKey(Forum, on_delete=models.CASCADE, related_name="participants")
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="forums")
+    date = models.DateField(blank=True, null=True)
+    link = models.URLField(max_length=250, blank=True)
+    display = models.BooleanField(default=True)
+    timestamps = models.CharField(blank=True, max_length=100, help_text="list of timestamps the candidates speaks during, ex., '15:35-16:45, 1:37:02-1:38:00' ")
+
+    @property
+    def forum_link(self):
+        return self.link or self.forum.link
+
+    def __str__(self):
+        return f"{self.candidate} participating in {self.forum}"
