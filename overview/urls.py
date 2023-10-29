@@ -27,7 +27,7 @@ class StaticViewSitemap(Sitemap):
             reverse("about_us"),
             reverse("by-organization"),
             reverse("housing_comparison"),
-            # reverse("written-public-comment"),
+            reverse("written-public-comment"),
         ]
 
     def location(self, item):
