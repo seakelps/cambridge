@@ -514,6 +514,7 @@ class Forum(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField(null=True, blank=True)
     year = models.IntegerField(null=True, default=2023)
+    moderators = models.CharField(max_length=500, blank=True)
 
     description = models.CharField(max_length=500, blank=True)
     link = models.URLField(max_length=500, blank=True)
