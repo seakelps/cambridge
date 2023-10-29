@@ -25,8 +25,72 @@
     <section class="container">
         <div class="row">
             <div class="col-12">
+                <h4>Biking Pledge &amp Experience</h4>
+                <p>
+                    CBS, or <a href="https://www.cambridgebikesafety.org">Cambridge Bicycle Safety</a>, is a Cambridge group that "[promotes] safety for cyclists of all ages and abilities" that asks candidates to sign a pledge to implement a city bike lane plan by a certain date. <a href="https://savemassave.com">Save Mass Ave</a> is "a group of Cambridge Residents and Small Business Owners" that formed in May 2020 to delay and reasess cycling-caused changes to Mass Ave near Porter Square and North Cambridge. <a href="https://cambridgeforall.org">Cambridge Streets for All</a> is the group that has sued to halt and remove bike lanes; they have not endorsed candidates (one of their board members and another named Plaintiff are running for Council themselves).
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Bikes?</th>
+                                <th>Signed Pledge</th>
+                                <th>CBS Endorsed</th>
+                                <th>Save Mass Ave Endorsed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                </td>
+                                <td>
+                                    {% if candidate.is_cyclist %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate.signed_bike_pledge %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate_bike_group_map|get_item:candidate.id %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidate_mass_group_map|get_item:candidate.id %}
+                                        <i class="fa fa-check text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-ban text-danger"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
                 <h4>Specific Proposals</h4>
-                <p>Actual bills, developments, or rules - not hypotheticals. Incumbent positions are from the voting record; others are based on public comment, surveys, or statements.</p>
+                <p>Actual bills, developments, or rules - not hypotheticals. Incumbent positions are from the voting record; others are based on public comment, surveys, or statements. Feel free to send us such records if you know of them!</p>
                 <div class="table-responsive">
                     <table class="table table-striped comparison-table">
                         <thead class="thead-dark">
@@ -83,71 +147,6 @@
                                 </td>
                                 {% endfor %}
 
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-</div>
-
-
-<div>
-    <section class="container">
-        <div class="row">
-            <div class="col-12">
-                <h4>Biking Pledge &amp Experience</h4>
-                <p>
-                    CBS, or <a href="https://www.cambridgebikesafety.org">Cambridge Bicycle Safety</a>, is a Cambridge group that "[promotes] safety for cyclists of all ages and abilities". <a href="https://savemassave.com">Save Mass Ave</a>is "a group of Cambridge Residents and Small Business Owners" that formed in May 2020 to delay and reasess cycling-caused changes to Mass Ave near Porter Square and North Cambridge. <a href="https://cambridgeforall.org">Cambridge Streets for All</a> is the group that has sued to halt and remove bike lanes; they have not endorsed candidates (one of their board members and another named Plaintiff are running for Council themselves).
-                </p>
-                <div class="table-responsive">
-                    <table class="table table-striped comparison-table">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>Candidate</th>
-                                <th>Bikes?</th>
-                                <th>Signed Pledge</th>
-                                <th>CBS Endorsed</th>
-                                <th>Save Mass Ave Endorsed</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for candidate in candidates %}
-                            <tr>
-                                <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
-                                </td>
-                                <td>
-                                    {% if candidate.is_cyclist %}
-                                        <i class="fa fa-check text-success"></i>
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    {% if candidate.signed_bike_pledge %}
-                                        <i class="fa fa-check text-success"></i>
-                                    {% else %}
-                                        <i class="fa fa-ban text-danger"></i>
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    {% if candidate_bike_group_map|get_item:candidate.id %}
-                                        <i class="fa fa-check text-success"></i>
-                                    {% else %}
-                                        <i class="fa fa-ban text-danger"></i>
-                                    {% endif %}
-                                </td>
-
-                                <td>
-                                    {% if candidate_mass_group_map|get_item:candidate.id %}
-                                        <i class="fa fa-check text-success"></i>
-                                    {% else %}
-                                        <i class="fa fa-ban text-danger"></i>
-                                    {% endif %}
-                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
