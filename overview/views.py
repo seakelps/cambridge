@@ -1,15 +1,21 @@
+import csv
 import json
-from markdown import markdown
+import os
+
 from bs4 import BeautifulSoup
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView, TemplateView
 from django.urls import reverse
+from django.views.generic import DetailView, ListView, TemplateView
+from markdown import markdown
 
-from .models import Candidate, SpecificProposal, CandidateSpecificProposalStance, Degree
+from campaign_finance.models import (RawBankReport, get_candidate_2021_raised,
+                                     get_candidate_2021_spent,
+                                     get_candidate_money_at_start_of_2021)
+
+from .models import (Candidate, CandidateSpecificProposalStance, Degree,
+                     SpecificProposal)
 from .utils import get_candidate_locations
 
-from campaign_finance.models import RawBankReport
-from campaign_finance.models import get_candidate_money_at_start_of_2021, get_candidate_2021_spent, get_candidate_2021_raised
 
 # servering the jumbotron page
 def index(request):
@@ -20,7 +26,9 @@ def index(request):
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
-    """.format(num_runners=num_runners).strip()
+    """.format(
+        num_runners=num_runners
+    ).strip()
 
     schema_org = {
         "@context": "https://schema.org",
@@ -30,25 +38,29 @@ def index(request):
         "url": request.build_absolute_uri(),
     }
 
-    return render(request, 'overview/index.html', context={
-        'title': "Vote Local!",
-        'description': description,
-        'num_runners': num_runners,
-        'candidate_locations': json.dumps(list(get_candidate_locations().values())),
-        'schema_org': schema_org,
-    })
+    return render(
+        request,
+        "overview/index.html",
+        context={
+            "title": "Vote Local!",
+            "description": description,
+            "num_runners": num_runners,
+            "candidate_locations": json.dumps(list(get_candidate_locations().values())),
+            "schema_org": schema_org,
+        },
+    )
 
 
 class CandidateList(ListView):
     model = Candidate
-    template_name = 'overview/candidate_list.html'
+    template_name = "overview/candidate_list.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateList, self).get_context_data(*args, **kwargs)
 
         candidates = Candidate.objects.exclude(hide=True).order_by("fullname")
-        context['runners'] = candidates.exclude(is_running=False)
-        context['not_runners'] = candidates.filter(is_running=False)
+        context["runners"] = candidates.exclude(is_running=False)
+        context["not_runners"] = candidates.filter(is_running=False)
         return context
 
 
@@ -57,61 +69,82 @@ class CandidateDetail(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
-        context['title'] = title = f'Learn More About {self.object.fullname}'
-        context["description"] = description = BeautifulSoup(markdown(self.object.blurb), features='html.parser').get_text()
-        context["headshot_url"] = headshot_url = self.request.build_absolute_uri(self.object.headshot)
+        context["title"] = title = f"Learn More About {self.object.fullname}"
+        context["description"] = description = BeautifulSoup(
+            markdown(self.object.blurb), features="html.parser"
+        ).get_text()
+        context["headshot_url"] = headshot_url = self.request.build_absolute_uri(
+            self.object.headshot
+        )
 
-        candidate_locations = get_candidate_locations(default_color='EEE')
+        candidate_locations = get_candidate_locations(default_color="EEE")
         # </script> will make us sad still
         if self.object.id in candidate_locations:
-            candidate_locations[self.object.id].update({
-                'color': 'F00',
-                'main': True
-            })
-        context['candidate_locations'] = json.dumps(list(candidate_locations.values()))
-        context['questionnaire_responses'] = self.object.responses\
-            .filter(display=True, questionnaire__display=True)\
-            .select_related("questionnaire")
+            candidate_locations[self.object.id].update({"color": "F00", "main": True})
+        context["candidate_locations"] = json.dumps(list(candidate_locations.values()))
+        context["questionnaire_responses"] = self.object.responses.filter(
+            display=True, questionnaire__display=True
+        ).select_related("questionnaire")
 
-        context['articles'] = self.object.pressarticlecandidate_set\
-            .filter(display=True)\
-            .select_related("pressarticle__pressoutlet").order_by("-pressarticle__date")
+        context["articles"] = (
+            self.object.pressarticlecandidate_set.filter(display=True)
+            .select_related("pressarticle__pressoutlet")
+            .order_by("-pressarticle__date")
+        )
 
         if self.object.cpf_id:
             try:
-                context['latest_bank_report'] = RawBankReport.objects\
-                    .filter(cpf_id=self.object.cpf_id)\
-                    .latest("filing_date")
+                context["latest_bank_report"] = RawBankReport.objects.filter(
+                    cpf_id=self.object.cpf_id
+                ).latest("filing_date")
             except RawBankReport.DoesNotExist:
-                context['latest_bank_report'] = None
-            context['money_2021_start'] = get_candidate_money_at_start_of_2021(self.object.cpf_id)
-            context['money_2021_spent'] = get_candidate_2021_spent(self.object.cpf_id)
-            context['money_2021_raised'] = get_candidate_2021_raised(self.object.cpf_id)
+                context["latest_bank_report"] = None
+            context["money_2021_start"] = get_candidate_money_at_start_of_2021(
+                self.object.cpf_id
+            )
+            context["money_2021_spent"] = get_candidate_2021_spent(self.object.cpf_id)
+            context["money_2021_raised"] = get_candidate_2021_raised(self.object.cpf_id)
         else:
-            context['latest_bank_report'] = None
-            context['money_2021_start'] = None
-            context['money_2021_spent'] = None
-            context['money_2021_raised'] = None
+            context["latest_bank_report"] = None
+            context["money_2021_start"] = None
+            context["money_2021_spent"] = None
+            context["money_2021_raised"] = None
 
-        context['endorsements'] = self.object.endorsements\
-            .filter(display=True)\
-            .select_related("organization").all()
+        context["endorsements"] = (
+            self.object.endorsements.filter(display=True)
+            .select_related("organization")
+            .all()
+        )
 
-        context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
-        context['specific_housing_support'] = self.object.candidatespecificproposalstance_set\
-            .filter(display=True, specific_proposal__display=True, specific_proposal__main_topic="housing")\
-            .select_related("specific_proposal").order_by("specific_proposal__order")
+        context["canonical_url"] = self.request.build_absolute_uri(
+            self.object.get_absolute_url()
+        )
+        context["specific_housing_support"] = (
+            self.object.candidatespecificproposalstance_set.filter(
+                display=True,
+                specific_proposal__display=True,
+                specific_proposal__main_topic="housing",
+            )
+            .select_related("specific_proposal")
+            .order_by("specific_proposal__order")
+        )
 
-        context['specific_proposal_support'] = self.object.candidatespecificproposalstance_set\
-            .filter(display=True, specific_proposal__display=True)\
-            .exclude(specific_proposal__main_topic="housing")\
-            .select_related("specific_proposal").order_by("specific_proposal__order")
+        context["specific_proposal_support"] = (
+            self.object.candidatespecificproposalstance_set.filter(
+                display=True, specific_proposal__display=True
+            )
+            .exclude(specific_proposal__main_topic="housing")
+            .select_related("specific_proposal")
+            .order_by("specific_proposal__order")
+        )
 
-        context['candidate_degrees'] = self.object.degrees.all()
+        context["candidate_degrees"] = self.object.degrees.all()
 
-        context['candidate_voting_history'] = self.object.van_history.order_by('-election__year').all()
+        context["candidate_voting_history"] = self.object.van_history.order_by(
+            "-election__year"
+        ).all()
 
-        context['schema_org'] = {
+        context["schema_org"] = {
             "@context": "https://schema.org",
             # "@type": "ProfilePage",  # not supported by google
             "@type": "Article",
@@ -127,7 +160,7 @@ class CandidateDetail(DetailView):
                 "birthdate": self.object.date_of_birth,
                 "jobTitle": self.object.job,
                 "image": headshot_url,
-            }
+            },
         }
 
         return context
@@ -136,20 +169,29 @@ class CandidateDetail(DetailView):
 # a specific "spreadsheet-like" view of candidates' housing support
 class CandidateHousingList(ListView):
     model = Candidate
-    template_name = 'overview/candidates_housing.html'
+    template_name = "overview/candidates_housing.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
-        specific_proposals = SpecificProposal.objects.exclude(display=False).filter(main_topic="housing").order_by("order")
+        candidates = (
+            Candidate.objects.exclude(hide=True)
+            .exclude(is_running=False)
+            .order_by("fullname")
+        )
+        specific_proposals = (
+            SpecificProposal.objects.exclude(display=False)
+            .filter(main_topic="housing")
+            .order_by("order")
+        )
 
-        candidate_specific_proposals = CandidateSpecificProposalStance.objects\
-            .select_related('specific_proposal')\
-            .select_related('candidate')\
-            .filter(specific_proposal__display=True)\
-            .filter(candidate__hide=False)\
+        candidate_specific_proposals = (
+            CandidateSpecificProposalStance.objects.select_related("specific_proposal")
+            .select_related("candidate")
+            .filter(specific_proposal__display=True)
+            .filter(candidate__hide=False)
             .filter(candidate__is_running=True)
+        )
 
         cp_map_yes_no = {}
         cp_map_blurb = {}
@@ -159,14 +201,17 @@ class CandidateHousingList(ListView):
             cp_map_blurb[candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
-            cp_map_yes_no[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.simple_yes_no
-            cp_map_blurb[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.blurb
+            cp_map_yes_no[candidate_proposal.candidate.id][
+                candidate_proposal.specific_proposal.id
+            ] = candidate_proposal.simple_yes_no
+            cp_map_blurb[candidate_proposal.candidate.id][
+                candidate_proposal.specific_proposal.id
+            ] = candidate_proposal.blurb
 
-
-        context['candidates'] = candidates
-        context['specific_proposals'] = specific_proposals
-        context['cp_map_yes_no'] = cp_map_yes_no
-        context['cp_map_blurb'] = cp_map_blurb
+        context["candidates"] = candidates
+        context["specific_proposals"] = specific_proposals
+        context["cp_map_yes_no"] = cp_map_yes_no
+        context["cp_map_blurb"] = cp_map_blurb
 
         return context
 
@@ -174,20 +219,29 @@ class CandidateHousingList(ListView):
 # a specific "spreadsheet-like" view of candidates' biking support
 class CandidateBikingList(ListView):
     model = Candidate
-    template_name = 'overview/candidates_biking.html'
+    template_name = "overview/candidates_biking.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
-        specific_proposals = SpecificProposal.objects.exclude(display=False).filter(main_topic="biking").order_by("order")
+        candidates = (
+            Candidate.objects.exclude(hide=True)
+            .exclude(is_running=False)
+            .order_by("fullname")
+        )
+        specific_proposals = (
+            SpecificProposal.objects.exclude(display=False)
+            .filter(main_topic="biking")
+            .order_by("order")
+        )
 
-        candidate_specific_proposals = CandidateSpecificProposalStance.objects\
-            .select_related('specific_proposal')\
-            .select_related('candidate')\
-            .filter(specific_proposal__display=True)\
-            .filter(candidate__hide=False)\
+        candidate_specific_proposals = (
+            CandidateSpecificProposalStance.objects.select_related("specific_proposal")
+            .select_related("candidate")
+            .filter(specific_proposal__display=True)
+            .filter(candidate__hide=False)
             .filter(candidate__is_running=True)
+        )
 
         cp_map_yes_no = {}
         cp_map_blurb = {}
@@ -197,21 +251,29 @@ class CandidateBikingList(ListView):
             cp_map_blurb[candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
-            cp_map_yes_no[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.simple_yes_no
-            cp_map_blurb[candidate_proposal.candidate.id][candidate_proposal.specific_proposal.id] = candidate_proposal.blurb
+            cp_map_yes_no[candidate_proposal.candidate.id][
+                candidate_proposal.specific_proposal.id
+            ] = candidate_proposal.simple_yes_no
+            cp_map_blurb[candidate_proposal.candidate.id][
+                candidate_proposal.specific_proposal.id
+            ] = candidate_proposal.blurb
 
         bike_group_yes_no = {}
         mass_ave_group_yes_no = {}
         for candidate in candidates:
-            bike_group_yes_no[candidate.id] = candidate.endorsed_by_group("Cambridge Bicycle Safety")
-            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group("Save Mass Ave")
+            bike_group_yes_no[candidate.id] = candidate.endorsed_by_group(
+                "Cambridge Bicycle Safety"
+            )
+            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group(
+                "Save Mass Ave"
+            )
 
-        context['candidates'] = candidates
-        context['specific_proposals'] = specific_proposals
-        context['cp_map_yes_no'] = cp_map_yes_no
-        context['cp_map_blurb'] = cp_map_blurb
-        context['candidate_bike_group_map'] = bike_group_yes_no
-        context['candidate_mass_group_map'] = mass_ave_group_yes_no
+        context["candidates"] = candidates
+        context["specific_proposals"] = specific_proposals
+        context["cp_map_yes_no"] = cp_map_yes_no
+        context["cp_map_blurb"] = cp_map_blurb
+        context["candidate_bike_group_map"] = bike_group_yes_no
+        context["candidate_mass_group_map"] = mass_ave_group_yes_no
 
         return context
 
@@ -219,19 +281,24 @@ class CandidateBikingList(ListView):
 # a specific "spreadsheet-like" view of candidate basic info
 class CandidateBasicList(ListView):
     model = Candidate
-    template_name = 'overview/candidates_basic.html'
+    template_name = "overview/candidates_basic.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname").prefetch_related('degrees')
+        candidates = (
+            Candidate.objects.exclude(hide=True)
+            .exclude(is_running=False)
+            .order_by("fullname")
+            .prefetch_related("degrees")
+        )
 
         candidate_degree_map = {}
         for candidate in candidates:
             candidate_degree_map[candidate.id] = candidate.degrees.all()
 
-        context['candidates'] = candidates
-        context['candidate_degree_map'] = candidate_degree_map
+        context["candidates"] = candidates
+        context["candidate_degree_map"] = candidate_degree_map
 
         return context
 
@@ -257,7 +324,7 @@ class ByOrganization(TemplateView):
         context["organizations"] = list(
             sorted(
                 set(org for org_list in endorsements.values() for org in org_list),
-                key=lambda o: o.name
+                key=lambda o: o.name,
             )
         )
 
@@ -267,7 +334,7 @@ class ByOrganization(TemplateView):
                 candidate.fullname,
                 candidate.get_absolute_url(),
                 any(org.is_union for org in endorsed_orgs),
-                *[org in endorsed_orgs for org in context["organizations"]]
+                *[org in endorsed_orgs for org in context["organizations"]],
             ]
             for candidate, endorsed_orgs in endorsements.items()
         ]
