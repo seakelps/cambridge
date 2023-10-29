@@ -144,6 +144,16 @@ class CandidateDetail(DetailView):
             "-election__year"
         ).all()
 
+        context["candidate_forums"] = (
+            self.object.forums.filter(
+                display=True,
+                forum__display=True,
+            )
+            .select_related("forum")
+            # .prefetch_related("forum__organization")
+            .order_by("forum__date")
+        )
+
         context["schema_org"] = {
             "@context": "https://schema.org",
             # "@type": "ProfilePage",  # not supported by google
@@ -354,3 +364,12 @@ class WrittenPublicComment(TemplateView):
             context["public_comments"] = list(reader)
 
         return context
+
+
+class CandidateForums(TemplateView):
+    template_name = "overview/candidates_forums.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        candidates = Candidate.objects.filter(is_running=True, hide=False)

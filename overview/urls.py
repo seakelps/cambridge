@@ -73,6 +73,11 @@ urlpatterns = [
         name="written-public-comment",
     ),
     re_path(
+        r"^by-topic/forums/$",
+        views.CandidateForums.as_view(),
+        name="forum_list",
+    ),
+    re_path(
         r"^sitemap\.xml$",
         sitemap,
         {

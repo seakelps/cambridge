@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load humanize %}
+{% load get_item from overview %}
+
+{% block body_id %}candidate_forums{% endblock %}
+
+{% block content %}
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Forums</h2>
+            </div>
+            <div class="col-12">
+                <p>A number of Cambridge organizations host/co-host forums with candidates. Per campaign finance regulations, they generally have to invite all candidates who've qualified for the ballot - but not all candidates say yes.</p>
+                <p>Here are the 2023 forums, who participated, and links to recordings when available (often by the folks at <a href="https://www.cctvcambridge.org">Cambridge Community Television</a>. Thank you, CCTV!)</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>(Forum 1)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}
