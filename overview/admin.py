@@ -140,7 +140,7 @@ class CandidateAdmin(admin.ModelAdmin):
         ('Election',              {'fields': ['is_incumbent', 'is_running', 'hide', 'political_party', 'cpf_id']}),
         ('Housing - theirs',      {'fields': ['address', 'latitude', 'longitude', 'neighborhood', 'housing_status', 'housing_status_note', 'housing_sell_value', 'housing_sale_date', 'housing_sale_price', 'housing_sale_price_inflation', 'housing_type', 'housing_is_a_landlord']}),
         ('Housing - blurb',       {'fields': ['housing_private_notes', 'housing_blurb']}),
-        ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist', 'job', 'previous_results_map']}),
+        ('Demographics',          {'fields': ['date_of_birth', 'place_of_birth', 'education', 'is_cyclist', 'job', 'previous_results_map', 'self_loan']}),
         ('Todos',                 {'fields': ['checked_ocpf_for_contributions', 'checked_fec_for_contributions']}),
     ]
 

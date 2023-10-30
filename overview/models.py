@@ -151,6 +151,9 @@ class Candidate(models.Model):
         help_text="previous election results from Davi",
         blank=True, null=True)
 
+    # this should go somewhere else, probably
+    self_loan = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
     checked_ocpf_for_contributions = models.BooleanField(null=True)
     checked_fec_for_contributions = models.BooleanField(null=True)
 
