@@ -315,3 +315,94 @@ def get_candidate_2021_raised(candidate_cpf_id):
             return None
 
     return agg['receipt_total_display__sum']
+
+
+
+#
+#
+# Beginning of generic functions
+#
+#
+
+# returns either 0 if they had no year-1-1 report, or the # from that report
+def get_candidate_money_at_start_of_year(candidate_cpf_id, year=2023):
+    # jan 1 2021 report for this candidate
+    try:
+        bank_report = RawBankReport.objects.filter(
+            cpf_id=candidate_cpf_id,
+            beginning_date_display__year=year,
+            beginning_date_display__month=1,
+            beginning_date_display__day=1
+            ).latest("filing_date")
+    except RawBankReport.DoesNotExist:
+        return 0
+
+    return bank_report.beginning_balance_display
+
+
+# all the money the candidate has spent in year
+#
+# note: if a candidate has two bank accounts, they have two bank reports...
+# and transferring money from one to the other counts as a receipt/expenditure.
+#
+# these two functions attempt to deal with that -
+# if there are are two bank reports for the same period, checks for a pair:
+#   - receipt = expenditure
+#   - receipt from = expenditure to
+#
+def get_candidate_spent_year(candidate_cpf_id, year=2023):
+    agg = RawBankReport.objects.filter(
+        cpf_id=candidate_cpf_id,
+        beginning_date_display__year=year
+    ).aggregate(Sum("expenditure_total_display"))
+
+    # check if there are 2 bank accounts during the same period ever, to try
+    # to flush out bank transfers
+    max_num_reports = RawBankReport.objects\
+        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=year)\
+        .values("beginning_date_display")\
+        .annotate(Count("beginning_date_display"))\
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+
+    if max_num_reports > 1:
+        # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
+        # this is such a hack.
+        # transfer from closing bank account: $13,472.25, 4/6/2021   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
+        # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
+        if (candidate_cpf_id == 16062):
+            return agg['expenditure_total_display__sum'] - decimal.Decimal("13472.25")
+        else:
+            print("two bank reports found for the same period! investigate! fix!")
+            return None
+
+    return agg['expenditure_total_display__sum']
+
+
+# all the money the candidate has raised in year
+# (doesn't include money candidate started yeaer with)
+def get_candidate_raised_year(candidate_cpf_id, year=2023):
+    agg = RawBankReport.objects.filter(
+        cpf_id=candidate_cpf_id,
+        beginning_date_display__year=year
+        ).aggregate(Sum("receipt_total_display"))
+
+    # check if there are 2 bank accounts during the same period ever, to try
+    # to flush out bank transfers
+    max_num_reports = RawBankReport.objects\
+        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=year)\
+        .values("beginning_date_display")\
+        .annotate(Count("beginning_date_display"))\
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+
+    if max_num_reports > 1:
+        # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
+        # this is such a hack.
+        # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
+        # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
+        if (candidate_cpf_id == 16062):
+            return agg['receipt_total_display__sum'] - decimal.Decimal("13472.25")
+        else:
+            print("two bank reports found for the same period! investigate! fix!")
+            return None
+
+    return agg['receipt_total_display__sum']
