@@ -752,7 +752,12 @@ p:last-of-type {
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Raised in 2023</div>
+                        <div>Raised in 2023
+                        {% if candidate.self_loan %}
+                            <br>
+                            ${{candidate.self_loan}} loan to self included
+                        {% endif %}
+                        </div>
                     </div>
                     <div>
                         <i class="fa fa-minus text-danger"></i>
