@@ -735,35 +735,35 @@ p:last-of-type {
                     </div>
                     <div>
                         <strong>
-                            {% if money_2021_start is not None %}
-                            ${{ money_2021_start|floatformat:0|intcomma }}
+                            {% if money_2023_start is not None %}
+                            ${{ money_2023_start|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Balance at the start of 2021</div>
+                        <div>Balance at the start of 2023</div>
                     </div>
                     <div>
                         <i class="fa fa-plus text-success"></i>
                         <strong>
-                            {% if money_2021_raised is not None %}
-                            ${{ money_2021_raised|floatformat:0|intcomma }}
+                            {% if money_2023_raised is not None %}
+                            ${{ money_2023_raised|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Raised in 2021</div>
+                        <div>Raised in 2023</div>
                     </div>
                     <div>
                         <i class="fa fa-minus text-danger"></i>
                         <strong>
-                            {% if money_2021_spent is not None %}
-                            ${{ money_2021_spent|floatformat:0|intcomma }}
+                            {% if money_2023_spent is not None %}
+                            ${{ money_2023_spent|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Spent in 2021</div>
+                        <div>Spent in 2023</div>
                     </div>
                 </div>
             </div>

@@ -8,9 +8,9 @@ from django.urls import reverse
 from django.views.generic import DetailView, ListView, TemplateView
 from markdown import markdown
 
-from campaign_finance.models import (RawBankReport, get_candidate_2021_raised,
-                                     get_candidate_2021_spent,
-                                     get_candidate_money_at_start_of_2021)
+from campaign_finance.models import (RawBankReport, get_candidate_raised_year,
+                                     get_candidate_spent_year,
+                                     get_candidate_money_at_start_of_year)
 
 from .models import (Candidate, CandidateSpecificProposalStance, Degree,
                      SpecificProposal)
@@ -99,16 +99,20 @@ class CandidateDetail(DetailView):
                 ).latest("filing_date")
             except RawBankReport.DoesNotExist:
                 context["latest_bank_report"] = None
-            context["money_2021_start"] = get_candidate_money_at_start_of_2021(
-                self.object.cpf_id
-            )
-            context["money_2021_spent"] = get_candidate_2021_spent(self.object.cpf_id)
-            context["money_2021_raised"] = get_candidate_2021_raised(self.object.cpf_id)
+
+            try:
+                context["money_2023_start"] = get_candidate_money_at_start_of_year(
+                    self.object.cpf_id, 2023
+                )
+                context["money_2023_spent"] = get_candidate_spent_year(self.object.cpf_id, 2023)
+                context["money_2023_raised"] = get_candidate_raised_year(self.object.cpf_id, 2023)
+            except:
+                context["latest_bank_report"] = None
         else:
             context["latest_bank_report"] = None
-            context["money_2021_start"] = None
-            context["money_2021_spent"] = None
-            context["money_2021_raised"] = None
+            context["money_2023_start"] = None
+            context["money_2023_spent"] = None
+            context["money_2023_raised"] = None
 
         context["endorsements"] = (
             self.object.endorsements.filter(display=True)

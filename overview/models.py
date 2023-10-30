@@ -542,6 +542,7 @@ class ForumParticipant(models.Model):
     link = models.URLField(max_length=250, blank=True)
     display = models.BooleanField(default=True)
     timestamps = models.CharField(blank=True, max_length=100, help_text="list of timestamps the candidates speaks during, ex., '15:35-16:45, 1:37:02-1:38:00' ")
+    by_proxy = models.BooleanField(default=False)
 
     @property
     def forum_link(self):
