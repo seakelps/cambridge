@@ -4,18 +4,29 @@ import debounce from 'lodash/debounce'
 
 function childText( d ) {
     /* text (can be html) for foldout row when main row is clicked */
-    if (d.aceladescription) {
-      return `<h5>${d.resolutionshorttitle} (<a target="_blank" rel="noopener" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?ID=${d.resolutionid}">view</a>)</h5>` + marked(d.aceladescription);
+	var child = `<h5>${d.title} (<a target="_blank" rel="noopener" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?ID=${d.id}">view</a>)</h5>`;
+    if (d.text) {
+      return child + marked(d.text);
     } else {
-      return ''; // otherwise .show() fails
+      return child;
     }
 }
 
 function make_vote_split( d ) {
-    let councillors = ["dennis_carlone", "jan_devereux", "craig_kelley", "alanna_mallon", "marc_mcgovern", "sumbul_siddiqui", "denise_simmons", "tim_toomey", "quinton_zondervan"];
+    let councillors = [
+            "dennis_j_carlone",
+            "e_denise_simmons",
+            "marc_c_mcgovern",
+            "burhan_azeem",
+            "alanna_mallon",
+            "patricia_nolan",
+            "paul_toner",
+            "sumbul_siddiqui",
+            "quinton_zondervan",
+    ];
 
     for (let i = 0; i < councillors.length; i++) {
-        if (d[councillors[i]] == 'Present' || d[councillors[i]] == 'Nays') {
+        if (d[councillors[i]] == 'NAYS') {
             return 'contested';
         }
     }
@@ -24,7 +35,11 @@ function make_vote_split( d ) {
 }
 
 function as_date(d) {
-    return (new Date(d)).toLocaleDateString();
+	if (d === null) {
+		return null;
+	} else {
+    	return (new Date(d)).toLocaleDateString();
+	}
 }
 
 function vote( data, type, row ) {
@@ -81,22 +96,34 @@ function createTable(voter_file_url) {
     order: [[ 0, "desc" ]],
     drawCallback: markOpenChildren,
     columns: [
-      { data: "resolutionid", visible: false },
-      { orderable: false, data: "full_text", visible: false },
-      { render: as_date, width: "20ch", orderable: true, data: "meetingdate", visible: true },
+      { data: "id", visible: false },
+      { orderable: false, data: "text", visible: false },
+      {
+		  title: "Date",
+		  render: as_date,
+		  width: "20ch",
+		  orderable: true,
+		  type: "date",
+		  data: "date",
+		  visible: true
+      },
 
-      { orderable: false, data: "resolutionshorttitle",  },
+      {
+		  title: "Title",
+		  orderable: false,
+		  data: "title"
+      },
       { searchable: true, visible: false, orderable: false, name: "vote_split", data: make_vote_split },
 
-      { render:vote, searchable: false, data: "dennis_carlone", title: "Carlone" },
-      { render:vote, searchable: false, data: "alanna_mallon", title: "Mallon" },
-      { render:vote, searchable: false, data: "marc_mcgovern", title: "McGovern" },
-      { render:vote, searchable: false, data: "sumbul_siddiqui", title: "Siddiqui" },
-      { render:vote, searchable: false, data: "denise_simmons", title: "Simmons" },
-      { render:vote, searchable: false, data: "tim_toomey", title: "Toomey" },
-      { render:vote, searchable: false, data: "quinton_zondervan", title: "Zondervan" },
-      { render:vote, searchable: false, data: "jivan_sobrinho-wheeler", title: "Sobrinho-Wheeler" },
-      { render:vote, searchable: false, data: "patty_nolan", title: "Nolan" }
+      { render:vote, orderable: false, searchable: false, data: "dennis_j_carlone", title: "Carlone" },
+      { render:vote, orderable: false, searchable: false, data: "e_denise_simmons", title: "Simmons" },
+      { render:vote, orderable: false, searchable: false, data: "marc_c_mcgovern", title: "McGovern" },
+      { render:vote, orderable: false, searchable: false, data: "burhan_azeem", title: "Azeem" },
+      { render:vote, orderable: false, searchable: false, data: "alanna_mallon", title: "Mallon" },
+      { render:vote, orderable: false, searchable: false, data: "patricia_nolan", title: "Nolan" },
+      { render:vote, orderable: false, searchable: false, data: "paul_toner", title: "Toner" },
+      { render:vote, orderable: false, searchable: false, data: "sumbul_siddiqui", title: "Siddiqui" },
+      { render:vote, orderable: false, searchable: false, data: "quinton_zondervan", title: "Zondervan" },
     ],
   } );
 
@@ -138,6 +165,7 @@ function createTable(voter_file_url) {
   });
 
   $("[data-toggle=tooltip]").tooltip();
+  $('#myTable thead').addClass('thead-dark');
 }
 
 export { createTable }
