@@ -116,7 +116,6 @@
                                 <th>Age</th>
                                 <th>Voter Reg</th>
                                 <th>Home Value</th>
-                                <th>Area</th>
                                 <th>Education</th>
                             </tr>
                         </thead>
@@ -154,10 +153,6 @@
                                     {% if candidate.housing_sell_value %}
                                         ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
                                     {% endif %}
-                                </td>
-
-                                <td>
-                                    {{ candidate.neighborhood }}
                                 </td>
 
                                 <td>
