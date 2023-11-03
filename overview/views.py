@@ -13,7 +13,7 @@ from campaign_finance.models import (RawBankReport, get_candidate_2021_raised,
                                      get_candidate_money_at_start_of_2021)
 
 from .models import (Candidate, CandidateSpecificProposalStance, Degree,
-                     SpecificProposal)
+                     SpecificProposal, Forum)
 from .utils import get_candidate_locations
 
 
@@ -372,4 +372,14 @@ class CandidateForums(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.filter(is_running=True, hide=False)
+        context["candidates"] = candidates = Candidate.objects.filter(is_running=True, hide=False)
+        context["forums"] = forums = Forum.objects.filter(display=True)
+
+        dataset = {}
+        for candidate in candidates:
+            forum_participation = {p.forum_id: p for p in candidate.forums.all()}
+            dataset[candidate] = [forum_participation.get(forum.id) for forum in forums]
+
+        context["dataset"] = dataset
+
+        return context

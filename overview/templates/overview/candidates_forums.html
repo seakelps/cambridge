@@ -4,6 +4,20 @@
 {% load humanize %}
 {% load get_item from overview %}
 
+{% block head_extra %}
+{{ block.super }}
+<link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+<link rel="stylesheet" href="//cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap4.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap4.min.js"></script>
+<script defer type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.colVis.min.js"></script>
+
+<script defer src="{% static "candidate_forums.js" %}"></script>
+{% endblock %}
+
 {% block body_id %}candidate_forums{% endblock %}
 
 {% block content %}
@@ -26,19 +40,28 @@
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
-                    <table class="table table-striped comparison-table">
+                    <table id="forums-table" class="table table-striped comparison-table">
                         <thead class="thead-dark">
                             <tr>
-                                <th>Candidate</th>
-                                <th>(Forum 1)</th>
+								<th>Candidate</th>
+								{% for forum in forums %}
+									<th>{{ forum.name }}</th>
+								{% endfor %}
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate, participations in dataset.items %}
                             <tr>
                                 <td>
                                     <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
                                 </td>
+								{% for participation in participations %}
+								<td>
+									{% if participation %}
+										<a href="{{ participation.forum_link }}">View</a>
+									{% endif %}
+								</td>
+								{% endfor %}
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -48,6 +71,4 @@
         </div>
     </section>
 </div>
-
-
 {% endblock %}
