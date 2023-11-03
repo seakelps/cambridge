@@ -627,6 +627,44 @@ p:last-of-type {
 </div>
 
 <div class="bg-gray">
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 id="q-and-a">Forums</h2>
+                <h3>Panels {{candidate.shortname}} participated in</h3>
+            </div>
+
+            {% for response in candidate_forums %}
+            <div class="col-12">
+                <div class="card border border-green d-none d-md-block survey">
+                    <div class="card-body">
+                        <h4>
+                            <a target="_blank" href="{{response.forum_link }}">
+                                {{ response.forum.name }}
+                            </a>
+                            <i class="fas fa-external-link-alt"></i>
+                        </h4>
+                        <p>{{ response.forum.description }}</p>
+                    </div>
+                </div>
+                <section class="bg-white border border-green d-md-none row survey">
+                    <div class="col">
+                        <h4>
+                            <a target="_blank" href="{{response.forum_link }}">
+                                {{ response.forum.name }}
+                            </a>
+                            <i class="fas fa-external-link-alt"></i>
+                        </h4>
+                        <p>{{ response.forum.description }}</p>
+                    </div>
+                </section>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<div>
     <section class="container" id="quotes">
         <div class="row">
             <div class="col-12">
@@ -646,7 +684,7 @@ p:last-of-type {
     </section>
 </div>
 
-<div>
+<div class="bg-gray">
     <section class="container" id="press">
         <div class="row">
             <div class="col-12">
@@ -716,7 +754,7 @@ p:last-of-type {
     </section>
 </div>
 
-<div class="bg-gray">
+<div>
     <section class="container">
         <div class="row">
             <div class="col">

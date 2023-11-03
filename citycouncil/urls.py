@@ -9,6 +9,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from overview.admin import money_admin_site
 
 
 class HowToVote(TemplateView):
@@ -31,6 +32,7 @@ urlpatterns = [
     re_path(r'^history/', include('voting_history.urls')),
     re_path(r'^finance/', include('campaign_finance.urls')),
     re_path(r'^admin/', admin.site.urls),
+    re_path(r'^money-admin/', money_admin_site.urls),
     re_path(r'^ranking/', include('ranking.urls')),
 
     # to support having users - login, logout, password management

@@ -13,7 +13,7 @@ from campaign_finance.models import (RawBankReport, get_candidate_raised_year,
                                      get_candidate_money_at_start_of_year)
 
 from .models import (Candidate, CandidateSpecificProposalStance, Degree,
-                     SpecificProposal)
+                     SpecificProposal, Forum)
 from .utils import get_candidate_locations
 
 
@@ -147,6 +147,16 @@ class CandidateDetail(DetailView):
         context["candidate_voting_history"] = self.object.van_history.order_by(
             "-election__year"
         ).all()
+
+        context["candidate_forums"] = (
+            self.object.forums.filter(
+                display=True,
+                forum__display=True,
+            )
+            .select_related("forum")
+            # .prefetch_related("forum__organization")
+            .order_by("forum__date")
+        )
 
         context["schema_org"] = {
             "@context": "https://schema.org",
@@ -356,5 +366,24 @@ class WrittenPublicComment(TemplateView):
         with open(full_path, "r") as fp:
             reader = csv.reader(fp)
             context["public_comments"] = list(reader)
+
+        return context
+
+
+class CandidateForums(TemplateView):
+    template_name = "overview/candidates_forums.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        context["candidates"] = candidates = Candidate.objects.filter(is_running=True, hide=False)
+        context["forums"] = forums = Forum.objects.filter(display=True)
+
+        dataset = {}
+        for candidate in candidates:
+            forum_participation = {p.forum_id: p for p in candidate.forums.all()}
+            dataset[candidate] = [forum_participation.get(forum.id) for forum in forums]
+
+        context["dataset"] = dataset
 
         return context

@@ -1,5 +1,7 @@
 import re
+from campaign_finance.models import RawBankReport, get_candidate_money_at_start_of_year, get_candidate_raised_year, get_candidate_spent_year
 from django.contrib import admin
+from django.contrib.admin import AdminSite
 from django.forms import ModelForm
 from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
@@ -207,6 +209,35 @@ class CandidateAdmin(admin.ModelAdmin):
             return "{:.0%}".format(1 - missing / total)
 
 
+class MoneyAdmin(admin.ModelAdmin):
+    ordering = ("hide", "-is_running", "fullname")
+
+    list_display = (
+        'fullname',
+        'balance',
+        'raised_current_year',
+        'spent_current_year',
+        'start_current_year',
+    )
+    list_filter = ('is_running', )
+
+    @admin.display
+    def balance(self, instance):
+        return RawBankReport.objects.filter(cpf_id=instance.cpf_id).latest("filing_date").ending_balance_display
+
+    @admin.display
+    def raised_current_year(self, instance):
+        return get_candidate_raised_year(instance.cpf_id)
+
+    @admin.display
+    def spent_current_year(self, instance):
+        return get_candidate_spent_year(instance.cpf_id)
+
+    @admin.display
+    def start_current_year(self, instance):
+        return get_candidate_money_at_start_of_year(instance.cpf_id)
+
+
 class OrganizationAdmin(admin.ModelAdmin):
     readonly_fields = ['has_logo']
     list_display = ('name', 'is_local', 'is_union', 'has_logo',)
@@ -322,6 +353,13 @@ class ForumAdmin(admin.ModelAdmin):
     list_filter = ('year',)
 
 
+class MoneyAdminSite(AdminSite):
+    site_header = "Money Admin"
+    site_title = "Money"
+
+money_admin_site = MoneyAdminSite(name='event_admin')
+
+
 admin.site.register(Candidate, CandidateAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
@@ -334,3 +372,5 @@ admin.site.register(PastContribution, PastContributionAdmin)
 admin.site.register(VanElection,VanElectionAdmin)
 admin.site.register(CandidateVan,CandidateVanAdmin)
 admin.site.register(Forum, ForumAdmin)
+
+money_admin_site.register(Candidate, MoneyAdmin)
