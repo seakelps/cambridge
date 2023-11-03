@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load fullurl %}
 {% load static %}
+{% load get_item from overview %}
+
 
 {% block title %}What funds are candidates raising?{% endblock %}
 {% block meta_description %}See how much money candidates are raising - and how much they are spending.{% endblock %}
@@ -9,56 +11,138 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="What funds are candidates raising?" />
 <meta name="twitter:description" content="See how much money candidates are raising - and how much they are spending." />
-<meta name="twitter:image" content="{% fullstatic "campaign_finance/money-2019-10-22.png" %}"/>
+<meta name="twitter:image" content="{% fullstatic "campaign_finance/money-2023-bar-chart.svg" %}"/>
 
-<meta property="og:image" content="{% fullstatic "campaign_finance/money-2019-10-22.png" %}"/>
+<meta property="og:image" content="{% fullstatic "campaign_finance/money-2023-bar-chart.svg" %}"/>
 {% endblock %}
 
 {% block content %}
-<div class="container">
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        What funds are candidates raising?
-    </div>
-    <div class="panel-body">
-        <div class="col-md-12">
-            <span>{# also included in og:description #}
-            See how much money candidates are raising - and how much they are spending.
-            </span>
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2>Campaign Finance</h2>
+            </div>
+
+            <div class="col-md-12">
+                <p>
+                How much money candidates are raising - and spending.
+                </p>
+            </div>
+
+        <div class="row">
+            <div class="col-md-12">
+            <p class="text-muted">
+                <cite>
+                <span class="data_highlight">Data</span> gathered from the
+                <a href="http://www.ocpf.us" target="_blank">
+                    Office of Campaign and Political Finance
+                </a>.
+                </cite>
+                Last scraped 2023-11-03.
+            </p>
+            </div>
         </div>
-
-        <!-- candidate drop down here? -->
-
-    </div>
-
-    <div class="panel-footer">
-        <cite class="text-muted">
-            <span class="data_highlight">Data</span> gathered from the
-            <a href="http://www.ocpf.us" target="_blank">
-                Office of Campaign and Political Finance
-            </a>
-        </cite>
-    </div>
+    </section>
 </div>
 
-
-<div class="row">
-    <div class="col-md-12">
-        <h4>Balance</h4>
-    </div>
-    <p>
-        2023 graph coming soon
-    </p>
-<!--     <div class="col-md-12">
-        <picture class="finance_bubble_graph">
-            <img
+<div class="">
+    <section class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Top Raisers - Bar Chart</h4>
+        </div>
+    
+        <div class="col-md-12">
+            <picture class="finance_bubble_graph">
+                <img
                 class="img"
                 style="max-width: 100%"
-                src="{% static 'campaign_finance/money-2019-10-22.svg' %}"
-                alt="visual representation of campaign finance raise and spend">
-        </picture>
-    </div> -->
+                src="{% static 'campaign_finance/money-2023-bar-chart.svg' %}"
+                alt="bar chart of campaign finance raise and spend">
+            </picture>
+        </div>
+    </div>    
+    </section>
 </div>
 
+
+<div class="">
+    <section class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>All Candidates - Bubble Graph</h4>
+        </div>
+        <div class="col-md-12">
+            <picture class="finance_bubble_graph">
+                <img
+                    class="img"
+                    style="max-width: 100%"
+                    src="{% static 'campaign_finance/money-2019-10-22.svg' %}"
+                    alt="visual representation of campaign finance raise and spend">
+            </picture>
+        </div>
+    </div>
+    </section>
 </div>
+
+
+
+<div class="">
+    <section class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h4>All Candidates - Table</h4>
+        </div>
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table class="table table-striped comparison-table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>start</th>
+                                <th>raised</th>
+                                <th>spent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for candidate in candidates %}
+                            <tr>
+                                <td>
+                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                </td>
+
+                                <td>
+                                    {% if candidates_start|get_item:candidate.id %}
+                                        {{candidates_start|get_item:candidate.id}}
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidates_raised|get_item:candidate.id %}
+                                        {{candidates_raised|get_item:candidate.id}}
+                                        <br>
+                                        ({{candidate.self_loan}})
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if candidates_spent|get_item:candidate.id %}
+                                        {{candidates_spent|get_item:candidate.id}}
+                                    {% endif %}
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </section>
+</div>
+
+
 {% endblock %}
