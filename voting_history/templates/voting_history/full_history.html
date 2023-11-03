@@ -36,10 +36,10 @@ See where current councillors stand on your issues.
     cursor: pointer;
 }
 
-.Yeas { color: blue; }
-.Nays { color: red; }
-.Absent { color: #CCC; }
-.Present { color: black }
+.YEAS { color: blue; }
+.NAYS { color: red; }
+.ABSENT { color: #CCC; }
+.PRESENT { color: black }
 
 
 /* make the short truncate */
@@ -89,57 +89,16 @@ tr[role=row] td:nth-child(2) {
 
         <div class="card-footer">
             <span class="data_highlight">Data</span> gathered from
-            the <a href="https://data.cambridgema.gov/resource/3g59-fvq4" target="_blank" rel="noopener">Open Data Portal</a>
-            and the
+            the
             <a href="http://cambridgema.iqm2.com/" target="_blank" rel="noopener">
                 Cambridge Open Meetings Portal
             </a>
-            <a title="Download our data" data-placement="bottom" data-toggle="tooltip" href="{% static "voting_record.prepared.json " %}" download target="_black">(last scraped 2021-10-24)</a>
+            <a title="Download our data" data-placement="bottom" data-toggle="tooltip" href="{% static "voting_record.prepared.json " %}" download target="_black">(last scraped 2023-11-01)</a>
         </div>
     </div>
 
 
     <table id="myTable" class="table table-condensed table-striped" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Resolution Id</td>
-                <th>full text</th>
-                <th>Date</th>
-
-                <th>Summary</th>
-                <th>vote_split</th>
-
-                <th>Carlone</th>
-                <th>Mallon</th>
-                <th>McGovern</th>
-                <th>Siddiqui</th>
-                <th>Simmons</th>
-                <th>Toomey</th>
-                <th>Zondervan</th>
-                <th>Sobrinho-Wheeler</th>
-                <th>Nolan</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Resolution Id</td>
-                <th>full text</th>
-                <th>Date </th>
-
-                <th>Summary</th>
-                <th>vote_split</th>
-
-                <th>Carlone</th>
-                <th>Mallon</th>
-                <th>McGovern</th>
-                <th>Siddiqui</th>
-                <th>Simmons</th>
-                <th>Toomey</th>
-                <th>Zondervan</th>
-                <th>Sobrinho-Wheeler</th>
-                <th>Nolan</th>
-            </tr>
-        </tfoot>
     </table>
 </div>
 {% endblock %}
