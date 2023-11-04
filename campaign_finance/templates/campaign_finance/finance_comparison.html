@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load fullurl %}
+{% load humanize %}
 {% load static %}
 {% load get_item from overview %}
 
@@ -78,7 +79,7 @@
                 <img
                     class="img"
                     style="max-width: 100%"
-                    src="{% static 'campaign_finance/money-2019-10-22.svg' %}"
+                    src="{% static 'campaign_finance/money-2023-11-03.svg' %}"
                     alt="visual representation of campaign finance raise and spend">
             </picture>
         </div>
@@ -114,21 +115,24 @@
 
                                 <td>
                                     {% if candidates_start|get_item:candidate.id %}
-                                        {{candidates_start|get_item:candidate.id}}
+                                        {{ candidates_start|get_item:candidate.id|floatformat:0|intcomma }}
                                     {% endif %}
                                 </td>
 
                                 <td>
                                     {% if candidates_raised|get_item:candidate.id %}
-                                        {{candidates_raised|get_item:candidate.id}}
-                                        <br>
-                                        ({{candidate.self_loan}})
+                                        {{ candidates_raised|get_item:candidate.id|floatformat:0|intcomma }}
+                                        {% if candidate.self_loan %}
+                                        <p class="text-muted">
+                                        {{candidate.self_loan}} from self
+                                        {% endif %}
+                                        </p>
                                     {% endif %}
                                 </td>
 
                                 <td>
                                     {% if candidates_spent|get_item:candidate.id %}
-                                        {{candidates_spent|get_item:candidate.id}}
+                                        {{ candidates_spent|get_item:candidate.id|floatformat:0|intcomma }}
                                     {% endif %}
                                 </td>
 
