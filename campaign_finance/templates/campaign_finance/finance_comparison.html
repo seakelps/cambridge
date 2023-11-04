@@ -115,16 +115,16 @@
 
                                 <td>
                                     {% if candidates_start|get_item:candidate.id %}
-                                        {{ candidates_start|get_item:candidate.id|floatformat:0|intcomma }}
+                                        ${{ candidates_start|get_item:candidate.id|floatformat:0|intcomma }}
                                     {% endif %}
                                 </td>
 
                                 <td>
                                     {% if candidates_raised|get_item:candidate.id %}
-                                        {{ candidates_raised|get_item:candidate.id|floatformat:0|intcomma }}
+                                        ${{ candidates_raised|get_item:candidate.id|floatformat:0|intcomma }}
                                         {% if candidate.self_loan %}
                                         <p class="text-muted">
-                                        {{candidate.self_loan}} from self
+                                            ${{candidate.self_loan|floatformat:0|intcomma}} from self
                                         {% endif %}
                                         </p>
                                     {% endif %}
@@ -132,7 +132,7 @@
 
                                 <td>
                                     {% if candidates_spent|get_item:candidate.id %}
-                                        {{ candidates_spent|get_item:candidate.id|floatformat:0|intcomma }}
+                                        ${{ candidates_spent|get_item:candidate.id|floatformat:0|intcomma }}
                                     {% endif %}
                                 </td>
 
