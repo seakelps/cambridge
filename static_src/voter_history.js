@@ -3,43 +3,43 @@ import debounce from 'lodash/debounce'
 
 
 function childText( d ) {
-	/* text (can be html) for foldout row when main row is clicked */
-		var child = `<h5>${d.title} (<a target="_blank" rel="noopener" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?ID=${d.id}">view</a>)</h5>`;
-	if (d.text) {
-		return child + marked(d.text);
-	} else {
-		return child;
-	}
+  /* text (can be html) for foldout row when main row is clicked */
+    var child = `<h5>${d.title} (<a target="_blank" rel="noopener" href="http://cambridgema.iqm2.com/Citizens/Detail_LegiFile.aspx?ID=${d.id}">view</a>)</h5>`;
+  if (d.text) {
+    return child + marked(d.text);
+  } else {
+    return child;
+  }
 }
 
 function make_vote_split( d ) {
-	let councillors = [
-		"dennis_j_carlone",
-		"e_denise_simmons",
-		"marc_c_mcgovern",
-		"burhan_azeem",
-		"alanna_mallon",
-		"patricia_nolan",
-		"paul_toner",
-		"sumbul_siddiqui",
-		"quinton_zondervan",
-	];
+  let councillors = [
+    "dennis_j_carlone",
+    "e_denise_simmons",
+    "marc_c_mcgovern",
+    "burhan_azeem",
+    "alanna_mallon",
+    "patricia_nolan",
+    "paul_toner",
+    "sumbul_siddiqui",
+    "quinton_zondervan",
+  ];
 
-	for (let i = 0; i < councillors.length; i++) {
-		if (d[councillors[i]] == 'NAYS') {
-			return 'contested';
-		}
-	}
+  for (let i = 0; i < councillors.length; i++) {
+    if (d[councillors[i]] == 'NAYS') {
+      return 'contested';
+    }
+  }
 
-	return 'unanimous';
+  return 'unanimous';
 }
 
 function as_date(d) {
-	if (d === null) {
-		return null;
-	} else {
-    	return (new Date(d)).toLocaleDateString();
-	}
+  if (d === null) {
+    return null;
+  } else {
+      return (new Date(d)).toLocaleDateString();
+  }
 }
 
 function vote( data, type, row ) {
@@ -89,25 +89,25 @@ function createTable(voter_file_url) {
     ajax: voter_file_url,
     searching: true,
     lengthChange: false,
-    order: [[ 0, "desc" ]],
+    order: [[ 2, "desc" ]],
     drawCallback: markOpenChildren,
     columns: [
       { data: "id", visible: false },
       { orderable: false, data: "text", visible: false },
       {
-		  title: "Date",
-		  render: as_date,
-		  width: "20ch",
-		  orderable: true,
-		  type: "date",
-		  data: "date",
-		  visible: true
+      title: "Date",
+      render: as_date,
+      width: "20ch",
+      orderable: true,
+      type: "date",
+      data: "date",
+      visible: true
       },
 
       {
-		  title: "Title",
-		  orderable: false,
-		  data: "title"
+      title: "Title",
+      orderable: false,
+      data: "title"
       },
       { searchable: true, visible: false, orderable: false, name: "vote_split", data: make_vote_split },
 
