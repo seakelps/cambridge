@@ -26,8 +26,7 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 WORKDIR /app
  
 # Copy application code (original version didn't work, hopefully this does?)
-# COPY --chown=appuser:appuser . .
-RUN chown -R appuser /app
+COPY --chown=appuser:appuser campaign_finance citycouncil locale media overview ranking static static_compiled staticfiles templates voting_history manage.py .
 
 # Set environment variables to optimize Python
 ENV PYTHONDONTWRITEBYTECODE=1
