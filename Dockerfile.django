@@ -35,8 +35,6 @@ ENV PYTHONUNBUFFERED=1
  
 USER appuser
 EXPOSE 8000 
-
-ENTRYPOINT ["python", "manage.py"]
  
 # Start the application using Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "citycouncil.wsgi:application"]
