@@ -29,16 +29,14 @@ WORKDIR /app
 # COPY --chown=appuser:appuser . .
 RUN chown -R appuser /app
 
- 
 # Set environment variables to optimize Python
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
  
-# Switch to non-root user
 USER appuser
- 
-# Expose the application port
 EXPOSE 8000 
+
+ENTRYPOINT ["python", "manage.py"]
  
 # Start the application using Gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "citycouncil.wsgi:application"]
