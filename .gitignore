@@ -1,5 +1,9 @@
 ### project/workspace specific ignores ###
 citycouncil/.python-version
+staticfiles/*
+static_compiled/*
+# keep files to force directories to exist
+!empty.txt
 
 ### generic python project ignores from static overflow question 3719243 ###
 # byte-compiled/ optimized/ dll files
