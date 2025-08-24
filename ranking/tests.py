@@ -147,11 +147,11 @@ class MyListTest(TestCase):
 
         ranking1, ranking2 = self.user.rankedlist.annotated_candidates.all()
 
-        self.assertEquals(ranking1.candidate, candidate2)
+        self.assertEqual(ranking1.candidate, candidate2)
         self.assertFalse(ranking1.comment)
 
-        self.assertEquals(ranking2.candidate, candidate1)
-        self.assertEquals(ranking2.comment, "My spoon is too big")
+        self.assertEqual(ranking2.candidate, candidate1)
+        self.assertEqual(ranking2.comment, "My spoon is too big")
 
 
 class UpdateNotes(TestCase):

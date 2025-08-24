@@ -2,7 +2,8 @@ FROM node:20
 
 WORKDIR /app
 COPY ./static_src /app/static_src
-COPY ./package*.json /app/
+COPY ./package-lock.json /app/
+COPY ./package.json /app/
 COPY ./webpack.config.js /app/
 
 RUN npm install
