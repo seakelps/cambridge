@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "This is a django project!",
   "engines": {
-    "node": "20"
+    "node": "24"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -32,11 +32,10 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.21",
     "marked": "^0.7.0",
-    "node-sass": "^4.13.1",
     "node": "^10.9.0",
     "popper.js": "^1.15.0",
     "regenerator-runtime": "^0.13.3",
-    "sass-loader": "^8.0.0",
+    "sass-loader": "^10.5.2",
     "sortablejs": "^1.10.1",
     "style-loader": "^1.0.0",
     "terser-webpack-plugin": "^4",

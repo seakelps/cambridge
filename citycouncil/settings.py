@@ -1,20 +1,14 @@
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+DEBUG = os.environ["DJANGO_DEBUG"] == "TRUE"
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'cf=_&u(m$icl*#0e_u0!=n_9$073xqf65(vi**=j-kxju6r8ff'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ["DJANGO_ALLOWED_HOST"]]
 ATOMIC_REQUESTS = True
 
 FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
@@ -95,27 +89,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'citycouncil.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'council',
-        'USER': 'djangouser',
-        'PASSWORD': 'djangopasspass',
-        'HOST': '',
-        'PORT': '',
-    }
+    'default': dj_database_url.parse(
+        os.environ["DJANGO_DATABASE_URL"],
+        conn_max_age=600,
+        conn_health_checks=True,
+    ),
 }
-
-# TODO: This is a hack while waiting for
-if os.environ.get('CI'):
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'HerokuCI'
-    }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

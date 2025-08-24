@@ -1,6 +1,6 @@
 # docker compose run web python manage.py {test,makemigrations,migrate}
 
-
+name: cambridge-vote
 services:
   db:
     image: postgres
@@ -15,22 +15,29 @@ services:
       dockerfile: Dockerfile.static
     command: watch
     volumes:
-      - .:/static_src
-      - .:/static_compiled
+      # mounting as a file so that we can npm update and see the changes
+      - ./package-lock.json:/app/package-lock.json
+      - ./package.json:/app/package.json
+      - ./webpack.config.json:/app/webpack.config.json
+      - static_compiled:/app/static_compiled
   web:
     build:
       dockerfile: Dockerfile.django
     # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-      - /static_compiled/
+      - static_compiled:/app/static_compiled
     ports:
       - "8000:8000"
     environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - DJANGO_SETTINGS_MODULE=docker_settings
+      - DJANGO_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - DJANGO_SETTINGS_MODULE=citycouncil.settings
+      - DJANGO_SECRET_KEY=testtest
+      - DJANGO_DEBUG=TRUE
+      - DJANGO_ALLOWED_HOST=*
     depends_on:
       - db
       - static
+volumes:
+  static_src:
+  static_compiled:
