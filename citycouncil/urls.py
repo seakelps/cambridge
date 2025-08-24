@@ -41,7 +41,9 @@ urlpatterns = [
 
     # annoyed django doesn't support this by default
     re_path('^404/$', TemplateView.as_view(template_name="404.html")),
-]
+    re_path('^40xxxx4/$', TemplateView.as_view(template_name="404.html")),
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # These are hosted from django since we will be using whitenoise
+    *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
+    *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+]
