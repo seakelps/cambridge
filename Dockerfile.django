@@ -25,8 +25,19 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 # Set the working directory
 WORKDIR /app
  
-# Copy application code (original version didn't work, hopefully this does?)
-COPY --chown=appuser:appuser campaign_finance citycouncil locale media overview ranking static static_compiled staticfiles templates voting_history manage.py ./
+# Copy application code (dodge volumes)
+COPY --chown=appuser:appuser campaign_finance ./campaign_finance
+COPY --chown=appuser:appuser citycouncil ./citycouncil
+COPY --chown=appuser:appuser locale ./locale
+COPY --chown=appuser:appuser media ./media
+COPY --chown=appuser:appuser overview ./overview
+COPY --chown=appuser:appuser ranking ./ranking
+COPY --chown=appuser:appuser static ./static
+COPY --chown=appuser:appuser static_compiled ./static_compiled
+COPY --chown=appuser:appuser staticfiles ./staticfiles
+COPY --chown=appuser:appuser templates ./templates
+COPY --chown=appuser:appuser voting_history ./voting_history
+COPY --chown=appuser:appuser manage.py .
 
 # Set environment variables to optimize Python
 ENV PYTHONDONTWRITEBYTECODE=1
