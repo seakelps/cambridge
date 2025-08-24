@@ -10,7 +10,8 @@ module.exports = {
     voter_history: './static_src/voter_history.js',
     by_organization: './static_src/by_organization.js',
     public_comment: './static_src/public_comment.js',
-    candidate_forums: './static_src/candidate_forums.js',
+    // oops, must have never commit this file
+    // candidate_forums: './static_src/candidate_forums.js',
   },
   output: {
     path: path.resolve(__dirname, 'static_compiled'),
