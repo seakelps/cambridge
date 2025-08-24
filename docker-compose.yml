@@ -15,7 +15,10 @@ services:
       dockerfile: Dockerfile.static
     command: watch
     volumes:
-      - static_src:/static_src
+      # mounting as a file so that we can npm update and see the changes
+      - ./package-lock.json:/app/package-lock.json
+      - ./package.json:/app/package.json
+      - ./webpack.config.json:/app/webpack.config.json
       - static_compiled:/app/static_compiled
   web:
     build:
