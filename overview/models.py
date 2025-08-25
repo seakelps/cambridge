@@ -114,7 +114,7 @@ class Candidate(models.Model):
         ('single',     'Single-Family'),
         ('double',     'Two-Family'),
         ('triple',     'Triple-Decker'),
-        ('apartment', 'Apartment'),
+        ('apartment',  'Apartment'),
         ('dorm',       'Dorm'),
         ('other',      'Other'),
         ('unknown',    'Unknown')
@@ -209,6 +209,39 @@ class Candidate(models.Model):
 
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()
+
+
+class Election(models.Model):
+    """
+    Holds the records of elections covered.
+
+    ex., "2025 School Committee"
+    """
+    position_choices = (
+        ('school',  'School Committee'),
+        ('council', 'City Council'),
+    )
+    position = models.CharField(max_length=40, choices=position_choices)
+    year = models.IntegerField(default=2025)
+
+
+class CandidateElection(models.Model):
+    """
+    Mapping between candidates and elections; new "base" model
+    to support historical data accuracy.
+
+    AKA, most pieces of information on Candidate will be moving here.
+    """
+    candidate = models.ForeignKey(
+        Candidate,
+        on_delete=models.CASCADE,
+        related_name="candidate_elections",
+    )
+    election = models.ForeignKey(
+        Election,
+        on_delete=models.CASCADE,
+        related_name="candidate_elections",
+    )
 
 
 class Organization(models.Model):
