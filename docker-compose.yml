@@ -19,7 +19,8 @@ services:
       - ./package-lock.json:/app/package-lock.json
       - ./package.json:/app/package.json
       - ./webpack.config.json:/app/webpack.config.json
-      - static_compiled:/app/static_compiled
+      - ./static_src:/app/static_src
+      - ./static_compiled:/app/static_compiled
   web:
     build:
       dockerfile: Dockerfile.django
@@ -28,7 +29,8 @@ services:
     # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
-      - static_compiled:/app/static_compiled
+      - ./static_compiled:/app/static_compiled
+      - /staticfiles/
     ports:
       - "8000:8000"
     environment:

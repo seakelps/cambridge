@@ -36,7 +36,6 @@ COPY --chown=appuser:appuser overview ./overview
 COPY --chown=appuser:appuser ranking ./ranking
 COPY --chown=appuser:appuser static ./static
 COPY --chown=appuser:appuser static_compiled ./static_compiled
-COPY --chown=appuser:appuser staticfiles ./staticfiles
 COPY --chown=appuser:appuser templates ./templates
 COPY --chown=appuser:appuser voting_history ./voting_history
 COPY --chown=appuser:appuser manage.py .
