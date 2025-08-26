@@ -30,7 +30,7 @@ services:
     volumes:
       - .:/app
       - ./static_compiled:/app/static_compiled
-      - /staticfiles/
+      - staticfiles:/app/staticfiles
     ports:
       - "8000:8000"
     environment:
@@ -43,5 +43,4 @@ services:
       - db
       - static
 volumes:
-  static_src:
-  static_compiled:
+  staticfiles:
