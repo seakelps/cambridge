@@ -1,31 +1,35 @@
 # cambridge
 
 This is a django + webpack project, styled with bootstrap!
+(sorry about the webpack, but haven't been able to update...)
+
+We used to host on Heroku but are moving to render.com
 
 # Setup
 
-```
-npm install
+0. Clone the codebase
 
-pip install -r requirements.txt
-python manage.py migrate
-```
+1. Download/install docker however you choose. https://www.docker.com/products/docker-desktop/
+
 
 # Running the site
 
-```
-npm run build  # generates javascript bundles and puts css in place for django to serve
-python manage.py runserver  # launches django server
-```
+1. `docker compose build`
 
-# Random scripts
+This command will do all the requirements downloading and package installation necessary. Everything but static files and database migrations.
 
-Running a random script on production can be a little hard. You can save the script as a django management command and execute it via heroku run, but for a one-off script, it's easier to run python via the django shell. Here are examples of each:
+2. `docker compose run static npm run build`
 
-```
-heroku run 'python manage.py shell -' < myscript.py
-heroku run 'python manage.py load_some_csv -' < some_csv.csv
-```
+3. `docker compose run web python manage.py collectstatic`
+
+4. `docker compose run web python manage.py migrate`
+
+(or `makemigrations` if you're making )
+
+5. `docker compose up`
+
+serves the site
+
 
 # Adding Translations
 
