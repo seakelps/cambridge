@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0033_auto_20171011_2310'),
+        ("overview", "0033_auto_20171011_2310"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='previous_results_map',
-            field=models.URLField(blank=True, help_text='previous election results from Davi', null=True),
+            model_name="candidate",
+            name="previous_results_map",
+            field=models.URLField(
+                blank=True, help_text="previous election results from Davi", null=True
+            ),
         ),
     ]

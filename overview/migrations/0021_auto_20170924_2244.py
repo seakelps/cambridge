@@ -8,13 +8,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0020_auto_20170924_2241'),
+        ("overview", "0020_auto_20170924_2241"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='candidate',
-            name='housing_status',
-            field=models.CharField(blank=True, choices=[('rent', 'Rent'), ('own', 'Own'), ('dorm', 'Dorm'), ('o', 'Other'), ('u', 'Unknown')], default='u', max_length=4),
+            model_name="candidate",
+            name="housing_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("rent", "Rent"),
+                    ("own", "Own"),
+                    ("dorm", "Dorm"),
+                    ("o", "Other"),
+                    ("u", "Unknown"),
+                ],
+                default="u",
+                max_length=4,
+            ),
         ),
     ]

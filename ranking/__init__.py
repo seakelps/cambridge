@@ -1,1 +1,1 @@
-default_app_config = 'ranking.apps.RankingConfig'
+default_app_config = "ranking.apps.RankingConfig"

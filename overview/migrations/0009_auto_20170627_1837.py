@@ -21,7 +21,7 @@ def remove_slugs(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0008_remove_candidate_headshot'),
+        ("overview", "0008_remove_candidate_headshot"),
     ]
 
     operations = [

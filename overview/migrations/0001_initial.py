@@ -9,17 +9,26 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Candidate',
+            name="Candidate",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fullname', models.CharField(max_length=200)),
-                ('shortname', models.CharField(max_length=200)),
-                ('pronoun', models.CharField(choices=[('she', 'She'), ('he', 'He'), ('they', 'They')], max_length=4)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("fullname", models.CharField(max_length=200)),
+                ("shortname", models.CharField(max_length=200)),
+                (
+                    "pronoun",
+                    models.CharField(
+                        choices=[("she", "She"), ("he", "He"), ("they", "They")], max_length=4
+                    ),
+                ),
             ],
         ),
     ]

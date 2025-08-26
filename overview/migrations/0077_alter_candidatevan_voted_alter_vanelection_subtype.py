@@ -6,18 +6,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0076_alter_candidatevan_political_party'),
+        ("overview", "0076_alter_candidatevan_political_party"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='candidatevan',
-            name='voted',
-            field=models.BooleanField(blank=True, default=True, help_text='van/votebuilder uses various letters for how people voted; we only care that they did', null=True),
+            model_name="candidatevan",
+            name="voted",
+            field=models.BooleanField(
+                blank=True,
+                default=True,
+                help_text="van/votebuilder uses various letters for how people voted; we only care that they did",
+                null=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='vanelection',
-            name='subtype',
-            field=models.CharField(choices=[('general', 'General'), ('local', 'Municipal'), ('local_primary', 'Municipal Primary'), ('presidental_primary', 'Presidental Primary'), ('primary', 'Primary'), ('special', 'Special'), ('special_primary', 'Special Primary')], max_length=20),
+            model_name="vanelection",
+            name="subtype",
+            field=models.CharField(
+                choices=[
+                    ("general", "General"),
+                    ("local", "Municipal"),
+                    ("local_primary", "Municipal Primary"),
+                    ("presidental_primary", "Presidental Primary"),
+                    ("primary", "Primary"),
+                    ("special", "Special"),
+                    ("special_primary", "Special Primary"),
+                ],
+                max_length=20,
+            ),
         ),
     ]

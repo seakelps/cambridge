@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0012_candidate_facebook'),
+        ("overview", "0012_candidate_facebook"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='email',
-            field=models.EmailField(blank=True, default='', max_length=254),
+            model_name="candidate",
+            name="email",
+            field=models.EmailField(blank=True, default="", max_length=254),
         ),
     ]

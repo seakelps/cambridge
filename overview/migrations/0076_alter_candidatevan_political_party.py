@@ -6,13 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0075_alter_candidatevan_voted'),
+        ("overview", "0075_alter_candidatevan_voted"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='candidatevan',
-            name='political_party',
-            field=models.CharField(blank=True, choices=[('dem', 'Democrat'), ('rep', 'Republican'), ('o', 'Other'), ('u', 'Unknown')], default=None, max_length=3, null=True),
+            model_name="candidatevan",
+            name="political_party",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("dem", "Democrat"),
+                    ("rep", "Republican"),
+                    ("o", "Other"),
+                    ("u", "Unknown"),
+                ],
+                default=None,
+                max_length=3,
+                null=True,
+            ),
         ),
     ]

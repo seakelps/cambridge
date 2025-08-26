@@ -9,8 +9,9 @@ from django.db import migrations
 def convert_to_handle(apps, schema_editor):
     Candidate = apps.get_model("overview.Candidate")
     for candidate in Candidate.objects.exclude(facebook=""):
-        candidate.facebook = urlparse(candidate.facebook).path.strip('/')
+        candidate.facebook = urlparse(candidate.facebook).path.strip("/")
         candidate.save()
+
 
 def back_to_site(app, schema_editor):
     Candidate = apps.get_model("overview.Candidate")
@@ -22,9 +23,7 @@ def back_to_site(app, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0032_auto_20171011_2310'),
+        ("overview", "0032_auto_20171011_2310"),
     ]
 
-    operations = [
-        migrations.RunPython(convert_to_handle, reverse_code=back_to_site)
-    ]
+    operations = [migrations.RunPython(convert_to_handle, reverse_code=back_to_site)]

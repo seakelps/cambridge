@@ -9,61 +9,75 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='CleanCampaignReceipt',
+            name="CleanCampaignReceipt",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recipient_cpf_id', models.IntegerField()),
-                ('recipient_full_name', models.CharField(max_length=200)),
-                ('date', models.DateField(blank=True, null=True)),
-                ('first_name', models.CharField(max_length=200)),
-                ('last_name', models.CharField(max_length=200)),
-                ('address', models.CharField(max_length=200)),
-                ('city', models.CharField(max_length=200)),
-                ('state', models.CharField(max_length=2)),
-                ('zip', models.CharField(max_length=20)),
-                ('occupation', models.CharField(max_length=200)),
-                ('employer', models.CharField(max_length=200)),
-                ('principal_officer', models.CharField(max_length=200)),
-                ('contributor_id', models.IntegerField()),
-                ('is_inkind', models.IntegerField()),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('occupation_type', models.CharField(max_length=200)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("recipient_cpf_id", models.IntegerField()),
+                ("recipient_full_name", models.CharField(max_length=200)),
+                ("date", models.DateField(blank=True, null=True)),
+                ("first_name", models.CharField(max_length=200)),
+                ("last_name", models.CharField(max_length=200)),
+                ("address", models.CharField(max_length=200)),
+                ("city", models.CharField(max_length=200)),
+                ("state", models.CharField(max_length=2)),
+                ("zip", models.CharField(max_length=20)),
+                ("occupation", models.CharField(max_length=200)),
+                ("employer", models.CharField(max_length=200)),
+                ("principal_officer", models.CharField(max_length=200)),
+                ("contributor_id", models.IntegerField()),
+                ("is_inkind", models.IntegerField()),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("occupation_type", models.CharField(max_length=200)),
             ],
         ),
         migrations.CreateModel(
-            name='Committee',
+            name="Committee",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('committee_name', models.CharField(max_length=200)),
-                ('treasurer', models.CharField(max_length=200)),
-                ('treasurer_salutation', models.CharField(max_length=200)),
-                ('committee_address', models.CharField(max_length=200)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("committee_name", models.CharField(max_length=200)),
+                ("treasurer", models.CharField(max_length=200)),
+                ("treasurer_salutation", models.CharField(max_length=200)),
+                ("committee_address", models.CharField(max_length=200)),
             ],
         ),
         migrations.CreateModel(
-            name='RawCampaignReceipt',
+            name="RawCampaignReceipt",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('recipient_cpf_id', models.IntegerField()),
-                ('recipient_full_name', models.CharField(max_length=200)),
-                ('date', models.DateField(blank=True, null=True)),
-                ('first_name', models.CharField(max_length=200)),
-                ('last_name', models.CharField(max_length=200)),
-                ('address', models.CharField(max_length=200)),
-                ('city', models.CharField(max_length=200)),
-                ('state', models.CharField(max_length=2)),
-                ('zip', models.CharField(max_length=20)),
-                ('occupation', models.CharField(max_length=200)),
-                ('employer', models.CharField(max_length=200)),
-                ('principal_officer', models.CharField(max_length=200)),
-                ('contributor_id', models.IntegerField()),
-                ('is_inkind', models.IntegerField()),
-                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("recipient_cpf_id", models.IntegerField()),
+                ("recipient_full_name", models.CharField(max_length=200)),
+                ("date", models.DateField(blank=True, null=True)),
+                ("first_name", models.CharField(max_length=200)),
+                ("last_name", models.CharField(max_length=200)),
+                ("address", models.CharField(max_length=200)),
+                ("city", models.CharField(max_length=200)),
+                ("state", models.CharField(max_length=2)),
+                ("zip", models.CharField(max_length=20)),
+                ("occupation", models.CharField(max_length=200)),
+                ("employer", models.CharField(max_length=200)),
+                ("principal_officer", models.CharField(max_length=200)),
+                ("contributor_id", models.IntegerField()),
+                ("is_inkind", models.IntegerField()),
+                ("amount", models.DecimalField(decimal_places=2, max_digits=10)),
             ],
         ),
     ]

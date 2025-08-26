@@ -7,18 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0057_alter_pressarticle_options_alter_pressoutlet_options'),
+        ("overview", "0057_alter_pressarticle_options_alter_pressoutlet_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='questionnaire',
-            name='organization',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='overview.organization'),
+            model_name="questionnaire",
+            name="organization",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="overview.organization",
+            ),
         ),
         migrations.AddField(
-            model_name='questionnaire',
-            name='year',
+            model_name="questionnaire",
+            name="year",
             field=models.IntegerField(default=2023, null=True),
         ),
     ]

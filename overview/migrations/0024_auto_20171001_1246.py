@@ -8,23 +8,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0023_auto_20170924_2303'),
+        ("overview", "0023_auto_20170924_2303"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='date_of_registration',
+            model_name="candidate",
+            name="date_of_registration",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='voter_id_number',
-            field=models.CharField(blank=True, default='', max_length=100),
+            model_name="candidate",
+            name="voter_id_number",
+            field=models.CharField(blank=True, default="", max_length=100),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='voter_status',
-            field=models.CharField(blank=True, choices=[('A', 'Active'), ('I', 'Inactive'), ('u', 'Unknown')], default='u', max_length=3),
+            model_name="candidate",
+            name="voter_status",
+            field=models.CharField(
+                blank=True,
+                choices=[("A", "Active"), ("I", "Inactive"), ("u", "Unknown")],
+                default="u",
+                max_length=3,
+            ),
         ),
     ]

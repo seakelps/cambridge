@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0017_auto_20170806_2153'),
+        ("overview", "0017_auto_20170806_2153"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='endorsements_link',
-            field=models.URLField(blank=True, default='', help_text='Endorsements List'),
+            model_name="candidate",
+            name="endorsements_link",
+            field=models.URLField(blank=True, default="", help_text="Endorsements List"),
         ),
     ]

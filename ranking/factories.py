@@ -23,10 +23,18 @@ class OrganizationProvider(BaseProvider):
         return str(random.randint(100, 1000))
 
     def adjective(self):
-        return self.random_element([
-            "Democratic", "Socialist", "Red", "Black",
-            "Silly", "Smelly", "Sweaty", "Sticky",
-        ])
+        return self.random_element(
+            [
+                "Democratic",
+                "Socialist",
+                "Red",
+                "Black",
+                "Silly",
+                "Smelly",
+                "Sweaty",
+                "Sticky",
+            ]
+        )
 
     def adjectiver(self):
         adj = self.adjective()
@@ -39,7 +47,7 @@ class OrganizationProvider(BaseProvider):
 class RankedList(factory.django.DjangoModelFactory):
     class Meta:
         model = models.RankedList
-        django_get_or_create = 'slug',
+        django_get_or_create = ("slug",)
 
     owner = factory.SubFactory(User)
     name = factory.Faker("org_name")

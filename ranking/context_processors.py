@@ -11,9 +11,7 @@ def sidebar(request):
 
     ranked_list = RankedList.objects.for_request(request, force=False)
     annotated_candidates = (
-        ranked_list.annotated_candidates.all()
-        if ranked_list
-        else RankedElement.objects.none()
+        ranked_list.annotated_candidates.all() if ranked_list else RankedElement.objects.none()
     )
 
     for ac in annotated_candidates.all():

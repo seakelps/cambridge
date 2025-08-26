@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('campaign_finance', '0004_auto_20170716_1304'),
+        ("campaign_finance", "0004_auto_20170716_1304"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='receipt_total_display',
+            model_name="rawbankreport",
+            name="receipt_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10),
         ),
     ]

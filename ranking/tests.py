@@ -9,35 +9,33 @@ from .models import RankedList
 
 class GetList(TestCase):
     def test_logged_in_no_list(self):
-        request = RequestFactory().get('/')
+        request = RequestFactory().get("/")
         request.user = overview_factories.User()
         request.session = {}
 
         self.assertEqual(
-            RankedList.objects.for_request(request, force=True),
-            request.user.rankedlist)
+            RankedList.objects.for_request(request, force=True), request.user.rankedlist
+        )
 
     def test_logged_in_with_list(self):
-        request = RequestFactory().get('/')
+        request = RequestFactory().get("/")
         ranked_list = factories.RankedList()
         request.user = ranked_list.owner
         request.session = {}
 
-        self.assertEqual(
-            RankedList.objects.for_request(request, force=True),
-            ranked_list)
+        self.assertEqual(RankedList.objects.for_request(request, force=True), ranked_list)
 
     def test_logged_out_no_list(self):
-        request = RequestFactory().get('/')
+        request = RequestFactory().get("/")
         request.user = AnonymousUser()
         request.session = {}
 
         ranked_list = RankedList.objects.for_request(request, force=True)
         self.assertTrue(ranked_list)
-        self.assertEqual(ranked_list.id, request.session['ranked_list_id'])
+        self.assertEqual(ranked_list.id, request.session["ranked_list_id"])
 
     def test_logged_out_with_list(self):
-        request = RequestFactory().get('/')
+        request = RequestFactory().get("/")
         request.user = AnonymousUser()
 
         ranked_list = factories.RankedList(owner=None)
@@ -45,7 +43,8 @@ class GetList(TestCase):
 
         self.assertEqual(
             RankedList.objects.for_request(request, force=True).id,
-            request.session['ranked_list_id'])
+            request.session["ranked_list_id"],
+        )
 
 
 class ListViewTest(TestCase):
@@ -99,9 +98,7 @@ class MyListTest(TestCase):
         self.client.get(reverse("my_ranking"))
         candidate = overview_factories.Candidate()
 
-        resp = self.client.post(reverse("my_ranking"), {
-            "candidates": candidate.slug
-        })
+        resp = self.client.post(reverse("my_ranking"), {"candidates": candidate.slug})
         self.assertEqual(resp.status_code, 302)
 
         self.assertTrue(self.user.rankedlist)
@@ -115,14 +112,12 @@ class MyListTest(TestCase):
         self.client.get(reverse("my_ranking"))
 
         self.user.rankedlist.annotated_candidates.create(
-            order=1,
-            candidate=overview_factories.Candidate())
+            order=1, candidate=overview_factories.Candidate()
+        )
 
         candidate = overview_factories.Candidate()
 
-        resp = self.client.post(reverse("my_ranking"), {
-            "candidates": candidate.slug
-        })
+        resp = self.client.post(reverse("my_ranking"), {"candidates": candidate.slug})
         self.assertEqual(resp.status_code, 302)
 
         self.assertTrue(self.user.rankedlist)
@@ -134,13 +129,12 @@ class MyListTest(TestCase):
         candidate1, candidate2 = overview_factories.Candidate.create_batch(2)
 
         self.user.rankedlist.annotated_candidates.create(
-            order=1,
-            comment="My spoon is too big",
-            candidate=candidate1)
+            order=1, comment="My spoon is too big", candidate=candidate1
+        )
 
-        resp = self.client.post(reverse("my_ranking"), {
-            "candidates": ','.join([candidate2.slug, candidate1.slug])
-        })
+        resp = self.client.post(
+            reverse("my_ranking"), {"candidates": ",".join([candidate2.slug, candidate1.slug])}
+        )
         self.assertEqual(resp.status_code, 302)
 
         self.assertTrue(self.user.rankedlist)
@@ -163,8 +157,8 @@ class UpdateNotes(TestCase):
         self.user.rankedlist.annotated_candidates.create(candidate=self.candidate, order=1)
 
         resp = self.client.post(
-            reverse("update_note", args=[self.candidate.slug]),
-            {"comment": "No Comment"})
+            reverse("update_note", args=[self.candidate.slug]), {"comment": "No Comment"}
+        )
 
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(self.user.rankedlist.annotated_candidates.get().comment, "No Comment")
@@ -184,8 +178,8 @@ class UpdateNotes(TestCase):
         ranked_list.annotated_candidates.create(candidate=self.candidate, order=1)
 
         resp = self.client.post(
-            reverse("update_note", args=[self.candidate.slug]),
-            {"comment": "No Comment"})
+            reverse("update_note", args=[self.candidate.slug]), {"comment": "No Comment"}
+        )
 
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(ranked_list.annotated_candidates.get().comment, "No Comment")
@@ -198,19 +192,22 @@ class ClaimList(TestCase):
         session["ranked_list_id"] = ranked_list.id
         session.save()
 
-        resp = self.client.post(reverse("django_registration_register"), {
-            "username": "kittens",
-            "email": "kittens@example.com",
-            "password1": "more cats",
-            "password2": "more cats",
-        })
+        resp = self.client.post(
+            reverse("django_registration_register"),
+            {
+                "username": "kittens",
+                "email": "kittens@example.com",
+                "password1": "more cats",
+                "password2": "more cats",
+            },
+        )
 
         self.assertEqual(resp.status_code, 302)
 
         ranked_list.refresh_from_db()
         self.assertIn("kittens", ranked_list.name)
         self.assertIn("kittens", ranked_list.slug)
-        self.assertEqual(int(self.client.session['_auth_user_id']), ranked_list.owner.id)
+        self.assertEqual(int(self.client.session["_auth_user_id"]), ranked_list.owner.id)
 
 
 class DeleteNote(TestCase):
@@ -259,7 +256,7 @@ class MakePublic(TestCase):
     def test_make_public(self):
         ranked_list = factories.RankedList(public=False)
         self.client.force_login(ranked_list.owner)
-        self.client.post(reverse("make_public"), {'public': True})
+        self.client.post(reverse("make_public"), {"public": True})
 
         ranked_list.refresh_from_db()
         self.assertTrue(ranked_list.public)
@@ -267,7 +264,7 @@ class MakePublic(TestCase):
     def test_make_private(self):
         ranked_list = factories.RankedList(public=True)
         self.client.force_login(ranked_list.owner)
-        self.client.post(reverse("make_public"), {'public': False})
+        self.client.post(reverse("make_public"), {"public": False})
 
         ranked_list.refresh_from_db()
         self.assertFalse(ranked_list.public)
@@ -277,7 +274,7 @@ class MakeOrdered(TestCase):
     def test_make_ordered(self):
         ranked_list = factories.RankedList(ordered=False)
         self.client.force_login(ranked_list.owner)
-        self.client.post(reverse("make_ordered"), {'ordered': True})
+        self.client.post(reverse("make_ordered"), {"ordered": True})
 
         ranked_list.refresh_from_db()
         self.assertTrue(ranked_list.ordered)
@@ -285,7 +282,7 @@ class MakeOrdered(TestCase):
     def test_make_private(self):
         ranked_list = factories.RankedList(ordered=True)
         self.client.force_login(ranked_list.owner)
-        self.client.post(reverse("make_ordered"), {'ordered': False})
+        self.client.post(reverse("make_ordered"), {"ordered": False})
 
         ranked_list.refresh_from_db()
         self.assertFalse(ranked_list.ordered)

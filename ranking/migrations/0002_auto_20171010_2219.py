@@ -8,19 +8,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0030_auto_20171003_2022'),
-        ('ranking', '0001_initial'),
+        ("overview", "0030_auto_20171003_2022"),
+        ("ranking", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='rankedelement',
-            name='order',
+            model_name="rankedelement",
+            name="order",
             field=models.PositiveSmallIntegerField(blank=True, default=1),
             preserve_default=False,
         ),
         migrations.AlterUniqueTogether(
-            name='rankedelement',
-            unique_together=set([('ranked_list', 'candidate'), ('ranked_list', 'order')]),
+            name="rankedelement",
+            unique_together=set([("ranked_list", "candidate"), ("ranked_list", "order")]),
         ),
     ]

@@ -8,17 +8,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0027_interviewvideo_sort_order'),
+        ("overview", "0027_interviewvideo_sort_order"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='interviewvideo',
-            options={'ordering': ['sort_order']},
+            name="interviewvideo",
+            options={"ordering": ["sort_order"]},
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='housing_status',
-            field=models.CharField(blank=True, choices=[('rent', 'Rent'), ('own', 'Own'), ('dorm', 'Dorm'), ('o', 'Other'), ('u', 'Live')], default='u', max_length=4),
+            model_name="candidate",
+            name="housing_status",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("rent", "Rent"),
+                    ("own", "Own"),
+                    ("dorm", "Dorm"),
+                    ("o", "Other"),
+                    ("u", "Live"),
+                ],
+                default="u",
+                max_length=4,
+            ),
         ),
     ]

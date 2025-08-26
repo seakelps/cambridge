@@ -9,18 +9,28 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0035_merge_20171014_1935'),
+        ("overview", "0035_merge_20171014_1935"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PastContribution',
+            name="PastContribution",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(blank=True, null=True)),
-                ('amount', models.FloatField(blank=True, null=True)),
-                ('recipient', models.CharField(max_length=400)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.Candidate')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("date", models.DateField(blank=True, null=True)),
+                ("amount", models.FloatField(blank=True, null=True)),
+                ("recipient", models.CharField(max_length=400)),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.Candidate"
+                    ),
+                ),
             ],
         ),
     ]

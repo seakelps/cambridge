@@ -9,30 +9,47 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0015_auto_20170716_1452'),
+        ("overview", "0015_auto_20170716_1452"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Endorsement',
+            name="Endorsement",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(blank=True, null=True)),
-                ('link', models.URLField(blank=True, max_length=150)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.Candidate')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("date", models.DateField(blank=True, null=True)),
+                ("link", models.URLField(blank=True, max_length=150)),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.Candidate"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Organization',
+            name="Organization",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=40, unique=True)),
-                ('logo', models.ImageField(blank=True, upload_to='')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("name", models.CharField(max_length=40, unique=True)),
+                ("logo", models.ImageField(blank=True, upload_to="")),
             ],
         ),
         migrations.AddField(
-            model_name='endorsement',
-            name='organization',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.Organization'),
+            model_name="endorsement",
+            name="organization",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="overview.Organization"
+            ),
         ),
     ]

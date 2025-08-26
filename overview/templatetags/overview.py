@@ -18,7 +18,7 @@ def truncate_website(value):
     if value:
         parsed = urlparse(value)
         netloc = parsed.netloc.replace("www.", "")  # as short as possible
-        if 'facebook' in value or 'squarespace' in value:
+        if "facebook" in value or "squarespace" in value:
             return netloc + parsed.path.rstrip("/")
         else:
             return netloc

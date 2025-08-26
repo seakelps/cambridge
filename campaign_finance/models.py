@@ -59,9 +59,15 @@ class RawBankReport(models.Model):
     receipt_total = models.DecimalField(max_digits=10, decimal_places=2)
     receipt_total_display = models.DecimalField(max_digits=10, decimal_places=2)
     receipt_unitemized_total_display = models.DecimalField(max_digits=10, decimal_places=2)
-    receipt_itemized_total_display = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    expenditure_unitemized_total_display = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    expenditure_itemized_total_display = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    receipt_itemized_total_display = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True
+    )
+    expenditure_unitemized_total_display = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True
+    )
+    expenditure_itemized_total_display = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True
+    )
     expenditure_total_display = models.DecimalField(max_digits=10, decimal_places=2)
     ending_balance_display = models.DecimalField(max_digits=10, decimal_places=2)
     inkind_total_display = models.DecimalField(max_digits=10, decimal_places=2, null=True)
@@ -153,8 +159,8 @@ def get_candidate_money_at_start_of_2019(candidate_cpf_id):
             cpf_id=candidate_cpf_id,
             beginning_date_display__year=2019,
             beginning_date_display__month=1,
-            beginning_date_display__day=1
-            ).latest("filing_date")
+            beginning_date_display__day=1,
+        ).latest("filing_date")
     except RawBankReport.DoesNotExist:
         return 0
 
@@ -173,61 +179,62 @@ def get_candidate_money_at_start_of_2019(candidate_cpf_id):
 #
 def get_candidate_2019_spent(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
-        cpf_id=candidate_cpf_id,
-        beginning_date_display__year=2019
+        cpf_id=candidate_cpf_id, beginning_date_display__year=2019
     ).aggregate(Sum("expenditure_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2019)\
-        .values("beginning_date_display")\
-        .annotate(Count("beginning_date_display"))\
-        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+    max_num_reports = (
+        RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2019)
+        .values("beginning_date_display")
+        .annotate(Count("beginning_date_display"))
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+        or 0
+    )
 
     if max_num_reports > 1:
         # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2019   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
-        if (candidate_cpf_id == 16062):
-            return agg['expenditure_total_display__sum'] - decimal.Decimal("13472.25")
+        if candidate_cpf_id == 16062:
+            return agg["expenditure_total_display__sum"] - decimal.Decimal("13472.25")
         else:
             print("two bank reports found for the same period! investigate! fix!")
             return None
 
-    return agg['expenditure_total_display__sum']
+    return agg["expenditure_total_display__sum"]
 
 
 # all the money the candidate has raised in 2019
 # (doesn't include money candidate started 2019 with)
 def get_candidate_2019_raised(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
-        cpf_id=candidate_cpf_id,
-        beginning_date_display__year=2019
-        ).aggregate(Sum("receipt_total_display"))
+        cpf_id=candidate_cpf_id, beginning_date_display__year=2019
+    ).aggregate(Sum("receipt_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2019)\
-        .values("beginning_date_display")\
-        .annotate(Count("beginning_date_display"))\
-        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+    max_num_reports = (
+        RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2019)
+        .values("beginning_date_display")
+        .annotate(Count("beginning_date_display"))
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+        or 0
+    )
 
     if max_num_reports > 1:
         # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
-        if (candidate_cpf_id == 16062):
-            return agg['receipt_total_display__sum'] - decimal.Decimal("13472.25")
+        if candidate_cpf_id == 16062:
+            return agg["receipt_total_display__sum"] - decimal.Decimal("13472.25")
         else:
             print("two bank reports found for the same period! investigate! fix!")
             return None
 
-    return agg['receipt_total_display__sum']
-
+    return agg["receipt_total_display__sum"]
 
 
 # yes these all need to be updated/ functionifixed
@@ -241,8 +248,8 @@ def get_candidate_money_at_start_of_2021(candidate_cpf_id):
             cpf_id=candidate_cpf_id,
             beginning_date_display__year=2021,
             beginning_date_display__month=1,
-            beginning_date_display__day=1
-            ).latest("filing_date")
+            beginning_date_display__day=1,
+        ).latest("filing_date")
     except RawBankReport.DoesNotExist:
         return 0
 
@@ -261,61 +268,62 @@ def get_candidate_money_at_start_of_2021(candidate_cpf_id):
 #
 def get_candidate_2021_spent(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
-        cpf_id=candidate_cpf_id,
-        beginning_date_display__year=2021
+        cpf_id=candidate_cpf_id, beginning_date_display__year=2021
     ).aggregate(Sum("expenditure_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2021)\
-        .values("beginning_date_display")\
-        .annotate(Count("beginning_date_display"))\
-        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+    max_num_reports = (
+        RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2021)
+        .values("beginning_date_display")
+        .annotate(Count("beginning_date_display"))
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+        or 0
+    )
 
     if max_num_reports > 1:
         # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2021   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
-        if (candidate_cpf_id == 16062):
-            return agg['expenditure_total_display__sum'] - decimal.Decimal("13472.25")
+        if candidate_cpf_id == 16062:
+            return agg["expenditure_total_display__sum"] - decimal.Decimal("13472.25")
         else:
             print("two bank reports found for the same period! investigate! fix!")
             return None
 
-    return agg['expenditure_total_display__sum']
+    return agg["expenditure_total_display__sum"]
 
 
 # all the money the candidate has raised in 2021
 # (doesn't include money candidate started 2021 with)
 def get_candidate_2021_raised(candidate_cpf_id):
     agg = RawBankReport.objects.filter(
-        cpf_id=candidate_cpf_id,
-        beginning_date_display__year=2021
-        ).aggregate(Sum("receipt_total_display"))
+        cpf_id=candidate_cpf_id, beginning_date_display__year=2021
+    ).aggregate(Sum("receipt_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2021)\
-        .values("beginning_date_display")\
-        .annotate(Count("beginning_date_display"))\
-        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+    max_num_reports = (
+        RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=2021)
+        .values("beginning_date_display")
+        .annotate(Count("beginning_date_display"))
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+        or 0
+    )
 
     if max_num_reports > 1:
         # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
-        if (candidate_cpf_id == 16062):
-            return agg['receipt_total_display__sum'] - decimal.Decimal("13472.25")
+        if candidate_cpf_id == 16062:
+            return agg["receipt_total_display__sum"] - decimal.Decimal("13472.25")
         else:
             print("two bank reports found for the same period! investigate! fix!")
             return None
 
-    return agg['receipt_total_display__sum']
-
+    return agg["receipt_total_display__sum"]
 
 
 #
@@ -323,6 +331,7 @@ def get_candidate_2021_raised(candidate_cpf_id):
 # Beginning of generic functions
 #
 #
+
 
 # returns either 0 if they had no year-1-1 report, or the # from that report
 def get_candidate_money_at_start_of_year(candidate_cpf_id, year=2023):
@@ -332,8 +341,8 @@ def get_candidate_money_at_start_of_year(candidate_cpf_id, year=2023):
             cpf_id=candidate_cpf_id,
             beginning_date_display__year=year,
             beginning_date_display__month=1,
-            beginning_date_display__day=1
-            ).latest("filing_date")
+            beginning_date_display__day=1,
+        ).latest("filing_date")
     except RawBankReport.DoesNotExist:
         return 0
 
@@ -352,57 +361,59 @@ def get_candidate_money_at_start_of_year(candidate_cpf_id, year=2023):
 #
 def get_candidate_spent_year(candidate_cpf_id, year=2023):
     agg = RawBankReport.objects.filter(
-        cpf_id=candidate_cpf_id,
-        beginning_date_display__year=year
+        cpf_id=candidate_cpf_id, beginning_date_display__year=year
     ).aggregate(Sum("expenditure_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=year)\
-        .values("beginning_date_display")\
-        .annotate(Count("beginning_date_display"))\
-        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+    max_num_reports = (
+        RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=year)
+        .values("beginning_date_display")
+        .annotate(Count("beginning_date_display"))
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+        or 0
+    )
 
     if max_num_reports > 1:
         # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2021   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
-        if (candidate_cpf_id == 16062):
-            return agg['expenditure_total_display__sum'] - decimal.Decimal("13472.25")
+        if candidate_cpf_id == 16062:
+            return agg["expenditure_total_display__sum"] - decimal.Decimal("13472.25")
         else:
             print("two bank reports found for the same period! investigate! fix!")
             return None
 
-    return agg['expenditure_total_display__sum']
+    return agg["expenditure_total_display__sum"]
 
 
 # all the money the candidate has raised in year
 # (doesn't include money candidate started yeaer with)
 def get_candidate_raised_year(candidate_cpf_id, year=2023):
     agg = RawBankReport.objects.filter(
-        cpf_id=candidate_cpf_id,
-        beginning_date_display__year=year
-        ).aggregate(Sum("receipt_total_display"))
+        cpf_id=candidate_cpf_id, beginning_date_display__year=year
+    ).aggregate(Sum("receipt_total_display"))
 
     # check if there are 2 bank accounts during the same period ever, to try
     # to flush out bank transfers
-    max_num_reports = RawBankReport.objects\
-        .filter(cpf_id=candidate_cpf_id, beginning_date_display__year=year)\
-        .values("beginning_date_display")\
-        .annotate(Count("beginning_date_display"))\
-        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"] or 0
+    max_num_reports = (
+        RawBankReport.objects.filter(cpf_id=candidate_cpf_id, beginning_date_display__year=year)
+        .values("beginning_date_display")
+        .annotate(Count("beginning_date_display"))
+        .aggregate(Max("beginning_date_display__count"))["beginning_date_display__count__max"]
+        or 0
+    )
 
     if max_num_reports > 1:
         # we might need candidate-specific hacks here, if they transfer bank accounts (ex., like Jan did in 2017)
         # this is such a hack.
         # transfer from closing bank account: $13,472.25, 4/6/2017   # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=606891#schedule-a
         # account closed: $13,472.25     # http://www.ocpf.us/Reports/DisplayReport?menuHidden=true&id=607350#schedule-b
-        if (candidate_cpf_id == 16062):
-            return agg['receipt_total_display__sum'] - decimal.Decimal("13472.25")
+        if candidate_cpf_id == 16062:
+            return agg["receipt_total_display__sum"] - decimal.Decimal("13472.25")
         else:
             print("two bank reports found for the same period! investigate! fix!")
             return None
 
-    return agg['receipt_total_display__sum']
+    return agg["receipt_total_display__sum"]

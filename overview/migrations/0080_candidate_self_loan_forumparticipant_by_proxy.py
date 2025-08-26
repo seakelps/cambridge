@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0079_forum_moderators_alter_forum_description'),
+        ("overview", "0079_forum_moderators_alter_forum_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='self_loan',
+            model_name="candidate",
+            name="self_loan",
             field=models.DecimalField(blank=True, decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AddField(
-            model_name='forumparticipant',
-            name='by_proxy',
+            model_name="forumparticipant",
+            name="by_proxy",
             field=models.BooleanField(default=False),
         ),
     ]

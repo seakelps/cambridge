@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0003_candidate_slug'),
+        ("overview", "0003_candidate_slug"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='latitude',
+            model_name="candidate",
+            name="latitude",
             field=models.FloatField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='longitude',
+            model_name="candidate",
+            name="longitude",
             field=models.FloatField(blank=True, null=True),
         ),
     ]

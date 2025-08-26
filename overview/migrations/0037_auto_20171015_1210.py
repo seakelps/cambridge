@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0036_pastcontribution'),
+        ("overview", "0036_pastcontribution"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='pastcontribution',
-            name='note',
+            model_name="pastcontribution",
+            name="note",
             field=models.CharField(blank=True, max_length=400, null=True),
         ),
         migrations.AlterField(
-            model_name='pastcontribution',
-            name='recipient',
+            model_name="pastcontribution",
+            name="recipient",
             field=models.CharField(blank=True, max_length=400, null=True),
         ),
     ]

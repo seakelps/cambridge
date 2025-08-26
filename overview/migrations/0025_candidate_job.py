@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0024_auto_20171001_1730'),
+        ("overview", "0024_auto_20171001_1730"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='job',
+            model_name="candidate",
+            name="job",
             field=models.CharField(blank=True, max_length=200),
         ),
     ]

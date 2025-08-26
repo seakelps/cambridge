@@ -8,12 +8,14 @@ from django.urls import reverse
 from django.views.generic import DetailView, ListView, TemplateView
 from markdown import markdown
 
-from campaign_finance.models import (RawBankReport, get_candidate_raised_year,
-                                     get_candidate_spent_year,
-                                     get_candidate_money_at_start_of_year)
+from campaign_finance.models import (
+    RawBankReport,
+    get_candidate_raised_year,
+    get_candidate_spent_year,
+    get_candidate_money_at_start_of_year,
+)
 
-from .models import (Candidate, CandidateSpecificProposalStance, Degree,
-                     SpecificProposal, Forum)
+from .models import Candidate, CandidateSpecificProposalStance, Degree, SpecificProposal, Forum
 from .utils import get_candidate_locations
 
 
@@ -115,14 +117,10 @@ class CandidateDetail(DetailView):
             context["money_2023_raised"] = None
 
         context["endorsements"] = (
-            self.object.endorsements.filter(display=True)
-            .select_related("organization")
-            .all()
+            self.object.endorsements.filter(display=True).select_related("organization").all()
         )
 
-        context["canonical_url"] = self.request.build_absolute_uri(
-            self.object.get_absolute_url()
-        )
+        context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
         context["specific_housing_support"] = (
             self.object.candidatespecificproposalstance_set.filter(
                 display=True,
@@ -152,8 +150,7 @@ class CandidateDetail(DetailView):
             self.object.forums.filter(
                 display=True,
                 forum__display=True,
-            )
-            .select_related("forum")
+            ).select_related("forum")
             # .prefetch_related("forum__organization")
             .order_by("forum__date")
         )
@@ -189,9 +186,7 @@ class CandidateHousingList(ListView):
         context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
 
         candidates = (
-            Candidate.objects.exclude(hide=True)
-            .exclude(is_running=False)
-            .order_by("fullname")
+            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -239,9 +234,7 @@ class CandidateBikingList(ListView):
         context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
 
         candidates = (
-            Candidate.objects.exclude(hide=True)
-            .exclude(is_running=False)
-            .order_by("fullname")
+            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -278,9 +271,7 @@ class CandidateBikingList(ListView):
             bike_group_yes_no[candidate.id] = candidate.endorsed_by_group(
                 "Cambridge Bicycle Safety"
             )
-            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group(
-                "Save Mass Ave"
-            )
+            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group("Save Mass Ave")
 
         context["candidates"] = candidates
         context["specific_proposals"] = specific_proposals

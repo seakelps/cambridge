@@ -3,6 +3,7 @@
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 """
+
 from django.urls import re_path, include
 from django.contrib import admin
 
@@ -17,32 +18,31 @@ class HowToVote(TemplateView):
 
     def get_context_data(self):
         context = super().get_context_data()
-        context['title'] = "How To Vote in Cambridge Municiple Elections"
-        context['description'] = """Cambridge has a ranked choice system, which
+        context["title"] = "How To Vote in Cambridge Municiple Elections"
+        context[
+            "description"
+        ] = """Cambridge has a ranked choice system, which
         might be different than what you're used to. Make sure you register
         ahead of time and bring an ID with you. """
         return context
 
 
 urlpatterns = [
-    re_path(r'^', include('overview.urls')),
-    re_path(r'^robots.txt/$', TemplateView.as_view(template_name="robots.txt"), name="robots"),
-    re_path(r'^about/$', TemplateView.as_view(template_name="about_us.html"), name="about_us"),
-    re_path(r'^how-to-vote/$', HowToVote.as_view(), name="how_to_vote"),
-    re_path(r'^history/', include('voting_history.urls')),
-    re_path(r'^finance/', include('campaign_finance.urls')),
-    re_path(r'^admin/', admin.site.urls),
-    re_path(r'^money-admin/', money_admin_site.urls),
-    re_path(r'^ranking/', include('ranking.urls')),
-
+    re_path(r"^", include("overview.urls")),
+    re_path(r"^robots.txt/$", TemplateView.as_view(template_name="robots.txt"), name="robots"),
+    re_path(r"^about/$", TemplateView.as_view(template_name="about_us.html"), name="about_us"),
+    re_path(r"^how-to-vote/$", HowToVote.as_view(), name="how_to_vote"),
+    re_path(r"^history/", include("voting_history.urls")),
+    re_path(r"^finance/", include("campaign_finance.urls")),
+    re_path(r"^admin/", admin.site.urls),
+    re_path(r"^money-admin/", money_admin_site.urls),
+    re_path(r"^ranking/", include("ranking.urls")),
     # to support having users - login, logout, password management
-    re_path(r'^accounts/', include('django_registration.backends.one_step.urls')),
-    re_path(r'^accounts/', include('django.contrib.auth.urls')),
-
+    re_path(r"^accounts/", include("django_registration.backends.one_step.urls")),
+    re_path(r"^accounts/", include("django.contrib.auth.urls")),
     # annoyed django doesn't support this by default
-    re_path('^404/$', TemplateView.as_view(template_name="404.html")),
-    re_path('^40xxxx4/$', TemplateView.as_view(template_name="404.html")),
-
+    re_path("^404/$", TemplateView.as_view(template_name="404.html")),
+    re_path("^40xxxx4/$", TemplateView.as_view(template_name="404.html")),
     # These are hosted from django since we will be using whitenoise
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),

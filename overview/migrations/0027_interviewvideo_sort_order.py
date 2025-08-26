@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0026_auto_20171001_2036'),
+        ("overview", "0026_auto_20171001_2036"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='interviewvideo',
-            name='sort_order',
+            model_name="interviewvideo",
+            name="sort_order",
             field=models.FloatField(default=1),
             preserve_default=False,
         ),

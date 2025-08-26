@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0061_alter_organization_is_local_and_more'),
+        ("overview", "0061_alter_organization_is_local_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='nextdoor',
-            field=models.CharField(blank=True, default='', max_length=100),
+            model_name="candidate",
+            name="nextdoor",
+            field=models.CharField(blank=True, default="", max_length=100),
         ),
         migrations.AlterField(
-            model_name='pressarticle',
-            name='title',
+            model_name="pressarticle",
+            name="title",
             field=models.CharField(max_length=200),
         ),
     ]

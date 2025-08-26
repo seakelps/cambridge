@@ -8,23 +8,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0038_merge_20171015_1401'),
+        ("overview", "0038_merge_20171015_1401"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='checked_fec_for_contributions',
+            model_name="candidate",
+            name="checked_fec_for_contributions",
             field=models.NullBooleanField(),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='checked_ocpf_for_contributions',
+            model_name="candidate",
+            name="checked_ocpf_for_contributions",
             field=models.NullBooleanField(),
         ),
         migrations.AddField(
-            model_name='pastcontribution',
-            name='level',
+            model_name="pastcontribution",
+            name="level",
             field=models.CharField(blank=True, max_length=4, null=True),
         ),
     ]

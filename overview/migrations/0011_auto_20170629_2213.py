@@ -8,23 +8,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0010_candidate_website'),
+        ("overview", "0010_candidate_website"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='address',
+            model_name="candidate",
+            name="address",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='notes',
+            model_name="candidate",
+            name="notes",
             field=models.CharField(blank=True, max_length=2000),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='political_party',
-            field=models.CharField(blank=True, choices=[('dem', 'Democrat'), ('rep', 'Republican'), ('o', 'Other'), ('u', 'Unknown')], default='u', max_length=3),
+            model_name="candidate",
+            name="political_party",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("dem", "Democrat"),
+                    ("rep", "Republican"),
+                    ("o", "Other"),
+                    ("u", "Unknown"),
+                ],
+                default="u",
+                max_length=3,
+            ),
         ),
     ]

@@ -8,9 +8,9 @@ import datetime
 
 
 def load_initial_donations(apps, schema_editor):
-    rcr = apps.get_model('campaign_finance.RawCampaignReceipt')
+    rcr = apps.get_model("campaign_finance.RawCampaignReceipt")
 
-    fp = open('campaign_finance/migrations/cambridge_donors_2017-07-15.csv', 'r')
+    fp = open("campaign_finance/migrations/cambridge_donors_2017-07-15.csv", "r")
     donors_csv = csv.DictReader(fp, delimiter="\t")
 
     for row in donors_csv:
@@ -33,12 +33,12 @@ def load_initial_donations(apps, schema_editor):
                 principal_officer=row["Principal Officer"],
                 contributor_id=row["Contributor ID"],
                 is_inkind=row["Is Inkind"],
-                amount=row["Amount"]
+                amount=row["Amount"],
             )
 
 
 def unload_initial_donations(apps, schema_editor):
-    rcr = apps.get_model('campaign_finance.RawCampaignReceipt')
+    rcr = apps.get_model("campaign_finance.RawCampaignReceipt")
 
     rcr.objects.all().delete()
 
@@ -46,7 +46,7 @@ def unload_initial_donations(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('campaign_finance', '0001_initial'),
+        ("campaign_finance", "0001_initial"),
     ]
 
     operations = [

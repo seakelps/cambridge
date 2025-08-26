@@ -8,28 +8,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0033_auto_20171011_2310'),
+        ("overview", "0033_auto_20171011_2310"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='housing_sale_date',
+            model_name="candidate",
+            name="housing_sale_date",
             field=models.DateField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='housing_sale_price',
+            model_name="candidate",
+            name="housing_sale_price",
             field=models.FloatField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='housing_sale_price_inflation',
+            model_name="candidate",
+            name="housing_sale_price_inflation",
             field=models.FloatField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='housing_status_note',
+            model_name="candidate",
+            name="housing_status_note",
             field=models.CharField(blank=True, max_length=200, null=True),
         ),
     ]

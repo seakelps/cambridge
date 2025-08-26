@@ -64,9 +64,7 @@ urlpatterns = [
         views.CandidateBasicList.as_view(),
         name="basic_comparison",
     ),
-    re_path(
-        r"^by-organization/$", views.ByOrganization.as_view(), name="by-organization"
-    ),
+    re_path(r"^by-organization/$", views.ByOrganization.as_view(), name="by-organization"),
     re_path(
         r"^written-public-comment/$",
         views.WrittenPublicComment.as_view(),

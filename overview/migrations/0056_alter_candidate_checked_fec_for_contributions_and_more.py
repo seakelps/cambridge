@@ -6,48 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0055_auto_20211024_1815'),
+        ("overview", "0055_auto_20211024_1815"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='candidate',
-            name='checked_fec_for_contributions',
+            model_name="candidate",
+            name="checked_fec_for_contributions",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='checked_ocpf_for_contributions',
+            model_name="candidate",
+            name="checked_ocpf_for_contributions",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='hide',
+            model_name="candidate",
+            name="hide",
             field=models.BooleanField(default=0, null=True),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='housing_is_a_landlord',
+            model_name="candidate",
+            name="housing_is_a_landlord",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='is_cyclist',
+            model_name="candidate",
+            name="is_cyclist",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='is_running',
+            model_name="candidate",
+            name="is_running",
             field=models.BooleanField(null=True),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='slug',
+            model_name="candidate",
+            name="slug",
             field=models.SlugField(unique=True),
         ),
         migrations.AlterField(
-            model_name='candidatespecificproposalstance',
-            name='simple_yes_no',
+            model_name="candidatespecificproposalstance",
+            name="simple_yes_no",
             field=models.BooleanField(default=True, null=True),
         ),
     ]
