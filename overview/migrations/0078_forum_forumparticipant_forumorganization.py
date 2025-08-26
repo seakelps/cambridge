@@ -7,46 +7,92 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0077_alter_candidatevan_voted_alter_vanelection_subtype'),
+        ("overview", "0077_alter_candidatevan_voted_alter_vanelection_subtype"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Forum',
+            name="Forum",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('date', models.DateField(blank=True, null=True)),
-                ('year', models.IntegerField(default=2023, null=True)),
-                ('description', models.CharField(max_length=500)),
-                ('link', models.URLField(blank=True, max_length=500)),
-                ('display', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("date", models.DateField(blank=True, null=True)),
+                ("year", models.IntegerField(default=2023, null=True)),
+                ("description", models.CharField(max_length=500)),
+                ("link", models.URLField(blank=True, max_length=500)),
+                ("display", models.BooleanField(default=True)),
             ],
             options={
-                'unique_together': {('name', 'year')},
+                "unique_together": {("name", "year")},
             },
         ),
         migrations.CreateModel(
-            name='ForumParticipant',
+            name="ForumParticipant",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(blank=True, null=True)),
-                ('link', models.URLField(blank=True, max_length=250)),
-                ('display', models.BooleanField(default=True)),
-                ('timestamps', models.CharField(blank=True, help_text="list of timestamps the candidates speaks during, ex., '15:35-16:45, 1:37:02-1:38:00' ", max_length=100)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='forums', to='overview.candidate')),
-                ('forum', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='participants', to='overview.forum')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("date", models.DateField(blank=True, null=True)),
+                ("link", models.URLField(blank=True, max_length=250)),
+                ("display", models.BooleanField(default=True)),
+                (
+                    "timestamps",
+                    models.CharField(
+                        blank=True,
+                        help_text="list of timestamps the candidates speaks during, ex., '15:35-16:45, 1:37:02-1:38:00' ",
+                        max_length=100,
+                    ),
+                ),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="forums",
+                        to="overview.candidate",
+                    ),
+                ),
+                (
+                    "forum",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="participants",
+                        to="overview.forum",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ForumOrganization',
+            name="ForumOrganization",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('forum', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.forum')),
-                ('organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.organization')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "forum",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.forum"
+                    ),
+                ),
+                (
+                    "organization",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.organization"
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('forum', 'organization')},
+                "unique_together": {("forum", "organization")},
             },
         ),
     ]

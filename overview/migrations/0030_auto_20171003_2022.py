@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0029_merge_20171001_2239'),
+        ("overview", "0029_merge_20171001_2239"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='interviewvideo',
-            name='sort_order',
+            model_name="interviewvideo",
+            name="sort_order",
             field=models.FloatField(blank=True),
         ),
     ]

@@ -2,8 +2,10 @@ import logging
 from typing import List
 from django.http.response import HttpResponseBadRequest
 from django.views.generic import DetailView, UpdateView, ListView
+
 # from django.utils.decorators import method_decorator
 from django.utils import timezone
+
 # from django.views.decorators.http import last_modified
 # from django.views.decorators.vary import vary_on_headers
 from django.db.models import Q, Max
@@ -54,7 +56,7 @@ class RankedListDetail(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['annotations'] = self.object.annotated_candidates.select_related('candidate')
+        context["annotations"] = self.object.annotated_candidates.select_related("candidate")
         return context
 
 
@@ -64,17 +66,18 @@ class DownloadRankedList(RankedListDetail):
 
     def render_to_response(self, *args, **kwargs):
         resp = super().render_to_response(*args, **kwargs)
-        resp['Content-Disposition'] = 'attachment; filename={name}-ranking.txt'.format(
-            name=slugify(self.object.name))
+        resp["Content-Disposition"] = "attachment; filename={name}-ranking.txt".format(
+            name=slugify(self.object.name)
+        )
         return resp
 
 
 class CandidateListField(forms.Field):
     def clean(self, value):
         if not value:
-            raise forms.ValidationError('Something went wrong. Please reload and try again.')
+            raise forms.ValidationError("Something went wrong. Please reload and try again.")
 
-        slugs = value.split(',')  # order is important!
+        slugs = value.split(",")  # order is important!
 
         # make sure the candidates go into the dadtabase with the same order as
         # they came into the API
@@ -87,12 +90,12 @@ class CandidateListField(forms.Field):
 
 
 class EditForm(forms.ModelForm):
-    """ Only used for reordering candidates! """
+    """Only used for reordering candidates!"""
 
     candidates = CandidateListField()
 
     def save(self):
-        self.instance.annotated_candidates.overwrite_list(self.cleaned_data['candidates'])
+        self.instance.annotated_candidates.overwrite_list(self.cleaned_data["candidates"])
         self.instance.timestamp_modified = timezone.now()
         self.instance.save()
         return self.instance
@@ -116,7 +119,7 @@ def append_to_ballot(request, slug):
         return HttpResponseBadRequest()
 
     ballot = RankedList.objects.for_request(request, force=True)
-    max_order = ballot.annotated_candidates.aggregate(Max("order"))['order__max']
+    max_order = ballot.annotated_candidates.aggregate(Max("order"))["order__max"]
     if max_order is None:
         max_order = -1
 
@@ -139,21 +142,20 @@ class MyList(_MyBallotMixin, UpdateView):
     success_url = reverse_lazy("my_ranking")
 
     def get_json(self, obj):
-        return {"candidates": list(
-            obj.annotated_candidates
-            .values_list("candidate__slug", flat=True))
+        return {
+            "candidates": list(obj.annotated_candidates.values_list("candidate__slug", flat=True))
         }
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['mine'] = True
+        context["mine"] = True
 
-        context['name_form'] = self.get_name_form()
-        context['visibility_form'] = self.get_visibility_form()
-        context['ordering_form'] = self.get_ordering_form()
+        context["name_form"] = self.get_name_form()
+        context["visibility_form"] = self.get_visibility_form()
+        context["ordering_form"] = self.get_ordering_form()
 
-        context['annotations'] = self.object.annotated_candidates.select_related('candidate')
-        for annotation in context['annotations']:
+        context["annotations"] = self.object.annotated_candidates.select_related("candidate")
+        for annotation in context["annotations"]:
             annotation.comment_form = self.get_note_form(annotation)
 
         return context
@@ -162,20 +164,16 @@ class MyList(_MyBallotMixin, UpdateView):
         return NameForm(instance=self.object)
 
     def get_visibility_form(self):
-        return VisibilityForm(
-            instance=self.object,
-            initial={'public': not self.object.public})
+        return VisibilityForm(instance=self.object, initial={"public": not self.object.public})
 
     def get_ordering_form(self):
-        return OrderedForm(
-            instance=self.object,
-            initial={'ordered': not self.object.ordered})
+        return OrderedForm(instance=self.object, initial={"ordered": not self.object.ordered})
 
     def get_note_form(self, ranked_element):
         return NoteForm(instance=ranked_element)
 
     def get(self, request):
-        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             self.object = self.get_object()
             return JsonResponse(self.get_json(self.object))
         else:
@@ -183,7 +181,7 @@ class MyList(_MyBallotMixin, UpdateView):
 
     def form_invalid(self, form):
         ret = super().form_invalid(form)
-        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             logging.warning("uh oh", extra={"errors": form.errors})
             return JsonResponse(form.errors.as_json())
         else:
@@ -191,7 +189,7 @@ class MyList(_MyBallotMixin, UpdateView):
 
     def form_valid(self, form):
         ret = super().form_valid(form)
-        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse(self.get_json(form.instance))
         else:
             return ret
@@ -204,7 +202,7 @@ class MakePublic(_MyBallotMixin, UpdateView):
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['public'] = not self.object.public
+        initial["public"] = not self.object.public
         return initial
 
 
@@ -214,7 +212,7 @@ class MakeOrdered(_MyBallotMixin, UpdateView):
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['ordered'] = not self.object.ordered
+        initial["ordered"] = not self.object.ordered
         return initial
 
 
@@ -227,15 +225,15 @@ class UpdateNote(UpdateView):
 
     def get_object(self):
         try:
-            return self.get_queryset().get(candidate__slug=self.kwargs['slug'])
+            return self.get_queryset().get(candidate__slug=self.kwargs["slug"])
         except RankedElement.DoesNotExist:
             # not sure if we'll ever need this
-            candidate = Candidate.objects.get(slug=self.kwargs['slug'])
+            candidate = Candidate.objects.get(slug=self.kwargs["slug"])
             return self.get_queryset().create(candidate=candidate)
 
     def form_valid(self, form):
         ret = super().form_valid(form)
-        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             return HttpResponse("OK", status=200)
         else:
             return ret
@@ -246,7 +244,7 @@ class UpdateNote(UpdateView):
 
 @require_POST
 def delete_note(request, slug):
-    """ Deletes note and position in ranking """
+    """Deletes note and position in ranking"""
 
     candidate = get_object_or_404(Candidate.objects.all(), slug=slug)
     ranked_list = RankedList.objects.for_request(request, force=True)

@@ -8,17 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ranking', '0002_auto_20171010_2219'),
+        ("ranking", "0002_auto_20171010_2219"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='rankedelement',
-            options={'ordering': ('order',)},
+            name="rankedelement",
+            options={"ordering": ("order",)},
         ),
         migrations.AddField(
-            model_name='rankedlist',
-            name='last_modified',
+            model_name="rankedlist",
+            name="last_modified",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

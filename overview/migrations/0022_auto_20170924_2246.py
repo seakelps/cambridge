@@ -8,17 +8,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0021_auto_20170924_2244'),
+        ("overview", "0021_auto_20170924_2244"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='candidate',
-            name='degrees',
+            model_name="candidate",
+            name="degrees",
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='education',
-            field=models.CharField(blank=True, help_text='like what degrees they have', max_length=200),
+            model_name="candidate",
+            name="education",
+            field=models.CharField(
+                blank=True, help_text="like what degrees they have", max_length=200
+            ),
         ),
     ]

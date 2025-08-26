@@ -9,55 +9,118 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0040_auto_20171026_2110'),
+        ("overview", "0040_auto_20171026_2110"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PressArticle',
+            name="PressArticle",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('author', models.CharField(blank=True, max_length=100)),
-                ('link', models.URLField(blank=True, max_length=500)),
-                ('date', models.DateField(blank=True, null=True)),
-                ('full_text', models.TextField(blank=True, help_text='possibility to allow full text search later', null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("author", models.CharField(blank=True, max_length=100)),
+                ("link", models.URLField(blank=True, max_length=500)),
+                ("date", models.DateField(blank=True, null=True)),
+                (
+                    "full_text",
+                    models.TextField(
+                        blank=True,
+                        help_text="possibility to allow full text search later",
+                        null=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PressArticleCandidate',
+            name="PressArticleCandidate",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('candidate_is_the_author', models.BooleanField(default=False)),
-                ('sample', models.TextField(blank=True, help_text="if there's something particularly noteworthy about this candidate and press article")),
-                ('display', models.BooleanField(default=False)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.Candidate')),
-                ('pressarticle', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.PressArticle')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("candidate_is_the_author", models.BooleanField(default=False)),
+                (
+                    "sample",
+                    models.TextField(
+                        blank=True,
+                        help_text="if there's something particularly noteworthy about this candidate and press article",
+                    ),
+                ),
+                ("display", models.BooleanField(default=False)),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.Candidate"
+                    ),
+                ),
+                (
+                    "pressarticle",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.PressArticle"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='PressOutlet',
+            name="PressOutlet",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('homepage', models.URLField(blank=True, max_length=100)),
-                ('logo', models.URLField(blank=True, max_length=150)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("homepage", models.URLField(blank=True, max_length=100)),
+                ("logo", models.URLField(blank=True, max_length=150)),
             ],
         ),
         migrations.CreateModel(
-            name='Quote',
+            name="Quote",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quote', models.TextField(blank=True, help_text='Text to display. Publically readable!')),
-                ('by', models.CharField(blank=True, default='', help_text='Leave blank if candidate', max_length=100)),
-                ('cite', models.CharField(blank=True, max_length=100)),
-                ('display', models.BooleanField(default=False)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.Candidate')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "quote",
+                    models.TextField(
+                        blank=True, help_text="Text to display. Publically readable!"
+                    ),
+                ),
+                (
+                    "by",
+                    models.CharField(
+                        blank=True,
+                        default="",
+                        help_text="Leave blank if candidate",
+                        max_length=100,
+                    ),
+                ),
+                ("cite", models.CharField(blank=True, max_length=100)),
+                ("display", models.BooleanField(default=False)),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.Candidate"
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='pressarticle',
-            name='pressoutlet',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.PressOutlet'),
+            model_name="pressarticle",
+            name="pressoutlet",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="overview.PressOutlet"
+            ),
         ),
     ]

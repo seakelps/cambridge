@@ -9,22 +9,32 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0025_candidate_job'),
+        ("overview", "0025_candidate_job"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='InterviewVideo',
+            name="InterviewVideo",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('link', models.URLField(blank=True, max_length=500)),
-                ('visible', models.BooleanField(default=True)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='overview.Candidate')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("link", models.URLField(blank=True, max_length=500)),
+                ("visible", models.BooleanField(default=True)),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="overview.Candidate"
+                    ),
+                ),
             ],
         ),
         migrations.AlterField(
-            model_name='questionnaire',
-            name='link',
+            model_name="questionnaire",
+            name="link",
             field=models.URLField(blank=True, max_length=500),
         ),
     ]

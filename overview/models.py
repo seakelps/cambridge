@@ -18,8 +18,9 @@ class Candidate(models.Model):
     should be updated across the board when it changes.
     (ex., like name.)
     """
+
     class Meta:
-        ordering = ('fullname', )
+        ordering = ("fullname",)
 
     timestamp_modified = models.DateTimeField(auto_now=True)
 
@@ -31,9 +32,9 @@ class Candidate(models.Model):
 
     # what pronoun they use
     pronoun_choices = (
-        ('she',  'She'),
-        ('he',   'He'),
-        ('they', 'They'),
+        ("she", "She"),
+        ("he", "He"),
+        ("they", "They"),
     )
     pronoun = models.CharField(max_length=4, choices=pronoun_choices)
 
@@ -50,21 +51,34 @@ class Candidate(models.Model):
     email = models.EmailField(blank=True, default="")
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
-    facebook = models.CharField(max_length=100, help_text="Candidate facebook page, not including facebook url", blank=True, default="")
-    twitter = models.CharField(max_length=100, blank=True, default="", help_text="twitter, not including twitter url")
-    linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
-    instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
+    facebook = models.CharField(
+        max_length=100,
+        help_text="Candidate facebook page, not including facebook url",
+        blank=True,
+        default="",
+    )
+    twitter = models.CharField(
+        max_length=100, blank=True, default="", help_text="twitter, not including twitter url"
+    )
+    linkedin = models.CharField(
+        max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url"
+    )
+    instagram = models.CharField(
+        max_length=100, blank=True, default="", help_text="insta, not including instagram url"
+    )
     nextdoor = models.CharField(max_length=100, blank=True, default="")
 
     # voting
     voter_id_number = models.CharField(max_length=100, blank=True, default="")
     date_of_registration = models.DateField(blank=True, null=True)
     voter_status_choices = (
-        ('A', 'Active'),
-        ('I', 'Inactive'),
-        ('u',  'Unknown'),
+        ("A", "Active"),
+        ("I", "Inactive"),
+        ("u", "Unknown"),
     )
-    voter_status = models.CharField(max_length=3, choices=voter_status_choices, default='u', blank=True)
+    voter_status = models.CharField(
+        max_length=3, choices=voter_status_choices, default="u", blank=True
+    )
     van_id = models.CharField(max_length=50, blank=True, default="")
     van_phone = models.CharField(max_length=50, blank=True, default="")
 
@@ -91,12 +105,14 @@ class Candidate(models.Model):
 
     # political affiliation
     party_choices = (
-        ('dem', 'Democrat'),
-        ('rep', 'Republican'),
-        ('o',   'Other'),
-        ('u',   'Unknown'),
+        ("dem", "Democrat"),
+        ("rep", "Republican"),
+        ("o", "Other"),
+        ("u", "Unknown"),
     )
-    political_party = models.CharField(max_length=3, choices=party_choices, default='u', blank=True)
+    political_party = models.CharField(
+        max_length=3, choices=party_choices, default="u", blank=True
+    )
     # would be interesting to try to catch the active level they are
 
     # previous political experience?
@@ -109,28 +125,32 @@ class Candidate(models.Model):
     neighborhood = models.CharField(max_length=200, blank=True)
 
     housing_choices = (
-        ('rent', 'Rent'),
-        ('own',  'Own'),
-        ('dorm', 'Dorm'),
-        ('o',    'Other'),
-        ('u',    'Live')
+        ("rent", "Rent"),
+        ("own", "Own"),
+        ("dorm", "Dorm"),
+        ("o", "Other"),
+        ("u", "Live"),
     )
-    housing_status = models.CharField(max_length=4, choices=housing_choices, default='u', blank=True)
+    housing_status = models.CharField(
+        max_length=4, choices=housing_choices, default="u", blank=True
+    )
     housing_status_note = models.CharField(max_length=200, null=True, blank=True)
     housing_sell_value = models.FloatField(null=True, blank=True)
     housing_sale_date = models.DateField(null=True, blank=True)
     housing_sale_price = models.FloatField(null=True, blank=True)
     housing_sale_price_inflation = models.FloatField(null=True, blank=True)
     housing_type_choices = (
-        ('single',     'Single-Family'),
-        ('double',     'Two-Family'),
-        ('triple',     'Triple-Decker'),
-        ('apartment',  'Apartment'),
-        ('dorm',       'Dorm'),
-        ('other',      'Other'),
-        ('unknown',    'Unknown')
+        ("single", "Single-Family"),
+        ("double", "Two-Family"),
+        ("triple", "Triple-Decker"),
+        ("apartment", "Apartment"),
+        ("dorm", "Dorm"),
+        ("other", "Other"),
+        ("unknown", "Unknown"),
     )
-    housing_type = models.CharField(max_length=40, choices=housing_type_choices, default='u', blank=True)
+    housing_type = models.CharField(
+        max_length=40, choices=housing_type_choices, default="u", blank=True
+    )
     housing_is_a_landlord = models.BooleanField(null=True)
 
     ## demographics
@@ -139,7 +159,9 @@ class Candidate(models.Model):
     place_of_birth = models.CharField(max_length=200, blank=True)
 
     # education
-    education = models.CharField(help_text="like what degrees they have", max_length=200, blank=True)
+    education = models.CharField(
+        help_text="like what degrees they have", max_length=200, blank=True
+    )
 
     # lifestyle
     is_cyclist = models.BooleanField(null=True)
@@ -159,8 +181,8 @@ class Candidate(models.Model):
     # primarily for linking to finance records
     cpf_id = models.IntegerField(null=True, blank=True)
     previous_results_map = models.URLField(
-        help_text="previous election results from Davi",
-        blank=True, null=True)
+        help_text="previous election results from Davi", blank=True, null=True
+    )
 
     # this should go somewhere else, probably
     self_loan = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -172,10 +194,11 @@ class Candidate(models.Model):
     @cached_property
     def headshot(self):
         try:
-            return staticfiles_storage.url(u'headshots/{0.slug}.png'.format(self))
+            return staticfiles_storage.url("headshots/{0.slug}.png".format(self))
         except ValueError:
-            return staticfiles_storage.url(u'headshots/blank.png')
-    headshot_description = models.CharField(default='headshot of candidate', max_length=500)
+            return staticfiles_storage.url("headshots/blank.png")
+
+    headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
     def __str__(self):
         return self.fullname
@@ -210,12 +233,20 @@ class Candidate(models.Model):
 
     @property
     def total_contributions_less_fees(self):
-        contributions = PastContribution.objects.filter(candidate=self).exclude(note__contains='access fee').aggregate(Sum('amount'))
+        contributions = (
+            PastContribution.objects.filter(candidate=self)
+            .exclude(note__contains="access fee")
+            .aggregate(Sum("amount"))
+        )
         return contributions["amount__sum"]
 
     @property
     def signed_bike_pledge(self):
-        pledge = Questionnaire.objects.filter(name="Cambridge Bike Safety Pledge 2023").first().responses.filter(candidate=self)
+        pledge = (
+            Questionnaire.objects.filter(name="Cambridge Bike Safety Pledge 2023")
+            .first()
+            .responses.filter(candidate=self)
+        )
         return pledge.exists()
 
     def endorsed_by_group(self, org_name):
@@ -228,9 +259,10 @@ class Election(models.Model):
 
     ex., "2025 School Committee"
     """
+
     position_choices = (
-        ('school',  'School Committee'),
-        ('council', 'City Council'),
+        ("school", "School Committee"),
+        ("council", "City Council"),
     )
     position = models.CharField(max_length=40, choices=position_choices)
     year = models.IntegerField(default=2025)
@@ -243,6 +275,7 @@ class CandidateElection(models.Model):
 
     AKA, most pieces of information on Candidate will be moving here.
     """
+
     candidate = models.ForeignKey(
         Candidate,
         on_delete=models.CASCADE,
@@ -261,11 +294,27 @@ class Organization(models.Model):
     logo = models.URLField(blank=True, max_length=150)
 
     website = models.URLField(blank=True, default="")
-    facebook = models.CharField(max_length=100, help_text="facebook page, not including facebook url", blank=True, default="")
-    twitter = models.CharField(max_length=100, blank=True, default="", help_text="twitter, not including twitter url")
-    linkedin = models.CharField(max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url")
-    instagram = models.CharField(max_length=100, blank=True, default="", help_text="insta, not including instagram url")
-    reddit = models.CharField(max_length=100, blank=True, default="", help_text="reddit community, not including reddit url")
+    facebook = models.CharField(
+        max_length=100,
+        help_text="facebook page, not including facebook url",
+        blank=True,
+        default="",
+    )
+    twitter = models.CharField(
+        max_length=100, blank=True, default="", help_text="twitter, not including twitter url"
+    )
+    linkedin = models.CharField(
+        max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url"
+    )
+    instagram = models.CharField(
+        max_length=100, blank=True, default="", help_text="insta, not including instagram url"
+    )
+    reddit = models.CharField(
+        max_length=100,
+        blank=True,
+        default="",
+        help_text="reddit community, not including reddit url",
+    )
 
     is_local = models.BooleanField(blank=True, default=None, null=True)
     is_union = models.BooleanField(blank=True, default=None, null=True)
@@ -279,7 +328,9 @@ class Organization(models.Model):
 
 
 class Endorsement(models.Model):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="endorsements")
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, related_name="endorsements"
+    )
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="endorsements")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
@@ -305,7 +356,9 @@ class Questionnaire(models.Model):
     name = models.CharField(max_length=40, unique=True)
     topic = models.CharField(max_length=40)
     icon_class = models.CharField(max_length=40, help_text='icon class like "fa-tree"')
-    organization = models.ForeignKey(Organization, null=True, blank=True, on_delete=models.SET_NULL)
+    organization = models.ForeignKey(
+        Organization, null=True, blank=True, on_delete=models.SET_NULL
+    )
     year = models.IntegerField(null=True, default=2023)
 
     description = models.CharField(max_length=500)
@@ -317,7 +370,9 @@ class Questionnaire(models.Model):
 
 
 class QuestionnaireResponse(models.Model):
-    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE, related_name="responses")
+    questionnaire = models.ForeignKey(
+        Questionnaire, on_delete=models.CASCADE, related_name="responses"
+    )
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="responses")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
@@ -347,7 +402,7 @@ class InterviewVideo(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.sort_order:
-            self.sort_order = InterviewVideo.objects.aggregate(models.Max('id'))['id__max']
+            self.sort_order = InterviewVideo.objects.aggregate(models.Max("id"))["id__max"]
 
         super().save(*args, **kwargs)
 
@@ -358,7 +413,9 @@ class InterviewVideo(models.Model):
 class Quote(models.Model):
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     quote = models.TextField(help_text="Text to display. Publically readable!", blank=True)
-    by = models.CharField(max_length=100, help_text="Leave blank if candidate", blank=True, default="")
+    by = models.CharField(
+        max_length=100, help_text="Leave blank if candidate", blank=True, default=""
+    )
     cite = models.CharField(max_length=100, blank=True)
     display = models.BooleanField(default=False)
     display_housing = models.BooleanField(default=False)
@@ -367,7 +424,7 @@ class Quote(models.Model):
 # ex., The Boston Globe; Cambridge Day
 class PressOutlet(models.Model):
     class Meta:
-        ordering = ('name', )
+        ordering = ("name",)
 
     name = models.CharField(max_length=50)
     homepage = models.URLField(max_length=100, blank=True)
@@ -380,14 +437,16 @@ class PressOutlet(models.Model):
 # ex., "Record number of women running for Council"
 class PressArticle(models.Model):
     class Meta:
-        ordering = ('date', )
+        ordering = ("date",)
 
     pressoutlet = models.ForeignKey(PressOutlet, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100, blank=True)
     link = models.URLField(max_length=500, blank=True)
     date = models.DateField(blank=True, null=True)
-    full_text = models.TextField(help_text="possibility to allow full text search later", blank=True, null=True)
+    full_text = models.TextField(
+        help_text="possibility to allow full text search later", blank=True, null=True
+    )
 
     def __str__(self):
         return "{} ({})".format(self.title, self.pressoutlet)
@@ -398,25 +457,28 @@ class PressArticleCandidate(models.Model):
     pressarticle = models.ForeignKey(PressArticle, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     candidate_is_the_author = models.BooleanField(default=False)
-    sample = models.TextField(help_text="if there's something particularly noteworthy about this candidate and press article", blank=True)
+    sample = models.TextField(
+        help_text="if there's something particularly noteworthy about this candidate and press article",
+        blank=True,
+    )
     display = models.BooleanField(default=False)
 
 
 proposal_type_choices = (
-    ('housing',  'Housing'),
-    ('biking',   'Biking'),
-    ('environment', 'Environment'),
-    ('climate', 'Climate Change'),
-    ('bigotry', 'Hatred/Bigotry'),
-    ('governance', 'Governance'),
-    ('equity', 'Diversity, Equity, and Inclusion'),
-    ('other', 'Other'),
-    ('police', 'Law Enforcement'),
-    ('justice', 'Racial Justice'),
-    ('business', 'Business'),
-    ('education', 'Education'),
-    ('economy', 'Jobs and Economy'),
-    ('transportation', 'Transportation'),
+    ("housing", "Housing"),
+    ("biking", "Biking"),
+    ("environment", "Environment"),
+    ("climate", "Climate Change"),
+    ("bigotry", "Hatred/Bigotry"),
+    ("governance", "Governance"),
+    ("equity", "Diversity, Equity, and Inclusion"),
+    ("other", "Other"),
+    ("police", "Law Enforcement"),
+    ("justice", "Racial Justice"),
+    ("business", "Business"),
+    ("education", "Education"),
+    ("economy", "Jobs and Economy"),
+    ("transportation", "Transportation"),
 )
 
 
@@ -434,7 +496,9 @@ class SpecificProposal(models.Model):
     blurb = models.TextField(blank=True)
     order = models.FloatField(null=True, blank=True)
 
-    main_topic = models.CharField(max_length=200, blank=True, default="", choices=proposal_type_choices)
+    main_topic = models.CharField(
+        max_length=200, blank=True, default="", choices=proposal_type_choices
+    )
 
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
@@ -453,7 +517,9 @@ class GeneralProposal(models.Model):
     initial_year = models.IntegerField(null=True, blank=True)
     private_notes = models.TextField(blank=True)
 
-    main_topic = models.CharField(max_length=200, blank=True, default="", choices=proposal_type_choices)
+    main_topic = models.CharField(
+        max_length=200, blank=True, default="", choices=proposal_type_choices
+    )
 
     def __str__(self):
         return "{} ({})".format(self.fullname, self.initial_year)
@@ -474,16 +540,18 @@ class CandidateSpecificProposalStance(models.Model):
     # todo: NullBooleanField
 
     support_degree_choices = (
-        ('supported', 'Strongly Supported'),
-        ('somewhat supported',  'Somewhat Supported'),
-        ('neither',  'Neither Supported nor Opposed'),
-        ('somewhat opposed', 'Somewhat Opposed'),
-        ('strongly opposed',  'Strongly Opposed'),
-        ('u', 'Unknown'),
-        ('na', 'Not Applicable'),
-        ('o',    'Other'),
+        ("supported", "Strongly Supported"),
+        ("somewhat supported", "Somewhat Supported"),
+        ("neither", "Neither Supported nor Opposed"),
+        ("somewhat opposed", "Somewhat Opposed"),
+        ("strongly opposed", "Strongly Opposed"),
+        ("u", "Unknown"),
+        ("na", "Not Applicable"),
+        ("o", "Other"),
     )
-    degree_of_support = models.CharField(max_length=25, choices=support_degree_choices, default='u', blank=True)
+    degree_of_support = models.CharField(
+        max_length=25, choices=support_degree_choices, default="u", blank=True
+    )
 
     # blurbs
     private_notes = models.TextField(blank=True)
@@ -513,6 +581,7 @@ class VanElection(models.Model):
     """
     An election according to VAN/votebuilder.
     """
+
     # data from van
     van_name = models.CharField(max_length=100, unique=True)
 
@@ -520,38 +589,49 @@ class VanElection(models.Model):
     year = models.IntegerField(null=True, blank=True)
 
     subtype_choices = (
-        ('general',  'General'),
-        ('local',   'Municipal'),
-        ('local_primary', 'Municipal Primary'),
-        ('presidental_primary', 'Presidental Primary'),
-        ('primary', 'Primary'),
-        ('special', 'Special'),
-        ('special_primary', 'Special Primary'),
+        ("general", "General"),
+        ("local", "Municipal"),
+        ("local_primary", "Municipal Primary"),
+        ("presidental_primary", "Presidental Primary"),
+        ("primary", "Primary"),
+        ("special", "Special"),
+        ("special_primary", "Special Primary"),
     )
     subtype = models.CharField(max_length=20, choices=subtype_choices)
 
     def __str__(self):
         return f"{self.van_name}: {self.year} {self.subtype}"
 
+
 class CandidateVan(models.Model):
     """
     If someone voted in an election according to VAN/votebuilder.
     """
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="van_history")
-    election = models.ForeignKey(VanElection, on_delete=models.CASCADE, related_name="candidate_map")
 
-    voted = models.BooleanField(blank=True, default=True, null=True, help_text="van/votebuilder uses various letters for how people voted; we only care that they did")
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="van_history")
+    election = models.ForeignKey(
+        VanElection, on_delete=models.CASCADE, related_name="candidate_map"
+    )
+
+    voted = models.BooleanField(
+        blank=True,
+        default=True,
+        null=True,
+        help_text="van/votebuilder uses various letters for how people voted; we only care that they did",
+    )
 
     party_choices = (
-        ('dem', 'Democrat'),
-        ('rep', 'Republican'),
-        ('o',   'Other'),
-        ('u',   'Unknown'),
+        ("dem", "Democrat"),
+        ("rep", "Republican"),
+        ("o", "Other"),
+        ("u", "Unknown"),
     )
-    political_party = models.CharField(max_length=3, choices=party_choices, default=None, blank=True, null=True)
+    political_party = models.CharField(
+        max_length=3, choices=party_choices, default=None, blank=True, null=True
+    )
 
     class Meta:
-        unique_together = ('candidate', 'election')
+        unique_together = ("candidate", "election")
 
     def __str__(self):
         return f"{self.candidate} {self.election}"
@@ -568,7 +648,7 @@ class Forum(models.Model):
     display = models.BooleanField(default=True)
 
     class Meta:
-        unique_together = ('name', 'year')
+        unique_together = ("name", "year")
 
     def __str__(self):
         return f"{self.name} - {self.year}"
@@ -579,7 +659,7 @@ class ForumOrganization(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('forum', 'organization')
+        unique_together = ("forum", "organization")
 
 
 class ForumParticipant(models.Model):
@@ -588,7 +668,11 @@ class ForumParticipant(models.Model):
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
     display = models.BooleanField(default=True)
-    timestamps = models.CharField(blank=True, max_length=100, help_text="list of timestamps the candidates speaks during, ex., '15:35-16:45, 1:37:02-1:38:00' ")
+    timestamps = models.CharField(
+        blank=True,
+        max_length=100,
+        help_text="list of timestamps the candidates speaks during, ex., '15:35-16:45, 1:37:02-1:38:00' ",
+    )
     by_proxy = models.BooleanField(default=False)
 
     @property

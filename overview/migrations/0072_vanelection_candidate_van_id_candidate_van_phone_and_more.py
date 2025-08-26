@@ -7,40 +7,89 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0071_degree_subject'),
+        ("overview", "0071_degree_subject"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='VanElection',
+            name="VanElection",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('van_name', models.CharField(max_length=100)),
-                ('year', models.IntegerField(blank=True, null=True)),
-                ('subtype', models.CharField(choices=[('general', 'General'), ('local', 'Municipal'), ('presidental_primary', 'Presidental Primary'), ('primary', 'Primary'), ('special', 'Special')], max_length=20)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("van_name", models.CharField(max_length=100)),
+                ("year", models.IntegerField(blank=True, null=True)),
+                (
+                    "subtype",
+                    models.CharField(
+                        choices=[
+                            ("general", "General"),
+                            ("local", "Municipal"),
+                            ("presidental_primary", "Presidental Primary"),
+                            ("primary", "Primary"),
+                            ("special", "Special"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='van_id',
-            field=models.CharField(blank=True, default='', max_length=50),
+            model_name="candidate",
+            name="van_id",
+            field=models.CharField(blank=True, default="", max_length=50),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='van_phone',
-            field=models.CharField(blank=True, default='', max_length=50),
+            model_name="candidate",
+            name="van_phone",
+            field=models.CharField(blank=True, default="", max_length=50),
         ),
         migrations.CreateModel(
-            name='CandidateVan',
+            name="CandidateVan",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('voted', models.BooleanField(blank=True, default=None, null=True)),
-                ('political_party', models.CharField(blank=True, choices=[('dem', 'Democrat'), ('rep', 'Republican'), ('o', 'Other'), ('u', 'Unknown')], default='u', max_length=3)),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='van_history', to='overview.candidate')),
-                ('election', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='candidate_map', to='overview.vanelection')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                ("voted", models.BooleanField(blank=True, default=None, null=True)),
+                (
+                    "political_party",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("dem", "Democrat"),
+                            ("rep", "Republican"),
+                            ("o", "Other"),
+                            ("u", "Unknown"),
+                        ],
+                        default="u",
+                        max_length=3,
+                    ),
+                ),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="van_history",
+                        to="overview.candidate",
+                    ),
+                ),
+                (
+                    "election",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="candidate_map",
+                        to="overview.vanelection",
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('candidate', 'election')},
+                "unique_together": {("candidate", "election")},
             },
         ),
     ]

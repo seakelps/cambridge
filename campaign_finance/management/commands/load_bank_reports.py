@@ -12,7 +12,9 @@ class Command(BaseCommand):
     help = """Load bank reports scraped with `python download_ocpfus.py --bankreports`"""
 
     def add_arguments(self, parser):
-        parser.add_argument(metavar='<campaign_bank_reports.csv>', dest='report_csv', type=FileType('r'))
+        parser.add_argument(
+            metavar="<campaign_bank_reports.csv>", dest="report_csv", type=FileType("r")
+        )
 
     def handle(self, report_csv, *args, **options):
         bank_reports_csv = csv.DictReader(report_csv)
@@ -23,7 +25,7 @@ class Command(BaseCommand):
 
             # ocpf.us has a formatting problem
             fdate = timezone.make_aware(datetime.datetime.strptime(row["dateFiled"], "%m/%d/%Y"))
-            start_date = row['reportingPeriod'].split(' - ')[0]
+            start_date = row["reportingPeriod"].split(" - ")[0]
 
             if d.year > 2014:
                 try:
@@ -38,7 +40,9 @@ class Command(BaseCommand):
                             # report_candidate_first_name=row["ReportCandidateFirstName"],
                             report_year=row["reportYear"],
                             # ending_date_display=datetime.datetime.strptime(row["EndingDateDisplay"], "%m/%d/%Y"),
-                            beginning_date_display=datetime.datetime.strptime(start_date, "%m/%d/%Y"),
+                            beginning_date_display=datetime.datetime.strptime(
+                                start_date, "%m/%d/%Y"
+                            ),
                             reporting_period=row["reportingPeriod"],
                             filing_id=row["id"],
                             filing_date=datetime.datetime.combine(fdate, datetime.time(0)),
@@ -53,35 +57,45 @@ class Command(BaseCommand):
                             # ui=row["Ui"],
                             # reimbursee=row["Reimbursee"],
                             # fun times were had
-                            beginning_balance_display=unstupify_ocpfus_money_column(row["startBalance"]),
-                            receipt_total_display=unstupify_ocpfus_money_column(row["creditTotal"]),
-                            receipt_unitemized_total_display=unstupify_ocpfus_money_column(row["filerReportedDepositReceiptUnitemizedTotal"]),
+                            beginning_balance_display=unstupify_ocpfus_money_column(
+                                row["startBalance"]
+                            ),
+                            receipt_total_display=unstupify_ocpfus_money_column(
+                                row["creditTotal"]
+                            ),
+                            receipt_unitemized_total_display=unstupify_ocpfus_money_column(
+                                row["filerReportedDepositReceiptUnitemizedTotal"]
+                            ),
                             # receipt_itemized_total_display=unstupify_ocpfus_money_column(row["filerReportedDepositReceiptItemizedTotal"]),  all zeros
                             # expenditure_unitemized_total_display=unstupify_ocpfus_money_column(row["filerReportedDepositExpenditureUnitemizedTotal"]),
                             # expenditure_itemized_total_display=unstupify_ocpfus_money_column(row["filerReportedDepositExpenditureItemizedTotal"]),
-                            expenditure_total_display=unstupify_ocpfus_money_column(row["expenditureTotal"]),
-                            ending_balance_display=unstupify_ocpfus_money_column(row["endBalance"]),
-
+                            expenditure_total_display=unstupify_ocpfus_money_column(
+                                row["expenditureTotal"]
+                            ),
+                            ending_balance_display=unstupify_ocpfus_money_column(
+                                row["endBalance"]
+                            ),
                             # inkind_total_display=unstupify_ocpfus_money_column(row["InkindTotalDisplay"]),
                             # liability_total_display=unstupify_ocpfus_money_column(row["LiabilityTotalDisplay"]),
                             # payments_display=unstupify_ocpfus_money_column(row["PaymentsDisplay"]),
                             # savings_total_display=unstupify_ocpfus_money_column(row["SavingsTotalDisplay"]),
-                        ))
+                        ),
+                    )
                 except Exception as e:
                     print(f"unable to process row, halting. {e}")
                     print(row)
                     raise
                 if created:
-                    print('created')
+                    print("created")
 
 
 def unstupify_ocpfus_money_column(col):
-    """ don't even talk to me - kelsey
-    $(100) is how accountants denote negative numbers """
+    """don't even talk to me - kelsey
+    $(100) is how accountants denote negative numbers"""
     temp = col.replace("$", "").replace(",", "")
     if temp.startswith("(") and temp.endswith(")"):
         temp = temp.strip("()")
         temp = "-" + temp
-    if temp == '' or temp == '-':
+    if temp == "" or temp == "-":
         temp = 0
     return temp

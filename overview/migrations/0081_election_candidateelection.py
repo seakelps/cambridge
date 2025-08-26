@@ -7,24 +7,54 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0080_candidate_self_loan_forumparticipant_by_proxy'),
+        ("overview", "0080_candidate_self_loan_forumparticipant_by_proxy"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Election',
+            name="Election",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('position', models.CharField(choices=[('school', 'School Committee'), ('council', 'City Council')], max_length=40)),
-                ('year', models.IntegerField(default=2025)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "position",
+                    models.CharField(
+                        choices=[("school", "School Committee"), ("council", "City Council")],
+                        max_length=40,
+                    ),
+                ),
+                ("year", models.IntegerField(default=2025)),
             ],
         ),
         migrations.CreateModel(
-            name='CandidateElection',
+            name="CandidateElection",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='candidate_elections', to='overview.candidate')),
-                ('election', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='candidate_elections', to='overview.election')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="candidate_elections",
+                        to="overview.candidate",
+                    ),
+                ),
+                (
+                    "election",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="candidate_elections",
+                        to="overview.election",
+                    ),
+                ),
             ],
         ),
     ]

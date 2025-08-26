@@ -7,7 +7,7 @@ from typing import Optional
 
 
 class RankedListManager(models.Manager):
-    def for_request(self, request, *, force) -> Optional['RankedList']:
+    def for_request(self, request, *, force) -> Optional["RankedList"]:
         user = request.user
 
         if user.is_authenticated:
@@ -16,15 +16,14 @@ class RankedListManager(models.Manager):
             except RankedList.DoesNotExist:
                 if force:
                     return RankedList.objects.create(
-                        name=RankedList.make_name(user),
-                        slug=user.username,
-                        owner=user)
+                        name=RankedList.make_name(user), slug=user.username, owner=user
+                    )
                 else:
                     return None
 
         else:
             try:
-                return RankedList.objects.get(pk=request.session['ranked_list_id'])
+                return RankedList.objects.get(pk=request.session["ranked_list_id"])
             except (RankedList.DoesNotExist, KeyError):
                 if not force:
                     return None
@@ -35,11 +34,11 @@ class RankedListManager(models.Manager):
 
                     # can't reliably catch IntegrityErrors so get_or_creating here instead
                     ranked_list, created = RankedList.objects.get_or_create(
-                        {"name": "{}'s Slate".format(name)},
-                        slug=slugify(name))
+                        {"name": "{}'s Slate".format(name)}, slug=slugify(name)
+                    )
 
                     if created:
-                        request.session['ranked_list_id'] = ranked_list.id
+                        request.session["ranked_list_id"] = ranked_list.id
                         return ranked_list
                 raise Exception("couldnt allocate a list id")
 
@@ -48,10 +47,7 @@ class RankedList(models.Model):
     objects = RankedListManager()
 
     last_modified = models.DateTimeField(auto_now=True)
-    owner = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        null=True,
-        on_delete=models.SET_NULL)
+    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     public = models.BooleanField(default=False)
@@ -93,9 +89,8 @@ class RankedElement(models.Model):
     objects = RankedElementManager()
 
     ranked_list = models.ForeignKey(
-        RankedList,
-        related_name="annotated_candidates",
-        on_delete=models.CASCADE)
+        RankedList, related_name="annotated_candidates", on_delete=models.CASCADE
+    )
 
     # probably need to reorder on delete
     candidate = models.ForeignKey("overview.Candidate", on_delete=models.CASCADE)
@@ -107,4 +102,4 @@ class RankedElement(models.Model):
             ("ranked_list", "candidate"),
             ("ranked_list", "order"),
         )
-        ordering = "order",  # required for overwriting
+        ordering = ("order",)  # required for overwriting

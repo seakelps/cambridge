@@ -6,43 +6,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('campaign_finance', '0005_auto_20170806_1956'),
+        ("campaign_finance", "0005_auto_20170806_1956"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='expenditure_itemized_total_display',
+            model_name="rawbankreport",
+            name="expenditure_itemized_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='expenditure_unitemized_total_display',
+            model_name="rawbankreport",
+            name="expenditure_unitemized_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='inkind_total_display',
+            model_name="rawbankreport",
+            name="inkind_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='liability_total_display',
+            model_name="rawbankreport",
+            name="liability_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='payments_display',
+            model_name="rawbankreport",
+            name="payments_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='receipt_itemized_total_display',
+            model_name="rawbankreport",
+            name="receipt_itemized_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
         migrations.AlterField(
-            model_name='rawbankreport',
-            name='savings_total_display',
+            model_name="rawbankreport",
+            name="savings_total_display",
             field=models.DecimalField(decimal_places=2, max_digits=10, null=True),
         ),
     ]

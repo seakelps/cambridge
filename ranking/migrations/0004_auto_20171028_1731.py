@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ranking', '0003_auto_20171015_1530'),
+        ("ranking", "0003_auto_20171015_1530"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rankedelement',
-            name='comment',
-            field=models.TextField(blank=True, default=''),
+            model_name="rankedelement",
+            name="comment",
+            field=models.TextField(blank=True, default=""),
         ),
     ]

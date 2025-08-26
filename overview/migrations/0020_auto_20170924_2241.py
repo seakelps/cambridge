@@ -8,33 +8,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0019_auto_20170924_2151'),
+        ("overview", "0019_auto_20170924_2151"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='campaign_manager',
-            field=models.CharField(default='', max_length=200),
+            model_name="candidate",
+            name="campaign_manager",
+            field=models.CharField(default="", max_length=200),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='is_cyclist',
+            model_name="candidate",
+            name="is_cyclist",
             field=models.NullBooleanField(),
         ),
         migrations.AddField(
-            model_name='candidate',
-            name='twitter',
-            field=models.CharField(default='', max_length=100),
+            model_name="candidate",
+            name="twitter",
+            field=models.CharField(default="", max_length=100),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='blurb',
-            field=models.TextField(blank=True, help_text='Text to display. Publically readable!'),
+            model_name="candidate",
+            name="blurb",
+            field=models.TextField(blank=True, help_text="Text to display. Publically readable!"),
         ),
         migrations.AlterField(
-            model_name='candidate',
-            name='private_notes',
+            model_name="candidate",
+            name="private_notes",
             field=models.TextField(blank=True),
         ),
     ]

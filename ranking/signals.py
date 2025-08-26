@@ -6,7 +6,7 @@ from .models import RankedList
 @receiver(user_registered)
 def upgrade_anon_ranking(sender, user, request, **kwargs):
     try:
-        ranking = RankedList.objects.get(owner=None, pk=request.session['ranked_list_id'])
+        ranking = RankedList.objects.get(owner=None, pk=request.session["ranked_list_id"])
     except (KeyError, RankedList.DoesNotExist):
         pass
     else:

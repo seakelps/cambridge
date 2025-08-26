@@ -14,7 +14,6 @@ from django.views.generic import TemplateView
 from overview.models import Candidate
 
 
-
 class FinanceComparison(TemplateView):
     template_name = "campaign_finance/finance_comparison.html"
 
@@ -23,9 +22,7 @@ class FinanceComparison(TemplateView):
         year = 2023
 
         candidates = (
-            Candidate.objects.exclude(hide=True)
-            .exclude(is_running=False)
-            .order_by("fullname")
+            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
         )
 
         candidates_raised = {}
@@ -41,6 +38,5 @@ class FinanceComparison(TemplateView):
         context["candidates_raised"] = candidates_raised
         context["candidates_spent"] = candidates_spent
         context["candidates_start"] = candidates_start
-
 
         return context

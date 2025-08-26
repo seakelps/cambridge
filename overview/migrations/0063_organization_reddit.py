@@ -6,13 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0062_candidate_nextdoor_alter_pressarticle_title'),
+        ("overview", "0062_candidate_nextdoor_alter_pressarticle_title"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='organization',
-            name='reddit',
-            field=models.CharField(blank=True, default='', help_text='reddit community, not including reddit url', max_length=100),
+            model_name="organization",
+            name="reddit",
+            field=models.CharField(
+                blank=True,
+                default="",
+                help_text="reddit community, not including reddit url",
+                max_length=100,
+            ),
         ),
     ]

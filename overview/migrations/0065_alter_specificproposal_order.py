@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0064_alter_organization_name'),
+        ("overview", "0064_alter_organization_name"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='specificproposal',
-            name='order',
+            model_name="specificproposal",
+            name="order",
             field=models.FloatField(blank=True, null=True),
         ),
     ]

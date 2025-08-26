@@ -10,7 +10,7 @@ from .models import RankedElement, RankedList
 class NameForm(forms.ModelForm):
     helper = FormHelper()
     helper.layout = Layout(
-        'name',
+        "name",
         Submit("save", "Save"),
         Button("cancel", "Cancel", data_toggle="collapse", data_target="#name_form"),
     )
@@ -19,7 +19,9 @@ class NameForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if self.instance.public:
-            self.fields['name'].help_text = 'Changing the name of your ballot will also change the share link to your ballot'
+            self.fields["name"].help_text = (
+                "Changing the name of your ballot will also change the share link to your ballot"
+            )
 
     def save(self):
         obj = super().save(commit=False)
@@ -28,7 +30,7 @@ class NameForm(forms.ModelForm):
         return obj
 
     class Meta:
-        fields = ['name']
+        fields = ["name"]
         model = RankedList
 
 
@@ -52,7 +54,7 @@ class NoteForm(forms.ModelForm):
     class Meta:
         fields = ["comment"]
         labels = {
-            "comment" : "",
+            "comment": "",
         }
         model = RankedElement
 

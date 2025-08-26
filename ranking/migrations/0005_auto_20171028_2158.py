@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ranking', '0004_auto_20171028_1731'),
+        ("ranking", "0004_auto_20171028_1731"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rankedlist',
-            name='slug',
+            model_name="rankedlist",
+            name="slug",
             field=models.SlugField(unique=True),
         ),
     ]

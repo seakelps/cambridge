@@ -7,22 +7,40 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0067_merge_20231014_2102'),
+        ("overview", "0067_merge_20231014_2102"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='candidate',
-            name='neighborhood',
+            model_name="candidate",
+            name="neighborhood",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.CreateModel(
-            name='Degree',
+            name="Degree",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('letters', models.CharField(blank=True, max_length=200, help_text='BA, BS, MA, etc.')),
-                ('school', models.CharField(blank=True, max_length=200, help_text='Harvard, Tufts, etc.')),
-                ('candidate', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='degrees', to='overview.candidate')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
+                    ),
+                ),
+                (
+                    "letters",
+                    models.CharField(blank=True, max_length=200, help_text="BA, BS, MA, etc."),
+                ),
+                (
+                    "school",
+                    models.CharField(blank=True, max_length=200, help_text="Harvard, Tufts, etc."),
+                ),
+                (
+                    "candidate",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="degrees",
+                        to="overview.candidate",
+                    ),
+                ),
             ],
         ),
     ]

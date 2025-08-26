@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('overview', '0051_specificproposal_blurb'),
+        ("overview", "0051_specificproposal_blurb"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='candidatespecificproposalstance',
-            name='simple_yes_no',
+            model_name="candidatespecificproposalstance",
+            name="simple_yes_no",
             field=models.NullBooleanField(default=True),
         ),
     ]

@@ -8,13 +8,17 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ranking', '0007_rankedlist_ordered'),
+        ("ranking", "0007_rankedlist_ordered"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='rankedlist',
-            name='owner',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL),
+            model_name="rankedlist",
+            name="owner",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
