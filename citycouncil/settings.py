@@ -9,6 +9,9 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = os.environ["DJANGO_DEBUG"] == "TRUE"
 
 ALLOWED_HOSTS = [os.environ["DJANGO_ALLOWED_HOST"]]
+CSRF_TRUSTED_ORIGINS = [
+    "https://cambridge-wh2u.onrender.com",
+]
 ATOMIC_REQUESTS = True
 
 FIXTURE_DIRS = [os.path.join(BASE_DIR, 'fixtures')]
