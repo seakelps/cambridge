@@ -7,6 +7,17 @@ from django.db.models import Sum
 
 
 class Candidate(models.Model):
+    """
+    Holds the basic information about a political candidate.
+
+    Historically was the "base" model, but that meant wiping
+    previous years with each election.
+
+    Should now be used only for information that is likely
+    to rename relatively constant from year to year, or
+    should be updated across the board when it changes.
+    (ex., like name.)
+    """
     class Meta:
         ordering = ('fullname', )
 
