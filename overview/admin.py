@@ -158,7 +158,7 @@ class HasBlurb(admin.SimpleListFilter):
 class CandidateAdmin(admin.ModelAdmin):
     ordering = ("hide", "-is_running", "fullname")
     fieldsets = [
-        (None, {"fields": ["fullname", "shortname", "slug", "pronoun"]}),
+        (None, {"fields": ["fullname", "shortname", "slug", "pronoun", "headshot"]}),
         (
             "Running",
             {
@@ -234,7 +234,7 @@ class CandidateAdmin(admin.ModelAdmin):
         ("Todos", {"fields": ["checked_ocpf_for_contributions", "checked_fec_for_contributions"]}),
     ]
 
-    readonly_fields = ("headshot", "has_blurb")
+    readonly_fields = ("has_blurb", )
     list_display = (
         "fullname",
         "is_running",
@@ -257,11 +257,6 @@ class CandidateAdmin(admin.ModelAdmin):
         PressArticleCandidateInline,
         # VideoInlineAdmin
     ]
-
-    def headshot(self, instance):
-        return "<img src='{0}' alt='{0}'>".format(instance.headshot)
-
-    headshot.allow_tags = True
 
     @admin.display(boolean=True)
     def has_blurb(self, instance):

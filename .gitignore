@@ -1,6 +1,7 @@
 ### project/workspace specific ignores ###
 citycouncil/.python-version
 staticfiles/*
+media/*
 # keep files to force directories to exist
 !empty.txt
 

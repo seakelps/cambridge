@@ -14,9 +14,9 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{{ title }}" />
 <meta name="twitter:description" content="{{ description }}" />
-<meta name="twitter:image" content="{{ headshot_url }}"/>
+<meta name="twitter:image" content="{{ candidate.headshot.url }}"/>
 <meta property="og:title" content="{{ title }}" />
-<meta property="og:image" content="{{ headshot_url }}"/>
+<meta property="og:image" content="{{ candidate.headshot.url }}"/>
 <meta property="og:site_name" content="Cambridge Council Candidates"/>
 
 <script>
@@ -57,7 +57,7 @@ p:last-of-type {
                          class="rounded-circle avatar-circle img-fluid"
                          height=500
                          width=500
-                         src="{{ candidate.headshot }}"
+                         src="{{ candidate.headshot.url }}"
                          alt="{{ candidate.headshot_description }}">
                         </picture>
                     </div>

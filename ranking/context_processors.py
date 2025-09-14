@@ -27,7 +27,7 @@ def sidebar(request):
                     "slug": c.slug,
                     "name": c.fullname,
                     "blurb": markdown(c.blurb),
-                    "img_url": c.headshot,
+                    "img_url": c.headshot.url,
                     "img_alt": c.headshot_description,
                     "comment": ranking_lookup[c]["comment"],
                     "order": ranking_lookup[c]["order"],
