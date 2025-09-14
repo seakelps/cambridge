@@ -26,9 +26,13 @@ services:
       dockerfile: Dockerfile.django
       args:
         REQ_ENV: dev
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          target: /app
     # command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
       - ./static_compiled:/app/static_compiled
       - staticfiles:/app/staticfiles
     ports:
