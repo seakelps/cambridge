@@ -75,9 +75,6 @@ class CandidateDetail(DetailView):
         context["description"] = description = BeautifulSoup(
             markdown(self.object.blurb), features="html.parser"
         ).get_text()
-        context["headshot_url"] = headshot_url = self.request.build_absolute_uri(
-            self.object.headshot
-        )
 
         candidate_locations = get_candidate_locations(default_color="EEE")
         # </script> will make us sad still
@@ -162,15 +159,15 @@ class CandidateDetail(DetailView):
             "name": title,
             "abstract": self.object.short_history_text,
             "description": description,
-            "image": headshot_url,
+            "image": self.object.headshot.url,
             "url": self.request.build_absolute_uri(self.object.get_absolute_url()),
-            "thumbnailUrl": headshot_url,
+            "thumbnailUrl": self.object.headshot.url,
             "mainEntity": {
                 "@type": "Person",
                 "name": self.object.fullname,
                 "birthdate": self.object.date_of_birth,
                 "jobTitle": self.object.job,
-                "image": headshot_url,
+                "image": self.object.headshot.url,
             },
         }
 

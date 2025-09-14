@@ -190,14 +190,7 @@ class Candidate(models.Model):
     checked_ocpf_for_contributions = models.BooleanField(null=True)
     checked_fec_for_contributions = models.BooleanField(null=True)
 
-    ##### finally, defined functions
-    @cached_property
-    def headshot(self):
-        try:
-            return staticfiles_storage.url("headshots/{0.slug}.png".format(self))
-        except ValueError:
-            return staticfiles_storage.url("headshots/blank.png")
-
+    headshot = models.ImageField(null=True)
     headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
     def __str__(self):
@@ -291,7 +284,7 @@ class CandidateElection(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=100, unique=True)
     short_name = models.CharField(max_length=10, unique=True, blank=True, null=True, default=None)
-    logo = models.URLField(blank=True, max_length=150)
+    logo = models.ImageField(null=True)
 
     website = models.URLField(blank=True, default="")
     facebook = models.CharField(
@@ -428,7 +421,7 @@ class PressOutlet(models.Model):
 
     name = models.CharField(max_length=50)
     homepage = models.URLField(max_length=100, blank=True)
-    logo = models.URLField(blank=True, max_length=150)
+    logo = models.ImageField(null=True)
 
     def __str__(self):
         return self.name
