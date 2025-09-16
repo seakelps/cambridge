@@ -233,6 +233,9 @@ class CandidateElection(models.Model):
     headshot = models.ImageField(null=True)
     headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
+    class Meta:
+        unique_together = ("candidate", "election")
+
     def __str__(self):
         return f"{self.candidate.fullname} ({self.election.year} self.election.election)"
 

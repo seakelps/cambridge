@@ -25,9 +25,9 @@ def sidebar(request):
             [
                 {
                     "slug": c.candidate.slug,
-                    "name": c.fullname,
+                    "name": c.candidate.fullname,
                     "blurb": markdown(c.blurb),
-                    "img_url": c.headshot.url,
+                    "img_url": c.headshot.url if c.headshot else None,
                     "img_alt": c.headshot_description,
                     "comment": ranking_lookup[c]["comment"],
                     "order": ranking_lookup[c]["order"],
