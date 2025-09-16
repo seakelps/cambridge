@@ -240,7 +240,7 @@ class CandidateElection(models.Model):
         return f"{self.candidate.fullname} ({self.election.year} self.election.election)"
 
     def get_absolute_url(self):
-        return reverse("candidate_detail", args=[self.slug])
+        return reverse("candidate_detail", args=[self.election.year, self.election.position, self.candidate.slug])
 
     @property
     def facebook_url(self):

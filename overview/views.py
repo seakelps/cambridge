@@ -31,6 +31,7 @@ def index(request):
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(
+        CURRENT_YEAR=CURRENT_YEAR,
         num_runners=num_runners
     ).strip()
 
@@ -69,11 +70,21 @@ class CandidateList(ListView):
 
 
 class CandidateDetail(DetailView):
-    model = Candidate
+    model = CandidateElection
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        return queryset.get(
+            candidate__slug=self.kwargs["slug"],
+            election__year=self.kwargs["year"],
+            election__position=self.kwargs["position"]
+        )
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
-        context["title"] = title = f"Learn More About {self.object.fullname}"
+        context["title"] = title = f"Learn More About {self.object.candidate.fullname}"
         context["description"] = description = BeautifulSoup(
             markdown(self.object.blurb), features="html.parser"
         ).get_text()
@@ -88,7 +99,7 @@ class CandidateDetail(DetailView):
         ).select_related("questionnaire")
 
         context["articles"] = (
-            self.object.pressarticlecandidate_set.filter(display=True)
+            self.object.candidate.pressarticlecandidate_set.filter(display=True)
             .select_related("pressarticle__pressoutlet")
             .order_by("-pressarticle__date")
         )
@@ -121,7 +132,7 @@ class CandidateDetail(DetailView):
 
         context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
         context["specific_housing_support"] = (
-            self.object.candidatespecificproposalstance_set.filter(
+            self.object.candidate.candidatespecificproposalstance_set.filter(
                 display=True,
                 specific_proposal__display=True,
                 specific_proposal__main_topic="housing",
@@ -131,7 +142,7 @@ class CandidateDetail(DetailView):
         )
 
         context["specific_proposal_support"] = (
-            self.object.candidatespecificproposalstance_set.filter(
+            self.object.candidate.candidatespecificproposalstance_set.filter(
                 display=True, specific_proposal__display=True
             )
             .exclude(specific_proposal__main_topic="housing")
@@ -139,14 +150,14 @@ class CandidateDetail(DetailView):
             .order_by("specific_proposal__order")
         )
 
-        context["candidate_degrees"] = self.object.degrees.all()
+        context["candidate_degrees"] = self.object.candidate.degrees.all()
 
-        context["candidate_voting_history"] = self.object.van_history.order_by(
+        context["candidate_voting_history"] = self.object.candidate.van_history.order_by(
             "-election__year"
         ).all()
 
         context["candidate_forums"] = (
-            self.object.forums.filter(
+            self.object.candidate.forums.filter(
                 display=True,
                 forum__display=True,
             ).select_related("forum")
