@@ -15,16 +15,18 @@ from campaign_finance.models import (
     get_candidate_money_at_start_of_year,
 )
 
-from .models import Candidate, CandidateSpecificProposalStance, Degree, SpecificProposal, Forum
+from .models import Candidate, Election, CandidateElection, CandidateSpecificProposalStance, Degree, SpecificProposal, Forum
 from .utils import get_candidate_locations
+
+CURRENT_YEAR = 2025
 
 
 # servering the jumbotron page
 def index(request):
-    num_runners = Candidate.objects.exclude(is_running=False).exclude(hide=True).count()
+    num_runners = CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election__year=CURRENT_YEAR).count()
 
     description = """
-        If you want more information before you cast your 2023
+        If you want more information before you cast your {CURRENT_YEAR}
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!

@@ -22,9 +22,9 @@ class Candidate(models.Model):
     class Meta:
         ordering = ("fullname",)
 
-    timestamp_modified = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.fullname
 
-    ##### section: campaign, free text about
     # very very basics
     slug = models.SlugField(unique=True)
     fullname = models.CharField(max_length=200)
@@ -37,6 +37,46 @@ class Candidate(models.Model):
         ("they", "They"),
     )
     pronoun = models.CharField(max_length=4, choices=pronoun_choices)
+
+    timestamp_modified = models.DateTimeField(auto_now=True)
+
+
+class Election(models.Model):
+    """
+    Holds the records of elections covered.
+
+    ex., "2025 School Committee"
+    """
+
+    def __str__(self):
+        return f"{self.position} {self.year}"
+
+    position_choices = (
+        ("school", "School Committee"),
+        ("council", "City Council"),
+    )
+    position = models.CharField(max_length=40, choices=position_choices)
+    year = models.IntegerField(default=2025)
+
+
+class CandidateElection(models.Model):
+    """
+    Mapping between candidates and elections; new "base" model
+    to support historical data accuracy.
+
+    AKA, most pieces of information on Candidate will be moving here.
+    """
+
+    candidate = models.ForeignKey(
+        Candidate,
+        on_delete=models.CASCADE,
+        related_name="candidate_elections",
+    )
+    election = models.ForeignKey(
+        Election,
+        on_delete=models.CASCADE,
+        related_name="candidate_elections",
+    )
 
     # it's not pretty but it works
     short_history_text = models.CharField(max_length=200, blank=True)
@@ -59,6 +99,9 @@ class Candidate(models.Model):
     )
     twitter = models.CharField(
         max_length=100, blank=True, default="", help_text="twitter, not including twitter url"
+    )
+    bluesky = models.CharField(
+        max_length=100, blank=True, default="", help_text="bluesky, not including twitter url"
     )
     linkedin = models.CharField(
         max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url"
@@ -180,9 +223,6 @@ class Candidate(models.Model):
 
     # primarily for linking to finance records
     cpf_id = models.IntegerField(null=True, blank=True)
-    previous_results_map = models.URLField(
-        help_text="previous election results from Davi", blank=True, null=True
-    )
 
     # this should go somewhere else, probably
     self_loan = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -194,7 +234,7 @@ class Candidate(models.Model):
     headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
     def __str__(self):
-        return self.fullname
+        return f"{self.candidate.fullname} ({self.election.year} self.election.election)"
 
     def get_absolute_url(self):
         return reverse("candidate_detail", args=[self.slug])
@@ -208,6 +248,11 @@ class Candidate(models.Model):
     def twitter_url(self):
         if self.twitter:
             return "https://twitter.com/{}".format(self.twitter)
+
+    @property
+    def bluesky_url(self):
+        if self.bluesky:
+            return "https://bsky.app/{}".format(self.bluesky)
 
     @property
     def linkedin_url(self):
@@ -244,41 +289,6 @@ class Candidate(models.Model):
 
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()
-
-
-class Election(models.Model):
-    """
-    Holds the records of elections covered.
-
-    ex., "2025 School Committee"
-    """
-
-    position_choices = (
-        ("school", "School Committee"),
-        ("council", "City Council"),
-    )
-    position = models.CharField(max_length=40, choices=position_choices)
-    year = models.IntegerField(default=2025)
-
-
-class CandidateElection(models.Model):
-    """
-    Mapping between candidates and elections; new "base" model
-    to support historical data accuracy.
-
-    AKA, most pieces of information on Candidate will be moving here.
-    """
-
-    candidate = models.ForeignKey(
-        Candidate,
-        on_delete=models.CASCADE,
-        related_name="candidate_elections",
-    )
-    election = models.ForeignKey(
-        Election,
-        on_delete=models.CASCADE,
-        related_name="candidate_elections",
-    )
 
 
 class Organization(models.Model):
@@ -564,10 +574,19 @@ class CandidateGeneralProposalStance(models.Model):
 
 
 class Degree(models.Model):
+    """
+    Intended to simplify/ consistant-i-fy the education information of
+    candidates.
+    """
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="degrees")
     letters = models.CharField(max_length=200, blank=True, help_text="BA, BS, MA, etc.")
     subject = models.CharField(max_length=200, blank=True, help_text="History, etc.")
     school = models.CharField(max_length=200, blank=True, help_text="Harvard, Tufts, etc.")
+
+    # if we need to, could use this information to only show a degree for
+    # elections after the degree
+    # (this avoids linking the degree to candidateelection)
+    year = models.IntegerField(null=True, blank=True)
 
 
 class VanElection(models.Model):

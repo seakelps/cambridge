@@ -12,6 +12,8 @@ from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
 from .models import (
     Candidate,
+    CandidateElection,
+    Election,
     Endorsement,
     Organization,
     QuestionnaireResponse,
@@ -90,11 +92,6 @@ class CandidateGeneralProposalStanceInline(admin.StackedInline):
     extra = 0
 
 
-class DegreeInline(admin.TabularInline):
-    model = Degree
-    extra = 0
-
-
 class VideoInlineAdmin(admin.TabularInline):
     model = InterviewVideo
     extra = 0
@@ -155,10 +152,95 @@ class HasBlurb(admin.SimpleListFilter):
             return queryset
 
 
+class DegreeInline(admin.TabularInline):
+    model = Degree
+    extra = 0
+
+
 class CandidateAdmin(admin.ModelAdmin):
-    ordering = ("hide", "-is_running", "fullname")
+    ordering = ("fullname",)
+    list_display = (
+        "fullname",
+        "shortname",
+    )
     fieldsets = [
         (None, {"fields": ["fullname", "shortname", "slug", "pronoun", "headshot"]}),
+    ]
+
+    prepopulated_fields = {"slug": ("fullname",)}
+
+    inlines = [
+        DegreeInline,
+    ]
+
+
+class MoneyAdmin(admin.ModelAdmin):
+    # todo: ordering back
+    list_display = (
+        "fullname",
+        "balance",
+        "raised_current_year",
+        "spent_current_year",
+        "start_current_year",
+    )
+    # list_filter = ("is_running",)
+
+    @admin.display
+    def balance(self, instance):
+        return (
+            RawBankReport.objects.filter(cpf_id=instance.cpf_id)
+            .latest("filing_date")
+            .ending_balance_display
+        )
+
+    @admin.display
+    def raised_current_year(self, instance):
+        return get_candidate_raised_year(instance.cpf_id)
+
+    @admin.display
+    def spent_current_year(self, instance):
+        return get_candidate_spent_year(instance.cpf_id)
+
+    @admin.display
+    def start_current_year(self, instance):
+        return get_candidate_money_at_start_of_year(instance.cpf_id)
+
+
+class ElectionAdmin(admin.ModelAdmin):
+    list_display = (
+        "position",
+        "year",
+    )
+    list_filter = (
+        "position",
+        "year",
+    )
+
+
+class CandidateElectionAdmin(admin.ModelAdmin):
+    ordering = ("candidate__fullname",)
+    list_display = (
+        "candidate__fullname",
+        "is_running",
+        "is_incumbent",
+        "cpf_id",
+        #"content_score",
+        #"related_score",
+    )
+    # list_filter = ("is_running", "is_incumbent", HasWebsite, HasBlurb, "hide",)
+
+    readonly_fields = ("has_blurb")
+
+    fieldsets = [
+        (
+            "",
+            {
+                "fields": [
+                    "candidate",
+                    "election",
+                ]
+            }
+        ),
         (
             "Running",
             {
@@ -181,6 +263,7 @@ class CandidateAdmin(admin.ModelAdmin):
                     "website",
                     "facebook",
                     "twitter",
+                    "bluesky",
                     "linkedin",
                     "instagram",
                     "nextdoor",
@@ -226,7 +309,6 @@ class CandidateAdmin(admin.ModelAdmin):
                     "education",
                     "is_cyclist",
                     "job",
-                    "previous_results_map",
                     "self_loan",
                 ]
             },
@@ -234,96 +316,39 @@ class CandidateAdmin(admin.ModelAdmin):
         ("Todos", {"fields": ["checked_ocpf_for_contributions", "checked_fec_for_contributions"]}),
     ]
 
-    readonly_fields = ("has_blurb", )
-    list_display = (
-        "fullname",
-        "is_running",
-        "is_incumbent",
-        "cpf_id",
-        "content_score",
-        "related_score",
-    )
-    list_filter = ("is_running", "is_incumbent", HasWebsite, HasBlurb, "hide")
-    prepopulated_fields = {"slug": ("fullname",)}
-
-    inlines = [
-        DegreeInline,
-        EndorsementInline,
-        CandidateSpecificProposalStanceInline,
-        CandidateGeneralProposalStanceInline,
-        QuestionnaireResponseInline,
-        # PastContributionInline,
-        QuoteInline,
-        PressArticleCandidateInline,
-        # VideoInlineAdmin
-    ]
-
     @admin.display(boolean=True)
     def has_blurb(self, instance):
         return bool(instance.blurb)
 
-    @admin.display
-    def content_score(self, instance):
-        missing = 0
-        total = 0
+    # @admin.display
+    # def content_score(self, instance):
+    #     missing = 0
+    #     total = 0
 
-        for field in instance._meta.fields:
-            if field.null or field.blank:
-                total += 1
+    #     for field in instance._meta.fields:
+    #         if field.null or field.blank:
+    #             total += 1
 
-                field_value = getattr(instance, field.attname)
-                if field_value in (None, ""):
-                    missing += 1
+    #             field_value = getattr(instance, field.attname)
+    #             if field_value in (None, ""):
+    #                 missing += 1
 
-        return "{:.0%}".format(1 - missing / total)
+    #     return "{:.0%}".format(1 - missing / total)
 
-    @admin.display
-    def related_score(self, instance):
-        missing = 0
-        total = 0
+    # @admin.display
+    # def related_score(self, instance):
+    #     missing = 0
+    #     total = 0
 
-        for field in instance._meta.get_fields(include_hidden=True):
-            print(type(field))
-            if isinstance(field, (ManyToOneRel, ManyToManyRel)):
-                total += 1
-                if not getattr(instance, field.get_accessor_name()).exists():
-                    missing += 1
+    #     for field in instance._meta.get_fields(include_hidden=True):
+    #         print(type(field))
+    #         if isinstance(field, (ManyToOneRel, ManyToManyRel)):
+    #             total += 1
+    #             if not getattr(instance, field.get_accessor_name()).exists():
+    #                 missing += 1
 
-        if total > 0:
-            return "{:.0%}".format(1 - missing / total)
-
-
-class MoneyAdmin(admin.ModelAdmin):
-    ordering = ("hide", "-is_running", "fullname")
-
-    list_display = (
-        "fullname",
-        "balance",
-        "raised_current_year",
-        "spent_current_year",
-        "start_current_year",
-    )
-    list_filter = ("is_running",)
-
-    @admin.display
-    def balance(self, instance):
-        return (
-            RawBankReport.objects.filter(cpf_id=instance.cpf_id)
-            .latest("filing_date")
-            .ending_balance_display
-        )
-
-    @admin.display
-    def raised_current_year(self, instance):
-        return get_candidate_raised_year(instance.cpf_id)
-
-    @admin.display
-    def spent_current_year(self, instance):
-        return get_candidate_spent_year(instance.cpf_id)
-
-    @admin.display
-    def start_current_year(self, instance):
-        return get_candidate_money_at_start_of_year(instance.cpf_id)
+    #     if total > 0:
+    #         return "{:.0%}".format(1 - missing / total)
 
 
 class OrganizationAdmin(admin.ModelAdmin):
@@ -476,7 +501,9 @@ money_admin_site = MoneyAdminSite(name="event_admin")
 
 
 admin.site.register(Candidate, CandidateAdmin)
+admin.site.register(CandidateElection, CandidateElectionAdmin)
 admin.site.register(Organization, OrganizationAdmin)
+admin.site.register(Election, ElectionAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 admin.site.register(QuestionnaireResponse)
 admin.site.register(PressOutlet, PressOutletAdmin)
