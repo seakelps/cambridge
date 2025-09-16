@@ -234,8 +234,6 @@ class CandidateElectionAdmin(admin.ModelAdmin):
     )
     # list_filter = ("is_running", "is_incumbent", HasWebsite, HasBlurb, "hide",)
 
-    readonly_fields = ("has_blurb")
-
     fieldsets = [
         (
             "",
@@ -255,6 +253,8 @@ class CandidateElectionAdmin(admin.ModelAdmin):
                     "n_terms_in_council",
                     "n_terms_on_school_committee",
                     "more_running_info",
+                    "headshot_description",
+                    "headshot",
                 ]
             },
         ),
