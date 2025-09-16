@@ -38,6 +38,9 @@ class Candidate(models.Model):
     )
     pronoun = models.CharField(max_length=4, choices=pronoun_choices)
 
+    date_of_birth = models.DateField(blank=True, null=True)
+    place_of_birth = models.CharField(max_length=200, blank=True)
+
     timestamp_modified = models.DateTimeField(auto_now=True)
 
 
@@ -197,9 +200,6 @@ class CandidateElection(models.Model):
     housing_is_a_landlord = models.BooleanField(null=True)
 
     ## demographics
-    # birth
-    date_of_birth = models.DateField(blank=True, null=True)
-    place_of_birth = models.CharField(max_length=200, blank=True)
 
     # education
     education = models.CharField(
@@ -330,17 +330,27 @@ class Organization(models.Model):
         return self.name
 
 
-class Endorsement(models.Model):
+class CandidateEndorsement(models.Model):
+    """
+    Endorsements are, naturally, per election cycle, and actually do vary
+    per person/year, due to shifting votes and... drama.
+    """
     organization = models.ForeignKey(
         Organization, on_delete=models.CASCADE, related_name="endorsements"
     )
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="endorsements")
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE, related_name="endorsements")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
     display = models.BooleanField(default=True)
 
+    # cambridge bike safety decided to get complicated in 2025
+    note = models.CharField(max_length=100, null=True, blank=True)
+
 
 class PastContribution(models.Model):
+    """
+    This doesn't change (but gets added to); use year to filter.
+    """
     # who donated
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
@@ -362,7 +372,7 @@ class Questionnaire(models.Model):
     organization = models.ForeignKey(
         Organization, null=True, blank=True, on_delete=models.SET_NULL
     )
-    year = models.IntegerField(null=True, default=2023)
+    election = models.ForeignKey(Election, on_delete=models.CASCADE, related_name="questionnaires")
 
     description = models.CharField(max_length=500)
     link = models.URLField(max_length=500, blank=True)
@@ -376,7 +386,7 @@ class QuestionnaireResponse(models.Model):
     questionnaire = models.ForeignKey(
         Questionnaire, on_delete=models.CASCADE, related_name="responses"
     )
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="responses")
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE, related_name="responses")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
     display = models.BooleanField(default=False)
@@ -395,7 +405,15 @@ class VisibleManager(models.Manager):
 
 
 class InterviewVideo(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    """
+    The first year we did this, we had enough volunteers to record our
+    own videos! We haven't done that since.
+
+    It might be nice to link to CCTV's individual interviews instead,
+    or to some of the forums, especially if they're cut to particular
+    candidates... not going to worry about that until later though.
+    """
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE)
     sort_order = models.FloatField(blank=True)
     link = models.URLField(max_length=500, blank=True)
     visible = models.BooleanField(default=True)
@@ -414,7 +432,7 @@ class InterviewVideo(models.Model):
 
 
 class Quote(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE)
     quote = models.TextField(help_text="Text to display. Publically readable!", blank=True)
     by = models.CharField(
         max_length=100, help_text="Leave blank if candidate", blank=True, default=""
@@ -424,8 +442,10 @@ class Quote(models.Model):
     display_housing = models.BooleanField(default=False)
 
 
-# ex., The Boston Globe; Cambridge Day
 class PressOutlet(models.Model):
+    """
+    ex., The Boston Globe; Cambridge Day
+    """
     class Meta:
         ordering = ("name",)
 
@@ -437,8 +457,10 @@ class PressOutlet(models.Model):
         return self.name
 
 
-# ex., "Record number of women running for Council"
 class PressArticle(models.Model):
+    """
+    ex., "Record number of women running for Council"
+    """
     class Meta:
         ordering = ("date",)
 
@@ -455,8 +477,14 @@ class PressArticle(models.Model):
         return "{} ({})".format(self.title, self.pressoutlet)
 
 
-# ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"
 class PressArticleCandidate(models.Model):
+    """
+    ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"
+
+    Right now this is remaining on candidate - might have to re-work display
+    logic a bit.
+    """
+
     pressarticle = models.ForeignKey(PressArticle, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     candidate_is_the_author = models.BooleanField(default=False)
@@ -512,8 +540,12 @@ class SpecificProposalTopic(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
-# ex., "superinclusionary", "reduced parking", "no parking", etc.
 class GeneralProposal(models.Model):
+    """
+    ex., "superinclusionary", "reduced parking", "no parking", etc.
+
+    not actually sure we're using this anywhere as of 2025.
+    """
     display = models.BooleanField(default=True)
     fullname = models.CharField(max_length=200, unique=True)
     shortname = models.CharField(max_length=200, blank=True)
@@ -533,8 +565,18 @@ class GeneralProposalTopic(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
-# ex., McGovern strongly supported the AHO
 class CandidateSpecificProposalStance(models.Model):
+    """
+    For showing what candidates have actually been nailed down on.
+
+    Since the specific proposals themselves are tied to years/dates,
+    this is tied directly to candidates.
+
+    ex., McGovern strongly supported the AHO v1.
+    That remains as true in 2025 as it was in 2023, 2021....
+    might need to re-work display logic for what election(s)
+    the policies are relevant for.
+    """
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
 
@@ -555,18 +597,6 @@ class CandidateSpecificProposalStance(models.Model):
     degree_of_support = models.CharField(
         max_length=25, choices=support_degree_choices, default="u", blank=True
     )
-
-    # blurbs
-    private_notes = models.TextField(blank=True)
-    blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
-
-
-class CandidateGeneralProposalStance(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    general_proposal = models.ForeignKey(GeneralProposal, on_delete=models.CASCADE)
-
-    display = models.BooleanField(default=True)
-    simple_yes_no = models.BooleanField(default=True)
 
     # blurbs
     private_notes = models.TextField(blank=True)

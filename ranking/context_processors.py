@@ -2,7 +2,7 @@ import json
 from markdown import markdown
 
 from collections import defaultdict
-from overview.models import Candidate
+from overview.models import Candidate, CandidateElection
 from .models import RankedList, RankedElement
 
 
@@ -20,11 +20,11 @@ def sidebar(request):
     context = {
         "my_ranking": ranked_list,
         "my_candidates": [element.candidate for element in annotated_candidates],
-        "runners": Candidate.objects.filter(is_running=True, hide=False),
+        "runners": CandidateElection.objects.filter(is_running=True, hide=False),
         "runnerJson": json.dumps(
             [
                 {
-                    "slug": c.slug,
+                    "slug": c.candidate.slug,
                     "name": c.fullname,
                     "blurb": markdown(c.blurb),
                     "img_url": c.headshot.url,
@@ -32,7 +32,7 @@ def sidebar(request):
                     "comment": ranking_lookup[c]["comment"],
                     "order": ranking_lookup[c]["order"],
                 }
-                for c in Candidate.objects.filter(is_running=True, hide=False)
+                for c in CandidateElection.objects.filter(is_running=True, hide=False).select_related("candidate")
             ]
         ),
     }

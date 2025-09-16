@@ -14,7 +14,7 @@ from .models import (
     Candidate,
     CandidateElection,
     Election,
-    Endorsement,
+    CandidateEndorsement,
     Organization,
     QuestionnaireResponse,
     Questionnaire,
@@ -29,7 +29,6 @@ from .models import (
     SpecificProposal,
     GeneralProposal,
     CandidateSpecificProposalStance,
-    CandidateGeneralProposalStance,
     Forum,
     ForumOrganization,
     ForumParticipant,
@@ -48,8 +47,8 @@ class PastContributionInline(admin.TabularInline):
     extra = 0
 
 
-class EndorsementInline(admin.TabularInline):
-    model = Endorsement
+class CandidateEndorsementInline(admin.TabularInline):
+    model = CandidateEndorsement
     autocomplete_fields = ["organization"]
     extra = 0
 
@@ -83,12 +82,6 @@ class CandidateSpecificProposalStanceInline(admin.StackedInline):
 
 class GeneralProposalInline(admin.TabularInline):
     model = GeneralProposal
-    extra = 0
-
-
-class CandidateGeneralProposalStanceInline(admin.StackedInline):
-    model = CandidateGeneralProposalStance
-    autocomplete_fields = ["general_proposal"]
     extra = 0
 
 
@@ -164,13 +157,25 @@ class CandidateAdmin(admin.ModelAdmin):
         "shortname",
     )
     fieldsets = [
-        (None, {"fields": ["fullname", "shortname", "slug", "pronoun", "headshot"]}),
+        (None, {
+            "fields": [
+                "fullname",
+                "shortname",
+                "slug",
+                "pronoun",
+                "date_of_birth",
+                "place_of_birth",
+            ]
+        }),
     ]
 
     prepopulated_fields = {"slug": ("fullname",)}
 
     inlines = [
         DegreeInline,
+        CandidateSpecificProposalStanceInline,
+        PastContributionInline,
+        PressArticleCandidateInline,
     ]
 
 
@@ -304,8 +309,6 @@ class CandidateElectionAdmin(admin.ModelAdmin):
             "Demographics",
             {
                 "fields": [
-                    "date_of_birth",
-                    "place_of_birth",
                     "education",
                     "is_cyclist",
                     "job",
@@ -319,6 +322,13 @@ class CandidateElectionAdmin(admin.ModelAdmin):
     @admin.display(boolean=True)
     def has_blurb(self, instance):
         return bool(instance.blurb)
+
+    inlines = [
+        CandidateEndorsementInline,
+        QuestionnaireResponseInline,
+        QuoteInline,
+        VideoInlineAdmin,
+    ]
 
     # @admin.display
     # def content_score(self, instance):
@@ -363,7 +373,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         "is_local",
         "is_union",
     )
-    inlines = [EndorsementInline]
+    inlines = [CandidateEndorsementInline]
     search_fields = ["name"]
 
     def has_logo(self, obj):
@@ -416,11 +426,11 @@ class PastContributionAdmin(admin.ModelAdmin):
 
 class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = [QuestionnaireResponseInline]
-    ordering = ("-year",)
+    ordering = ("election",)
     search_fields = ["name"]
-    list_display = ["name", "organization", "year"]
+    list_display = ["name", "organization", "election"]
     list_filter = (
-        "year",
+        "election",
         "organization",
     )
 
@@ -442,12 +452,6 @@ class SpecificProposalAdmin(admin.ModelAdmin):
         "order",
     )
     inlines = [CandidateSpecificProposalStanceInline]
-
-
-class GeneralProposalAdmin(admin.ModelAdmin):
-    list_display = ["fullname", "initial_year"]
-    search_fields = ["fullname", "shortname"]
-    inlines = [CandidateGeneralProposalStanceInline]
 
 
 class CandidateVanAdminInline(admin.TabularInline):
@@ -509,7 +513,6 @@ admin.site.register(QuestionnaireResponse)
 admin.site.register(PressOutlet, PressOutletAdmin)
 admin.site.register(PressArticle, PressArticleAdmin)
 admin.site.register(SpecificProposal, SpecificProposalAdmin)
-admin.site.register(GeneralProposal, GeneralProposalAdmin)
 admin.site.register(PastContribution, PastContributionAdmin)
 admin.site.register(VanElection, VanElectionAdmin)
 admin.site.register(CandidateVan, CandidateVanAdmin)

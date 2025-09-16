@@ -166,8 +166,8 @@ class CandidateDetail(DetailView):
             "thumbnailUrl": self.object.headshot.url,
             "mainEntity": {
                 "@type": "Person",
-                "name": self.object.fullname,
-                "birthdate": self.object.date_of_birth,
+                "name": self.object.candidate.fullname,
+                "birthdate": self.object.candidate.date_of_birth,
                 "jobTitle": self.object.job,
                 "image": self.object.headshot.url,
             },
