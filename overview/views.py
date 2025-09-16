@@ -15,20 +15,23 @@ from campaign_finance.models import (
     get_candidate_money_at_start_of_year,
 )
 
-from .models import Candidate, CandidateSpecificProposalStance, Degree, SpecificProposal, Forum
+from .models import Candidate, Election, CandidateElection, CandidateSpecificProposalStance, Degree, SpecificProposal, Forum
 from .utils import get_candidate_locations
+
+CURRENT_YEAR = 2025
 
 
 # servering the jumbotron page
 def index(request):
-    num_runners = Candidate.objects.exclude(is_running=False).exclude(hide=True).count()
+    num_runners = CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election__year=CURRENT_YEAR).count()
 
     description = """
-        If you want more information before you cast your 2023
+        If you want more information before you cast your {CURRENT_YEAR}
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(
+        CURRENT_YEAR=CURRENT_YEAR,
         num_runners=num_runners
     ).strip()
 
@@ -67,11 +70,21 @@ class CandidateList(ListView):
 
 
 class CandidateDetail(DetailView):
-    model = Candidate
+    model = CandidateElection
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        return queryset.get(
+            candidate__slug=self.kwargs["slug"],
+            election__year=self.kwargs["year"],
+            election__position=self.kwargs["position"]
+        )
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
-        context["title"] = title = f"Learn More About {self.object.fullname}"
+        context["title"] = title = f"Learn More About {self.object.candidate.fullname}"
         context["description"] = description = BeautifulSoup(
             markdown(self.object.blurb), features="html.parser"
         ).get_text()
@@ -86,7 +99,7 @@ class CandidateDetail(DetailView):
         ).select_related("questionnaire")
 
         context["articles"] = (
-            self.object.pressarticlecandidate_set.filter(display=True)
+            self.object.candidate.pressarticlecandidate_set.filter(display=True)
             .select_related("pressarticle__pressoutlet")
             .order_by("-pressarticle__date")
         )
@@ -119,7 +132,7 @@ class CandidateDetail(DetailView):
 
         context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
         context["specific_housing_support"] = (
-            self.object.candidatespecificproposalstance_set.filter(
+            self.object.candidate.candidatespecificproposalstance_set.filter(
                 display=True,
                 specific_proposal__display=True,
                 specific_proposal__main_topic="housing",
@@ -129,7 +142,7 @@ class CandidateDetail(DetailView):
         )
 
         context["specific_proposal_support"] = (
-            self.object.candidatespecificproposalstance_set.filter(
+            self.object.candidate.candidatespecificproposalstance_set.filter(
                 display=True, specific_proposal__display=True
             )
             .exclude(specific_proposal__main_topic="housing")
@@ -137,14 +150,14 @@ class CandidateDetail(DetailView):
             .order_by("specific_proposal__order")
         )
 
-        context["candidate_degrees"] = self.object.degrees.all()
+        context["candidate_degrees"] = self.object.candidate.degrees.all()
 
-        context["candidate_voting_history"] = self.object.van_history.order_by(
+        context["candidate_voting_history"] = self.object.candidate.van_history.order_by(
             "-election__year"
         ).all()
 
         context["candidate_forums"] = (
-            self.object.forums.filter(
+            self.object.candidate.forums.filter(
                 display=True,
                 forum__display=True,
             ).select_related("forum")
@@ -164,8 +177,8 @@ class CandidateDetail(DetailView):
             "thumbnailUrl": self.object.headshot.url,
             "mainEntity": {
                 "@type": "Person",
-                "name": self.object.fullname,
-                "birthdate": self.object.date_of_birth,
+                "name": self.object.candidate.fullname,
+                "birthdate": self.object.candidate.date_of_birth,
                 "jobTitle": self.object.job,
                 "image": self.object.headshot.url,
             },

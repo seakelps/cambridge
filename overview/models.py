@@ -22,9 +22,9 @@ class Candidate(models.Model):
     class Meta:
         ordering = ("fullname",)
 
-    timestamp_modified = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.fullname
 
-    ##### section: campaign, free text about
     # very very basics
     slug = models.SlugField(unique=True)
     fullname = models.CharField(max_length=200)
@@ -37,6 +37,49 @@ class Candidate(models.Model):
         ("they", "They"),
     )
     pronoun = models.CharField(max_length=4, choices=pronoun_choices)
+
+    date_of_birth = models.DateField(blank=True, null=True)
+    place_of_birth = models.CharField(max_length=200, blank=True)
+
+    timestamp_modified = models.DateTimeField(auto_now=True)
+
+
+class Election(models.Model):
+    """
+    Holds the records of elections covered.
+
+    ex., "2025 School Committee"
+    """
+
+    def __str__(self):
+        return f"{self.position} {self.year}"
+
+    position_choices = (
+        ("school", "School Committee"),
+        ("council", "City Council"),
+    )
+    position = models.CharField(max_length=40, choices=position_choices)
+    year = models.IntegerField(default=2025)
+
+
+class CandidateElection(models.Model):
+    """
+    Mapping between candidates and elections; new "base" model
+    to support historical data accuracy.
+
+    AKA, most pieces of information on Candidate will be moving here.
+    """
+
+    candidate = models.ForeignKey(
+        Candidate,
+        on_delete=models.CASCADE,
+        related_name="candidate_elections",
+    )
+    election = models.ForeignKey(
+        Election,
+        on_delete=models.CASCADE,
+        related_name="candidate_elections",
+    )
 
     # it's not pretty but it works
     short_history_text = models.CharField(max_length=200, blank=True)
@@ -59,6 +102,9 @@ class Candidate(models.Model):
     )
     twitter = models.CharField(
         max_length=100, blank=True, default="", help_text="twitter, not including twitter url"
+    )
+    bluesky = models.CharField(
+        max_length=100, blank=True, default="", help_text="bluesky, not including twitter url"
     )
     linkedin = models.CharField(
         max_length=100, blank=True, default="", help_text="linkedin, not including linkedin url"
@@ -154,9 +200,6 @@ class Candidate(models.Model):
     housing_is_a_landlord = models.BooleanField(null=True)
 
     ## demographics
-    # birth
-    date_of_birth = models.DateField(blank=True, null=True)
-    place_of_birth = models.CharField(max_length=200, blank=True)
 
     # education
     education = models.CharField(
@@ -180,9 +223,6 @@ class Candidate(models.Model):
 
     # primarily for linking to finance records
     cpf_id = models.IntegerField(null=True, blank=True)
-    previous_results_map = models.URLField(
-        help_text="previous election results from Davi", blank=True, null=True
-    )
 
     # this should go somewhere else, probably
     self_loan = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
@@ -193,11 +233,14 @@ class Candidate(models.Model):
     headshot = models.ImageField(null=True)
     headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
+    class Meta:
+        unique_together = ("candidate", "election")
+
     def __str__(self):
-        return self.fullname
+        return f"{self.candidate.fullname} ({self.election.year} self.election.election)"
 
     def get_absolute_url(self):
-        return reverse("candidate_detail", args=[self.slug])
+        return reverse("candidate_detail", args=[self.election.year, self.election.position, self.candidate.slug])
 
     @property
     def facebook_url(self):
@@ -208,6 +251,11 @@ class Candidate(models.Model):
     def twitter_url(self):
         if self.twitter:
             return "https://twitter.com/{}".format(self.twitter)
+
+    @property
+    def bluesky_url(self):
+        if self.bluesky:
+            return "https://bsky.app/{}".format(self.bluesky)
 
     @property
     def linkedin_url(self):
@@ -244,41 +292,6 @@ class Candidate(models.Model):
 
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()
-
-
-class Election(models.Model):
-    """
-    Holds the records of elections covered.
-
-    ex., "2025 School Committee"
-    """
-
-    position_choices = (
-        ("school", "School Committee"),
-        ("council", "City Council"),
-    )
-    position = models.CharField(max_length=40, choices=position_choices)
-    year = models.IntegerField(default=2025)
-
-
-class CandidateElection(models.Model):
-    """
-    Mapping between candidates and elections; new "base" model
-    to support historical data accuracy.
-
-    AKA, most pieces of information on Candidate will be moving here.
-    """
-
-    candidate = models.ForeignKey(
-        Candidate,
-        on_delete=models.CASCADE,
-        related_name="candidate_elections",
-    )
-    election = models.ForeignKey(
-        Election,
-        on_delete=models.CASCADE,
-        related_name="candidate_elections",
-    )
 
 
 class Organization(models.Model):
@@ -320,17 +333,27 @@ class Organization(models.Model):
         return self.name
 
 
-class Endorsement(models.Model):
+class CandidateEndorsement(models.Model):
+    """
+    Endorsements are, naturally, per election cycle, and actually do vary
+    per person/year, due to shifting votes and... drama.
+    """
     organization = models.ForeignKey(
         Organization, on_delete=models.CASCADE, related_name="endorsements"
     )
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="endorsements")
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE, related_name="endorsements")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=150, blank=True)
     display = models.BooleanField(default=True)
 
+    # cambridge bike safety decided to get complicated in 2025
+    note = models.CharField(max_length=100, null=True, blank=True)
+
 
 class PastContribution(models.Model):
+    """
+    This doesn't change (but gets added to); use year to filter.
+    """
     # who donated
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
 
@@ -352,7 +375,7 @@ class Questionnaire(models.Model):
     organization = models.ForeignKey(
         Organization, null=True, blank=True, on_delete=models.SET_NULL
     )
-    year = models.IntegerField(null=True, default=2023)
+    election = models.ForeignKey(Election, on_delete=models.CASCADE, related_name="questionnaires")
 
     description = models.CharField(max_length=500)
     link = models.URLField(max_length=500, blank=True)
@@ -366,7 +389,7 @@ class QuestionnaireResponse(models.Model):
     questionnaire = models.ForeignKey(
         Questionnaire, on_delete=models.CASCADE, related_name="responses"
     )
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="responses")
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE, related_name="responses")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
     display = models.BooleanField(default=False)
@@ -385,7 +408,15 @@ class VisibleManager(models.Manager):
 
 
 class InterviewVideo(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    """
+    The first year we did this, we had enough volunteers to record our
+    own videos! We haven't done that since.
+
+    It might be nice to link to CCTV's individual interviews instead,
+    or to some of the forums, especially if they're cut to particular
+    candidates... not going to worry about that until later though.
+    """
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE)
     sort_order = models.FloatField(blank=True)
     link = models.URLField(max_length=500, blank=True)
     visible = models.BooleanField(default=True)
@@ -404,7 +435,7 @@ class InterviewVideo(models.Model):
 
 
 class Quote(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE)
     quote = models.TextField(help_text="Text to display. Publically readable!", blank=True)
     by = models.CharField(
         max_length=100, help_text="Leave blank if candidate", blank=True, default=""
@@ -414,8 +445,10 @@ class Quote(models.Model):
     display_housing = models.BooleanField(default=False)
 
 
-# ex., The Boston Globe; Cambridge Day
 class PressOutlet(models.Model):
+    """
+    ex., The Boston Globe; Cambridge Day
+    """
     class Meta:
         ordering = ("name",)
 
@@ -427,8 +460,10 @@ class PressOutlet(models.Model):
         return self.name
 
 
-# ex., "Record number of women running for Council"
 class PressArticle(models.Model):
+    """
+    ex., "Record number of women running for Council"
+    """
     class Meta:
         ordering = ("date",)
 
@@ -445,8 +480,14 @@ class PressArticle(models.Model):
         return "{} ({})".format(self.title, self.pressoutlet)
 
 
-# ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"
 class PressArticleCandidate(models.Model):
+    """
+    ex., Jan, Sumbul, Simmons, etc. mentioned in "Record number of women running"
+
+    Right now this is remaining on candidate - might have to re-work display
+    logic a bit.
+    """
+
     pressarticle = models.ForeignKey(PressArticle, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     candidate_is_the_author = models.BooleanField(default=False)
@@ -502,8 +543,12 @@ class SpecificProposalTopic(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
-# ex., "superinclusionary", "reduced parking", "no parking", etc.
 class GeneralProposal(models.Model):
+    """
+    ex., "superinclusionary", "reduced parking", "no parking", etc.
+
+    not actually sure we're using this anywhere as of 2025.
+    """
     display = models.BooleanField(default=True)
     fullname = models.CharField(max_length=200, unique=True)
     shortname = models.CharField(max_length=200, blank=True)
@@ -523,8 +568,18 @@ class GeneralProposalTopic(models.Model):
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
 
 
-# ex., McGovern strongly supported the AHO
 class CandidateSpecificProposalStance(models.Model):
+    """
+    For showing what candidates have actually been nailed down on.
+
+    Since the specific proposals themselves are tied to years/dates,
+    this is tied directly to candidates.
+
+    ex., McGovern strongly supported the AHO v1.
+    That remains as true in 2025 as it was in 2023, 2021....
+    might need to re-work display logic for what election(s)
+    the policies are relevant for.
+    """
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     specific_proposal = models.ForeignKey(SpecificProposal, on_delete=models.CASCADE)
 
@@ -551,23 +606,20 @@ class CandidateSpecificProposalStance(models.Model):
     blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
 
 
-class CandidateGeneralProposalStance(models.Model):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    general_proposal = models.ForeignKey(GeneralProposal, on_delete=models.CASCADE)
-
-    display = models.BooleanField(default=True)
-    simple_yes_no = models.BooleanField(default=True)
-
-    # blurbs
-    private_notes = models.TextField(blank=True)
-    blurb = models.TextField(help_text="Text to display. Publically readable!", blank=True)
-
-
 class Degree(models.Model):
+    """
+    Intended to simplify/ consistant-i-fy the education information of
+    candidates.
+    """
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="degrees")
     letters = models.CharField(max_length=200, blank=True, help_text="BA, BS, MA, etc.")
     subject = models.CharField(max_length=200, blank=True, help_text="History, etc.")
     school = models.CharField(max_length=200, blank=True, help_text="Harvard, Tufts, etc.")
+
+    # if we need to, could use this information to only show a degree for
+    # elections after the degree
+    # (this avoids linking the degree to candidateelection)
+    year = models.IntegerField(null=True, blank=True)
 
 
 class VanElection(models.Model):

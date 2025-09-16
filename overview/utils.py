@@ -1,9 +1,9 @@
 from django.urls import reverse
-from .models import Candidate
+from .models import Candidate, Election, CandidateElection
 
 
 def get_candidate_locations(
-    candidates=Candidate.objects.filter(hide=False, is_running=True), default_color="F00"
+    candidates=CandidateElection.objects.filter(hide=False, is_running=True), default_color="F00"
 ):
     has_address = candidates.exclude(latitude=None).exclude(longitude=None)
 

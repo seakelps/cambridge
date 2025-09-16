@@ -31,6 +31,30 @@ This command will do all the requirements downloading and package installation n
 serves the site
 
 
+# Adding data locally
+
+## manually
+
+1. add a local django admin/super user:
+
+`docker compose run web python manage.py createsuperuser`
+
+2. log in:
+
+http://localhost:8000/admin/login/?next=/admin/
+
+3. create models via the admin as needed
+
+## via script
+
+coming soon! (hopefully)
+
+
+# useful commands
+
+`docker compose run web /bin/bash -c "black . && isort --profile black`
+
+
 # Adding Translations
 
 When writing new strings, surround blocks of text with `{% blocktrans %}...{% endblocktrans %}`.

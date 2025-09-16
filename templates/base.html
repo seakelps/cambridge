@@ -66,27 +66,11 @@
                         <div id="candidate_list" class="dropdown-menu bg-dark">
                             <h6 class="dropdown-header">Incumbents</h6>
                             {% for incumbent in incumbents %}
-                                {% if incumbent.slug %}
-                                    {% if incumbent.is_running == False %}
-                                        <a href="{% url "candidate_detail" incumbent.slug %}" class="dropdown-item not_running">{{ incumbent.fullname }}</a>
-                                    {% else %}
-                                        <a href="{% url "candidate_detail" incumbent.slug %}" class="dropdown-item">{{ incumbent.fullname }}</a>
-                                    {% endif %}
-                                {% else %}
-                                    <a class="dropdown-item disabled" href="#">{{ incumbent.fullname }}</a>
-                                {% endif %}
+			        <a href="{{incumbent.get_absolute_url}}" class="dropdown-item {% if incumbent.is_running %}{% else %}not_running{% endif %}">{{ incumbent.candidate.fullname }}</a>
                             {% endfor %}
                             <h6 class="dropdown-header">Challengers</h6>
                             {% for non_incumbent in non_incumbents %}
-                                {% if non_incumbent.slug %}
-                                    {% if non_incumbent.is_running == False %}
-                                        <a href="{% url "candidate_detail" non_incumbent.slug %}" class="dropdown-item not_running">{{ non_incumbent.fullname }}</a>
-                                    {% else %}
-                                        <a href="{% url "candidate_detail" non_incumbent.slug %}" class="dropdown-item">{{ non_incumbent.fullname }}</a>
-                                    {% endif %}
-                                {% else %}
-                                    <a class="dropdown-item disabled" href="#">{{ non_incumbent.fullname }}</a>
-                                {% endif %}
+			        <a href="{{non_incumbent.get_absolute_url}}" class="dropdown-item {% if non_incumbent.is_running %}{% else %}not_running{% endif %}">{{ non_incumbent.candidate.fullname }}</a>
                             {% endfor %}
                         </div>
                     </li>
