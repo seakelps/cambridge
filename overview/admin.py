@@ -12,7 +12,9 @@ from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
 
 from .models import (
     Candidate,
-    Endorsement,
+    CandidateElection,
+    Election,
+    CandidateEndorsement,
     Organization,
     QuestionnaireResponse,
     Questionnaire,
@@ -27,7 +29,6 @@ from .models import (
     SpecificProposal,
     GeneralProposal,
     CandidateSpecificProposalStance,
-    CandidateGeneralProposalStance,
     Forum,
     ForumOrganization,
     ForumParticipant,
@@ -46,8 +47,8 @@ class PastContributionInline(admin.TabularInline):
     extra = 0
 
 
-class EndorsementInline(admin.TabularInline):
-    model = Endorsement
+class CandidateEndorsementInline(admin.TabularInline):
+    model = CandidateEndorsement
     autocomplete_fields = ["organization"]
     extra = 0
 
@@ -81,17 +82,6 @@ class CandidateSpecificProposalStanceInline(admin.StackedInline):
 
 class GeneralProposalInline(admin.TabularInline):
     model = GeneralProposal
-    extra = 0
-
-
-class CandidateGeneralProposalStanceInline(admin.StackedInline):
-    model = CandidateGeneralProposalStance
-    autocomplete_fields = ["general_proposal"]
-    extra = 0
-
-
-class DegreeInline(admin.TabularInline):
-    model = Degree
     extra = 0
 
 
@@ -155,10 +145,105 @@ class HasBlurb(admin.SimpleListFilter):
             return queryset
 
 
+class DegreeInline(admin.TabularInline):
+    model = Degree
+    extra = 0
+
+
 class CandidateAdmin(admin.ModelAdmin):
-    ordering = ("hide", "-is_running", "fullname")
+    ordering = ("fullname",)
+    list_display = (
+        "fullname",
+        "shortname",
+    )
     fieldsets = [
-        (None, {"fields": ["fullname", "shortname", "slug", "pronoun", "headshot"]}),
+        (None, {
+            "fields": [
+                "fullname",
+                "shortname",
+                "slug",
+                "pronoun",
+                "date_of_birth",
+                "place_of_birth",
+            ]
+        }),
+    ]
+
+    prepopulated_fields = {"slug": ("fullname",)}
+
+    inlines = [
+        DegreeInline,
+        CandidateSpecificProposalStanceInline,
+        PastContributionInline,
+        PressArticleCandidateInline,
+    ]
+
+
+class MoneyAdmin(admin.ModelAdmin):
+    # todo: ordering back
+    list_display = (
+        "fullname",
+        "balance",
+        "raised_current_year",
+        "spent_current_year",
+        "start_current_year",
+    )
+    # list_filter = ("is_running",)
+
+    @admin.display
+    def balance(self, instance):
+        return (
+            RawBankReport.objects.filter(cpf_id=instance.cpf_id)
+            .latest("filing_date")
+            .ending_balance_display
+        )
+
+    @admin.display
+    def raised_current_year(self, instance):
+        return get_candidate_raised_year(instance.cpf_id)
+
+    @admin.display
+    def spent_current_year(self, instance):
+        return get_candidate_spent_year(instance.cpf_id)
+
+    @admin.display
+    def start_current_year(self, instance):
+        return get_candidate_money_at_start_of_year(instance.cpf_id)
+
+
+class ElectionAdmin(admin.ModelAdmin):
+    list_display = (
+        "position",
+        "year",
+    )
+    list_filter = (
+        "position",
+        "year",
+    )
+
+
+class CandidateElectionAdmin(admin.ModelAdmin):
+    ordering = ("candidate__fullname",)
+    list_display = (
+        "candidate__fullname",
+        "is_running",
+        "is_incumbent",
+        "cpf_id",
+        #"content_score",
+        #"related_score",
+    )
+    # list_filter = ("is_running", "is_incumbent", HasWebsite, HasBlurb, "hide",)
+
+    fieldsets = [
+        (
+            "",
+            {
+                "fields": [
+                    "candidate",
+                    "election",
+                ]
+            }
+        ),
         (
             "Running",
             {
@@ -168,6 +253,8 @@ class CandidateAdmin(admin.ModelAdmin):
                     "n_terms_in_council",
                     "n_terms_on_school_committee",
                     "more_running_info",
+                    "headshot_description",
+                    "headshot",
                 ]
             },
         ),
@@ -181,6 +268,7 @@ class CandidateAdmin(admin.ModelAdmin):
                     "website",
                     "facebook",
                     "twitter",
+                    "bluesky",
                     "linkedin",
                     "instagram",
                     "nextdoor",
@@ -221,12 +309,9 @@ class CandidateAdmin(admin.ModelAdmin):
             "Demographics",
             {
                 "fields": [
-                    "date_of_birth",
-                    "place_of_birth",
                     "education",
                     "is_cyclist",
                     "job",
-                    "previous_results_map",
                     "self_loan",
                 ]
             },
@@ -234,96 +319,46 @@ class CandidateAdmin(admin.ModelAdmin):
         ("Todos", {"fields": ["checked_ocpf_for_contributions", "checked_fec_for_contributions"]}),
     ]
 
-    readonly_fields = ("has_blurb", )
-    list_display = (
-        "fullname",
-        "is_running",
-        "is_incumbent",
-        "cpf_id",
-        "content_score",
-        "related_score",
-    )
-    list_filter = ("is_running", "is_incumbent", HasWebsite, HasBlurb, "hide")
-    prepopulated_fields = {"slug": ("fullname",)}
-
-    inlines = [
-        DegreeInline,
-        EndorsementInline,
-        CandidateSpecificProposalStanceInline,
-        CandidateGeneralProposalStanceInline,
-        QuestionnaireResponseInline,
-        # PastContributionInline,
-        QuoteInline,
-        PressArticleCandidateInline,
-        # VideoInlineAdmin
-    ]
-
     @admin.display(boolean=True)
     def has_blurb(self, instance):
         return bool(instance.blurb)
 
-    @admin.display
-    def content_score(self, instance):
-        missing = 0
-        total = 0
+    inlines = [
+        CandidateEndorsementInline,
+        QuestionnaireResponseInline,
+        QuoteInline,
+        VideoInlineAdmin,
+    ]
 
-        for field in instance._meta.fields:
-            if field.null or field.blank:
-                total += 1
+    # @admin.display
+    # def content_score(self, instance):
+    #     missing = 0
+    #     total = 0
 
-                field_value = getattr(instance, field.attname)
-                if field_value in (None, ""):
-                    missing += 1
+    #     for field in instance._meta.fields:
+    #         if field.null or field.blank:
+    #             total += 1
 
-        return "{:.0%}".format(1 - missing / total)
+    #             field_value = getattr(instance, field.attname)
+    #             if field_value in (None, ""):
+    #                 missing += 1
 
-    @admin.display
-    def related_score(self, instance):
-        missing = 0
-        total = 0
+    #     return "{:.0%}".format(1 - missing / total)
 
-        for field in instance._meta.get_fields(include_hidden=True):
-            print(type(field))
-            if isinstance(field, (ManyToOneRel, ManyToManyRel)):
-                total += 1
-                if not getattr(instance, field.get_accessor_name()).exists():
-                    missing += 1
+    # @admin.display
+    # def related_score(self, instance):
+    #     missing = 0
+    #     total = 0
 
-        if total > 0:
-            return "{:.0%}".format(1 - missing / total)
+    #     for field in instance._meta.get_fields(include_hidden=True):
+    #         print(type(field))
+    #         if isinstance(field, (ManyToOneRel, ManyToManyRel)):
+    #             total += 1
+    #             if not getattr(instance, field.get_accessor_name()).exists():
+    #                 missing += 1
 
-
-class MoneyAdmin(admin.ModelAdmin):
-    ordering = ("hide", "-is_running", "fullname")
-
-    list_display = (
-        "fullname",
-        "balance",
-        "raised_current_year",
-        "spent_current_year",
-        "start_current_year",
-    )
-    list_filter = ("is_running",)
-
-    @admin.display
-    def balance(self, instance):
-        return (
-            RawBankReport.objects.filter(cpf_id=instance.cpf_id)
-            .latest("filing_date")
-            .ending_balance_display
-        )
-
-    @admin.display
-    def raised_current_year(self, instance):
-        return get_candidate_raised_year(instance.cpf_id)
-
-    @admin.display
-    def spent_current_year(self, instance):
-        return get_candidate_spent_year(instance.cpf_id)
-
-    @admin.display
-    def start_current_year(self, instance):
-        return get_candidate_money_at_start_of_year(instance.cpf_id)
+    #     if total > 0:
+    #         return "{:.0%}".format(1 - missing / total)
 
 
 class OrganizationAdmin(admin.ModelAdmin):
@@ -338,7 +373,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         "is_local",
         "is_union",
     )
-    inlines = [EndorsementInline]
+    inlines = [CandidateEndorsementInline]
     search_fields = ["name"]
 
     def has_logo(self, obj):
@@ -391,11 +426,11 @@ class PastContributionAdmin(admin.ModelAdmin):
 
 class QuestionnaireAdmin(admin.ModelAdmin):
     inlines = [QuestionnaireResponseInline]
-    ordering = ("-year",)
+    ordering = ("election",)
     search_fields = ["name"]
-    list_display = ["name", "organization", "year"]
+    list_display = ["name", "organization", "election"]
     list_filter = (
-        "year",
+        "election",
         "organization",
     )
 
@@ -417,12 +452,6 @@ class SpecificProposalAdmin(admin.ModelAdmin):
         "order",
     )
     inlines = [CandidateSpecificProposalStanceInline]
-
-
-class GeneralProposalAdmin(admin.ModelAdmin):
-    list_display = ["fullname", "initial_year"]
-    search_fields = ["fullname", "shortname"]
-    inlines = [CandidateGeneralProposalStanceInline]
 
 
 class CandidateVanAdminInline(admin.TabularInline):
@@ -476,13 +505,14 @@ money_admin_site = MoneyAdminSite(name="event_admin")
 
 
 admin.site.register(Candidate, CandidateAdmin)
+admin.site.register(CandidateElection, CandidateElectionAdmin)
 admin.site.register(Organization, OrganizationAdmin)
+admin.site.register(Election, ElectionAdmin)
 admin.site.register(Questionnaire, QuestionnaireAdmin)
 admin.site.register(QuestionnaireResponse)
 admin.site.register(PressOutlet, PressOutletAdmin)
 admin.site.register(PressArticle, PressArticleAdmin)
 admin.site.register(SpecificProposal, SpecificProposalAdmin)
-admin.site.register(GeneralProposal, GeneralProposalAdmin)
 admin.site.register(PastContribution, PastContributionAdmin)
 admin.site.register(VanElection, VanElectionAdmin)
 admin.site.register(CandidateVan, CandidateVanAdmin)

@@ -138,8 +138,8 @@
                                 </td>
 
                                 <td>
-                                    {% if candidate.date_of_birth %}
-                                        {{ candidate.date_of_birth|timesince }}
+                                    {% if candidate.candidate.date_of_birth %}
+                                        {{ candidate.candidate.date_of_birth|timesince }}
                                     {% endif %}
                                 </td>
 

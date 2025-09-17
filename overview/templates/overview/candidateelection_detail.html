@@ -6,7 +6,7 @@
 
 {% block body_id %}candidate_detail{% endblock %}
 
-{% block meta_description %}{{ candidate.blurb|markdown|striptags }}{% endblock %}
+{% block meta_description %}{{ object.blurb|markdown|striptags }}{% endblock %}
 
 {% block head_extra %}
 <link rel="canonical" href="{{ canonical_url }}" />
@@ -14,9 +14,9 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{{ title }}" />
 <meta name="twitter:description" content="{{ description }}" />
-<meta name="twitter:image" content="{{ candidate.headshot.url }}"/>
+<meta name="twitter:image" content="{{ object.headshot.url }}"/>
 <meta property="og:title" content="{{ title }}" />
-<meta property="og:image" content="{{ candidate.headshot.url }}"/>
+<meta property="og:image" content="{{ object.headshot.url }}"/>
 <meta property="og:site_name" content="Cambridge Council Candidates"/>
 
 <script>
@@ -57,45 +57,45 @@ p:last-of-type {
                          class="rounded-circle avatar-circle img-fluid"
                          height=500
                          width=500
-                         src="{{ candidate.headshot.url }}"
-                         alt="{{ candidate.headshot_description }}">
+                         src="{{ object.headshot.url }}"
+                         alt="{{ object.headshot_description }}">
                         </picture>
                     </div>
                 </div>
             </div>
 
             <div class="name-and-info mb-0">
-                <h1 class="mb-0">{{ candidate.fullname }}</h1>
+                <h1 class="mb-0">{{ object.candidate.fullname }}</h1>
 
                 <p>
                     <i>
-                        {% if candidate.pronoun == 'he' %}
+                        {% if object.candidate.pronoun == 'he' %}
                             He/Him
-                        {% elif  candidate.pronoun == 'she'%}
+                        {% elif  object.candidate.pronoun == 'she'%}
                             She/Her
-                        {% elif  candidate.pronoun == 'they'%}
+                        {% elif  object.candidate.pronoun == 'they'%}
                             They/Them
                         {% endif %}
                     </i>
                 </p>
 
                 <dl class="text-left mb-0">
-                    {% if candidate.job and candidate.is_incumbent %}
+                    {% if object.job and object.is_incumbent %}
                         <dt>Currently</dt>
                         <dd class="mb-0">City Councillor</dd>
                         <dt class="mt-0" style="line-height: 1rem;">Also</dt>
-                        <dd class="mt-0" style="line-height: 1rem;">{{ candidate.job }}</dd>
-                    {% elif candidate.is_incumbent %}
+                        <dd class="mt-0" style="line-height: 1rem;">{{ object.job }}</dd>
+                    {% elif object.is_incumbent %}
                         <dt>Currently</dt>
                         <dd>City Councillor</dd>
-                    {% elif candidate.job %}
+                    {% elif object.job %}
                         <dt>Currently</dt>
-                        <dd>{{ candidate.job }}</dd>
+                        <dd>{{ object.job }}</dd>
                     {% endif %}
 
-                    {% if candidate.short_history_text %}
+                    {% if object.short_history_text %}
                         <dt>Election history</dt>
-                        <dd class="mb-0">{{ candidate.short_history_text }}</dd>
+                        <dd class="mb-0">{{ object.short_history_text }}</dd>
                     {% endif %}
                 </dl>
             </div>
@@ -107,60 +107,60 @@ p:last-of-type {
 <section class="container">
     <div class="row">
         <div class="col-12">
-            <h2 id="more">More about {{candidate.fullname}}</h2>
+            <h2 id="more">More about {{object.candidate.fullname}}</h2>
         </div>
 
         <div class="col-12 text-center">
             <ul class="list-inline" id="socials">
-                {% if candidate.website %}
+                {% if object.website %}
                 <li class="list-inline-item">
-                    <a class="btn btn-website fa-button" rel="noopener" target="_blank" href="{{ candidate.website }}" aria-label="{{ candidate.shortname }}&rsquo;s Website">
+                    <a class="btn btn-website fa-button" rel="noopener" target="_blank" href="{{ object.website }}" aria-label="{{ object.shortname }}&rsquo;s Website">
                         <i class="fa fa-globe-americas"></i>
-                        {# {{ candidate.website|truncate_website }} #}
+                        {# {{ object.website|truncate_website }} #}
                         <span>Website</span>
                     </a>
                 </li>
                 {% endif %}
 
-                {% if candidate.facebook %}
+                {% if object.facebook %}
                 <li class="list-inline-item">
-                    <a class="btn btn-facebook fa-button" rel="noopener" target="_blank" href="{{ candidate.facebook_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Website">
+                    <a class="btn btn-facebook fa-button" rel="noopener" target="_blank" href="{{ object.facebook_url }}" aria-label="{{ object.shortname }}&rsquo;s Website">
                         <i class="fab fa-facebook"></i>
                         <span>Facebook</span>
                     </a>
                 </li>
                 {% endif %}
 
-                {% if candidate.twitter %}
+                {% if object.twitter %}
                 <li class="list-inline-item">
-                    <a class="btn btn-twitter fa-button" rel="noopener" target="_blank" href="{{ candidate.twitter_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Twitter">
+                    <a class="btn btn-twitter fa-button" rel="noopener" target="_blank" href="{{ object.twitter_url }}" aria-label="{{ object.shortname }}&rsquo;s Twitter">
                         <i class="fab fa-twitter"></i>
                         <span>Twitter</span>
                     </a>
                 </li>
                 {% endif %}
 
-                {% if candidate.linkedin %}
+                {% if object.linkedin %}
                 <li class="list-inline-item">
-                    <a class="btn btn-linkedin fa-button" rel="noopener" target="_blank" href="{{ candidate.linkedin_url }}" aria-label="{{ candidate.shortname }}&rsquo;s LinkedIn">
+                    <a class="btn btn-linkedin fa-button" rel="noopener" target="_blank" href="{{ object.linkedin_url }}" aria-label="{{ object.shortname }}&rsquo;s LinkedIn">
                         <i class="fab fa-linkedin"></i>
                         <span>LinkedIn</span>
                     </a>
                 </li>
                 {% endif %}
 
-                {% if candidate.instagram %}
+                {% if object.instagram %}
                 <li class="list-inline-item">
-                    <a class="btn btn-instagram fa-button" rel="noopener" target="_blank" href="{{ candidate.instagram_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Instagram">
+                    <a class="btn btn-instagram fa-button" rel="noopener" target="_blank" href="{{ object.instagram_url }}" aria-label="{{ object.shortname }}&rsquo;s Instagram">
                         <i class="fab fa-instagram"></i>
                         <span>Instagram</span>
                     </a>
                 </li>
                 {% endif %}
 
-                {% if candidate.nextdoor %}
+                {% if object.nextdoor %}
                 <li class="list-inline-item">
-                    <a class="btn btn-nextdoor fa-button" rel="noopener" target="_blank" href="{{ candidate.nextdoor_url }}" aria-label="{{ candidate.shortname }}&rsquo;s Nextdoor">
+                    <a class="btn btn-nextdoor fa-button" rel="noopener" target="_blank" href="{{ object.nextdoor_url }}" aria-label="{{ object.shortname }}&rsquo;s Nextdoor">
                         <i class="fas fa-home"></i>
                         <span>Nextdoor</span>
                     </a>
@@ -169,13 +169,13 @@ p:last-of-type {
             </ul>
         </div>
         <div class="col-12">
-            {{ candidate.blurb|markdown }}
+            {{ object.blurb|markdown }}
         </div>
 
         <div class="col-12 text-center">
             <dl class="dl-horizontal pt-4">
                 <dt>Incumbent</dt>
-                <dd>{{ candidate.is_incumbent|yesno:"Yes,No" }}</dd>
+                <dd>{{ object.is_incumbent|yesno:"Yes,No" }}</dd>
 
                 {% if candidate_degrees %}
                     <dt>Education</dt>
@@ -195,20 +195,20 @@ p:last-of-type {
                 {% endif %}
 
                 <dt>Age</dt>
-                <dd>{{ candidate.date_of_birth|timesince }}
-                {% if candidate.date_of_birth or candidate.place_of_birth %}
+                <dd>{{ object.candidate.date_of_birth|timesince }}
+                {% if object.candidate.date_of_birth or object.candidate.place_of_birth %}
                 <br>
                 <span class="text-muted">
                     Born
-                    {% if candidate.place_of_birth %}in {{ candidate.place_of_birth }}{% endif %}
-                    {% if candidate.date_of_birth %}in {{ candidate.date_of_birth|date:"Y" }}{% endif %}
+                    {% if object.candidate.place_of_birth %}in {{ object.candidate.place_of_birth }}{% endif %}
+                    {% if object.candidate.date_of_birth %}in {{ object.candidate.date_of_birth|date:"Y" }}{% endif %}
                 </span>
                 {% endif %}
                 </dd>
 
-                {% if candidate.date_of_registration %}
+                {% if object.date_of_registration %}
                 <dt>Voting</dt>
-                <dd>Reg. {{ candidate.date_of_registration }} <a class="fa fa-info-circle"
+                <dd>Reg. {{ object.date_of_registration }} <a class="fa fa-info-circle"
                                                             href="#!"
                                                             data-toggle="popover"
                                                             data-trigger="focus"
@@ -286,17 +286,17 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <section class="col" style="padding-bottom: 0">
-                <h2 id="where">Where {{candidate.shortname}} Lives</h2>
+                <h2 id="where">Where {{object.candidate.shortname}} Lives</h2>
                 <dl class="dl-horizontal">
                     <dt>Address</dt>
                     <dd>
-                    {{ candidate.get_housing_status_display|title }}s
-                    {% if candidate.housing_status_note %}({{candidate.housing_status_note}}){% endif %}
+                    {{ object.get_housing_status_display|title }}s
+                    {% if object.housing_status_note %}({{object.housing_status_note}}){% endif %}
                     at
-                    <strong>{{ candidate.address }}</strong>
-                    {% if candidate.housing_sell_value %}
+                    <strong>{{ object.address }}</strong>
+                    {% if object.housing_sell_value %}
                     <br>
-                    <span class="text-muted">Valued at approx. ${{ candidate.housing_sell_value|floatformat:0|intcomma }}
+                    <span class="text-muted">Valued at approx. ${{ object.housing_sell_value|floatformat:0|intcomma }}
                         <a class="fa fa-info-circle"
                            href="#!"
                            data-toggle="popover"
@@ -307,15 +307,15 @@ p:last-of-type {
                         </a>
                     </span>
                     {% endif %}
-                    {% if candidate.housing_sale_date %}
+                    {% if object.housing_sale_date %}
                     <br>
-                    <span class="text-muted">Last sold {{ candidate.housing_sale_date }}
-                        {% if candidate.housing_sale_price %}
-                        for ${{ candidate.housing_sale_price|floatformat:0|intcomma }}
+                    <span class="text-muted">Last sold {{ object.housing_sale_date }}
+                        {% if object.housing_sale_price %}
+                        for ${{ object.housing_sale_price|floatformat:0|intcomma }}
                         {% endif %}
-                        {% if candidate.housing_sale_price_inflation %}
+                        {% if object.housing_sale_price_inflation %}
                         <br>
-                        inflation adjusted approx. ${{ candidate.housing_sale_price_inflation|floatformat:0|intcomma }}
+                        inflation adjusted approx. ${{ object.housing_sale_price_inflation|floatformat:0|intcomma }}
                         {% endif %}
                     </span>
                     {% endif %}
@@ -341,7 +341,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2 id="housing-policies">{{candidate.shortname}} on Housing</h2>
+                <h2 id="housing-policies">{{object.candidate.shortname}} on Housing</h2>
             </div>
         </div>
 
@@ -406,19 +406,19 @@ p:last-of-type {
         {% endif %}
 
         <div class="row">
-            {% if candidate.housing_blurb %}
+            {% if object.housing_blurb %}
                 <div class="col-12 py-3">
-                    {{ candidate.housing_blurb|markdown }}
+                    {{ object.housing_blurb|markdown }}
                 </div>
             {% endif %}
 
             <div class="col-12">
-                {% for quote in candidate.quote_set.all %}
+                {% for quote in object.quote_set.all %}
                 {% if quote.display_housing %}
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -433,7 +433,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2 id="policies">{{candidate.shortname}} on Other Issues</h2>
+                <h2 id="policies">{{object.candidate.shortname}} on Other Issues</h2>
             </div>
         </div>
 
@@ -498,19 +498,19 @@ p:last-of-type {
         {% endif %}
 
         <div class="row">
-            {% if candidate.proposal_blurb %}
+            {% if object.proposal_blurb %}
                 <div class="col-12 py-3">
-                    {{ candidate.proposal_blurb|markdown }}
+                    {{ object.proposal_blurb|markdown }}
                 </div>
             {% endif %}
 
             <div class="col-12">
-                {% for quote in candidate.quote_set.all %}
+                {% for quote in object.quote_set.all %}
                 {% if quote.display_proposal %}
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -525,7 +525,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col-12">
-                <h2 id="endorsements">Endorsements for {{candidate.shortname}}</h2>
+                <h2 id="endorsements">Endorsements for {{object.candidate.shortname}}</h2>
             </div>
 
             <div class="col-12">
@@ -593,7 +593,7 @@ p:last-of-type {
         <div class="row">
             <div class="col-12">
                 <h2 id="q-and-a">Q&amp;A</h2>
-                <h3>Interviews with {{candidate.shortname}}</h3>
+                <h3>Interviews with {{object.candidate.shortname}}</h3>
             </div>
 
             {% for response in questionnaire_responses %}
@@ -631,7 +631,7 @@ p:last-of-type {
         <div class="row">
             <div class="col-12">
                 <h2 id="q-and-a">Forums</h2>
-                <h3>Panels {{candidate.shortname}} participated in</h3>
+                <h3>Panels {{object.candidate.shortname}} participated in</h3>
             </div>
 
             {% for response in candidate_forums %}
@@ -668,13 +668,13 @@ p:last-of-type {
     <section class="container" id="quotes">
         <div class="row">
             <div class="col-12">
-                <h2 id="quotes">Quotes by or about {{candidate.shortname}}</h2>
-                {% for quote in candidate.quote_set.all %}
+                <h2 id="quotes">Quotes by or about {{object.candidate.shortname}}</h2>
+                {% for quote in object.candidate.quote_set.all %}
                 {% if quote.display %}
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -689,7 +689,7 @@ p:last-of-type {
         <div class="row">
             <div class="col-12">
                 <h2 id="press">Press</h2>
-                <h3>Articles about or by {{candidate.shortname}}</h3>
+                <h3>Articles about or by {{object.candidate.shortname}}</h3>
             </div>
 
             {% for article_snippet in articles %}
@@ -759,7 +759,7 @@ p:last-of-type {
         <div class="row">
             <div class="col">
                 <h2 id="finance">Campaign finance</h2>
-                <h3>How much {{candidate.shortname}} has raised and spent</h3>
+                <h3>How much {{object.candidate.shortname}} has raised and spent</h3>
                 <div class="stats">
                     <div>
                         <strong>
@@ -791,9 +791,9 @@ p:last-of-type {
                             {% endif %}
                         </strong>
                         <div>Raised in 2023
-                        {% if candidate.self_loan %}
+                        {% if object.self_loan %}
                             <br>
-                            ${{candidate.self_loan}} from self included
+                            ${{object.self_loan}} from self included
                         {% endif %}
                         </div>
                     </div>

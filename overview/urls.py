@@ -38,7 +38,7 @@ urlpatterns = [
     re_path(r"^$", views.index, name="index"),
     re_path(r"^candidates/$", views.CandidateList.as_view(), name="all"),
     re_path(
-        r"^candidates/(?P<slug>[-\w]+)/$",
+        r"^(?P<year>\d+)/(?P<position>\w+)/(?P<slug>[-\w]+)/$",
         views.CandidateDetail.as_view(),
         name="candidate_detail",
     ),
