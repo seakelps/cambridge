@@ -229,10 +229,10 @@ class CandidateElectionAdmin(admin.ModelAdmin):
         "is_running",
         "is_incumbent",
         "cpf_id",
-        #"content_score",
-        #"related_score",
+        "content_score",
+        "related_score",
     )
-    # list_filter = ("is_running", "is_incumbent", HasWebsite, HasBlurb, "hide",)
+    list_filter = ("is_incumbent", HasWebsite, HasBlurb, "hide",)
 
     fieldsets = [
         (
@@ -330,35 +330,35 @@ class CandidateElectionAdmin(admin.ModelAdmin):
         VideoInlineAdmin,
     ]
 
-    # @admin.display
-    # def content_score(self, instance):
-    #     missing = 0
-    #     total = 0
+    @admin.display
+    def content_score(self, instance):
+        missing = 0
+        total = 0
 
-    #     for field in instance._meta.fields:
-    #         if field.null or field.blank:
-    #             total += 1
+        for field in instance._meta.fields:
+            if field.null or field.blank:
+                total += 1
 
-    #             field_value = getattr(instance, field.attname)
-    #             if field_value in (None, ""):
-    #                 missing += 1
+                field_value = getattr(instance, field.attname)
+                if field_value in (None, ""):
+                    missing += 1
 
-    #     return "{:.0%}".format(1 - missing / total)
+        return "{:.0%}".format(1 - missing / total)
 
-    # @admin.display
-    # def related_score(self, instance):
-    #     missing = 0
-    #     total = 0
+    @admin.display
+    def related_score(self, instance):
+        missing = 0
+        total = 0
 
-    #     for field in instance._meta.get_fields(include_hidden=True):
-    #         print(type(field))
-    #         if isinstance(field, (ManyToOneRel, ManyToManyRel)):
-    #             total += 1
-    #             if not getattr(instance, field.get_accessor_name()).exists():
-    #                 missing += 1
+        for field in instance._meta.get_fields(include_hidden=True):
+            print(type(field))
+            if isinstance(field, (ManyToOneRel, ManyToManyRel)):
+                total += 1
+                if not getattr(instance, field.get_accessor_name()).exists():
+                    missing += 1
 
-    #     if total > 0:
-    #         return "{:.0%}".format(1 - missing / total)
+        if total > 0:
+            return "{:.0%}".format(1 - missing / total)
 
 
 class OrganizationAdmin(admin.ModelAdmin):
