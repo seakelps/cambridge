@@ -38,7 +38,7 @@
                         <div class="col-md-12">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                             {% trans num_runners noop as num_runners %}
-                            <p>{% blocktrans with year=2023 %}We're compiling everything we can find about the {{ year }} Cambridge City Council candidates&mdash;from op-eds to campaign finance records&mdash;to help you determine who deserves your #1, #2, or #9 vote on November 7th, 2023. You've got {{ num_runners }} options!{% endblocktrans %}</p>
+                            <p>{% blocktrans with ELECTION_YEAR=ELECTION_DATE|date:"Y" %}We're compiling everything we can find about the {{ ELECTION_YEAR }} Cambridge City Council candidates&mdash;from op-eds to campaign finance records&mdash;to help you determine who deserves your #1, #2, or #9 vote on {{ ELECTION_DATE }}. You've got {{ num_runners }} options!{% endblocktrans %}</p>
 
 
                             <div class="col" style="text-align: center">

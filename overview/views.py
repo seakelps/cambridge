@@ -4,6 +4,7 @@ import os
 
 from bs4 import BeautifulSoup
 from django.shortcuts import render
+from django.conf import settings
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, TemplateView
 from markdown import markdown
@@ -18,20 +19,18 @@ from campaign_finance.models import (
 from .models import Candidate, Election, CandidateElection, CandidateSpecificProposalStance, Degree, SpecificProposal, Forum
 from .utils import get_candidate_locations
 
-CURRENT_YEAR = 2025
-
 
 # servering the jumbotron page
 def index(request):
-    num_runners = CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election__year=CURRENT_YEAR).count()
+    num_runners = CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election__year=settings.ELECTION_DATE.year).count()
 
     description = """
-        If you want more information before you cast your {CURRENT_YEAR}
+        If you want more information before you cast your {election_year}
         ballot for Cambridge City Council, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(
-        CURRENT_YEAR=CURRENT_YEAR,
+        election_year=settings.ELECTION_DATE.year,
         num_runners=num_runners
     ).strip()
 

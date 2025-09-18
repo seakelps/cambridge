@@ -1,5 +1,6 @@
 import os
 import dj_database_url
+import datetime
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -16,6 +17,8 @@ CSRF_TRUSTED_ORIGINS = [
 ATOMIC_REQUESTS = True
 
 FIXTURE_DIRS = [os.path.join(BASE_DIR, "fixtures")]
+
+ELECTION_DATE = datetime.date(2025, 11, 4)
 
 
 # Application definition
