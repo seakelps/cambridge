@@ -1,15 +1,17 @@
 from django.conf import settings
-from .models import Candidate, CandidateElection
+from .models import Election
 
 
 def header(request):
-    incumbents = CandidateElection.objects.filter(is_incumbent=True, hide=False).order_by(
-        "-is_running", "candidate__fullname"
-    )
-    non_incumbents = CandidateElection.objects.filter(is_incumbent=False, hide=False).order_by(
-        "-is_running", "candidate__fullname"
-    )
-    return {"incumbents": incumbents, "non_incumbents": non_incumbents}
+    ret = {}
+    for election  in Election.objects.filter(year=settings.ELECTION_DATE.year):
+        ret[election.position] = {
+            "incumbent" if is_incumbent else "non_incumbents": election.candidate_elections.filter(
+                is_incumbent=is_incumbent, hide=False).order_by("-is_running", "candidate__fullname")
+            for is_incumbent in [True, False]
+        }
+    print('header_context', ret)
+    return ret
 
 
 def constants(request):

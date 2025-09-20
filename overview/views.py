@@ -21,24 +21,26 @@ from .utils import get_candidate_locations
 
 
 # servering the jumbotron page
-def index(request):
-    num_runners = CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election__year=settings.ELECTION_DATE.year).count()
+def index(request, year, position):
+    election = Election.objects.get(year=year, position=position)
+    num_runners = election.candidate_elections.exclude(is_running=False).exclude(hide=True).count()
 
     description = """
         If you want more information before you cast your {election_year}
-        ballot for Cambridge City Council, you've come to the right place. We're
+        ballot for {position}, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(
         election_year=settings.ELECTION_DATE.year,
-        num_runners=num_runners
+        num_runners=num_runners,
+        position="Cambridge City Council" if election.position == "council" else "Cambridge School Committee",
     ).strip()
 
     schema_org = {
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Cambridge Council Candidates",
-        "alternateName": ["cambridgecouncilcandidates.com"],
+        "alternateName": ["cambridge.vote"],
         "url": request.build_absolute_uri(),
     }
 
