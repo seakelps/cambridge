@@ -11,8 +11,16 @@ def sidebar(request):
     ranking_lookup = defaultdict(lambda: {"order": None, "comment": ""})
 
     # TODO
-    election = Election.objects.get(year=settings.ELECTION_DATE.year, position="council")
-    ranked_list = RankedList.objects.for_request(request, election=election, force=False)
+    council_election = Election.objects.filter(
+        year=settings.ELECTION_DATE.year,
+        position="council").first()
+
+    school_election = Election.objects.filter(
+        year=settings.ELECTION_DATE.year,
+        position="school"
+    ).first()
+
+    ranked_list = RankedList.objects.for_request(request, election=council_election, force=False)
     annotated_candidates = (
         ranked_list.annotated_candidates.all() if ranked_list else RankedElement.objects.none()
     )
