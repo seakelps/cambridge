@@ -37,6 +37,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
+			    {# NOTE we prefer ELECTION_DATE vs election so we can reference the actual date #}
                             {% trans num_runners noop as num_runners %}
                             <p>{% blocktrans with ELECTION_YEAR=ELECTION_DATE|date:"Y" %}We're compiling everything we can find about the {{ ELECTION_YEAR }} candidates&mdash;from op-eds to campaign finance records&mdash;to help you determine who deserves your #1, #2, or #9 vote on {{ ELECTION_DATE }}. You've got {{ num_runners }} options!{% endblocktrans %}</p>
 
@@ -87,8 +88,7 @@
                         We let you rank the candidates, just like you'll do in the voting booth. You can even share your choices - if you want to.
                     </p>
                     <p>
-		    	{# TODO school too #}
-                        <a class="btn btn-info" href="{% url 'my_ranking' ELECTION_DATE.year "council" %}" role="button">See my candidates &raquo;</a>
+                        <a class="btn btn-info" href="{% url 'my_ranking' election.year election.position %}" role="button">See my candidates &raquo;</a>
                     </p>
                 </div>
             </div>
