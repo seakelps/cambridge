@@ -1,15 +1,18 @@
 import json
 from markdown import markdown
 
+from django.conf import settings
 from collections import defaultdict
-from overview.models import Candidate, CandidateElection
+from overview.models import Candidate, CandidateElection, Election
 from .models import RankedList, RankedElement
 
 
 def sidebar(request):
     ranking_lookup = defaultdict(lambda: {"order": None, "comment": ""})
 
-    ranked_list = RankedList.objects.for_request(request, force=False)
+    # TODO
+    election = Election.objects.get(year=settings.ELECTION_DATE.year, position="council")
+    ranked_list = RankedList.objects.for_request(request, election=election, force=False)
     annotated_candidates = (
         ranked_list.annotated_candidates.all() if ranked_list else RankedElement.objects.none()
     )

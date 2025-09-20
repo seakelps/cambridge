@@ -38,11 +38,12 @@
                         <div class="col-md-12">
                             <h1 class="splash_header">{% blocktrans %}Vote Local!{% endblocktrans %}</h1>
                             {% trans num_runners noop as num_runners %}
-                            <p>{% blocktrans with ELECTION_YEAR=ELECTION_DATE|date:"Y" %}We're compiling everything we can find about the {{ ELECTION_YEAR }} Cambridge City Council candidates&mdash;from op-eds to campaign finance records&mdash;to help you determine who deserves your #1, #2, or #9 vote on {{ ELECTION_DATE }}. You've got {{ num_runners }} options!{% endblocktrans %}</p>
+                            <p>{% blocktrans with ELECTION_YEAR=ELECTION_DATE|date:"Y" %}We're compiling everything we can find about the {{ ELECTION_YEAR }} candidates&mdash;from op-eds to campaign finance records&mdash;to help you determine who deserves your #1, #2, or #9 vote on {{ ELECTION_DATE }}. You've got {{ num_runners }} options!{% endblocktrans %}</p>
 
 
                             <div class="col" style="text-align: center">
-                                <a class="btn btn-secondary" href="{% url 'all' %}" role="button">{% blocktrans %}Explore Candidates{% endblocktrans %}</a>
+				<a class="btn btn-secondary" href="{% url "election" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
+				<a class="btn btn-secondary" href="{% url "election" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
                             </div>
                         </div>
                     </div>
@@ -86,7 +87,8 @@
                         We let you rank the candidates, just like you'll do in the voting booth. You can even share your choices - if you want to.
                     </p>
                     <p>
-                        <a class="btn btn-info" href="{% url 'my_ranking' %}" role="button">See my candidates &raquo;</a>
+		    	{# TODO school too #}
+                        <a class="btn btn-info" href="{% url 'my_ranking' ELECTION_DATE.year "council" %}" role="button">See my candidates &raquo;</a>
                     </p>
                 </div>
             </div>

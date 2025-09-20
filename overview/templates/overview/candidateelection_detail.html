@@ -818,7 +818,7 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col" id="my-rankings-footer">
-                <a rel="nofollow" class="btn btn-red btn-bold fa-button" href="{% url "my_ranking" %}">
+                <a rel="nofollow" class="btn btn-red btn-bold fa-button" href="{% url "my_ranking" object.election.year object.election.position %}">
                     <i class="fa fa-list-ol"></i>
                     <span>View my ballot</span>
                 </a>

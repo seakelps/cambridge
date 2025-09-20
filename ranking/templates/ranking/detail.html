@@ -13,7 +13,7 @@
             <div class="col-md-12 mb-3">
                 <div class="alert alert-warning">
                     Your ballot is publically viewable. You can share it by linking to
-                    <a class="alert-link ellipsed" href="{% url "list_explore" object.slug %}">{% fullurl "list_explore" object.slug %}</a>
+                    <a class="alert-link ellipsed" href="{% url "list_explore" object.candidate.slug %}">{% fullurl "list_explore" object.candidate.slug %}</a>
                 </div>
             </div>
             {% endif %}
@@ -78,15 +78,15 @@
                 <div id="ranked_list" class="list-group">
                     {# help #}
                     {% for annotation in annotations %}
-                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.slug }}" data-delete_url="{% url "delete_note" annotation.candidate.slug %}">
+                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.candidate.slug }}" data-delete_url="{% url "delete_note" annotation.candidate.candidate.slug %}">
                         <span aria-hidden="true"></span>
                         <div>
                             {% if mine %}
                                 <i class="fas fa-arrows-alt handle"></i>
                             {% endif %}
                             {% if object.ordered %}<span class="counter"></span>{% endif %}
-                            <a href="{% url "candidate_detail" annotation.candidate.slug %}">
-                                {{ annotation.candidate.fullname }}
+                            <a href="{% url "candidate_detail" object.election.year object.election.position annotation.candidate.candidate.slug %}">
+                                {{ annotation.candidate.candidate.fullname }}
                             </a>
 
                             {% if mine %}
@@ -99,17 +99,23 @@
                         </div>
 
                         {% if mine %}
-                        <form class="d-none update_note py-1" action="{% url "update_note" annotation.candidate.slug %}" method="POST">
+			{% comment %}
+			TODO fixme
+                        <form class="d-none update_note py-1" action="{% url "update_note" annotation.candidate.candidate.slug %}" method="POST">
                             {% crispy annotation.comment_form %}
                         </form>
+			{% endcomment %}
                         {% endif %}
 
                     </candidate>
                     {% endfor %}
 
+		    {% comment %}
+		    TODO fixme
                     {% if annotations %}
-                        <a download href="{% url "list_explore_download" object.slug %}" class="m-2">Download this slate</a>
+                        <a download href="{% url "list_explore_download" object.candidate.slug %}" class="m-2">Download this slate</a>
                     {% endif %}
+		    {% endcomment %}
                 </div>
                 <div>
                     {% if mine and not annotations %}
@@ -118,7 +124,8 @@
                         </p>
 
                         <div style="display: block" class="text-center">
-                            <a class="btn btn-secondary" href="{% url 'all' %}" role="button">Explore Candidates</a>
+			    {# TODO probably want school too #}
+                            <a class="btn btn-secondary" href="{% url 'election' ELECTION_DATE.year "council" %}" role="button">Explore Candidates</a>
                         </div>
                     {% endif %}
                 </div>

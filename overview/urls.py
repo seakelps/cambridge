@@ -36,7 +36,7 @@ class StaticViewSitemap(Sitemap):
 
 urlpatterns = [
     re_path(r"^$", views.index, name="index"),
-    re_path(r"^candidates/$", views.CandidateList.as_view(), name="all"),
+    re_path(r"^(?P<year>\d+)/(?P<position>\w+)/$", views.ElectionCandidateList.as_view(), name="election"),
     re_path(
         r"^(?P<year>\d+)/(?P<position>\w+)/(?P<slug>[-\w]+)/$",
         views.CandidateDetail.as_view(),

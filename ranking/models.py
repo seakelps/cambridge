@@ -7,7 +7,7 @@ from typing import Optional
 
 
 class RankedListManager(models.Manager):
-    def for_request(self, request, *, force) -> Optional["RankedList"]:
+    def for_request(self, request, election, *, force) -> Optional["RankedList"]:
         user = request.user
 
         if user.is_authenticated:
@@ -16,7 +16,10 @@ class RankedListManager(models.Manager):
             except RankedList.DoesNotExist:
                 if force:
                     return RankedList.objects.create(
-                        name=RankedList.make_name(user), slug=user.username, owner=user
+                        name=RankedList.make_name(user),
+                        slug=user.username,
+                        owner=user,
+                        election=election
                     )
                 else:
                     return None
@@ -34,7 +37,9 @@ class RankedListManager(models.Manager):
 
                     # can't reliably catch IntegrityErrors so get_or_creating here instead
                     ranked_list, created = RankedList.objects.get_or_create(
-                        {"name": "{}'s Slate".format(name)}, slug=slugify(name)
+                        {"name": "{}'s Slate".format(name)}, 
+                        slug=slugify(name),
+                        election=election,
                     )
 
                     if created:
@@ -46,6 +51,7 @@ class RankedListManager(models.Manager):
 class RankedList(models.Model):
     objects = RankedListManager()
 
+    election = models.ForeignKey("overview.Election", on_delete=models.CASCADE)
     last_modified = models.DateTimeField(auto_now=True)
     owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=200)
@@ -93,7 +99,7 @@ class RankedElement(models.Model):
     )
 
     # probably need to reorder on delete
-    candidate = models.ForeignKey("overview.Candidate", on_delete=models.CASCADE)
+    candidate = models.ForeignKey("overview.CandidateElection", on_delete=models.CASCADE)
     comment = models.TextField(blank=True, default="")
     order = models.PositiveSmallIntegerField(blank=True)
 

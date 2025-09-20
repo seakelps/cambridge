@@ -55,16 +55,25 @@ def index(request):
     )
 
 
-class CandidateList(ListView):
-    model = Candidate
-    template_name = "overview/candidate_list.html"
+class ElectionCandidateList(DetailView):
+    model = Election
+    template_name = "overview/candidateelection_list.html"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        return queryset.get(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"]
+        )
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CandidateList, self).get_context_data(*args, **kwargs)
+        context = super(ElectionCandidateList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).order_by("fullname")
-        context["runners"] = candidates.exclude(is_running=False)
-        context["not_runners"] = candidates.filter(is_running=False)
+        candidate_elections = self.object.candidate_elections.exclude(hide=True).order_by("candidate__fullname")
+        context["runners"] = candidate_elections.exclude(is_running=False)
+        context["not_runners"] = candidate_elections.filter(is_running=False)
         return context
 
 
