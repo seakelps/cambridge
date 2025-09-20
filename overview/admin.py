@@ -232,7 +232,13 @@ class CandidateElectionAdmin(admin.ModelAdmin):
         "content_score",
         "related_score",
     )
-    list_filter = ("is_incumbent", HasWebsite, HasBlurb, "hide",)
+    list_filter = (
+        "is_incumbent",
+        "election",
+        HasWebsite,
+        HasBlurb,
+        "hide",
+    )
 
     fieldsets = [
         (
