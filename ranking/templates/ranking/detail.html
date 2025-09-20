@@ -124,8 +124,7 @@
                         </p>
 
                         <div style="display: block" class="text-center">
-			    {# TODO probably want school too #}
-                            <a class="btn btn-secondary" href="{% url 'election' ELECTION_DATE.year "council" %}" role="button">Explore Candidates</a>
+                            <a class="btn btn-secondary" href="{% url 'election_candidates' election.year election.position %}" role="button">Explore Candidates</a>
                         </div>
                     {% endif %}
                 </div>
