@@ -3,10 +3,10 @@ from .models import Candidate, CandidateElection
 
 
 def header(request):
-    incumbents = CandidateElection.objects.filter(is_incumbent=True, hide=False).order_by(
+    incumbents = CandidateElection.objects.filter(is_incumbent=True).order_by(
         "-is_running", "candidate__fullname"
     )
-    non_incumbents = CandidateElection.objects.filter(is_incumbent=False, hide=False).order_by(
+    non_incumbents = CandidateElection.objects.filter(is_incumbent=False).order_by(
         "-is_running", "candidate__fullname"
     )
     return {"incumbents": incumbents, "non_incumbents": non_incumbents}

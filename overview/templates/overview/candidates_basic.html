@@ -40,14 +40,14 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
                                     <p>
                                         <i>
-                                            {% if candidate.pronoun == 'he' %}
+                                            {% if candidate.candidate.pronoun == 'he' %}
                                                 He/Him
-                                            {% elif  candidate.pronoun == 'she'%}
+                                            {% elif  candidate.candodate.pronoun == 'she'%}
                                                 She/Her
-                                            {% elif  candidate.pronoun == 'they'%}
+                                            {% elif  candidate.candidate.pronoun == 'they'%}
                                                 They/Them
                                             {% endif %}
                                         </i>
@@ -55,20 +55,22 @@
                                 </td>
 
                                 <td>
-                                    <div>
-                                        <div style="position: relative">
-                                            <div>
-                                                <picture>
-                                                <img
-                                                 class="rounded-circle avatar-circle img-fluid"
-                                                 height=125
-                                                 width=125
-                                                 src="{{ candidate.headshot.url }}"
-                                                 alt="{{ candidate.headshot_description }}">
-                                                </picture>
+                                    {% if candidate.headshot %}
+                                        <div>
+                                            <div style="position: relative">
+                                                <div>
+                                                    <picture>
+                                                    <img
+                                                     class="rounded-circle avatar-circle img-fluid"
+                                                     height=125
+                                                     width=125
+                                                     src="{{ candidate.headshot.url }}"
+                                                     alt="{{ candidate.headshot_description }}">
+                                                    </picture>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 </td>
 
                                 <td>
@@ -123,14 +125,15 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}
+                                    </a>
                                     <p>
                                         <i>
-                                            {% if candidate.pronoun == 'he' %}
+                                            {% if candidate.candidate.pronoun == 'he' %}
                                                 He/Him
-                                            {% elif  candidate.pronoun == 'she'%}
+                                            {% elif  candidate.candidate.pronoun == 'she'%}
                                                 She/Her
-                                            {% elif  candidate.pronoun == 'they'%}
+                                            {% elif  candidate.candidate.pronoun == 'they'%}
                                                 They/Them
                                             {% endif %}
                                         </i>

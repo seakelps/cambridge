@@ -204,7 +204,7 @@ class CandidateHousingList(ListView):
         context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
 
         candidates = (
-            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+            Candidate.objects.exclude(is_running=False).order_by("fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -252,7 +252,7 @@ class CandidateBikingList(ListView):
         context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
 
         candidates = (
-            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+            Candidate.objects.exclude(is_running=False).order_by("fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -301,26 +301,35 @@ class CandidateBikingList(ListView):
         return context
 
 
-# a specific "spreadsheet-like" view of candidate basic info
 class CandidateBasicList(ListView):
-    model = Candidate
+    """
+    A specific "spreadsheet-like" view of candidate basic info.
+    """
+    model = CandidateElection
     template_name = "overview/candidates_basic.html"
 
     def get_context_data(self, *args, **kwargs):
+
+        year=self.kwargs["year"] if "year" in kwargs else "2025"
+        position=self.kwargs["position"] if "position" in kwargs else "council"
+
+        election = Election.objects.filter(year=year, position=position).first()
+
         context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
 
-        candidates = (
-            Candidate.objects.exclude(hide=True)
+        candidate_elections = (
+            CandidateElection.objects.exclude(hide=True)
             .exclude(is_running=False)
-            .order_by("fullname")
-            .prefetch_related("degrees")
+            .filter(election=election)
+            .order_by("candidate__fullname")
+            .prefetch_related("candidate__degrees")
         )
 
         candidate_degree_map = {}
-        for candidate in candidates:
-            candidate_degree_map[candidate.id] = candidate.degrees.all()
+        for candidate_election in candidate_elections:
+            candidate_degree_map[candidate_election.id] = candidate_election.candidate.degrees.all()
 
-        context["candidates"] = candidates
+        context["candidates"] = candidate_elections
         context["candidate_degree_map"] = candidate_degree_map
 
         return context
