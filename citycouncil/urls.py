@@ -6,7 +6,10 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 
 from django.urls import re_path, include
 from django.contrib import admin
+from django.views.generic.base import RedirectView
 
+from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
@@ -27,8 +30,47 @@ class HowToVote(TemplateView):
         return context
 
 
+# class CandidateSitemap(Sitemap):
+#     changefreq = "daily"
+#     priority = 0.5
+
+#     def items(self):
+#         return Candidate.objects.all()
+
+#     def lastmod(self, obj):
+#         return obj.timestamp_modified
+
+
+class StaticViewSitemap(Sitemap):
+    changefreq = "weeklyn"
+    priority = 0.4
+
+    def items(self):
+        return [
+            reverse("about_us"),
+            reverse("by-organization"),
+            reverse("housing_comparison"),
+            reverse("written-public-comment"),
+        ]
+
+    def location(self, item):
+        return item
+
+
+class Index(RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("election", kwargs={
+            "year": settings.ELECTION_DATE.year,
+            "position": "council"
+        })
+
+
 urlpatterns = [
-    re_path(r"^", include("overview.urls")),
+    re_path(r"^$", Index.as_view(), name="index"),
+    re_path(r"^(?P<year>\d+)/(?P<position>\w+)/", include("overview.urls")),
+
     re_path(r"^robots.txt/$", TemplateView.as_view(template_name="robots.txt"), name="robots"),
     re_path(r"^about/$", TemplateView.as_view(template_name="about_us.html"), name="about_us"),
     re_path(r"^how-to-vote/$", HowToVote.as_view(), name="how_to_vote"),
@@ -46,4 +88,16 @@ urlpatterns = [
     # These are hosted from django since we will be using whitenoise
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
+
+    # re_path(
+    #     r"^sitemap\.xml$",
+    #     sitemap,
+    #     {
+    #         "sitemaps": {
+    #             "candidates": CandidateSitemap,
+    #             "static": StaticViewSitemap,
+    #         }
+    #     },
+    #     name="django.contrib.sitemaps.views.sitemap",
+    # ),
 ]
