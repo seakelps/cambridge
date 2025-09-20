@@ -78,7 +78,7 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
                         <div class="dropdown-menu dropdown-menu-right bg-dark">
-                            <a class="dropdown-item" href="{% url 'election' election.year election.position %}">Candidates</a>
+                            <a class="dropdown-item" href="{% url 'election_candidates' election.year election.position %}">Candidates</a>
                             <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' election.year election.position %}">My Council Picks</a>
 
                             <h6 class="dropdown-header">Comparisons</h6>
