@@ -61,31 +61,15 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <div class="div mr-auto"></div>
                 <ul class="nav navbar-nav text-center">
-		    {# council #}
                     <li class="nav-item dropdown {% if request.resolver_match.url_name == 'candidateelection_detail' %} active {% endif %}">
-                        <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Council Candidates <span class="caret"></span></a>
+                        <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
                         <div id="candidate_list" class="dropdown-menu bg-dark">
                             <h6 class="dropdown-header">Incumbents</h6>
-                            {% for incumbent in council.incumbents %}
+                            {% for incumbent in incumbents %}
 			        <a href="{{incumbent.get_absolute_url}}" class="dropdown-item {% if incumbent.is_running %}{% else %}not_running{% endif %}">{{ incumbent.candidate.fullname }}</a>
                             {% endfor %}
                             <h6 class="dropdown-header">Challengers</h6>
-                            {% for non_incumbent in council.non_incumbents %}
-			        <a href="{{non_incumbent.get_absolute_url}}" class="dropdown-item {% if non_incumbent.is_running %}{% else %}not_running{% endif %}">{{ non_incumbent.candidate.fullname }}</a>
-                            {% endfor %}
-                        </div>
-                    </li>
-
-		    {# school #}
-                    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'candidateelection_detail' %} active {% endif %}">
-                        <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">School Committee Candidates <span class="caret"></span></a>
-                        <div id="candidate_list" class="dropdown-menu bg-dark">
-                            <h6 class="dropdown-header">Incumbents</h6>
-                            {% for incumbent in school.incumbents %}
-			        <a href="{{incumbent.get_absolute_url}}" class="dropdown-item {% if incumbent.is_running %}{% else %}not_running{% endif %}">{{ incumbent.candidate.fullname }}</a>
-                            {% endfor %}
-                            <h6 class="dropdown-header">Challengers</h6>
-                            {% for non_incumbent in school.non_incumbents %}
+                            {% for non_incumbent in non_incumbents %}
 			        <a href="{{non_incumbent.get_absolute_url}}" class="dropdown-item {% if non_incumbent.is_running %}{% else %}not_running{% endif %}">{{ non_incumbent.candidate.fullname }}</a>
                             {% endfor %}
                         </div>
@@ -94,12 +78,8 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
                         <div class="dropdown-menu dropdown-menu-right bg-dark">
-                            <a class="dropdown-item" href="{% url 'election' ELECTION_DATE.year "council" %}">City Council Candidates</a>
-                            <a class="dropdown-item" href="{% url 'election' ELECTION_DATE.year "school" %}">School Committee Candidates</a>
-
-			    {# TODO school too #}
-                            <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' ELECTION_DATE.year "council" %}">My Council Picks</a>
-                            <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' ELECTION_DATE.year "school" %}">My School Committee Picks</a>
+                            <a class="dropdown-item" href="{% url 'election' election.year election.position %}">Candidates</a>
+                            <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' election.year election.position %}">My Council Picks</a>
 
                             <h6 class="dropdown-header">Comparisons</h6>
 			    {% comment %}
@@ -139,12 +119,10 @@
 
     <footer class="navbar navbar-dark bg-dark navbar-expand-lg">
         <div class="container">
-	    {% if election %}{# TODO #}
-            <a class="navbar-brand" href="{% url 'election' %}">
+            <a class="navbar-brand" href="{% url 'election' election.year election.position %}">
                 <span class="d-none d-small-inline header-text">Cambridge Candidates</span>
                 <span class="d-inline d-small-none header-text">Cambridge Candidates</span>
             </a>
-	    {% endif %}
 
             <div class="div mr-auto"></div>
             <ul class="nav navbar-nav">

@@ -1,27 +1,23 @@
-from django.contrib.sitemaps.views import sitemap
 from django.urls import re_path, include
-from django.views.generic import RedirectView
 
 from . import views
-from .models import Candidate
 
 
 urlpatterns = [
     re_path(r"^$", views.index, name="election"),
-    re_path(r"candidates/$", views.ElectionCandidateList.as_view(), name="election_candidates"),
-    re_path(
-        r"^(?P<slug>[-\w]+)/$",
-        views.CandidateDetail.as_view(),
-        name="candidate_detail",
-    ),
 
-    re_path(
-        r"^candidates/housing",
-        RedirectView.as_view(
-            pattern_name="housing_comparison",
-            permanent=True,
+    re_path(r"candidates/", include([
+        re_path(
+            r"^$",
+            views.ElectionCandidateList.as_view(),
+            name="election_candidates"
         ),
-    ),
+        re_path(
+            r"^(?P<slug>[-\w]+)/$",
+            views.CandidateDetail.as_view(),
+            name="candidate_detail",
+        ),
+    ])),
 
     re_path(r"by-topic/", include([
         re_path(
