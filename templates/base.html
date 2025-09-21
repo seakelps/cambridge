@@ -98,9 +98,17 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="btn btn-primary" href="{% url 'how_to_vote' %}" role="button">
-                            How to Vote
+					    {% if election.position == "school" %}
+                        <a title="Switch to City Council"  class="btn btn-primary" href="{% url 'election' ELECTION_DATE.year "council" %}" role="button">
+                            School Committee
+							<i class="fa fa-toggle-off pl-1"></i>
                         </a>
+						{% else %}
+                        <a title="Switch to School Committe" class="btn btn-primary" href="{% url 'election' ELECTION_DATE.year "school" %}" role="button">
+                            City Council
+							<i class="fa fa-toggle-on pl-1"></i>
+                        </a>
+						{% endif %}
                     </li>
 
                     {% if user.is_authenticated %}
