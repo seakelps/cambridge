@@ -14,7 +14,7 @@ def get_candidate_locations(
             "lat": cand.latitude,
             "lng": cand.longitude,
             "color": default_color,
-            "link": reverse("candidate_detail", args=[cand.slug]),
+            "link": reverse("candidate_detail", args=[cand.election.year, cand.election.position, cand.candidate.slug]),
         }
         for cand in has_address
     }
