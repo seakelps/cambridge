@@ -315,7 +315,6 @@ class CandidateElectionAdmin(admin.ModelAdmin):
             "Demographics",
             {
                 "fields": [
-                    "education",
                     "is_cyclist",
                     "job",
                     "self_loan",
