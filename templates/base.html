@@ -61,7 +61,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <div class="div mr-auto"></div>
                 <ul class="nav navbar-nav text-center">
-                    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'candidate_detail' %} active {% endif %}">
+                    <li class="nav-item dropdown {% if request.resolver_match.url_name == 'candidateelection_detail' %} active {% endif %}">
                         <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Candidates <span class="caret"></span></a>
                         <div id="candidate_list" class="dropdown-menu bg-dark">
                             <h6 class="dropdown-header">Incumbents</h6>
@@ -78,9 +78,12 @@
                     <li class="nav-item dropdown">
                         <a href="#" class="btn btn-link text-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span class="caret"></span></a>
                         <div class="dropdown-menu dropdown-menu-right bg-dark">
-                            <a class="dropdown-item" href="{% url 'all' %}">All Candidates</a>
-                            <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' %}">My Candidates</a>
+                            <a class="dropdown-item" href="{% url 'election_candidates' election.year election.position %}">Candidates</a>
+                            <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' election.year election.position %}">My Council Picks</a>
+
                             <h6 class="dropdown-header">Comparisons</h6>
+			    {% comment %}
+			    TODO!
                             <a class="dropdown-item" href="{% url 'basic_comparison' %}">Basic</a>
                             <a class="dropdown-item" href="{% url 'finance_comparison' %}">Campaign Finance</a>
                             <a class="dropdown-item" href="{% url 'by-organization' %}">Endorsements</a>
@@ -90,6 +93,7 @@
                             <a class="dropdown-item" href="{% url 'biking_comparison' %}">Issue: Biking</a>
                             <a class="dropdown-item" href="{% url 'housing_comparison' %}">Issue: Housing</a>
                             <!-- <a class="dropdown-item disabled" href="#">Press Coverage</a> -->
+			    {% endcomment %}
                         </div>
                     </li>
 
@@ -115,7 +119,7 @@
 
     <footer class="navbar navbar-dark bg-dark navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'index' %}">
+            <a class="navbar-brand" href="{% url 'election' election.year election.position %}">
                 <span class="d-none d-small-inline header-text">Cambridge Candidates</span>
                 <span class="d-inline d-small-none header-text">Cambridge Candidates</span>
             </a>

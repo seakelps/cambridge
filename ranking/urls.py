@@ -14,8 +14,8 @@ from .views import (
 
 
 urlpatterns = [
-    re_path("^mine/$", view=MyList.as_view(), name="my_ranking"),
-    re_path(r"^mine/append/(?P<slug>[-_\w]+)$", view=append_to_ballot, name="append_to_ballot"),
+    re_path(r"^mine/(?P<year>\d+)/(?P<position>\w+)/$", view=MyList.as_view(), name="my_ranking"),
+    re_path(r"^mine/append/(?P<year>\d+)/(?P<position>\w+)/(?P<slug>[-_\w]+)$", view=append_to_ballot, name="append_to_ballot"),
     re_path("^mine/rename/$", view=RenameBallot.as_view(), name="rename_ballot"),
     re_path("^mine/make-public/$", view=MakePublic.as_view(), name="make_public"),
     re_path("^mine/make-ordered/$", view=MakeOrdered.as_view(), name="make_ordered"),

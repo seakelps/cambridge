@@ -30,7 +30,8 @@ html, body {
                 </p>
 
                 <div style="display: block" class="text-center">
-                    <a class="btn btn-primary" href="{% url 'all' %}" role="button">All Candidates</a>
+                    <a class="btn btn-primary" href="{% url 'election' ELECTION_DATE.year "council" %}" role="button">City Council</a>
+                    <a class="btn btn-primary" href="{% url 'election' ELECTION_DATE.year "school" %}" role="button">School Committee</a>
                 </div>
             </div>
         </div>

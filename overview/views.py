@@ -21,24 +21,26 @@ from .utils import get_candidate_locations
 
 
 # servering the jumbotron page
-def index(request):
-    num_runners = CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election__year=settings.ELECTION_DATE.year).count()
+def index(request, year, position):
+    election = Election.objects.get(year=year, position=position)
+    num_runners = election.candidate_elections.exclude(is_running=False).exclude(hide=True).count()
 
     description = """
         If you want more information before you cast your {election_year}
-        ballot for Cambridge City Council, you've come to the right place. We're
+        ballot for {position}, you've come to the right place. We're
         compiling everything we can find - from op-eds to campaign finance records.
         Determine who deserves your #1, #2, or #9 vote - you've got #{num_runners} options!
     """.format(
         election_year=settings.ELECTION_DATE.year,
-        num_runners=num_runners
+        num_runners=num_runners,
+        position="Cambridge City Council" if election.position == "council" else "Cambridge School Committee",
     ).strip()
 
     schema_org = {
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Cambridge Council Candidates",
-        "alternateName": ["cambridgecouncilcandidates.com"],
+        "alternateName": ["cambridge.vote"],
         "url": request.build_absolute_uri(),
     }
 
@@ -55,16 +57,25 @@ def index(request):
     )
 
 
-class CandidateList(ListView):
-    model = Candidate
-    template_name = "overview/candidate_list.html"
+class ElectionCandidateList(DetailView):
+    model = Election
+    template_name = "overview/candidateelection_list.html"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        return queryset.get(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"]
+        )
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CandidateList, self).get_context_data(*args, **kwargs)
+        context = super(ElectionCandidateList, self).get_context_data(*args, **kwargs)
 
-        candidates = Candidate.objects.exclude(hide=True).order_by("fullname")
-        context["runners"] = candidates.exclude(is_running=False)
-        context["not_runners"] = candidates.filter(is_running=False)
+        candidate_elections = self.object.candidate_elections.exclude(hide=True).order_by("candidate__fullname")
+        context["runners"] = candidate_elections.exclude(is_running=False)
+        context["not_runners"] = candidate_elections.filter(is_running=False)
         return context
 
 
@@ -194,8 +205,13 @@ class CandidateHousingList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
 
+        year=self.kwargs["year"] if "year" in kwargs else "2025"
+        position=self.kwargs["position"] if "position" in kwargs else "council"
+
+        election = Election.objects.filter(year=year, position=position).first()
+
         candidates = (
-            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+            Candidate.objects.exclude(is_running=False).order_by("fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -236,14 +252,19 @@ class CandidateHousingList(ListView):
 
 # a specific "spreadsheet-like" view of candidates' biking support
 class CandidateBikingList(ListView):
-    model = Candidate
+    model = CandidateElection
     template_name = "overview/candidates_biking.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
 
+        year=self.kwargs["year"] if "year" in kwargs else "2025"
+        position=self.kwargs["position"] if "position" in kwargs else "council"
+
+        election = Election.objects.filter(year=year, position=position).first()
+
         candidates = (
-            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+            CandidateElection.objects.exclude(is_running=False).filter(election=election).order_by("fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -292,26 +313,34 @@ class CandidateBikingList(ListView):
         return context
 
 
-# a specific "spreadsheet-like" view of candidate basic info
 class CandidateBasicList(ListView):
-    model = Candidate
+    """
+    A specific "spreadsheet-like" view of candidate basic info.
+    """
+    model = CandidateElection
     template_name = "overview/candidates_basic.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
 
-        candidates = (
-            Candidate.objects.exclude(hide=True)
+        year=self.kwargs["year"] if "year" in kwargs else "2025"
+        position=self.kwargs["position"] if "position" in kwargs else "council"
+
+        election = Election.objects.filter(year=year, position=position).first()
+
+        candidate_elections = (
+            CandidateElection.objects.exclude(hide=True)
             .exclude(is_running=False)
-            .order_by("fullname")
-            .prefetch_related("degrees")
+            .filter(election=election)
+            .order_by("candidate__fullname")
+            .prefetch_related("candidate__degrees")
         )
 
         candidate_degree_map = {}
-        for candidate in candidates:
-            candidate_degree_map[candidate.id] = candidate.degrees.all()
+        for candidate_election in candidate_elections:
+            candidate_degree_map[candidate_election.id] = candidate_election.candidate.degrees.all()
 
-        context["candidates"] = candidates
+        context["candidates"] = candidate_elections
         context["candidate_degree_map"] = candidate_degree_map
 
         return context
@@ -322,6 +351,11 @@ class ByOrganization(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+
+        year=self.kwargs["year"] if "year" in kwargs else "2025"
+        position=self.kwargs["position"] if "position" in kwargs else "council"
+
+        election = Election.objects.filter(year=year, position=position).first()
 
         candidates = Candidate.objects.filter(is_running=True, hide=False)
 
@@ -375,6 +409,11 @@ class CandidateForums(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+
+        year=self.kwargs["year"] if "year" in kwargs else "2025"
+        position=self.kwargs["position"] if "position" in kwargs else "council"
+
+        election = Election.objects.filter(year=year, position=position).first()
 
         context["candidates"] = candidates = Candidate.objects.filter(is_running=True, hide=False)
         context["forums"] = forums = Forum.objects.filter(display=True)

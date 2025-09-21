@@ -1,15 +1,28 @@
 from django.conf import settings
-from .models import Candidate, CandidateElection
+from .models import Election
+import logging
 
 
 def header(request):
-    incumbents = CandidateElection.objects.filter(is_incumbent=True, hide=False).order_by(
-        "-is_running", "candidate__fullname"
-    )
-    non_incumbents = CandidateElection.objects.filter(is_incumbent=False, hide=False).order_by(
-        "-is_running", "candidate__fullname"
-    )
-    return {"incumbents": incumbents, "non_incumbents": non_incumbents}
+    try:
+        election = Election.objects.filter(
+            year=request.resolver_match.kwargs["year"],
+            position=request.resolver_match.kwargs["position"],
+        ).first()
+    except KeyError:
+        # page without year / position e.g. admin view
+        pass
+    else:
+        if election:
+            candidates = election.candidate_elections.filter(hide=False).order_by("-is_running", "candidate__fullname")
+            return {
+                "election": election,
+                "incumbents": candidates.filter(is_incumbent=True),
+                "non_incumbents": candidates.filter(is_incumbent=False),
+            }
+        else:
+            logging.warning("header context: no election found")
+    return {}
 
 
 def constants(request):

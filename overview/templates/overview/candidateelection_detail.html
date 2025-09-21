@@ -818,11 +818,12 @@ p:last-of-type {
     <section class="container">
         <div class="row">
             <div class="col" id="my-rankings-footer">
-                <a rel="nofollow" class="btn btn-red btn-bold fa-button" href="{% url "my_ranking" %}">
+                <a rel="nofollow" class="btn btn-red btn-bold fa-button" href="{% url "my_ranking" object.election.year object.election.position %}">
                     <i class="fa fa-list-ol"></i>
                     <span>View my ballot</span>
                 </a>
 
+		{% comment %} TODO
                 <a rel="nofollow" class="{% if object.hide or not object.is_running or object in my_candidates %}disabled{% endif %} btn btn-dark btn-bold fa-button" {% if object.hide or not object.is_running or object in my_candidates %}href="#"{% else %}href="{% url "append_to_ballot" object.candidate.slug %}"{% endif %}>
                     {% if object.hide or not object.is_running %}
                     <span>Candidate not running</span>
@@ -832,6 +833,7 @@ p:last-of-type {
                     <i class="fa fa-plus"></i>
                     <span>Add this candidate to ballot</span>
                     {% endif %}
+		{% endcomment %}
                 </a>
             </div>
         </div>

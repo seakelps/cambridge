@@ -19,12 +19,13 @@ from django.shortcuts import get_object_or_404, redirect
 
 from .forms import NoteForm, OrderedForm, VisibilityForm, NameForm
 from .models import RankedList, RankedElement
-from overview.models import Candidate
+from overview.models import Candidate, CandidateElection, Election
 
 
 class _MyBallotMixin:
     def get_object(self):
-        return RankedList.objects.for_request(self.request, force=True)
+        election = Election.objects.get(year=self.kwargs["year"], position=self.kwargs["position"])
+        return RankedList.objects.for_request(self.request, election, force=True)
 
 
 class RankedListExplore(ListView):
@@ -112,19 +113,20 @@ def my_last_edit(request):
 
 
 # @require_POST
-def append_to_ballot(request, slug):
+def append_to_ballot(request, year, position, slug):
     try:
-        candidate = Candidate.objects.get(is_running=True, hide=False, slug=slug)
+        election = Election.objects.get(year=year, position=position)
+        candidate_election = election.candidate_elections.get(is_running=True, hide=False, candidate__slug=slug)
     except Candidate.DoesNotExist:
         return HttpResponseBadRequest()
 
-    ballot = RankedList.objects.for_request(request, force=True)
+    ballot = RankedList.objects.for_request(request, election, force=True)
     max_order = ballot.annotated_candidates.aggregate(Max("order"))["order__max"]
     if max_order is None:
         max_order = -1
 
-    ballot.annotated_candidates.create(candidate=candidate, order=max_order + 1)
-    return redirect(candidate)
+    ballot.annotated_candidates.create(candidate=candidate_election, order=max_order + 1)
+    return redirect(candidate_election)
 
 
 class RenameBallot(_MyBallotMixin, UpdateView):
@@ -172,7 +174,7 @@ class MyList(_MyBallotMixin, UpdateView):
     def get_note_form(self, ranked_element):
         return NoteForm(instance=ranked_element)
 
-    def get(self, request):
+    def get(self, request, year, position):
         if self.request.headers.get("x-requested-with") == "XMLHttpRequest":
             self.object = self.get_object()
             return JsonResponse(self.get_json(self.object))
@@ -221,7 +223,7 @@ class UpdateNote(UpdateView):
     model = RankedElement
 
     def get_queryset(self):
-        return RankedList.objects.for_request(self.request, force=True).annotated_candidates
+        return RankedList.objects.for_request(self.request, election, force=True).annotated_candidates
 
     def get_object(self):
         try:
@@ -247,6 +249,6 @@ def delete_note(request, slug):
     """Deletes note and position in ranking"""
 
     candidate = get_object_or_404(Candidate.objects.all(), slug=slug)
-    ranked_list = RankedList.objects.for_request(request, force=True)
+    ranked_list = RankedList.objects.for_request(request, election, force=True)
     ranked_list.annotated_candidates.filter(candidate=candidate).delete()
     return HttpResponse("DELETED", status=201)

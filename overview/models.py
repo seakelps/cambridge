@@ -230,7 +230,7 @@ class CandidateElection(models.Model):
     checked_ocpf_for_contributions = models.BooleanField(null=True)
     checked_fec_for_contributions = models.BooleanField(null=True)
 
-    headshot = models.ImageField(null=True)
+    headshot = models.ImageField(null=True, blank=True)
     headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
     class Meta:

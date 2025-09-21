@@ -23,14 +23,15 @@
         <div class="col-12">
             <span>
                 <div class="section pos">
-                    <h2>City Council</h2>
+		    <h2>{% if object.position == "council" %}City Council{% else %}School Committee{% endif %}</h2>
 
-                    <p>{# TODO description of position? #}</p>
+                    {# <p> TODO description of position? </p> #}
 
                     <div>
                         <strong>Cambridge</strong>
 
-                        {% for candidate in runners %}
+                        {% for candidate_election in runners %}
+			{% with candidate=candidate_election.candidate %}
                         <div class="candidate card">
                             <div class="card-body candidate-card-body">
                                 <div class="avatar-and-icon">
@@ -39,8 +40,8 @@
                                             <img
                                                 class="rounded-circle avatar-cirlce img-fluid"
                                                 height="500" width="500"  {# all 1:1 #}
-                                                src="{{ candidate.headshot.url }}"
-                                                alt="{{ candidate.headshot_description }}">
+                                                src="{{ candidate_election.headshot.url }}"
+                                                alt="{{ candidate_election.headshot_description }}">
                                         </div>
                                     </div>
                                 </div>
@@ -49,8 +50,8 @@
                                         {{ candidate.fullname }}
                                     </div>
                                     <p>
-                                        {{ candidate.blurb|markdown|truncatechars_html:120|striptags }}
-                                        <a class="learn-more" href="{{ candidate.get_absolute_url }}">Learn&nbsp;more&nbsp;&raquo;</a>
+                                        {{ candidate_election.blurb|markdown|truncatechars_html:120|striptags }}
+                                        <a class="learn-more" href="{{ candidate_election.get_absolute_url }}">Learn&nbsp;more&nbsp;&raquo;</a>
                                     </p>
                                 </div>
 
@@ -59,6 +60,7 @@
                                 <ballot-button></ballot-button>{# TODO think this was ko'd #}
                             </div>
                         </div>
+			{% endwith %}
                         {% endfor %}
                     </div>
                 </div>
