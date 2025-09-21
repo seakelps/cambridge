@@ -211,7 +211,7 @@ class CandidateHousingList(ListView):
         election = Election.objects.filter(year=year, position=position).first()
 
         candidates = (
-            Candidate.objects.exclude(is_running=False).order_by("fullname")
+            CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election=election).order_by("candidate__fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -223,8 +223,9 @@ class CandidateHousingList(ListView):
             CandidateSpecificProposalStance.objects.select_related("specific_proposal")
             .select_related("candidate")
             .filter(specific_proposal__display=True)
-            .filter(candidate__hide=False)
-            .filter(candidate__is_running=True)
+            # todo: review filtering
+            #.filter(candidate__hide=False)
+            #.filter(candidate__is_running=True)
         )
 
         cp_map_yes_no = {}
@@ -264,7 +265,7 @@ class CandidateBikingList(ListView):
         election = Election.objects.filter(year=year, position=position).first()
 
         candidates = (
-            CandidateElection.objects.exclude(is_running=False).filter(election=election).order_by("fullname")
+            CandidateElection.objects.exclude(is_running=False).filter(election=election).order_by("candidate__fullname")
         )
         specific_proposals = (
             SpecificProposal.objects.exclude(display=False)
@@ -276,8 +277,9 @@ class CandidateBikingList(ListView):
             CandidateSpecificProposalStance.objects.select_related("specific_proposal")
             .select_related("candidate")
             .filter(specific_proposal__display=True)
-            .filter(candidate__hide=False)
-            .filter(candidate__is_running=True)
+            # todo: fix filtering....
+            # .filter(candidate__hide=False)
+            # .filter(candidate__is_running=True)
         )
 
         cp_map_yes_no = {}
@@ -357,7 +359,11 @@ class ByOrganization(TemplateView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        candidates = Candidate.objects.filter(is_running=True, hide=False)
+        candidates = CandidateElection.objects.filter(
+            is_running=True,
+            hide=False,
+            election=election,
+        )
 
         endorsements = {
             candidate: [
@@ -378,8 +384,8 @@ class ByOrganization(TemplateView):
 
         context["endorsement_table"] = [
             [
-                reverse("append_to_ballot", args=[candidate.slug]),
-                candidate.fullname,
+                reverse("append_to_ballot", args=[year, position, candidate.candidate.slug]),
+                candidate.candidate.fullname,
                 candidate.get_absolute_url(),
                 any(org.is_union for org in endorsed_orgs),
                 *[org in endorsed_orgs for org in context["organizations"]],
@@ -415,12 +421,13 @@ class CandidateForums(TemplateView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        context["candidates"] = candidates = Candidate.objects.filter(is_running=True, hide=False)
-        context["forums"] = forums = Forum.objects.filter(display=True)
+        context["candidates"] = candidates = CandidateElection.objects.filter(is_running=True, hide=False, election=election)
+        context["forums"] = forums = Forum.objects.filter(display=True, year=year)
 
         dataset = {}
         for candidate in candidates:
-            forum_participation = {p.forum_id: p for p in candidate.forums.all()}
+            # todo: candidate.candidate.forums.all() is not quite accurate
+            forum_participation = {p.forum_id: p for p in candidate.candidate.forums.all()}
             dataset[candidate] = [forum_participation.get(forum.id) for forum in forums]
 
         context["dataset"] = dataset

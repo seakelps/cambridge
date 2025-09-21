@@ -283,12 +283,12 @@ class CandidateElection(models.Model):
 
     @property
     def signed_bike_pledge(self):
-        pledge = (
-            Questionnaire.objects.filter(name="Cambridge Bike Safety Pledge 2023")
-            .first()
-            .responses.filter(candidate=self)
-        )
-        return pledge.exists()
+        # TODO: might need to rework for 2025
+        questionnaire = Questionnaire.objects.filter(name="CSO 2026 Commitment").first()
+        if not questionnaire:
+            return False
+
+        return questionnaire.responses.filter(candidate=self).exists()
 
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()
@@ -297,7 +297,7 @@ class CandidateElection(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=100, unique=True)
     short_name = models.CharField(max_length=10, unique=True, blank=True, null=True, default=None)
-    logo = models.ImageField(null=True)
+    logo = models.ImageField(null=True, blank=True)
 
     website = models.URLField(blank=True, default="")
     facebook = models.CharField(
@@ -454,7 +454,7 @@ class PressOutlet(models.Model):
 
     name = models.CharField(max_length=50)
     homepage = models.URLField(max_length=100, blank=True)
-    logo = models.ImageField(null=True)
+    logo = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -685,7 +685,8 @@ class CandidateVan(models.Model):
 class Forum(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField(null=True, blank=True)
-    year = models.IntegerField(null=True, default=2023)
+    # TODO: better default
+    year = models.IntegerField(null=True, default=2025)
     moderators = models.CharField(max_length=500, blank=True)
 
     description = models.CharField(max_length=500, blank=True)

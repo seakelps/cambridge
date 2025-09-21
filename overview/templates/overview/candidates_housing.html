@@ -15,7 +15,7 @@
             </div>
             <div class="col-12">
                 <p>Affordable Housing is the most frequent answer to the polling question, "What is the single most import issue facing Cambridge?"</p>
-                <p>Here is how the 2023 candidates compare.</p>
+                <p>Here is how the {{ election.year }} candidates compare.</p>
             </div>
         </div>
     </section>
@@ -58,7 +58,7 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" election.year election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
                                 </td>
 
                                 {% for specific_proposal in specific_proposals %}
@@ -115,7 +115,7 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" election.year election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
                                 </td>
                                 <td>
                                     {% if candidate.housing_status == 'rent' %}

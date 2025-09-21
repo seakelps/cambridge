@@ -29,7 +29,7 @@
             </div>
             <div class="col-12">
                 <p>A number of Cambridge organizations host/co-host forums with candidates. Per campaign finance regulations, they generally have to invite all candidates who've qualified for the ballot - but not all candidates say yes.</p>
-                <p>Here are the 2023 forums, who participated, and links to recordings when available (often by the folks at <a href="https://www.cctvcambridge.org">Cambridge Community Television</a>. Thank you, CCTV!)</p>
+                <p>Here are the {{ election.year }} forums, who participated, and links to recordings when available (often by the folks at <a href="https://www.cctvcambridge.org">Cambridge Community Television</a>. Thank you, CCTV!)</p>
             </div>
         </div>
     </section>
@@ -53,7 +53,7 @@
                             {% for candidate, participations in dataset.items %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" election.year election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
                                 </td>
 								{% for participation in participations %}
 								<td>
