@@ -297,7 +297,7 @@ class CandidateElection(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=100, unique=True)
     short_name = models.CharField(max_length=10, unique=True, blank=True, null=True, default=None)
-    logo = models.ImageField(null=True)
+    logo = models.ImageField(null=True, blank=True)
 
     website = models.URLField(blank=True, default="")
     facebook = models.CharField(
@@ -454,7 +454,7 @@ class PressOutlet(models.Model):
 
     name = models.CharField(max_length=50)
     homepage = models.URLField(max_length=100, blank=True)
-    logo = models.ImageField(null=True)
+    logo = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.name

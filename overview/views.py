@@ -357,7 +357,11 @@ class ByOrganization(TemplateView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        candidates = Candidate.objects.filter(is_running=True, hide=False)
+        candidates = CandidateElection.objects.filter(
+            is_running=True,
+            hide=False,
+            election=election,
+        )
 
         endorsements = {
             candidate: [
@@ -378,8 +382,8 @@ class ByOrganization(TemplateView):
 
         context["endorsement_table"] = [
             [
-                reverse("append_to_ballot", args=[candidate.slug]),
-                candidate.fullname,
+                reverse("append_to_ballot", args=[year, position, candidate.candidate.slug]),
+                candidate.candidate.fullname,
                 candidate.get_absolute_url(),
                 any(org.is_union for org in endorsed_orgs),
                 *[org in endorsed_orgs for org in context["organizations"]],

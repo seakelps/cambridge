@@ -82,11 +82,14 @@
                             <a class="dropdown-item" rel="nofollow" href="{% url 'my_ranking' election.year election.position %}">My Council Picks</a>
 
                             <h6 class="dropdown-header">Comparisons</h6>
-			    {% comment %}
-			    TODO!
-                            <a class="dropdown-item" href="{% url 'basic_comparison' %}">Basic</a>
-                            <a class="dropdown-item" href="{% url 'finance_comparison' %}">Campaign Finance</a>
-                            <a class="dropdown-item" href="{% url 'by-organization' %}">Endorsements</a>
+                            <a class="dropdown-item" href="{% url 'basic_comparison' election.year election.position %}">Basic</a>
+                {% comment %}
+                TODO!
+                            <a class="dropdown-item" href="{% url 'finance_comparison' election.year election.position %}">Campaign Finance</a>
+                {% endcomment %}
+                            <a class="dropdown-item" href="{% url 'by-organization' election.year election.position %}">Endorsements</a>
+                {% comment %}
+                TODO!
                             <a class="dropdown-item" href="{% url 'forum-list' %}">Forums</a>
                             <a class="dropdown-item" href="{% url 'written-public-comment' %}">Public Comments</a>
                             <a class="dropdown-item" href="{% url 'full_history' %}">Voting Record</a>
