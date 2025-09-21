@@ -419,12 +419,13 @@ class CandidateForums(TemplateView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        context["candidates"] = candidates = Candidate.objects.filter(is_running=True, hide=False)
-        context["forums"] = forums = Forum.objects.filter(display=True)
+        context["candidates"] = candidates = CandidateElection.objects.filter(is_running=True, hide=False, election=election)
+        context["forums"] = forums = Forum.objects.filter(display=True, year=year)
 
         dataset = {}
         for candidate in candidates:
-            forum_participation = {p.forum_id: p for p in candidate.forums.all()}
+            # todo: candidate.candidate.forums.all() is not quite accurate
+            forum_participation = {p.forum_id: p for p in candidate.candidate.forums.all()}
             dataset[candidate] = [forum_participation.get(forum.id) for forum in forums]
 
         context["dataset"] = dataset

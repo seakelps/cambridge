@@ -685,7 +685,8 @@ class CandidateVan(models.Model):
 class Forum(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField(null=True, blank=True)
-    year = models.IntegerField(null=True, default=2023)
+    # TODO: better default
+    year = models.IntegerField(null=True, default=2025)
     moderators = models.CharField(max_length=500, blank=True)
 
     description = models.CharField(max_length=500, blank=True)

@@ -88,9 +88,9 @@
                             <a class="dropdown-item" href="{% url 'finance_comparison' election.year election.position %}">Campaign Finance</a>
                 {% endcomment %}
                             <a class="dropdown-item" href="{% url 'by-organization' election.year election.position %}">Endorsements</a>
+                            <a class="dropdown-item" href="{% url 'forum-list' election.year election.position %}">Forums</a>
                 {% comment %}
                 TODO!
-                            <a class="dropdown-item" href="{% url 'forum-list' %}">Forums</a>
                             <a class="dropdown-item" href="{% url 'written-public-comment' %}">Public Comments</a>
                             <a class="dropdown-item" href="{% url 'full_history' %}">Voting Record</a>
                             <a class="dropdown-item" href="{% url 'biking_comparison' %}">Issue: Biking</a>
