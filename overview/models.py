@@ -283,12 +283,12 @@ class CandidateElection(models.Model):
 
     @property
     def signed_bike_pledge(self):
-        pledge = (
-            Questionnaire.objects.filter(name="Cambridge Bike Safety Pledge 2023")
-            .first()
-            .responses.filter(candidate=self)
-        )
-        return pledge.exists()
+        # TODO: might need to rework for 2025
+        questionnaire = Questionnaire.objects.filter(name="CSO 2026 Commitment").first()
+        if not questionnaire:
+            return False
+
+        return questionnaire.responses.filter(candidate=self).exists()
 
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()

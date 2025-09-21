@@ -93,10 +93,13 @@
                 {% comment %}
                 TODO!
                             <a class="dropdown-item" href="{% url 'full_history' %}">Voting Record</a>
-                            <a class="dropdown-item" href="{% url 'biking_comparison' %}">Issue: Biking</a>
-                            <a class="dropdown-item" href="{% url 'housing_comparison' %}">Issue: Housing</a>
+                {% endcomment %}
+
+                        {% if election.position == "council" %}
+                            <a class="dropdown-item" href="{% url 'biking_comparison' election.year election.position %}">Issue: Biking</a>
+                            <a class="dropdown-item" href="{% url 'housing_comparison' election.year election.position %}">Issue: Housing</a>
+                        {% endif %}
                             <!-- <a class="dropdown-item disabled" href="#">Press Coverage</a> -->
-			    {% endcomment %}
                         </div>
                     </li>
 
