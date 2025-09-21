@@ -37,8 +37,8 @@
             {# TODO #}
             {# <a href="#" id="rankCandidates" class="fa fa-sort-numeric-asc navbar-toggle btn btn-link visible-xs"></a> #}
             <a class="navbar-brand" href="{% url 'index' %}">
-                <span class="d-none d-sm-inline header-text">Cambridge Candidates</span>
-                <span class="d-inline d-sm-none header-text">Cambridge Candidates</span>
+                <span class="d-none d-sm-inline header-text">Cambridge.vote</span>
+                <span class="d-inline d-sm-none header-text">Cambridge.vote</span>
             </a>
 
             <button type="button"
@@ -99,7 +99,7 @@
 
                     <li class="nav-item">
                         <a class="btn btn-primary" href="{% url 'how_to_vote' %}" role="button">
-                            How to Vote
+                            TODO: TOGGLE
                         </a>
                     </li>
 
@@ -120,17 +120,22 @@
     <footer class="navbar navbar-dark bg-dark navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{% url 'election' election.year election.position %}">
-                <span class="d-none d-small-inline header-text">Cambridge Candidates</span>
-                <span class="d-inline d-small-none header-text">Cambridge Candidates</span>
+                <span class="d-none d-small-inline header-text">Cambridge.vote</span>
+                <span class="d-inline d-small-none header-text">Cambridge.vote</span>
             </a>
 
             <div class="div mr-auto"></div>
             <ul class="nav navbar-nav">
                 <li class="nav-item ml-2">
-			<a class="text-light" href="{% url "about_us" %}">About</a>
+			       <a class="text-light" href="{% url "about_us" %}">About</a>
                 </li>
                 <li class="nav-item ml-2">
-			<a class="text-light" href="{% url "about_us" %}#contact">Contact Us</a>
+			        <a class="text-light" href="{% url "about_us" %}#contact">Contact Us</a>
+                </li>
+                <li class="nav-item ml-2">
+                    <a class="btn btn-primary" href="{% url 'how_to_vote' %}" role="button">
+                            How to Vote
+                    </a>
                 </li>
             </ul>
         </div> <!-- /container -->
