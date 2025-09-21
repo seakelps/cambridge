@@ -10,7 +10,7 @@ def get_candidate_locations(
     return {
         cand.id: {
             "id": cand.id,
-            "name": cand.fullname,
+            "name": cand.candidate.fullname,
             "lat": cand.latitude,
             "lng": cand.longitude,
             "color": default_color,
