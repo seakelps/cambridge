@@ -90,12 +90,12 @@ p:last-of-type {
                         <dd>City Councillor</dd>
                     {% elif object.job %}
                         <dt>Currently</dt>
-                        <dd>{{ object.job }}</dd>
+                        <dd style="line-height: 1rem;">{{ object.job }}</dd>
                     {% endif %}
 
                     {% if object.short_history_text %}
                         <dt>Election history</dt>
-                        <dd class="mb-0">{{ object.short_history_text }}</dd>
+                        <dd class="mb-0" style="line-height: 1rem;">{{ object.short_history_text }}</dd>
                     {% endif %}
                 </dl>
             </div>
