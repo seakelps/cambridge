@@ -399,7 +399,7 @@ class QuestionnaireResponse(models.Model):
         return self.link or self.questionnaire.link
 
     def __str__(self):
-        return "{} answering {}".format(self.candidate, self.questionnaire)
+        return "{} answering {}".format(self.candidate_election.candidate, self.questionnaire)
 
 
 class VisibleManager(models.Manager):
