@@ -669,7 +669,7 @@ p:last-of-type {
         <div class="row">
             <div class="col-12">
                 <h2 id="quotes">Quotes by or about {{object.candidate.shortname}}</h2>
-                {% for quote in object.candidate.quote_set.all %}
+                {% for quote in object.quote_set.all %}
                 {% if quote.display %}
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
