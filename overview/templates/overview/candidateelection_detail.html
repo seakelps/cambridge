@@ -195,7 +195,7 @@ p:last-of-type {
                 {% endif %}
 
                 <dt>Age</dt>
-                <dd>{{ object.candidate.date_of_birth|timesince }}
+                <dd>{{ object.candidate.date_of_birth|timesince:election.date }}
                 {% if object.candidate.date_of_birth or object.candidate.place_of_birth %}
                 <br>
                 <span class="text-muted">

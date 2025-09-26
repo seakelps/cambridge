@@ -59,7 +59,9 @@ class Election(models.Model):
         ("council", "City Council"),
     )
     position = models.CharField(max_length=40, choices=position_choices)
+
     year = models.IntegerField(default=2025)
+    date = models.DateField(blank=True, null=True)
 
 
 class CandidateElection(models.Model):

@@ -215,6 +215,7 @@ class ElectionAdmin(admin.ModelAdmin):
     list_display = (
         "position",
         "year",
+        "date",
     )
     list_filter = (
         "position",
