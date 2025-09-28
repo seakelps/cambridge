@@ -232,8 +232,8 @@ class CandidateHousingList(ListView):
         cp_map_blurb = {}
 
         for candidate in candidates:
-            cp_map_yes_no[candidate.id] = {}
-            cp_map_blurb[candidate.id] = {}
+            cp_map_yes_no[candidate.candidate.id] = {}
+            cp_map_blurb[candidate.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
             cp_map_yes_no[candidate_proposal.candidate.id][
@@ -286,8 +286,8 @@ class CandidateBikingList(ListView):
         cp_map_blurb = {}
 
         for candidate in candidates:
-            cp_map_yes_no[candidate.id] = {}
-            cp_map_blurb[candidate.id] = {}
+            cp_map_yes_no[candidate.candidate.id] = {}
+            cp_map_blurb[candidate.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
             cp_map_yes_no[candidate_proposal.candidate.id][

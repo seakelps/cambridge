@@ -52,9 +52,14 @@
 
             <ul class="nav navbar-nav navbar-right d-none d-md-flex">
                 {% if user.is_authenticated %}
-                    <li><a rel="nofollow" href="{% url "logout" %}">Logout</a></li>
+                    <li>
+                        <form action="{% url 'logout' %}" class="form-inline" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link nav-link">Logout</button>
+                        </form>
+                    </li>
                 {% else %}
-                    <li><a rel="nofollow" href="{% url "login" %}">Login</a></li>
+                    <li><a rel="nofollow" href="{% url "login" %}" class="nav-link">Login</a></li>
                 {% endif %}
             </ul>
 

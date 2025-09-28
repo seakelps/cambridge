@@ -4,25 +4,29 @@ import logging
 
 
 def header(request):
+    context = {}
+
     try:
-        election = Election.objects.filter(
+        context["election"] = election = Election.objects.filter(
             year=request.resolver_match.kwargs["year"],
             position=request.resolver_match.kwargs["position"],
         ).first()
     except KeyError:
         # page without year / position e.g. admin view
-        pass
+        context["election"] = Election.objects.filter(
+            year=settings.ELECTION_DATE.year,
+            position="council",
+        ).first()
     else:
         if election:
             candidates = election.candidate_elections.filter(hide=False).order_by("-is_running", "candidate__fullname")
-            return {
-                "election": election,
+            context.update({
                 "incumbents": candidates.filter(is_incumbent=True),
                 "non_incumbents": candidates.filter(is_incumbent=False),
-            }
+            })
         else:
             logging.warning("header context: no election found")
-    return {}
+    return context
 
 
 def constants(request):
