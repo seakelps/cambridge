@@ -773,24 +773,24 @@ p:last-of-type {
                     </div>
                     <div>
                         <strong>
-                            {% if money_2023_start is not None %}
-                            ${{ money_2023_start|floatformat:0|intcomma }}
+                            {% if money_start is not None %}
+                            ${{ money_start|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Balance at the start of 2023</div>
+                        <div>Balance at the start of {{ object.election.year }}</div>
                     </div>
                     <div>
                         <i class="fa fa-plus text-success"></i>
                         <strong>
-                            {% if money_2023_raised is not None %}
-                            ${{ money_2023_raised|floatformat:0|intcomma }}
+                            {% if money_raised is not None %}
+                            ${{ money_raised|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Raised in 2023
+                        <div>Raised in {{ object.election.year }}
                         {% if object.self_loan %}
                             <br>
                             ${{object.self_loan}} from self included
@@ -800,13 +800,13 @@ p:last-of-type {
                     <div>
                         <i class="fa fa-minus text-danger"></i>
                         <strong>
-                            {% if money_2023_spent is not None %}
-                            ${{ money_2023_spent|floatformat:0|intcomma }}
+                            {% if money_spent is not None %}
+                            ${{ money_spent|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Spent in 2023</div>
+                        <div>Spent in {{ object.election.year }}</div>
                     </div>
                 </div>
             </div>

@@ -334,7 +334,7 @@ def get_candidate_2021_raised(candidate_cpf_id):
 
 
 # returns either 0 if they had no year-1-1 report, or the # from that report
-def get_candidate_money_at_start_of_year(candidate_cpf_id, year=2023):
+def get_candidate_money_at_start_of_year(candidate_cpf_id, year):
     # jan 1 2021 report for this candidate
     try:
         bank_report = RawBankReport.objects.filter(
@@ -359,7 +359,7 @@ def get_candidate_money_at_start_of_year(candidate_cpf_id, year=2023):
 #   - receipt = expenditure
 #   - receipt from = expenditure to
 #
-def get_candidate_spent_year(candidate_cpf_id, year=2023):
+def get_candidate_spent_year(candidate_cpf_id, year):
     agg = RawBankReport.objects.filter(
         cpf_id=candidate_cpf_id, beginning_date_display__year=year
     ).aggregate(Sum("expenditure_total_display"))
@@ -390,7 +390,7 @@ def get_candidate_spent_year(candidate_cpf_id, year=2023):
 
 # all the money the candidate has raised in year
 # (doesn't include money candidate started yeaer with)
-def get_candidate_raised_year(candidate_cpf_id, year=2023):
+def get_candidate_raised_year(candidate_cpf_id, year):
     agg = RawBankReport.objects.filter(
         cpf_id=candidate_cpf_id, beginning_date_display__year=year
     ).aggregate(Sum("receipt_total_display"))
