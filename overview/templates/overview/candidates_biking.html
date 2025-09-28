@@ -37,7 +37,6 @@
                                 <th>Bikes?</th>
                                 <th>Signed Pledge</th>
                                 <th>CBS Endorsed</th>
-                                <th>Save Mass Ave Endorsed</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -68,13 +67,6 @@
                                     {% endif %}
                                 </td>
 
-                                <td>
-                                    {% if candidate_mass_group_map|get_item:candidate.id %}
-                                        <i class="fa fa-check text-success"></i>
-                                    {% else %}
-                                        <i class="fa fa-ban text-danger"></i>
-                                    {% endif %}
-                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
