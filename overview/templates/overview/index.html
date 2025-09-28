@@ -43,8 +43,8 @@
 
 
                             <div class="col" style="text-align: center">
-				<a class="btn btn-secondary" href="{% url "election" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
-				<a class="btn btn-secondary" href="{% url "election" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
+				<a class="btn btn-secondary" href="{% url "election_candidates" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
+				<a class="btn btn-secondary" href="{% url "election_candidates" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
                             </div>
                         </div>
                     </div>
