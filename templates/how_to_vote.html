@@ -23,7 +23,7 @@
                 </p>
 
 				<p>
-					{% blocktrans %}For 2023, Cambridge has prepared voter guides in many of the most commonly spoken languages in the area.{% endblocktrans %}
+					{% blocktrans with election_year=ELECTION_DATE.year %}For {{ election_year }}, Cambridge has prepared voter guides in many of the most commonly spoken languages in the area.{% endblocktrans %}
 					<a href="https://www.cambridgema.gov/departments/electioncommission/cambridgemunicipalelections" rel="noopener" target="_blank">View offical voter guides.</a>
 				</p>
             </div>
