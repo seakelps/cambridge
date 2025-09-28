@@ -3,19 +3,17 @@
 name: cambridge-vote
 services:
   db:
-    image: postgres
+    image: postgres:17
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
   static:
     build:
       dockerfile: Dockerfile.static
-    command: watch
+    # command: watch
     volumes:
       # mounting as a file so that we can npm update and see the changes
       - ./package-lock.json:/app/package-lock.json
@@ -41,13 +39,15 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DJANGO_DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - DJANGO_DATABASE_URL=postgresql://postgres:postgres@db/postgres
       - DJANGO_SETTINGS_MODULE=citycouncil.settings
       - DJANGO_SECRET_KEY=testtest
       - DJANGO_DEBUG=TRUE
       - DJANGO_ALLOWED_HOST=*
-    depends_on:
+      - GOOGLE_EMBED_API_KEY=AIzaSyCcioP2q-I1l11gotDDN7-suOclEmR5eVo
+    links:
       - db
+    depends_on:
       - static
 volumes:
   staticfiles:
