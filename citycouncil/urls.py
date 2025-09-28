@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from overview.models import Election
 from overview.admin import money_admin_site
 
 
@@ -21,6 +22,11 @@ class HowToVote(TemplateView):
 
     def get_context_data(self):
         context = super().get_context_data()
+        # Doesn't really matter which one, but useful for reversing urls
+        context["election"] = Election.objects.get(
+            year=settings.ELECTION_DATE.year,
+            position="council"
+        )
         context["title"] = "How To Vote in Cambridge Municiple Elections"
         context[
             "description"

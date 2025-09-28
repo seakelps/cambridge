@@ -1,14 +1,18 @@
 import json
 from markdown import markdown
 
-from django.conf import settings
 from collections import defaultdict
-from overview.models import Candidate, CandidateElection, Election
+from overview.models import CandidateElection, Election
 from .models import RankedList, RankedElement
 
 
 def sidebar(request):
-    context = {}
+    context = {
+        "my_ranking": [],
+        "my_candidates": [],
+        "runners": [],
+        "runnerJson": "{}",
+    }
     ranking_lookup = defaultdict(lambda: {"order": None, "comment": ""})
 
     try:

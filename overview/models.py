@@ -223,6 +223,8 @@ class CandidateElection(models.Model):
 
     ##### section: finance
 
+    fundraising_info_url = models.URLField(help_text="External websites with fundraising breakdown", blank=True, default="")
+
     # primarily for linking to finance records
     cpf_id = models.IntegerField(null=True, blank=True)
 

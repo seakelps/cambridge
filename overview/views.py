@@ -123,18 +123,18 @@ class CandidateDetail(DetailView):
                 context["latest_bank_report"] = None
 
             try:
-                context["money_2023_start"] = get_candidate_money_at_start_of_year(
-                    self.object.cpf_id, 2023
+                context["money_start"] = get_candidate_money_at_start_of_year(
+                    self.object.cpf_id, self.object.election.year
                 )
-                context["money_2023_spent"] = get_candidate_spent_year(self.object.cpf_id, 2023)
-                context["money_2023_raised"] = get_candidate_raised_year(self.object.cpf_id, 2023)
+                context["money_spent"] = get_candidate_spent_year(self.object.cpf_id, self.object.election.year)
+                context["money_raised"] = get_candidate_raised_year(self.object.cpf_id, self.object.election.year)
             except:
                 context["latest_bank_report"] = None
         else:
             context["latest_bank_report"] = None
-            context["money_2023_start"] = None
-            context["money_2023_spent"] = None
-            context["money_2023_raised"] = None
+            context["money_start"] = None
+            context["money_spent"] = None
+            context["money_raised"] = None
 
         context["endorsements"] = (
             self.object.endorsements.filter(display=True).select_related("organization").all()

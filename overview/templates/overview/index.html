@@ -4,7 +4,7 @@
 {% load i18n %}
 {% load overview %}
 
-{% block title %}Cambridge Council Election 2023{% endblock %}
+{% block title %}Cambridge Council Election {{election.year|default:ELECTION_DATE.year}}{% endblock %}
 
 {% block body_id %}welcome{% endblock %}
 
@@ -22,7 +22,7 @@
     var initialLocations = {{ candidate_locations|safe }};
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
-<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}"></script>
+<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}&q=Cambridge"></script>
 
 {{ schema_org|json_ld }} 
 
@@ -43,8 +43,8 @@
 
 
                             <div class="col" style="text-align: center">
-				<a class="btn btn-secondary" href="{% url "election" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
-				<a class="btn btn-secondary" href="{% url "election" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
+				<a class="btn btn-secondary" href="{% url "election_candidates" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
+				<a class="btn btn-secondary" href="{% url "election_candidates" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
                             </div>
                         </div>
                     </div>

@@ -759,54 +759,35 @@ p:last-of-type {
         <div class="row">
             <div class="col">
                 <h2 id="finance">Campaign finance</h2>
-                <h3>How much {{object.candidate.shortname}} has raised and spent</h3>
+
+                <h3>
+		    {% if object.fundraising_info_url %}
+			{% if "https://cambridgereview.org/" in object.fundraising_info_url %}
+			    See <a href="{{ object.fundraising_info_url }}">CambridgReview</a> for detailed information about {{object.candidate.shortname}}'s fundraising
+			{% else %}
+			    See <a href="{{ object.fundraising_info_url }}">{{ object.fundraising_info_url }}</a> for detailed information about {{object.candidate.shortname}}'s fundraising
+			{% endif %}
+		    {% else %}
+			How much {{object.candidate.shortname}} has raised and spent
+		    {% endif %}
+		</h3>
+
                 <div class="stats">
-                    <div>
-                        <strong>
-                            {% if latest_bank_report.ending_balance_display is not None %}
-                            ${{ latest_bank_report.ending_balance_display|floatformat:0|intcomma }}
-                            {% else %}
-                            <i>TBD</i>
-                            {% endif %}
-                        </strong>
-                        <div>Current balance</div>
-                    </div>
-                    <div>
-                        <strong>
-                            {% if money_2023_start is not None %}
-                            ${{ money_2023_start|floatformat:0|intcomma }}
-                            {% else %}
-                            <i>TBD</i>
-                            {% endif %}
-                        </strong>
-                        <div>Balance at the start of 2023</div>
-                    </div>
                     <div>
                         <i class="fa fa-plus text-success"></i>
                         <strong>
-                            {% if money_2023_raised is not None %}
-                            ${{ money_2023_raised|floatformat:0|intcomma }}
+                            {% if money_raised is not None %}
+                            ${{ money_raised|floatformat:0|intcomma }}
                             {% else %}
                             <i>TBD</i>
                             {% endif %}
                         </strong>
-                        <div>Raised in 2023
+                        <div>Raised in {{ object.election.year }}
                         {% if object.self_loan %}
                             <br>
                             ${{object.self_loan}} from self included
                         {% endif %}
                         </div>
-                    </div>
-                    <div>
-                        <i class="fa fa-minus text-danger"></i>
-                        <strong>
-                            {% if money_2023_spent is not None %}
-                            ${{ money_2023_spent|floatformat:0|intcomma }}
-                            {% else %}
-                            <i>TBD</i>
-                            {% endif %}
-                        </strong>
-                        <div>Spent in 2023</div>
                     </div>
                 </div>
             </div>

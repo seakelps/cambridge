@@ -6,6 +6,7 @@ from campaign_finance.models import (
     get_candidate_spent_year,
 )
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.forms import ModelForm
 from django.db.models import Max, ManyToOneRel, ManyToManyRel, F
@@ -200,15 +201,15 @@ class MoneyAdmin(admin.ModelAdmin):
 
     @admin.display
     def raised_current_year(self, instance):
-        return get_candidate_raised_year(instance.cpf_id)
+        return get_candidate_raised_year(instance.cpf_id, settings.ELECTION_DATE.year)
 
     @admin.display
     def spent_current_year(self, instance):
-        return get_candidate_spent_year(instance.cpf_id)
+        return get_candidate_spent_year(instance.cpf_id, settings.ELECTION_DATE.year)
 
     @admin.display
     def start_current_year(self, instance):
-        return get_candidate_money_at_start_of_year(instance.cpf_id)
+        return get_candidate_money_at_start_of_year(instance.cpf_id, settings.ELECTION_DATE.year)
 
 
 class ElectionAdmin(admin.ModelAdmin):
@@ -290,7 +291,14 @@ class CandidateElectionAdmin(admin.ModelAdmin):
         ("Our Writing", {"fields": ["private_notes", "blurb"]}),
         (
             "Election",
-            {"fields": ["is_incumbent", "is_running", "hide", "political_party", "cpf_id"]},
+            {"fields": [
+                "is_incumbent",
+                "is_running",
+                "hide",
+                "political_party",
+                "cpf_id",
+                "fundraising_info_url",
+            ]},
         ),
         (
             "Housing - theirs",
