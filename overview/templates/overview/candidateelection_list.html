@@ -4,15 +4,15 @@
 {% load markdown from overview %}
 
 
-{% block title %}Candidates Running in 2023{% endblock %}
-{% block meta_description %}{{ runners.count }} candidates are running for 9 seats in 2023. Determine who deserves your #1, #2, or #9 vote on November 7th.{% endblock %}
++{% block title %}Candidates Running in {{election.year|default:ELECTION_DATE.year}}{% endblock %}
+{% block meta_description %}{{ runners.count }} candidates are running for 9 seats in {{election.year|default:ELECTION_DATE.year}}. Determine who deserves your #1, #2, or #9 vote on {{election.date|date:"F, jS"}}.{% endblock %}
 {% block body_id %}all_candidates{% endblock %}
 
 {% block head_extra %}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:domain" content="cambridgecouncilcandidates.com" />
-    <meta name="twitter:title" content="Candidates Running in 2023" />
-    <meta name="twitter:description" content="{{ runners.count }} candidates are running for 9 seats in 2023. Determine who deserves your #1, #2, or #9 vote on November 7th." />
+    <meta name="twitter:title" content="Candidates Running in {{election.year|default:ELECTION_DATE.year}}" />
+    <meta name="twitter:description" content="{{ runners.count }} candidates are running for 9 seats in {{election.year|default:ELECTION_DATE.year}}. Determine who deserves your #1, #2, or #9 vote on {{election.date|date:"F, jS"}}." />
     <meta name="twitter:image" content="{% fullstatic "candidate_grid.png" %}"/>
 {% endblock %}
 
