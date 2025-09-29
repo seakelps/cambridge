@@ -194,7 +194,17 @@ p:last-of-type {
                     </dd>
                 {% endif %}
 
-                <dt>Age</dt>
+                <dt>Age
+                    <a tabindex="0"
+                        class="fa fa-info-circle"
+                        role="button"
+                        href="#!"
+                        data-toggle="popover"
+                        data-trigger="focus"
+                        data-html="true"
+                        data-content='On day of election'>
+                    </a>
+                </dt>
                 <dd>{{ object.candidate.date_of_birth|timesince:election.date }}
                 {% if object.candidate.date_of_birth or object.candidate.place_of_birth %}
                 <br>
@@ -208,19 +218,21 @@ p:last-of-type {
 
                 {% if object.date_of_registration %}
                 <dt>Voting</dt>
-                <dd>Reg. {{ object.date_of_registration }} <a class="fa fa-info-circle"
-                                                            href="#!"
-                                                            data-toggle="popover"
-                                                            data-trigger="focus"
-                                                            data-html="true"
-                                                            data-container="body"
-                                                            data-content='Date candidate first registered to vote in Cambridge.'>
+                <dd>Reg. {{ object.date_of_registration }}
+                    <a tabindex="0"
+                    class="fa fa-info-circle"
+                    role="button"
+                    href="#!"
+                    data-toggle="popover"
+                    data-trigger="focus"
+                    data-html="true"
+                    data-content='Date candidate first registered to vote in Cambridge.'>
                 </a>
                 <br>
 
                 <details>
                   <summary>
-                    History <a class="fa fa-info-circle"
+                    History <a tabindex="0" class="fa fa-info-circle"
                                 href="#!"
                                 data-toggle="popover"
                                 data-trigger="focus"
@@ -297,7 +309,7 @@ p:last-of-type {
                     {% if object.housing_sell_value %}
                     <br>
                     <span class="text-muted">Valued at approx. ${{ object.housing_sell_value|floatformat:0|intcomma }}
-                        <a class="fa fa-info-circle"
+                        <a tabindex="0" class="fa fa-info-circle"
                            href="#!"
                            data-toggle="popover"
                            data-trigger="focus"
@@ -366,7 +378,7 @@ p:last-of-type {
                                 {% endif %}
 
                                 {% if housing.specific_proposal.blurb %}
-                                <a  class="fa fa-info-circle"
+                                <a tabindex="0" class="fa fa-info-circle"
                                     href="#!"
                                     data-toggle="popover"
                                     data-trigger="focus"
@@ -386,7 +398,7 @@ p:last-of-type {
                                 {% endif %}
 
                                 {% if housing.blurb %}
-                                <a  class="fa fa-info-circle"
+                                <a tabindex="0" class="fa fa-info-circle"
                                     href="#!"
                                     data-toggle="popover"
                                     data-trigger="focus"
@@ -458,7 +470,7 @@ p:last-of-type {
                                 {% endif %}
 
                                 {% if proposal.specific_proposal.blurb %}
-                                <a  class="fa fa-info-circle"
+                                <a tabindex="0" class="fa fa-info-circle"
                                     href="#!"
                                     data-toggle="popover"
                                     data-trigger="focus"
@@ -478,7 +490,7 @@ p:last-of-type {
                                 {% endif %}
 
                                 {% if proposal.blurb %}
-                                <a  class="fa fa-info-circle"
+                                <a tabindex="0" class="fa fa-info-circle"
                                     href="#!"
                                     data-toggle="popover"
                                     data-trigger="focus"

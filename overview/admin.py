@@ -510,6 +510,10 @@ class ForumAdmin(admin.ModelAdmin):
     list_filter = ("year",)
 
 
+class InterviewVideoAdmin(admin.ModelAdmin):
+    list_display = ["candidate_election", "sort_order"]
+
+
 class MoneyAdminSite(AdminSite):
     site_header = "Money Admin"
     site_title = "Money"
@@ -531,5 +535,6 @@ admin.site.register(PastContribution, PastContributionAdmin)
 admin.site.register(VanElection, VanElectionAdmin)
 admin.site.register(CandidateVan, CandidateVanAdmin)
 admin.site.register(Forum, ForumAdmin)
+admin.site.register(InterviewVideo, InterviewVideoAdmin)
 
 money_admin_site.register(Candidate, MoneyAdmin)

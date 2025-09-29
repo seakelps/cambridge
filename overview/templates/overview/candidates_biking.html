@@ -105,7 +105,7 @@
                                         {% endif %}
 
                                         {% if specific_proposal.blurb %}
-                                        <a  class="fa fa-info-circle"
+                                        <a tabindex="0" class="fa fa-info-circle"
                                             href="#!"
                                             data-toggle="popover"
                                             data-trigger="focus"
@@ -136,7 +136,7 @@
                                         {% endif %}
 
                                         {% if cp_map_blurb|get_item:candidate.id|get_item:specific_proposal.id %}
-                                        <a  class="fa fa-info-circle"
+                                        <a tabindex="0" class="fa fa-info-circle"
                                             href="#!"
                                             data-toggle="popover"
                                             data-trigger="focus"
