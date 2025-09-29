@@ -99,12 +99,9 @@
                         </div>
 
                         {% if mine %}
-			{% comment %}
-			TODO fixme
                         <form class="d-none update_note py-1" action="{% url "update_note" annotation.candidate.candidate.slug %}" method="POST">
                             {% crispy annotation.comment_form %}
                         </form>
-			{% endcomment %}
                         {% endif %}
 
                     </candidate>

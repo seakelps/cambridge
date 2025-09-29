@@ -42,12 +42,13 @@
             </a>
 
             <button type="button"
-                class="d-md-none fa fa-bars btn btn-dark"
+                class="d-md-none btn btn-dark"
                 data-target="#navbar"
                 data-toggle="collapse"
                 aria-label="Toggle Navigation"
                 aria-expanded="false"
                 aria-controls="navbar">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
 
             <ul class="nav navbar-nav navbar-right d-none d-md-flex">
@@ -71,11 +72,11 @@
                         <div id="candidate_list" class="dropdown-menu bg-dark">
                             <h6 class="dropdown-header">Incumbents</h6>
                             {% for incumbent in incumbents %}
-                    <a href="{{incumbent.get_absolute_url}}" class="dropdown-item {% if incumbent.is_running %}{% else %}not_running{% endif %}">{{ incumbent.candidate.fullname }}</a>
+                            <a href="{{incumbent.get_absolute_url}}" class="dropdown-item {% if incumbent.is_running %}{% else %}not_running{% endif %}">{{ incumbent.candidate.fullname }}</a>
                             {% endfor %}
                             <h6 class="dropdown-header">Challengers</h6>
                             {% for non_incumbent in non_incumbents %}
-                    <a href="{{non_incumbent.get_absolute_url}}" class="dropdown-item {% if non_incumbent.is_running %}{% else %}not_running{% endif %}">{{ non_incumbent.candidate.fullname }}</a>
+                            <a href="{{non_incumbent.get_absolute_url}}" class="dropdown-item {% if non_incumbent.is_running %}{% else %}not_running{% endif %}">{{ non_incumbent.candidate.fullname }}</a>
                             {% endfor %}
                         </div>
                     </li>
