@@ -41,6 +41,8 @@ class Candidate(models.Model):
     date_of_birth = models.DateField(blank=True, null=True)
     place_of_birth = models.CharField(max_length=200, blank=True)
 
+    wikipedia_page = models.CharField(max_length=200, blank=True, default="")
+
     timestamp_modified = models.DateTimeField(auto_now=True)
 
 
