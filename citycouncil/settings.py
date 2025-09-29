@@ -13,6 +13,9 @@ DEBUG = os.environ["DJANGO_DEBUG"] == "TRUE"
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOST"].split(",")
 CSRF_TRUSTED_ORIGINS = [
     "https://cambridge-wh2u.onrender.com",
+    "https://www.cambridge-wh2u.onrender.com",
+    "https://cambridge.vote",
+    "https://www.cambridge.vote",
 ]
 ATOMIC_REQUESTS = True
 
