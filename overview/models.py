@@ -385,7 +385,7 @@ class Questionnaire(models.Model):
 
     description = models.CharField(max_length=500)
     link = models.URLField(max_length=500, blank=True)
-    display = models.BooleanField(default=False)
+    display = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
@@ -398,7 +398,7 @@ class QuestionnaireResponse(models.Model):
     candidate_election = models.ForeignKey(CandidateElection, on_delete=models.CASCADE, related_name="responses")
     date = models.DateField(blank=True, null=True)
     link = models.URLField(max_length=250, blank=True)
-    display = models.BooleanField(default=False)
+    display = models.BooleanField(default=True)
 
     @property
     def questionnaire_link(self):
@@ -447,7 +447,7 @@ class Quote(models.Model):
         max_length=100, help_text="Leave blank if candidate", blank=True, default=""
     )
     cite = models.CharField(max_length=100, blank=True)
-    display = models.BooleanField(default=False)
+    display = models.BooleanField(default=True)
     display_housing = models.BooleanField(default=False)
 
 
@@ -501,7 +501,7 @@ class PressArticleCandidate(models.Model):
         help_text="if there's something particularly noteworthy about this candidate and press article",
         blank=True,
     )
-    display = models.BooleanField(default=False)
+    display = models.BooleanField(default=True)
 
 
 proposal_type_choices = (
