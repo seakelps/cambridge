@@ -12,11 +12,17 @@ class RankedListManager(models.Manager):
 
         if user.is_authenticated:
             try:
-                return user.rankedlist
+                return RankedList.objects.get(
+                    owner=user,
+                    election=election
+                )
             except RankedList.DoesNotExist:
                 if force:
                     return RankedList.objects.create(
-                        name=RankedList.make_name(user),
+                        name=RankedList.make_name(
+                            user,
+                            election,
+                        ),
                         slug=user.username,
                         owner=user,
                         election=election
@@ -53,11 +59,19 @@ class RankedList(models.Model):
 
     election = models.ForeignKey("overview.Election", on_delete=models.CASCADE)
     last_modified = models.DateTimeField(auto_now=True)
-    owner = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, on_delete=models.SET_NULL)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        on_delete=models.SET_NULL
+    )
     name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
-    public = models.BooleanField(default=False)
+    slug = models.SlugField()
     ordered = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = [
+            ("election", "slug")
+        ]
 
     def __str__(self):
         return self.name
@@ -66,8 +80,11 @@ class RankedList(models.Model):
         return reverse("list_explore", args=[self.slug])
 
     @staticmethod
-    def make_name(user):
-        return "{}'s Slate".format(user.get_full_name() or user.username)
+    def make_name(user, election):
+        return "{username}'s {position} Slate".format(
+            username=user.get_full_name() or user.username,
+            position=election.position,
+        )
 
 
 class RankedElementManager(models.Manager):

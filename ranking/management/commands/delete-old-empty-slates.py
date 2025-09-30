@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         empty_lists = (
-            RankedList.objects.exclude(public=True)
+            RankedList.objects
             .filter(owner_id=None, annotated_candidates__isnull=True)
             .filter(last_modified__lte=datetime.now() - timedelta(days=7))
             .delete()

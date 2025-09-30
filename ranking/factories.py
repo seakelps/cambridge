@@ -52,7 +52,6 @@ class RankedList(factory.django.DjangoModelFactory):
     owner = factory.SubFactory(User)
     name = factory.Faker("org_name")
     slug = factory.LazyAttribute(lambda o: slugify(o.name))
-    public = True
 
 
 class RankedElement(factory.django.DjangoModelFactory):

@@ -75,6 +75,7 @@ class Index(RedirectView):
 
 urlpatterns = [
     re_path(r"^$", Index.as_view(), name="index"),
+    re_path(r"^(?P<year>\d+)/(?P<position>\w+)/ranking/", include("ranking.urls")),
     re_path(r"^(?P<year>\d+)/(?P<position>\w+)/", include("overview.urls")),
 
     re_path(r"^robots.txt/$", TemplateView.as_view(template_name="robots.txt"), name="robots"),
@@ -84,7 +85,6 @@ urlpatterns = [
     re_path(r"^finance/", include("campaign_finance.urls")),
     re_path(r"^admin/", admin.site.urls),
     re_path(r"^money-admin/", money_admin_site.urls),
-    re_path(r"^ranking/", include("ranking.urls")),
     # to support having users - login, logout, password management
     re_path(r"^accounts/", include("django_registration.backends.one_step.urls")),
     re_path(r"^accounts/", include("django.contrib.auth.urls")),
