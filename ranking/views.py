@@ -1,15 +1,11 @@
 import logging
 from typing import List
 from django.http.response import HttpResponseBadRequest
-from django.views.generic import DetailView, UpdateView, ListView
+from django.views.generic import UpdateView
 
-# from django.utils.decorators import method_decorator
 from django.utils import timezone
 
-# from django.views.decorators.http import last_modified
-# from django.views.decorators.vary import vary_on_headers
-from django.db.models import Q, Max
-from django.utils.text import slugify
+from django.db.models import Max
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django import forms
@@ -17,60 +13,22 @@ from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, redirect
 
 
-from .forms import NoteForm, OrderedForm, VisibilityForm, NameForm
+from .forms import NoteForm, OrderedForm, NameForm
 from .models import RankedList, RankedElement
-from overview.models import Candidate, CandidateElection, Election
+from overview.models import Candidate, Election
 
 
 class _MyBallotMixin:
     def get_object(self):
-        election = Election.objects.get(year=self.kwargs["year"], position=self.kwargs["position"])
-        return RankedList.objects.for_request(self.request, election, force=True)
-
-
-class RankedListExplore(ListView):
-    template_name = "ranking/explore_lists.html"
-    model = RankedList
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return super().get_queryset()
-        else:
-            filters = Q(public=True)
-            if self.request.user.is_authenticated:
-                filters = filters | Q(owner=self.request.user)
-            return super().get_queryset().filter(filters)
-
-
-class RankedListDetail(DetailView):
-    template_name = "ranking/detail.html"
-    model = RankedList
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return super().get_queryset()
-        else:
-            filters = Q(public=True)
-            if self.request.user.is_authenticated:
-                filters = filters | Q(owner=self.request.user)
-            return super().get_queryset().filter(filters)
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context["annotations"] = self.object.annotated_candidates.select_related("candidate")
-        return context
-
-
-class DownloadRankedList(RankedListDetail):
-    content_type = "text/plain"
-    template_name = "ranking/detail.txt"
-
-    def render_to_response(self, *args, **kwargs):
-        resp = super().render_to_response(*args, **kwargs)
-        resp["Content-Disposition"] = "attachment; filename={name}-ranking.txt".format(
-            name=slugify(self.object.name)
+        election = Election.objects.get(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"]
         )
-        return resp
+        return RankedList.objects.for_request(
+            self.request,
+            election,
+            force=True
+        )
 
 
 class CandidateListField(forms.Field):
@@ -153,7 +111,6 @@ class MyList(_MyBallotMixin, UpdateView):
         context["mine"] = True
 
         context["name_form"] = self.get_name_form()
-        context["visibility_form"] = self.get_visibility_form()
         context["ordering_form"] = self.get_ordering_form()
 
         context["annotations"] = self.object.annotated_candidates.select_related("candidate")
@@ -164,9 +121,6 @@ class MyList(_MyBallotMixin, UpdateView):
 
     def get_name_form(self):
         return NameForm(instance=self.object)
-
-    def get_visibility_form(self):
-        return VisibilityForm(instance=self.object, initial={"public": not self.object.public})
 
     def get_ordering_form(self):
         return OrderedForm(instance=self.object, initial={"ordered": not self.object.ordered})
@@ -195,17 +149,6 @@ class MyList(_MyBallotMixin, UpdateView):
             return JsonResponse(self.get_json(form.instance))
         else:
             return ret
-
-
-class MakePublic(_MyBallotMixin, UpdateView):
-    model = RankedList
-    form_class = VisibilityForm
-    success_url = reverse_lazy("my_ranking")
-
-    def get_initial(self):
-        initial = super().get_initial()
-        initial["public"] = not self.object.public
-        return initial
 
 
 class MakeOrdered(_MyBallotMixin, UpdateView):
@@ -245,10 +188,18 @@ class UpdateNote(UpdateView):
 
 
 @require_POST
-def delete_note(request, slug):
+def delete_note(request, year, position, slug):
     """Deletes note and position in ranking"""
 
-    candidate = get_object_or_404(Candidate.objects.all(), slug=slug)
+    election = get_object_or_404(Election.objects.filter(
+        year=year,
+        position=position
+    ))
+
+    candidate = get_object_or_404(election.candidate_elections.filter(
+        candidate__slug=slug
+    ))
+
     ranked_list = RankedList.objects.for_request(request, election, force=True)
     ranked_list.annotated_candidates.filter(candidate=candidate).delete()
     return HttpResponse("DELETED", status=201)

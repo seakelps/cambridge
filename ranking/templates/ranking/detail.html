@@ -9,17 +9,6 @@
 <div class="bg-light p-sm-5 py-5">
     <div class="container">
         <div class="row">
-            {% if mine and object.public %}
-            <div class="col-md-12 mb-3">
-                <div class="alert alert-warning">
-                    Your ballot is publically viewable. You can share it by linking to
-                    <a class="alert-link ellipsed" href="{% url "list_explore" object.candidate.slug %}">{% fullurl "list_explore" object.candidate.slug %}</a>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-
-        <div class="row">
             <div class="col-md-12" style="display: flex;">
                 <h1>
                     {{ object.name }}
@@ -34,7 +23,7 @@
         <div class="row">
             <div class="col-md-12 md-2">
                 {% if mine %}
-                    <form id="name_form" class="collapse mb-2" action="{% url "rename_ballot" %}" method="POST">
+                    <form id="name_form" class="collapse mb-2" action="{% url "rename_ballot" election.year election.position %}" method="POST">
                         {% crispy name_form %}
                     </form>
                 {% endif %}
@@ -45,19 +34,7 @@
             <div class="col-md-12" style="display: flex;">
 
                 {% if mine %}
-                    <form class="form-inline d-sm-block float-md-right md-2 mr-2" action="{% url "make_public" %}" method="post">
-                        {% csrf_token %}
-
-                        {{ visibility_form.public.as_hidden }}
-
-                        {% if visibility_form.public.value %}
-                            <button class="w-100 btn btn-outline-danger">Make Public</button>
-                        {% else %}
-                            <button class="w-100 btn btn-outline-info">Make Private</button>
-                        {% endif %}
-                    </form>
-
-                    <form class="form-inline d-sm-block float-md-right" action="{% url "make_ordered" %}" method="post">
+                    <form class="form-inline d-sm-block float-md-right" action="{% url "make_ordered" election.year election.position %}" method="post">
                         {% csrf_token %}
                         {{ ordering_form.ordered.as_hidden }}
 
@@ -78,7 +55,7 @@
                 <div id="ranked_list" class="list-group">
                     {# help #}
                     {% for annotation in annotations %}
-                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.candidate.slug }}" data-delete_url="{% url "delete_note" annotation.candidate.candidate.slug %}">
+                    <candidate class="list-group-item" data-slug="{{ annotation.candidate.candidate.slug }}" data-delete_url="{% url "delete_note" election.year election.position annotation.candidate.candidate.slug %}">
                         <span aria-hidden="true"></span>
                         <div>
                             {% if mine %}
@@ -99,7 +76,7 @@
                         </div>
 
                         {% if mine %}
-                        <form class="d-none update_note py-1" action="{% url "update_note" annotation.candidate.candidate.slug %}" method="POST">
+                        <form class="d-none update_note py-1" action="{% url "update_note" annotation.candidate.election.year annotation.candidate.election.position annotation.candidate.candidate.slug %}" method="POST">
                             {% crispy annotation.comment_form %}
                         </form>
                         {% endif %}

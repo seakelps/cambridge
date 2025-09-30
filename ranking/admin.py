@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Count, F
 from django.utils import timezone
 
-from .models import RankedList, RankedElement
+from .models import RankedList
 
 
 class LoggedInSince(admin.SimpleListFilter):
@@ -32,10 +32,6 @@ class UserAdmin(BaseUserAdmin):
     list_display = BaseUserAdmin.list_display + ("date_joined",)
     list_filter = BaseUserAdmin.list_filter + (LoggedInSince,)
     date_hierarchy = "date_joined"
-
-
-class CandidateInline(admin.StackedInline):
-    model = RankedElement
 
 
 class LengthFilter(admin.SimpleListFilter):
@@ -72,9 +68,9 @@ class LengthFilter(admin.SimpleListFilter):
 
 class RankedListAdmin(admin.ModelAdmin):
     raw_id_fields = ["owner"]
-    list_filter = ["public", LengthFilter]
+    list_filter = [LengthFilter]
     date_hierarchy = "last_modified"
-    list_display = ["name", "owner", "last_modified", "public", "ordered"]
+    list_display = ["name", "owner", "last_modified", "ordered"]
 
 
 admin.site.register(RankedList, RankedListAdmin)

@@ -15,14 +15,6 @@ class NameForm(forms.ModelForm):
         Button("cancel", "Cancel", data_toggle="collapse", data_target="#name_form"),
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if self.instance.public:
-            self.fields["name"].help_text = (
-                "Changing the name of your ballot will also change the share link to your ballot"
-            )
-
     def save(self):
         obj = super().save(commit=False)
         obj.slug = slugify(obj.name)
@@ -62,10 +54,4 @@ class NoteForm(forms.ModelForm):
 class OrderedForm(forms.ModelForm):
     class Meta:
         fields = ["ordered"]
-        model = RankedList
-
-
-class VisibilityForm(forms.ModelForm):
-    class Meta:
-        fields = ["public"]
         model = RankedList
