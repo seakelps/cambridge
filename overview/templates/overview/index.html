@@ -111,7 +111,7 @@
                     <p>{% blocktrans %}Tools to see the whole field.{% endblocktrans %}</p>
                     <p>
                         <a class="btn btn-info" href="{% url 'full_history' %}" role="button">{% blocktrans %}Votes{% endblocktrans %} &raquo;</a>
-                        <a class="btn btn-info" href="{% url 'finance_comparison' %}" role="button">{% blocktrans %}Finance{% endblocktrans %} &raquo;</a>
+                        <a class="btn btn-info" href="{% url 'housing_comparison' election.year election.position %}" role="button">{% blocktrans %}Houseing{% endblocktrans %} &raquo;</a>
                     </p>
                 </div>
             </div>

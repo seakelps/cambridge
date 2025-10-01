@@ -59,7 +59,7 @@
                                 {% with candidate=candidate_election.candidate %}
                                 <tr>
                                     <td>
-                                        <a href="{% url "candidate_detail" election.year election.position candidate_election.slug %}">{{ candidate_election.fullname }}</a>
+                                        <a href="{% url "candidate_detail" election.year election.position candidate.slug %}">{{ candidate.fullname }}</a>
                                     </td>
 
                                     {% for specific_proposal in specific_proposals %}
@@ -118,7 +118,7 @@
                                 {% with candidate=candidate_election.candidate %}
                                 <tr>
                                     <td>
-                                        <a href="{% url "candidate_detail" election.year election.position candidate_election.slug %}">{{ candidate.fullname }}</a>
+                                        <a href="{% url "candidate_detail" election.year election.position candidate.slug %}">{{ candidate.fullname }}</a>
                                     </td>
                                     <td>
                                         {% if candidate_election.housing_status == 'rent' %}
