@@ -166,6 +166,7 @@ class CandidateAdmin(admin.ModelAdmin):
                 "pronoun",
                 "date_of_birth",
                 "place_of_birth",
+                "wikipedia_page",
             ]
         }),
     ]
@@ -274,6 +275,7 @@ class CandidateElectionAdmin(admin.ModelAdmin):
                     "van_phone",
                     "campaign_manager",
                     "website",
+                    "city_website",
                     "facebook",
                     "twitter",
                     "bluesky",

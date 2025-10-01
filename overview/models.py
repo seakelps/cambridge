@@ -45,6 +45,11 @@ class Candidate(models.Model):
 
     timestamp_modified = models.DateTimeField(auto_now=True)
 
+    @property
+    def wikipedia_url(self):
+        if self.wikipedia_page:
+            return "https://en.wikipedia.org/wiki/{}".format(self.wikipedia_page)
+
 
 class Election(models.Model):
     """
@@ -98,6 +103,8 @@ class CandidateElection(models.Model):
     email = models.EmailField(blank=True, default="")
     campaign_manager = models.CharField(max_length=200, blank=True, default="")
     website = models.URLField(help_text="Main candidate website", blank=True, default="")
+    city_website = models.URLField(help_text="Official city blurb site", blank=True, default="")
+
     facebook = models.CharField(
         max_length=100,
         help_text="Candidate facebook page, not including facebook url",
@@ -426,6 +433,22 @@ class InterviewVideo(models.Model):
     sort_order = models.FloatField(blank=True)
     link = models.URLField(max_length=500, blank=True)
     visible = models.BooleanField(default=True)
+
+    title = models.TextField(
+        max_length=200,
+        blank=True,
+        default="",
+        help_text="title in the video system"
+    )
+    blurb = models.TextField(
+        max_length=200,
+        blank=True,
+        default="",
+        help_text="additional information (ex., if there's one video but this is a specific question in it)",
+    )
+
+    start_time = models.IntegerField(blank=True, null=True, help_text="start for youtube")
+    end_time = models.IntegerField(blank=True, null=True, help_text="end for youtube")
 
     objects = models.Manager()
     active = VisibleManager()

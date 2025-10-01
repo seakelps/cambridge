@@ -20,6 +20,15 @@
 {% block content %}
 <div>
     <section class="container">
+
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-12">
+        <p>
+        <b>To be updated for 2025!</b>
+        </p>
+        </div>
+    </div>
+
         <div class="row">
             <div class="col-12">
                 <h2>Campaign Finance</h2>
@@ -110,7 +119,7 @@
                             {% for candidate in candidates %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" candidate.slug %}">{{ candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
                                 </td>
 
                                 <td>

@@ -11,7 +11,7 @@ from campaign_finance.models import (
 
 from django.views.generic import TemplateView
 
-from overview.models import Candidate
+from overview.models import Candidate, CandidateElection
 
 
 class FinanceComparison(TemplateView):
@@ -22,7 +22,7 @@ class FinanceComparison(TemplateView):
         year = 2023
 
         candidates = (
-            Candidate.objects.exclude(hide=True).exclude(is_running=False).order_by("fullname")
+            CandidateElection.objects.exclude(hide=True).exclude(is_running=False).order_by("candidate__fullname")
         )
 
         candidates_raised = {}
