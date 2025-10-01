@@ -215,7 +215,7 @@ class CandidateHousingList(ListView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        candidates = (
+        candidate_elections = (
             CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election=election).order_by("candidate__fullname")
         )
         specific_proposals = (
@@ -237,9 +237,9 @@ class CandidateHousingList(ListView):
         cp_map_yes_no = {}
         cp_map_blurb = {}
 
-        for candidate in candidates:
-            cp_map_yes_no[candidate.candidate.id] = {}
-            cp_map_blurb[candidate.candidate.id] = {}
+        for candidate_election in candidate_elections:
+            cp_map_yes_no[candidate_election.candidate.id] = {}
+            cp_map_blurb[candidate_election.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
             if candidate_proposal.candidate.id not in cp_map_yes_no:
@@ -252,7 +252,7 @@ class CandidateHousingList(ListView):
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.blurb
 
-        context["candidates"] = candidates
+        context["candidate_elections"] = candidate_elections
         context["specific_proposals"] = specific_proposals
         context["cp_map_yes_no"] = cp_map_yes_no
         context["cp_map_blurb"] = cp_map_blurb
@@ -273,7 +273,7 @@ class CandidateBikingList(ListView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        candidates = (
+        candidate_elections = (
             CandidateElection.objects.exclude(is_running=False).filter(election=election).order_by("candidate__fullname")
         )
         specific_proposals = (
@@ -294,9 +294,9 @@ class CandidateBikingList(ListView):
         cp_map_yes_no = {}
         cp_map_blurb = {}
 
-        for candidate in candidates:
-            cp_map_yes_no[candidate.candidate.id] = {}
-            cp_map_blurb[candidate.candidate.id] = {}
+        for candidate_election in candidate_elections:
+            cp_map_yes_no[candidate_election.candidate.id] = {}
+            cp_map_blurb[candidate_election.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
             if candidate_proposal.candidate.id not in cp_map_yes_no:
@@ -311,13 +311,13 @@ class CandidateBikingList(ListView):
 
         bike_group_yes_no = {}
         mass_ave_group_yes_no = {}
-        for candidate in candidates:
-            bike_group_yes_no[candidate.id] = candidate.endorsed_by_group(
+        for candidate_election in candidate_elections:
+            bike_group_yes_no[candidate_election.candidate.id] = candidate_election.endorsed_by_group(
                 "Cambridge Bicycle Safety"
             )
-            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group("Save Mass Ave")
+            mass_ave_group_yes_no[candidate_election.candidate.id] = candidate_election.endorsed_by_group("Save Mass Ave")
 
-        context["candidates"] = candidates
+        context["candidate_elections"] = candidate_elections
         context["specific_proposals"] = specific_proposals
         context["cp_map_yes_no"] = cp_map_yes_no
         context["cp_map_blurb"] = cp_map_blurb

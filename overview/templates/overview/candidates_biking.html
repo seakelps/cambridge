@@ -40,19 +40,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate_election in candidate_elections %}
+			    {% with candidate=candidate_election.candidate %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" election.year election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" election.year election.position candidate.slug %}">{{ candidate.fullname }}</a>
                                 </td>
                                 <td>
-                                    {% if candidate.candidate.is_cyclist %}
+                                    {% if candidate_election.is_cyclist %}
                                         <i class="fa fa-check text-success"></i>
                                     {% endif %}
                                 </td>
 
                                 <td>
-                                    {% if candidate.candidate.signed_bike_pledge %}
+                                    {% if candidate_election.signed_bike_pledge %}
                                         <i class="fa fa-check text-success"></i>
                                     {% else %}
                                         <i class="fa fa-ban text-danger"></i>
@@ -68,6 +69,7 @@
                                 </td>
 
                             </tr>
+			    {% endwith %}
                             {% endfor %}
                         </tbody>
                     </table>
@@ -111,10 +113,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate_election in candidate_elections %}
+			    {% with candidate=candidate_election.candidate %}
                             <tr>
                                 <td>
-                                    <a href="{% url "candidate_detail" election.year election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
+                                    <a href="{% url "candidate_detail" election.year election.position candidate.slug %}">{{ candidate.fullname }}</a>
                                 </td>
 
                                 {% for specific_proposal in specific_proposals %}
@@ -140,6 +143,7 @@
                                 {% endfor %}
 
                             </tr>
+			    {% endwith %}
                             {% endfor %}
                         </tbody>
                     </table>
