@@ -311,20 +311,18 @@ class CandidateBikingList(ListView):
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.blurb
 
-        bike_group_yes_no = {}
+        bike_group_endorsed = {}
         mass_ave_group_yes_no = {}
         for candidate_election in candidate_elections:
-            bike_group_yes_no[candidate_election.candidate.id] = candidate_election.endorsed_by_group(
+            bike_group_endorsed[candidate_election.candidate.id] = candidate_election.group_endorsement(
                 "Cambridge Bicycle Safety"
             )
-            mass_ave_group_yes_no[candidate_election.candidate.id] = candidate_election.endorsed_by_group("Save Mass Ave")
 
         context["candidate_elections"] = candidate_elections
         context["specific_proposals"] = specific_proposals
         context["cp_map_yes_no"] = cp_map_yes_no
         context["cp_map_blurb"] = cp_map_blurb
-        context["candidate_bike_group_map"] = bike_group_yes_no
-        context["candidate_mass_group_map"] = mass_ave_group_yes_no
+        context["candidate_bike_group_map"] = bike_group_endorsed
 
         return context
 

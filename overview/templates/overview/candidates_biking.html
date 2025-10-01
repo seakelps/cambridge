@@ -27,7 +27,10 @@
             <div class="col-12">
                 <h4>Biking Pledge &amp Experience</h4>
                 <p>
-                    CBS, or <a href="https://www.cambridgebikesafety.org">Cambridge Bicycle Safety</a>, is a Cambridge group that "[promotes] safety for cyclists of all ages and abilities" that asks candidates to sign a pledge to implement a city bike lane plan by a certain date. <a href="https://savemassave.com">Save Mass Ave</a> is "a group of Cambridge Residents and Small Business Owners" that formed in May 2020 to delay and reasess cycling-caused changes to Mass Ave near Porter Square and North Cambridge. <a href="https://cambridgeforall.org">Cambridge Streets for All</a> is the group that has sued to halt and remove bike lanes; they have not endorsed candidates (one of their board members and another named Plaintiff are running for Council themselves).
+                    CBS, or <a href="https://www.cambridgebikesafety.org">Cambridge Bicycle Safety</a>, is a Cambridge group that "[promotes] safety for cyclists of all ages and abilities". They used to ask candidates to sign a pledge to implement a city bike lane plan by a certain date; this year, they've sent out a questionnaire that includes that commitment, as well as issued multi-layer endorsements.
+                </p>
+                <p>
+                    Previous cycles also had endorsements from "the other side" - groups opposed to completing the Cycling Safety Ordinance on time or entirely. Save Mass Ave, "a group of Cambridge Residents and Small Business Owners", formed in May 2020 to delay and reasess cycling-caused changes to Mass Ave near Porter Square and North Cambridge. Their website is now defunct. <a href="https://cambridgeforall.org">Cambridge Streets for All</a> is the group that has sued to halt and remove bike lanes; they have not endorsed candidates, but members of the group have run for council.
                 </p>
                 <div class="table-responsive">
                     <table class="table table-striped comparison-table">
@@ -35,8 +38,8 @@
                             <tr>
                                 <th>Candidate</th>
                                 <th>Bikes?</th>
-                                <th>Signed Pledge</th>
                                 <th>CBS Endorsed</th>
+                                <th>Sued to stop bike lanes?</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,15 +56,21 @@
                                 </td>
 
                                 <td>
-                                    {% if candidate_election.signed_bike_pledge %}
-                                        <i class="fa fa-check text-success"></i>
-                                    {% else %}
-                                        <i class="fa fa-ban text-danger"></i>
-                                    {% endif %}
+                                    {% with candidate_bike_group_map|get_item:candidate.id as endorsement %}
+                                        {% if endorsement %}
+                                            {% if endorsement.note == "champion" %}
+                                                <i class="fa fa-crown text-warning" title="{{ endorsement.note }}"></i>
+                                            {% elif endorsement.note == "supporter" %}
+                                                <i class="fa fa-check text-success" title="{{ endorsement.note }}"></i>
+                                            {% endif %}
+                                        {% else %}
+                                            <i class="fa fa-ban text-danger"></i>
+                                        {% endif %}
+                                    {% endwith %}
                                 </td>
 
                                 <td>
-                                    {% if candidate_bike_group_map|get_item:candidate.id %}
+                                    {% if candidate.fullname == "John Hanratty" %}
                                         <i class="fa fa-check text-success"></i>
                                     {% else %}
                                         <i class="fa fa-ban text-danger"></i>
@@ -121,7 +130,7 @@
                                 </td>
 
                                 {% for specific_proposal in specific_proposals %}
-                                <td>
+                                <td style="min-width: 4em;">
                                         {% if cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == True %}
                                             <i class="fa fa-check text-success"></i>
                                         {% elif cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == False %}

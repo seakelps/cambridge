@@ -306,6 +306,9 @@ class CandidateElection(models.Model):
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()
 
+    def group_endorsement(self, org_name):
+        return self.endorsements.filter(organization__name=org_name).last()
+
 
 class Organization(models.Model):
     name = models.CharField(max_length=100, unique=True)
