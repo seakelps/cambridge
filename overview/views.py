@@ -228,9 +228,10 @@ class CandidateHousingList(ListView):
             CandidateSpecificProposalStance.objects.select_related("specific_proposal")
             .select_related("candidate")
             .filter(specific_proposal__display=True)
-            # todo: review filtering
-            #.filter(candidate__hide=False)
-            #.filter(candidate__is_running=True)
+            # is_running and _hide are on elections, not candidates...
+            # want to eventually filter this down on candidates
+            # .exclude(candidate__is_running=False)
+            # .exclude(candidate__hide=True)
         )
 
         cp_map_yes_no = {}
@@ -241,6 +242,9 @@ class CandidateHousingList(ListView):
             cp_map_blurb[candidate.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
+            if candidate_proposal.candidate.id not in cp_map_yes_no:
+                continue
+
             cp_map_yes_no[candidate_proposal.candidate.id][
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.simple_yes_no
@@ -295,6 +299,9 @@ class CandidateBikingList(ListView):
             cp_map_blurb[candidate.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
+            if candidate_proposal.candidate.id not in cp_map_yes_no:
+                continue
+
             cp_map_yes_no[candidate_proposal.candidate.id][
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.simple_yes_no
