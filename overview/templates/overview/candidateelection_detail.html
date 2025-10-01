@@ -430,7 +430,8 @@ p:last-of-type {
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}
+			{% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -516,7 +517,8 @@ p:last-of-type {
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}
+			{% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -680,7 +682,8 @@ p:last-of-type {
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}
+			{% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}

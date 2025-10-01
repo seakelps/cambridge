@@ -34,6 +34,15 @@ def md(string):
     return mark_safe(markdown(string))
 
 
+@register.filter(name="markdown_inline")
+@stringfilter
+def md_inline(string):
+    string = markdown(string)
+    if string.startswith("<p>"):
+        string = string[3:-4]
+    return mark_safe(string)
+
+
 @register.filter
 @stringfilter
 def yt_direct(video_url):
