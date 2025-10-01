@@ -37,8 +37,21 @@ p:last-of-type {
     /* make citation appear immediately below */
     margin-bottom: 0px;
 }
-</style>
 
+#theCarousel {
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+#theCarousel .video {
+    display: inline-block;
+}
+
+.questionnaire_link {
+    display: block;
+    margin-top: 0.75em;
+}
+</style>
 
 <script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}&q=Cambridge"></script>
 {% endblock %}
@@ -651,6 +664,48 @@ p:last-of-type {
                 </section>
             </div>
             {% endfor %}
+
+            {% if interview_videos %}
+                <div class="col-md-12">
+                    <div id="theCarousel" data-interval="false">
+                    {% for video in interview_videos %}
+                            {% if "youtube.com" in video.link %}
+                                <div>
+                                <iframe
+                                    width="705"
+                                    height="397"
+                                    src={{video.link}}?start={{video.start_time}}&end={{video.end_time}}
+                                    title={{video.title}}
+                                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                                </iframe>
+                                <p>
+                                    {{ video.blurb }}
+                                    {% if video.start_time %}
+                                    from {{ video.start_time }}
+                                    {% endif %}
+                                    {% if video.end_time %}
+                                    from {{ video.end_time }}
+                                    {% endif %}
+                                </p>
+
+                                </div>
+                            {% else %}
+                                <div class="video">
+                                <p>
+                                    Video Interview at {{ video.link }}
+                                </p>
+                                <a href="#1">
+                                <object data="{{ video.link }}" style="width:100%" height="225"></object>
+                                </a>
+                                </div>
+                            {% endif %}
+
+                    {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+
         </div>
     </section>
 </div>

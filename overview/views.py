@@ -108,6 +108,8 @@ class CandidateDetail(DetailView):
             display=True, questionnaire__display=True
         ).select_related("questionnaire")
 
+        context["interview_videos"] = self.object.interviewvideo_set.filter(visible=True).order_by("sort_order")
+
         context["articles"] = (
             self.object.candidate.pressarticlecandidate_set.filter(display=True)
             .select_related("pressarticle__pressoutlet")

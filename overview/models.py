@@ -434,6 +434,22 @@ class InterviewVideo(models.Model):
     link = models.URLField(max_length=500, blank=True)
     visible = models.BooleanField(default=True)
 
+    title = models.TextField(
+        max_length=200,
+        blank=True,
+        default="",
+        help_text="title in the video system"
+    )
+    blurb = models.TextField(
+        max_length=200,
+        blank=True,
+        default="",
+        help_text="additional information (ex., if there's one video but this is a specific question in it)",
+    )
+
+    start_time = models.IntegerField(blank=True, null=True, help_text="start for youtube")
+    end_time = models.IntegerField(blank=True, null=True, help_text="end for youtube")
+
     objects = models.Manager()
     active = VisibleManager()
 
