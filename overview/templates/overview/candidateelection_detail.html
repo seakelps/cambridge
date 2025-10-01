@@ -652,14 +652,18 @@ p:last-of-type {
                 </section>
             </div>
             {% endfor %}
+        </div>
+        <div class="row">
 
             {% if interview_videos %}
-                <div class="col-md-12">
-                    <div class="d-flex overflow-auto">
+                <div id="videoCarousel" class="carousel slide" data-ride="false">
+                    <div class="carousel-inner">
                     {% for video in interview_videos %}
+                        <div class="d-block w-100 carousel-item {% if forloop.first %}active{% endif %} ">
                         {% if "youtube.com" in video.link %}
-                            <div class="flex-shrink-0 me-3" style="width: 80vw; max-width: 500px;">
+                            <div class="ratio ratio-16x9">
                             <iframe
+                                class="embed-responsive-item"
                                 src={{video.link}}?start={{video.start_time}}&end={{video.end_time}}
                                 title={{video.title}}
                                 frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
@@ -685,12 +689,27 @@ p:last-of-type {
                             </a>
                             </div>
                         {% endif %}
+                        </div>
 
                     {% endfor %}
                     </div>
-                </div>
-            {% endif %}
 
+                  <a class="carousel-control-prev" href="#videoCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"
+                        style="color:#555;font-size:24px;text-decoration:none;border-radius:50%;background:transparent;border:1px solid #e6e6e6;">
+                    ></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#videoCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"
+                        style="color:#555;font-size:24px;text-decoration:none;border-radius:50%;background:transparent;border:1px solid #e6e6e6;"
+                    ></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+
+                </div>
+
+            {% endif %}
 
         </div>
     </section>
