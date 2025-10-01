@@ -6,10 +6,12 @@
  */
 
 
-function initMap() {
+async function initMap() {
     /* google maps callback. waiting for document.ready so we don't ever load
      * it before the id=map exists */
-    $(function() {
+    $(async function() {
+        const { Map } = await google.maps.importLibrary("maps");
+
         var mapDiv = document.getElementById('map');
 
         center = {lat: 42.3767926, lng: -71.1064153};
@@ -21,13 +23,14 @@ function initMap() {
             }
         }
 
-        map = new google.maps.Map(mapDiv, {
+        map = new Map(mapDiv, {
             center,
             navigationControl: false,
             mapTypeControl: false,
             scaleControl: false,
             scrollwheel: false,
-            zoom: 13
+            zoom: 13,
+	    mapId: "CAMB"
         });
 
         for (let location of initialLocations) {
@@ -50,29 +53,35 @@ var Location = function(data) {
 };
 
 
-function addMarker(map, feature) {
-    var marker = new google.maps.Marker({
+async function addMarker(map, feature) {
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
+
+
+    const pinGlyph = new PinElement({
+	scale: 0.75,
+        glyphColor: feature.color,
+    })
+
+    var marker = new AdvancedMarkerElement({
         id : feature.id,
         position: new google.maps.LatLng(feature.lat, feature.lng),
         map: map,
-        icon: {
-          // https://developers.google.com/chart/image/docs/gallery/dynamic_icons?csw=1#pins
-          // chld=size|rotation|color|fontsize|fontweight|text
-          url: `https://chart.googleapis.com/chart?chst=d_map_spin&chld=0.75|0|${feature.color}|11|_|${feature.label}`
-        },
         title: feature.name,
-        zIndex: feature.main ? 2 : 1  // put primary focus on top of other candidate pins
+        zIndex: feature.main ? 2 : 1,  // put primary focus on top of other candidate pins
+        content: pinGlyph.element,
+        gmpClickable: true,
     });
 
-    var infowindow = new google.maps.InfoWindow({
+    var infoWindow = new google.maps.InfoWindow({
         content: `<a href="${feature.link}">${feature.name}</a>`
     });
 
-    google.maps.event.addListener(marker, 'click', function() {
-        if (infowindow.getAnchor()) {
-            infowindow.close(map, marker);
+    marker.addListener('click', ({ domEvent, latLng }) => {
+	const { target } = domEvent;
+        if (infoWindow.getAnchor()) {
+            infoWindow.close(map, marker);
         } else {
-            infowindow.open(map, marker);
+            infoWindow.open(map, marker);
         }
     });
 

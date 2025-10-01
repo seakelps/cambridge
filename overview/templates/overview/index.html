@@ -85,7 +85,7 @@
                 <div class="col-md-8 text-center">
                     <h4>{% blocktrans %}Compare{% endblocktrans %}</h4>
                     <p>
-                        We let you rank the candidates, just like you'll do in the voting booth. You can even share your choices - if you want to.
+                        We let you rank the candidates, just like you do in the voting booth.
                     </p>
                     <p>
                         <a class="btn btn-info" href="{% url 'my_ranking' election.year election.position %}" role="button">See my candidates &raquo;</a>
@@ -97,7 +97,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 text-center">
                     <h4>{% blocktrans %}Vote{% endblocktrans %}</h4>
-                    <p>{% blocktrans %}Cambridge has a ranked choice system, which might be different than what you're used to. We've made an illustration of how it works as well as collected other explanations.{% endblocktrans %}</p>
+                    <p>{% blocktrans %}Cambridge has a ranked choice system, which might be different than what you're used to.{% endblocktrans %}</p>
                     <p>
                         <a class="btn btn-info" href="{% url 'how_to_vote' %}" role="button">{% blocktrans %}Learn More{% endblocktrans %} &raquo;</a>
                         <a class="btn btn-info" target="_blank" rel="noopener" href="https://www.sec.state.ma.us/ovr/" role="button">{% blocktrans %}Register to vote{% endblocktrans %} &raquo;</a>
@@ -111,7 +111,7 @@
                     <p>{% blocktrans %}Tools to see the whole field.{% endblocktrans %}</p>
                     <p>
                         <a class="btn btn-info" href="{% url 'full_history' %}" role="button">{% blocktrans %}Votes{% endblocktrans %} &raquo;</a>
-                        <a class="btn btn-info" href="{% url 'finance_comparison' %}" role="button">{% blocktrans %}Finance{% endblocktrans %} &raquo;</a>
+                        <a class="btn btn-info" href="{% url 'housing_comparison' election.year election.position %}" role="button">{% blocktrans %}Houseing{% endblocktrans %} &raquo;</a>
                     </p>
                 </div>
             </div>
