@@ -51,7 +51,7 @@ def index(request, year, position):
             "title": "Vote Local!",
             "description": description,
             "num_runners": num_runners,
-            "candidate_locations": json.dumps(list(get_candidate_locations().values())),
+            "candidate_locations": json.dumps(list(get_candidate_locations(election).values())),
             "schema_org": schema_org,
         },
     )
@@ -86,10 +86,14 @@ class CandidateDetail(DetailView):
         if queryset is None:
             queryset = self.get_queryset()
 
+        self.election = Election.objects.get(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"],
+        )
+
         return queryset.get(
+            election=self.election,
             candidate__slug=self.kwargs["slug"],
-            election__year=self.kwargs["year"],
-            election__position=self.kwargs["position"]
         )
 
     def get_context_data(self, *args, **kwargs):
@@ -99,10 +103,11 @@ class CandidateDetail(DetailView):
             markdown(self.object.blurb), features="html.parser"
         ).get_text()
 
-        candidate_locations = get_candidate_locations(default_color="EEE")
+        candidate_locations = get_candidate_locations(self.election)
         # </script> will make us sad still
         if self.object.id in candidate_locations:
-            candidate_locations[self.object.id].update({"color": "F00", "main": True})
+            candidate_locations[self.object.id].update({"color": "#EEE", "main": True})
+
         context["candidate_locations"] = json.dumps(list(candidate_locations.values()))
         context["questionnaire_responses"] = self.object.responses.filter(
             display=True, questionnaire__display=True
