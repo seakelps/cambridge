@@ -466,7 +466,8 @@ p:last-of-type {
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}
+			{% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -552,7 +553,8 @@ p:last-of-type {
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}
+			{% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -748,6 +750,7 @@ p:last-of-type {
     </section>
 </div>
 
+{% comment %}
 <div>
     <section class="container" id="quotes">
         <div class="row">
@@ -758,7 +761,8 @@ p:last-of-type {
                 <blockquote class="blockquote">
                     {{ quote.quote|markdown }}
                     <footer class="blockquote-footer">
-                        {{ quote.by|default:object.candidate.fullname }}{% if quote.cite %}, <cite>{{ quote.cite }}</cite>{% endif %}
+                        {{ quote.by|default:object.candidate.fullname }}
+			{% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
                     </footer>
                 </blockquote>
                 {% endif %}
@@ -767,8 +771,9 @@ p:last-of-type {
         </div>
     </section>
 </div>
+{% endcomment %}
 
-<div class="bg-gray">
+<div>
     <section class="container" id="press">
         <div class="row">
             <div class="col-12">
@@ -838,7 +843,7 @@ p:last-of-type {
     </section>
 </div>
 
-<div>
+<div class="bg-gray">
     <section class="container">
         <div class="row">
             <div class="col">

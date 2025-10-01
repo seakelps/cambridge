@@ -55,11 +55,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate_election in candidates %}
+                            {% for candidate_election in candidate_elections %}
                                 {% with candidate=candidate_election.candidate %}
                                 <tr>
                                     <td>
-                                        <a href="{% url "candidate_detail" election.year election.position candidate_election.slug %}">{{ candidate_election.fullname }}</a>
+                                        <a href="{% url "candidate_detail" election.year election.position candidate.slug %}">{{ candidate.fullname }}</a>
                                     </td>
 
                                     {% for specific_proposal in specific_proposals %}
@@ -114,16 +114,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate_election in candidates %}
+                            {% for candidate_election in candidate_elections %}
                                 {% with candidate=candidate_election.candidate %}
                                 <tr>
                                     <td>
-                                        <a href="{% url "candidate_detail" election.year election.position candidate_election.slug %}">{{ candidate.fullname }}</a>
+                                        <a href="{% url "candidate_detail" election.year election.position candidate.slug %}">{{ candidate.fullname }}</a>
                                     </td>
                                     <td>
                                         {% if candidate_election.housing_status == 'rent' %}
                                             <i class="fa fa-check text-success"></i>
                                         {% endif %}
+
                                         {% if candidate_election.housing_status_note %}
                                             <a tabindex="0" class="fa fa-info-circle"
                                                 href="#!"
@@ -143,6 +144,8 @@
                                     <td>
                                         {% if candidate_election.housing_is_a_landlord %}
                                             <i class="fa fa-check text-success"></i>
+                                        {% elif candidate_election.housing_is_a_landlord == False %}
+                                            <i class="fa fa-ban text-danger"></i>
                                         {% endif %}
                                     </td>
                                 </tr>

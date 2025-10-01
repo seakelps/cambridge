@@ -10,7 +10,7 @@ dependencies = [
     "bs4",
     "gunicorn",
     "psycopg2-binary==2.9.10",
-    "whitenoise",
+    "whitenoise[brotli]",
     "requests",
     "Pillow",
     "django-fullurl",

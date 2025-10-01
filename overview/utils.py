@@ -2,10 +2,11 @@ from django.urls import reverse
 from .models import Candidate, Election, CandidateElection
 
 
-def get_candidate_locations(
-    candidates=CandidateElection.objects.filter(hide=False, is_running=True), default_color="F00"
-):
-    has_address = candidates.exclude(latitude=None).exclude(longitude=None)
+def get_candidate_locations(election, default_color="#F00"):
+    candidates = election.candidate_elections.filter(
+        hide=False,
+        is_running=True
+    ).select_related("candidate")
 
     return {
         cand.id: {
@@ -14,7 +15,7 @@ def get_candidate_locations(
             "lat": cand.latitude,
             "lng": cand.longitude,
             "color": default_color,
-            "link": reverse("candidate_detail", args=[cand.election.year, cand.election.position, cand.candidate.slug]),
+            "link": reverse("candidate_detail", args=[election.year, election.position, cand.candidate.slug]),
         }
-        for cand in has_address
+        for cand in candidates
     }

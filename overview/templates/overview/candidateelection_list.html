@@ -36,13 +36,15 @@
                             <div class="card-body candidate-card-body">
                                 <div class="avatar-and-icon">
                                     <div style="position: relative">
-                                        <div class="avatar">
+					{% spaceless %}
+                                        <a class="avatar d-block" href="{{ candidate_election.get_absolute_url }}">
                                             <img
                                                 class="rounded-circle avatar-cirlce img-fluid"
                                                 height="500" width="500"  {# all 1:1 #}
                                                 src="{{ candidate_election.headshot.url }}"
                                                 alt="{{ candidate_election.headshot_description }}">
-                                        </div>
+					</a>
+					{% endspaceless %}
                                     </div>
                                 </div>
                                 <div class="name-and-blurb">

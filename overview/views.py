@@ -51,7 +51,7 @@ def index(request, year, position):
             "title": "Vote Local!",
             "description": description,
             "num_runners": num_runners,
-            "candidate_locations": json.dumps(list(get_candidate_locations().values())),
+            "candidate_locations": json.dumps(list(get_candidate_locations(election).values())),
             "schema_org": schema_org,
         },
     )
@@ -86,10 +86,14 @@ class CandidateDetail(DetailView):
         if queryset is None:
             queryset = self.get_queryset()
 
+        self.election = Election.objects.get(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"],
+        )
+
         return queryset.get(
+            election=self.election,
             candidate__slug=self.kwargs["slug"],
-            election__year=self.kwargs["year"],
-            election__position=self.kwargs["position"]
         )
 
     def get_context_data(self, *args, **kwargs):
@@ -99,10 +103,11 @@ class CandidateDetail(DetailView):
             markdown(self.object.blurb), features="html.parser"
         ).get_text()
 
-        candidate_locations = get_candidate_locations(default_color="EEE")
+        candidate_locations = get_candidate_locations(self.election)
         # </script> will make us sad still
         if self.object.id in candidate_locations:
-            candidate_locations[self.object.id].update({"color": "F00", "main": True})
+            candidate_locations[self.object.id].update({"color": "#EEE", "main": True})
+
         context["candidate_locations"] = json.dumps(list(candidate_locations.values()))
         context["questionnaire_responses"] = self.object.responses.filter(
             display=True, questionnaire__display=True
@@ -212,7 +217,7 @@ class CandidateHousingList(ListView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        candidates = (
+        candidate_elections = (
             CandidateElection.objects.exclude(is_running=False).exclude(hide=True).filter(election=election).order_by("candidate__fullname")
         )
         specific_proposals = (
@@ -225,19 +230,23 @@ class CandidateHousingList(ListView):
             CandidateSpecificProposalStance.objects.select_related("specific_proposal")
             .select_related("candidate")
             .filter(specific_proposal__display=True)
-            # todo: review filtering
-            #.filter(candidate__hide=False)
-            #.filter(candidate__is_running=True)
+            # is_running and _hide are on elections, not candidates...
+            # want to eventually filter this down on candidates
+            # .exclude(candidate__is_running=False)
+            # .exclude(candidate__hide=True)
         )
 
         cp_map_yes_no = {}
         cp_map_blurb = {}
 
-        for candidate in candidates:
-            cp_map_yes_no[candidate.candidate.id] = {}
-            cp_map_blurb[candidate.candidate.id] = {}
+        for candidate_election in candidate_elections:
+            cp_map_yes_no[candidate_election.candidate.id] = {}
+            cp_map_blurb[candidate_election.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
+            if candidate_proposal.candidate.id not in cp_map_yes_no:
+                continue
+
             cp_map_yes_no[candidate_proposal.candidate.id][
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.simple_yes_no
@@ -245,7 +254,7 @@ class CandidateHousingList(ListView):
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.blurb
 
-        context["candidates"] = candidates
+        context["candidate_elections"] = candidate_elections
         context["specific_proposals"] = specific_proposals
         context["cp_map_yes_no"] = cp_map_yes_no
         context["cp_map_blurb"] = cp_map_blurb
@@ -266,7 +275,7 @@ class CandidateBikingList(ListView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        candidates = (
+        candidate_elections = (
             CandidateElection.objects.exclude(is_running=False).filter(election=election).order_by("candidate__fullname")
         )
         specific_proposals = (
@@ -287,11 +296,14 @@ class CandidateBikingList(ListView):
         cp_map_yes_no = {}
         cp_map_blurb = {}
 
-        for candidate in candidates:
-            cp_map_yes_no[candidate.candidate.id] = {}
-            cp_map_blurb[candidate.candidate.id] = {}
+        for candidate_election in candidate_elections:
+            cp_map_yes_no[candidate_election.candidate.id] = {}
+            cp_map_blurb[candidate_election.candidate.id] = {}
 
         for candidate_proposal in candidate_specific_proposals:
+            if candidate_proposal.candidate.id not in cp_map_yes_no:
+                continue
+
             cp_map_yes_no[candidate_proposal.candidate.id][
                 candidate_proposal.specific_proposal.id
             ] = candidate_proposal.simple_yes_no
@@ -301,13 +313,13 @@ class CandidateBikingList(ListView):
 
         bike_group_yes_no = {}
         mass_ave_group_yes_no = {}
-        for candidate in candidates:
-            bike_group_yes_no[candidate.id] = candidate.endorsed_by_group(
+        for candidate_election in candidate_elections:
+            bike_group_yes_no[candidate_election.candidate.id] = candidate_election.endorsed_by_group(
                 "Cambridge Bicycle Safety"
             )
-            mass_ave_group_yes_no[candidate.id] = candidate.endorsed_by_group("Save Mass Ave")
+            mass_ave_group_yes_no[candidate_election.candidate.id] = candidate_election.endorsed_by_group("Save Mass Ave")
 
-        context["candidates"] = candidates
+        context["candidate_elections"] = candidate_elections
         context["specific_proposals"] = specific_proposals
         context["cp_map_yes_no"] = cp_map_yes_no
         context["cp_map_blurb"] = cp_map_blurb

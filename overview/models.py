@@ -301,7 +301,7 @@ class CandidateElection(models.Model):
         if not questionnaire:
             return False
 
-        return questionnaire.responses.filter(candidate=self).exists()
+        return questionnaire.responses.filter(candidate_election=self).exists()
 
     def endorsed_by_group(self, org_name):
         return self.endorsements.filter(organization__name=org_name).exists()
