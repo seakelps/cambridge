@@ -121,15 +121,6 @@ p:last-of-type {
                 </li>
                 {% endif %}
 
-                {% if object.candidate.wikipedia_page %}
-                <li class="list-inline-item">
-                    <a class="btn btn-wikipedia fa-button" rel="noopener" target="_blank" href="{{ object.candidate.wikipedia_url }}" aria-label="{{ object.candidate.shortname }}&rsquo;s Wikipedia">
-                        <i class="fa-brands fa-wikipedia-w"></i>
-                        <span>Wikipedia</span>
-                    </a>
-                </li>
-                {% endif %}
-
                 {% if object.city_website %}
                 <li class="list-inline-item">
                     <a class="btn btn-website fa-button" rel="noopener" target="_blank" href="{{ object.city_website }}" aria-label="{{ object.candidate.shortname }}&rsquo;s City Page">
@@ -143,7 +134,7 @@ p:last-of-type {
         </div>
 
         <div class="col-12 text-center">
-            <ul class="list-inline" id="socials">
+            <ul class="list-inline d-flex flex-wrap justify-content-center" id="socials">
                 {% if object.facebook %}
                 <li class="list-inline-item">
                     <a class="btn btn-facebook fa-button" rel="noopener" target="_blank" href="{{ object.facebook_url }}" aria-label="{{ object.candidate.shortname }}&rsquo;s Website">
@@ -190,8 +181,19 @@ p:last-of-type {
                 {% endif %}
             </ul>
         </div>
+
         <div class="col-12">
             {{ object.blurb|markdown }}
+        </div>
+
+        <div class="col-12">
+            {% if object.candidate.wikipedia_page %}
+            <a class="btn btn-wikipedia fa-button" rel="noopener" target="_blank" href="{{ object.candidate.wikipedia_url }}" aria-label="{{ object.candidate.shortname }}&rsquo;s Wikipedia">
+                <i class="fab fa-wikipedia-w"></i>
+                <span>Wikipedia</span>
+            </a>
+            {% endif %}
+
         </div>
 
         <div class="col-12 text-center">
@@ -654,63 +656,69 @@ p:last-of-type {
             {% endfor %}
         </div>
         <div class="row">
-
             {% if interview_videos %}
-                <div id="videoCarousel" class="carousel slide" data-ride="false">
-                    <div class="carousel-inner">
-                    {% for video in interview_videos %}
-                        <div class="d-block w-100 carousel-item {% if forloop.first %}active{% endif %} ">
-                        {% if "youtube.com" in video.link %}
-                            <div class="ratio ratio-16x9">
-                            <iframe
-                                class="embed-responsive-item"
-                                src={{video.link}}?start={{video.start_time}}&end={{video.end_time}}
-                                title={{video.title}}
-                                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                            </iframe>
-                            <p>
-                                {{ video.blurb }}
-                                {% if video.start_time %}
-                                from {{ video.start_time }}
-                                {% endif %}
-                                {% if video.end_time %}
-                                from {{ video.end_time }}
-                                {% endif %}
-                            </p>
+            <div class="col-12">
+              <div class="row align-items-center" style="background:#fff;padding:1rem;">
 
-                            </div>
-                        {% else %}
-                            <div class="video">
-                            <p>
-                                Video Interview at {{ video.link }}
-                            </p>
-                            <a href="#1">
-                            <object data="{{ video.link }}" style="width:100%" height="225"></object>
-                            </a>
-                            </div>
-                        {% endif %}
-                        </div>
-
-                    {% endfor %}
-                    </div>
-
-                  <a class="carousel-control-prev" href="#videoCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"
-                        style="color:#555;font-size:24px;text-decoration:none;border-radius:50%;background:transparent;border:1px solid #e6e6e6;">
-                    ></span>
-                    <span class="sr-only">Previous</span>
+                <!-- Left button -->
+                 <div class="col-auto">
+                  <a href="#videoCarousel" role="button" data-slide="prev"
+                     style="color:#555;font-size:64px;font-weight:bold;text-decoration:none;line-height:1;">
+                    ‹
                   </a>
-                  <a class="carousel-control-next" href="#videoCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"
-                        style="color:#555;font-size:24px;text-decoration:none;border-radius:50%;background:transparent;border:1px solid #e6e6e6;"
-                    ></span>
-                    <span class="sr-only">Next</span>
-                  </a>
-
                 </div>
 
-            {% endif %}
+                <!-- Center: carousel-->
+                <div class="col">
+                  <div id="videoCarousel" class="carousel" data-interval="false" aria-label="Video carousel">
+                    <div class="carousel-inner">
+                      {% for video in interview_videos %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
 
+                          {% if "youtube.com" in video.link %}
+                            <div class="embed-responsive embed-responsive-16by9 mx-auto" style="max-width:800px;">
+                              <iframe class="embed-responsive-item"
+                                      src="{{ video.link }}?start={{ video.start_time }}&end={{ video.end_time }}"
+                                      title="{{ video.title }}"
+                                      frameborder="0"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                      referrerpolicy="strict-origin-when-cross-origin"
+                                      allowfullscreen>
+                              </iframe>
+                            </div>
+
+                            <p class="text-center mt-2">
+                              {{ video.blurb }}
+                              {% if video.start_time %} from {{ video.start_time }}{% endif %}
+                              {% if video.end_time %} to {{ video.end_time }}{% endif %}
+                            </p>
+
+                          {% else %}
+                            <div class="video text-center">
+                              <p>Video Interview at {{ video.link }}</p>
+                              <a href="#1">
+                                <object data="{{ video.link }}" style="width:100%" height="225"></object>
+                              </a>
+                            </div>
+                          {% endif %}
+
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Right button -->
+                <div class="col-auto">
+                  <a href="#videoCarousel" role="button" data-slide="next"
+                     style="color:#555;font-size:64px;font-weight:bold;text-decoration:none;line-height:1;">
+                    ›
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          {% endif %}
         </div>
     </section>
 </div>
