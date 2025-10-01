@@ -9,25 +9,31 @@ from django.db.models import Max
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from django import forms
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, redirect
 
 
 from .forms import NoteForm, OrderedForm, NameForm
 from .models import RankedList, RankedElement
-from overview.models import Candidate, Election
+from overview.models import CandidateElection, Election
 
 
 class _MyBallotMixin:
     def get_object(self):
-        election = Election.objects.get(
+        self.election = Election.objects.get(
             year=self.kwargs["year"],
             position=self.kwargs["position"]
         )
         return RankedList.objects.for_request(
             self.request,
-            election,
+            self.election,
             force=True
+        )
+
+    def get_success_url(self):
+        return reverse(
+            "my_ranking",
+            args=[self.election.year, self.election.position],
         )
 
 
@@ -40,8 +46,8 @@ class CandidateListField(forms.Field):
 
         # make sure the candidates go into the dadtabase with the same order as
         # they came into the API
-        candidates = Candidate.objects.filter(slug__in=slugs)
-        candidates = sorted(candidates, key=lambda c: slugs.index(c.slug))
+        candidates = CandidateElection.objects.filter(candidate__slug__in=slugs)
+        candidates = sorted(candidates, key=lambda c: slugs.index(c.candidate.slug))
 
         if len(set(slugs)) != len(candidates):
             raise forms.ValidationError("unable to find candidate")
@@ -75,7 +81,7 @@ def append_to_ballot(request, year, position, slug):
     try:
         election = Election.objects.get(year=year, position=position)
         candidate_election = election.candidate_elections.get(is_running=True, hide=False, candidate__slug=slug)
-    except Candidate.DoesNotExist:
+    except CandidateElection.DoesNotExist:
         return HttpResponseBadRequest()
 
     ballot = RankedList.objects.for_request(request, election, force=True)
@@ -90,7 +96,6 @@ def append_to_ballot(request, year, position, slug):
 class RenameBallot(_MyBallotMixin, UpdateView):
     form_class = NameForm
     model = RankedList
-    success_url = reverse_lazy("my_ranking")
 
 
 # @method_decorator(vary_on_headers('HTTP_X_REQUESTED_WITH'), "get")
@@ -99,11 +104,10 @@ class MyList(_MyBallotMixin, UpdateView):
     form_class = EditForm
     model = RankedList
     template_name = "ranking/detail.html"
-    success_url = reverse_lazy("my_ranking")
 
     def get_json(self, obj):
         return {
-            "candidates": list(obj.annotated_candidates.values_list("candidate__slug", flat=True))
+            "candidates": list(obj.annotated_candidates.values_list("candidate__candidate__slug", flat=True))
         }
 
     def get_context_data(self, *args, **kwargs):
@@ -153,7 +157,6 @@ class MyList(_MyBallotMixin, UpdateView):
 
 class MakeOrdered(_MyBallotMixin, UpdateView):
     form_class = OrderedForm
-    success_url = reverse_lazy("my_ranking")
 
     def get_initial(self):
         initial = super().get_initial()
@@ -166,14 +169,18 @@ class UpdateNote(UpdateView):
     model = RankedElement
 
     def get_queryset(self):
-        return RankedList.objects.for_request(self.request, election, force=True).annotated_candidates
+        self.election = Election.objects.get(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"]
+        )
+        return RankedList.objects.for_request(self.request, self.election, force=True).annotated_candidates
 
     def get_object(self):
         try:
-            return self.get_queryset().get(candidate__slug=self.kwargs["slug"])
+            return self.get_queryset().get(candidate__candidate__slug=self.kwargs["slug"])
         except RankedElement.DoesNotExist:
             # not sure if we'll ever need this
-            candidate = Candidate.objects.get(slug=self.kwargs["slug"])
+            candidate = CandidateElection.objects.get(candidate__slug=self.kwargs["slug"])
             return self.get_queryset().create(candidate=candidate)
 
     def form_valid(self, form):
@@ -184,7 +191,11 @@ class UpdateNote(UpdateView):
             return ret
 
     def get_success_url(self):
-        return reverse("candidate_detail", args=[self.object.candidate.slug])
+        return reverse("candidate_detail", args=[
+            self.object.candidate.election.year,
+            self.object.candidate.election.position,
+            self.object.candidate.candidate.slug
+        ])
 
 
 @require_POST
