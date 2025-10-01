@@ -130,7 +130,7 @@
                                 </td>
 
                                 {% for specific_proposal in specific_proposals %}
-                                <td>
+                                <td style="min-width: 4em;">
                                         {% if cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == True %}
                                             <i class="fa fa-check text-success"></i>
                                         {% elif cp_map_yes_no|get_item:candidate.id|get_item:specific_proposal.id == False %}
