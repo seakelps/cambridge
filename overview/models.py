@@ -472,7 +472,7 @@ class Quote(models.Model):
     by = models.CharField(
         max_length=100, help_text="Leave blank if candidate", blank=True, default=""
     )
-    cite = models.CharField(max_length=100, blank=True)
+    cite = models.CharField(max_length=200, blank=True)
     display = models.BooleanField(default=True)
     display_housing = models.BooleanField(default=False)
 
