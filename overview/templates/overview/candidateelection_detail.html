@@ -269,9 +269,11 @@ p:last-of-type {
                                 data-container="body"
                                 data-content='Voting record since 2012 from MA Votebuilder (may be incomplete, ex. for out-of-state elections or because of errors in reporting).'></a>
                   </summary>
+                  Updated soon, we hope!
+                  <br>
 
                   {% if not candidate_voting_history %}
-                    No record
+
                   {% else %}
                         <ul style="list-style: none; text-align: left">
                         {% for candidate_election in candidate_voting_history %}
