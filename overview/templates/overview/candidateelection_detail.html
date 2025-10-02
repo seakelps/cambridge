@@ -108,10 +108,11 @@ p:last-of-type {
 
 <section class="container">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 d-none d-sm-block">
             <h2 id="more">More about {{object.candidate.fullname}}</h2>
         </div>
 
+	{% if object.website or object.city_website %}
         <div class="col-12 text-center">
             <ul class="list-inline" id="official-sites">
                 {% if object.website %}
@@ -134,7 +135,8 @@ p:last-of-type {
                 </li>
                 {% endif %}
             </ul>
-        </div>
+	</div>
+	{% endif %}
 
         <div class="col-12 text-center">
             <ul class="list-inline d-flex flex-wrap justify-content-center" id="socials">
@@ -267,9 +269,11 @@ p:last-of-type {
                                 data-container="body"
                                 data-content='Voting record since 2012 from MA Votebuilder (may be incomplete, ex. for out-of-state elections or because of errors in reporting).'></a>
                   </summary>
+                  Updated soon, we hope!
+                  <br>
 
                   {% if not candidate_voting_history %}
-                    No record
+
                   {% else %}
                         <ul style="list-style: none; text-align: left">
                         {% for candidate_election in candidate_voting_history %}
