@@ -10,13 +10,16 @@
 
 {% block head_extra %}
 <meta name="twitter:card" content="summary">
-<meta name="twitter:domain" content="cambridgecouncilcandidates.com" />
+<meta name="twitter:domain" content="cambridge.vote" />
 <meta name="twitter:title" content="{{ title }}" />
 <meta name="twitter:description" content="{{ description }}" />
 <meta name="twitter:image" content="{% fullstatic "candidate_grid.png" %}"/>
 
 <meta property="og:image" content="{% fullstatic "candidate_grid.png" %}"/>
 <meta property="og:title" content="{{ title }}" />
+<meta property="og:description" content="{{ description }}" />
+<meta property="og:site_name" content="Cambridge.Vote"/>
+
 <script>
     // data for candidate_map.js
     var initialLocations = {{ candidate_locations|safe }};

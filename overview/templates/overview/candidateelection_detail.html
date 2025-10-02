@@ -3,6 +3,7 @@
 {% load static %}
 {% load humanize %}
 {% load overview %}
+{% load fullurl %}
 
 {% block body_id %}candidate_detail{% endblock %}
 
@@ -14,10 +15,12 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{{ title }}" />
 <meta name="twitter:description" content="{{ description }}" />
-<meta name="twitter:image" content="{{ object.headshot.url }}"/>
+<meta name="twitter:image" content="{% buildfullurl object.headshot.url %}"/>
+
 <meta property="og:title" content="{{ title }}" />
-<meta property="og:image" content="{{ object.headshot.url }}"/>
-<meta property="og:site_name" content="Cambridge Council Candidates"/>
+<meta property="og:image" content="{% buildfullurl object.headshot.url %}"/>
+<meta property="og:description" content="{{ description }}" />
+<meta property="og:site_name" content="Cambridge.Vote"/>
 
 <script>
     // data for candidate_map.js
