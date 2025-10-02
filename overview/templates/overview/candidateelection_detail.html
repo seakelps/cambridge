@@ -112,6 +112,7 @@ p:last-of-type {
             <h2 id="more">More about {{object.candidate.fullname}}</h2>
         </div>
 
+	{% if object.website or object.city_website %}
         <div class="col-12 text-center">
             <ul class="list-inline" id="official-sites">
                 {% if object.website %}
@@ -135,6 +136,7 @@ p:last-of-type {
                 {% endif %}
             </ul>
 	</div>
+	{% endif %}
 
         <div class="col-12 text-center">
             <ul class="list-inline d-flex flex-wrap justify-content-center" id="socials">
