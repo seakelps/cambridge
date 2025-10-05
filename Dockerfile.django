@@ -24,13 +24,9 @@ RUN useradd -m -r appuser && \
 COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
  
-# Set the working directory
 WORKDIR /app
  
-# Copy application code (dodge volumes)
 COPY --chown=appuser:appuser media ./media
-# COPY --chown=appuser:appuser django_app/static_compiled ./static_compiled
-
 COPY --chown=appuser:appuser django_app .
 
 # Set environment variables to optimize Python
@@ -38,7 +34,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1 
  
 USER appuser
-# RUN mkdir staticfiles
 
 EXPOSE 8000 
  
