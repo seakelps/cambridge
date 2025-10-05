@@ -4,3 +4,5 @@ WORKDIR /app
 COPY javascript_app .
 
 RUN npm install
+
+CMD ["npm", "run", "watch"]

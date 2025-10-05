@@ -18,7 +18,6 @@ services:
         - action: sync
           path: ./javascript_app
           target: /app
-    command: npm run watch
     volumes:
       - ./static_compiled:/app/static_compiled
   web:
@@ -31,7 +30,6 @@ services:
         - action: sync
           path: ./django_app
           target: /app
-    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       # static_compiled is checked in to avoid compile for deploys
       - ./static_compiled:/app/static_compiled
