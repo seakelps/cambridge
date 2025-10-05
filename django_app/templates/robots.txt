@@ -1,4 +1,4 @@
 User-Agent: *
-Allow: {% url "list_explore" %}
-Disallow: {% url "my_ranking" %}
+Disallow: {% url "my_ranking" ELECTION_DATE.year "council" %}
+Disallow: {% url "my_ranking" ELECTION_DATE.year "school" %}
 Allow: /
