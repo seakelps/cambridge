@@ -15,16 +15,11 @@ services:
       dockerfile: Dockerfile.static
     develop:
       watch:
-        - action: rebuild
-          path: ./static_src
-          target: /app/static_src
-    # command: watch
+        - action: sync
+          path: ./javascript_app
+          target: /app
+    command: npm run watch
     volumes:
-      # mounting as a file so that we can npm update and see the changes
-      - ./package-lock.json:/app/package-lock.json
-      - ./package.json:/app/package.json
-      - ./webpack.config.json:/app/webpack.config.json
-      - ./static_src:/app/static_src
       - ./static_compiled:/app/static_compiled
   web:
     build:
