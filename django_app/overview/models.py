@@ -246,6 +246,8 @@ class CandidateElection(models.Model):
     headshot = models.ImageField(null=True, blank=True)
     headshot_description = models.CharField(default="headshot of candidate", max_length=500)
 
+    timestamp_modified = models.DateTimeField(auto_now=True)
+
     class Meta:
         unique_together = ("candidate", "election")
 

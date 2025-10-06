@@ -8,12 +8,13 @@ from django.urls import re_path, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 
+from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
-from overview.models import Election
+from overview.models import Election, CandidateElection
 from overview.admin import money_admin_site
 
 
@@ -36,27 +37,30 @@ class HowToVote(TemplateView):
         return context
 
 
-# class CandidateSitemap(Sitemap):
-#     changefreq = "daily"
-#     priority = 0.5
+class CandidateElectionSitemap(Sitemap):
+    changefreq = "daily"
+    priority = 0.5
 
-#     def items(self):
-#         return Candidate.objects.all()
+    def items(self):
+        return CandidateElection.objects.all()
 
-#     def lastmod(self, obj):
-#         return obj.timestamp_modified
+    def lastmod(self, obj):
+        return obj.timestamp_modified
 
 
 class StaticViewSitemap(Sitemap):
-    changefreq = "weeklyn"
+    changefreq = "weekly"
     priority = 0.4
 
     def items(self):
         return [
             reverse("about_us"),
-            reverse("by-organization"),
-            reverse("housing_comparison"),
-            reverse("written-public-comment"),
+            reverse("by-organization", args=[settings.ELECTION_DATE.year, "council"]),
+            reverse("housing_comparison", args=[settings.ELECTION_DATE.year, "council"]),
+            reverse("biking_comparison", args=[settings.ELECTION_DATE.year, "council"]),
+            reverse("basic_comparison", args=[settings.ELECTION_DATE.year, "council"]),
+            reverse("forum-list", args=[settings.ELECTION_DATE.year, "council"]),
+            reverse("written-public-comment", args=[settings.ELECTION_DATE.year, "council"]),
         ]
 
     def location(self, item):
@@ -95,15 +99,15 @@ urlpatterns = [
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
     *static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),
 
-    # re_path(
-    #     r"^sitemap\.xml$",
-    #     sitemap,
-    #     {
-    #         "sitemaps": {
-    #             "candidates": CandidateSitemap,
-    #             "static": StaticViewSitemap,
-    #         }
-    #     },
-    #     name="django.contrib.sitemaps.views.sitemap",
-    # ),
+    re_path(
+        r"^sitemap\.xml$",
+        sitemap,
+        {
+            "sitemaps": {
+                "candidates": CandidateElectionSitemap,
+                "static": StaticViewSitemap,
+            }
+        },
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
 ]

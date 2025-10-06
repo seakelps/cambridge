@@ -32,6 +32,7 @@ services:
           target: /app
     volumes:
       # static_compiled is checked in to avoid compile for deploys
+      - ./django_app:/app  # for new migration files
       - ./static_compiled:/app/static_compiled
       - staticfiles:/app/staticfiles
       - media:/app/media
