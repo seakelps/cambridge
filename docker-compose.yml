@@ -13,13 +13,12 @@ services:
   static:
     build:
       dockerfile: Dockerfile.static
-    # command: watch
+    develop:
+      watch:
+        - action: sync
+          path: ./javascript_app
+          target: /app
     volumes:
-      # mounting as a file so that we can npm update and see the changes
-      - ./package-lock.json:/app/package-lock.json
-      - ./package.json:/app/package.json
-      - ./webpack.config.json:/app/webpack.config.json
-      - ./static_src:/app/static_src
       - ./static_compiled:/app/static_compiled
   web:
     build:
@@ -28,14 +27,14 @@ services:
         REQ_ENV: dev
     develop:
       watch:
-        - action: rebuild
-          path: .
+        - action: sync
+          path: ./django_app
           target: /app
-    # command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
+      # static_compiled is checked in to avoid compile for deploys
       - ./static_compiled:/app/static_compiled
       - staticfiles:/app/staticfiles
+      - media:/app/media
     ports:
       - "8000:8000"
     environment:
@@ -52,3 +51,4 @@ services:
 volumes:
   staticfiles:
   postgres_data:
+  media:

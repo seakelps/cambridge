@@ -1,9 +1,8 @@
 FROM node:24
 
 WORKDIR /app
-COPY ./static_src ./static_src
-COPY ./package-lock.json .
-COPY ./package.json .
-COPY ./webpack.config.js .
+COPY javascript_app .
 
 RUN npm install
+
+CMD ["npm", "run", "watch"]
