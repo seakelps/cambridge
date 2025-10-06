@@ -1,0 +1,8 @@
+- model: overview.Election
+  fields:
+    year: 2025
+    position: council
+- model: overview.Election
+  fields:
+    year: 2025
+    position: school
