@@ -26,8 +26,8 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
  
 WORKDIR /app
  
-COPY --chown=appuser:appuser static_compiled .
-COPY --chown=appuser:appuser media .
+COPY --chown=appuser:appuser static_compiled ./static_compiled
+COPY --chown=appuser:appuser media ./media
 COPY --chown=appuser:appuser django_app .
 
 # Set environment variables to optimize Python
