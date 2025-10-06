@@ -72,15 +72,13 @@ class ListViewTest(TestCase):
 
 
 class OverwriteListTest(TestCase):
-    def setUp(self):
-        super().setUp()
-        self.user = factories.RankedList().owner
-
     def test_swap(self):
         c1, c2, c3 = overview_factories.CandidateElection.create_batch(3)
 
-        self.user.rankedlist.annotated_candidates.overwrite_list([c1, c2, c3])
-        self.user.rankedlist.annotated_candidates.overwrite_list([c3, c1, c2])
+        ranked_list = factories.RankedList.create()
+
+        ranked_list.annotated_candidates.overwrite_list([c1, c2, c3])
+        ranked_list.annotated_candidates.overwrite_list([c3, c1, c2])
 
 
 class MyListTest(TestCase):
