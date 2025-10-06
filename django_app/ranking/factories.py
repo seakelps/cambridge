@@ -3,7 +3,7 @@ from django.utils.text import slugify
 import factory.fuzzy
 from . import models
 from faker.providers import BaseProvider
-from overview.factories import User, Candidate
+import overview.factories
 
 
 @factory.Faker.add_provider
@@ -49,7 +49,8 @@ class RankedList(factory.django.DjangoModelFactory):
         model = models.RankedList
         django_get_or_create = ("slug",)
 
-    owner = factory.SubFactory(User)
+    election = factory.SubFactory(overview.factories.Election)
+    owner = factory.SubFactory(overview.factories.User)
     name = factory.Faker("org_name")
     slug = factory.LazyAttribute(lambda o: slugify(o.name))
 
@@ -59,6 +60,9 @@ class RankedElement(factory.django.DjangoModelFactory):
         model = models.RankedElement
 
     ranked_list = factory.SubFactory(RankedList)
-    candidate = factory.SubFactory(Candidate)
+    candidate = factory.SubFactory(
+        overview.factories.CandidateElection,
+        election=factory.SelfAttribute("..ranked_list.election"),
+    )
     comment = factory.Faker("paragraph")
     order = factory.Sequence(lambda n: n)
