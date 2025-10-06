@@ -32,7 +32,11 @@ class RankedListManager(models.Manager):
 
         else:
             try:
-                return RankedList.objects.get(pk=request.session["ranked_list_id"])
+                return RankedList.objects.get(
+                    pk=request.session["ranked_list_id"],
+                    election=election,
+
+                )
             except (RankedList.DoesNotExist, KeyError):
                 if not force:
                     return None
