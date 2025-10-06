@@ -14,7 +14,6 @@ class GetList(TestCase):
         super().setUp()
         self.election = overview_factories.Election.create()
 
-    @unittest.expectedFailure
     def test_logged_in_no_list(self):
         request = RequestFactory().get("/")
         request.user = overview_factories.User()
@@ -25,7 +24,7 @@ class GetList(TestCase):
                 request,
                 force=True,
                 election=self.election,
-            ), request.user.rankedlist
+            ), request.user.rankedlist_set.get(election=self.election)
         )
 
     def test_logged_in_with_list(self):
