@@ -16,6 +16,10 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.cambridge-wh2u.onrender.com",
     "https://cambridge.vote",
     "https://www.cambridge.vote",
+
+    # old urls, to be removed after 2025
+    "https://cambridgecouncilcandidates.com",
+    "https://www.cambridgecouncilcandidates.com",
 ]
 ATOMIC_REQUESTS = True
 

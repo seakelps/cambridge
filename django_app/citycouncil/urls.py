@@ -4,7 +4,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 """
 
-from django.urls import re_path, include
+from django.urls import re_path, include, path
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 
@@ -110,4 +110,34 @@ urlpatterns = [
         },
         name="django.contrib.sitemaps.views.sitemap",
     ),
+
+]
+
+urlpatterns += [
+    # Old urls from cambridgecouncilcandidate that appear in google search results
+    # this is a temporary hack to mitigate the page rank loss from changing domains
+    # after ranking pretty well last cycle.
+    path(
+        f"candidates/{old_name}/",
+        RedirectView.as_view(
+            url=f"https://cambridge.vote/2025/council/candidates/{new_name}/",
+            permanent=True,
+        ),
+    )
+
+    for old_name, new_name in [
+        ("ayah-al-zubi", "ayah-al-zubi"),
+        ("ayesha-wilson", "ayesha-wilson"),
+        ("burhan-azeem", "burhan-azeem"),
+        ("catherine-zusy", "cathie-zusy"),
+        ("denise-simmons", "e-denise-simmons"),
+        ("jivan-sobrinho-wheeler", "jivan-sobrinho-wheeler"),
+        ("john-hanratty", "john-hanratty"),
+        ("marc-mcgovern", "marc-mcgovern"),
+        ("patty-nolan", "patty-nolan"),
+        ("paul-toner", "paul-toner"),
+        ("peter-hsu", "peter-hsu"),
+        ("robert-winters", "robert-winters"),
+        ("sumbul-siddiqui", "sumbul-siddiqui"),
+    ]
 ]
