@@ -32,7 +32,11 @@ class RankedListManager(models.Manager):
 
         else:
             try:
-                return RankedList.objects.get(pk=request.session["ranked_list_id"])
+                return RankedList.objects.get(
+                    pk=request.session[f"ranked_list_{election.position}_id"],
+                    election=election,
+
+                )
             except (RankedList.DoesNotExist, KeyError):
                 if not force:
                     return None
@@ -49,7 +53,7 @@ class RankedListManager(models.Manager):
                     )
 
                     if created:
-                        request.session["ranked_list_id"] = ranked_list.id
+                        request.session[f"ranked_list_{election.position}_id"] = ranked_list.id
                         return ranked_list
                 raise Exception("couldnt allocate a list id")
 

@@ -80,7 +80,11 @@ def my_last_edit(request):
 def append_to_ballot(request, year, position, slug):
     try:
         election = Election.objects.get(year=year, position=position)
-        candidate_election = election.candidate_elections.get(is_running=True, hide=False, candidate__slug=slug)
+        candidate_election = election.candidate_elections.get(
+            is_running=True,
+            hide=False,
+            candidate__slug=slug
+        )
     except CandidateElection.DoesNotExist:
         return HttpResponseBadRequest()
 

@@ -6,8 +6,8 @@ from . import factories
 
 class SiteMapTest(TestCase):
     def test_sanity(self):
-        factories.Candidate.create()
-        factories.Candidate.create(is_running=False)
+        factories.CandidateElection.create()
+        factories.CandidateElection.create(is_running=False)
 
         resp = self.client.get(reverse("django.contrib.sitemaps.views.sitemap"))
         self.assertEqual(resp.status_code, 200)
@@ -15,26 +15,28 @@ class SiteMapTest(TestCase):
 
 class CandidateListTest(TestCase):
     def test_sanity(self):
-        factories.Candidate.create()
-        factories.Candidate.create(is_running=False)
+        election = factories.Election()
+        factories.CandidateElection.create(election=election)
+        factories.CandidateElection.create(election=election, is_running=False)
 
-        resp = self.client.get(reverse("all"))
+        resp = self.client.get(reverse("election_candidates", args=[election.year, election.position]))
         self.assertEqual(resp.status_code, 200)
 
 
 class ByOrganizationTest(TestCase):
     def setUp(self):
         super().setUp()
-        factories.Candidate.create()
-        factories.Candidate.create(is_running=False)
+        self.election = factories.Election()
+        factories.CandidateElection.create(election=self.election)
+        factories.CandidateElection.create(election=self.election, is_running=False)
 
     def test_logged_out(self):
-        resp = self.client.get(reverse("by-organization"))
+        resp = self.client.get(reverse("by-organization", args=[self.election.year, self.election.position]))
         self.assertEqual(resp.status_code, 200)
 
     def test_logged_in(self):
         user = factories.User.create()
         self.client.force_login(user)
 
-        resp = self.client.get(reverse("by-organization"))
+        resp = self.client.get(reverse("by-organization", args=[self.election.year, self.election.position]))
         self.assertEqual(resp.status_code, 200)

@@ -22,3 +22,23 @@ class Candidate(factory.django.DjangoModelFactory):
     fullname = factory.Faker("name")
     shortname = factory.LazyAttribute(lambda o: o.fullname.split(" ")[0])
     slug = factory.LazyAttribute(lambda o: slugify(o.fullname))
+
+
+class Election(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Election
+        django_get_or_create = ("year", "position", )
+
+    position = "council"
+    year = 2025
+
+
+class CandidateElection(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.CandidateElection
+        # django_get_or_create = ("slug",)
+
+    candidate = factory.SubFactory(Candidate)
+    election = factory.SubFactory(Election)
+    headshot = factory.django.ImageField()
+
