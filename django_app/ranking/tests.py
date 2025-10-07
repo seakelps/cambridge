@@ -200,11 +200,12 @@ class UpdateNotes(TestCase):
 
 
 class ClaimList(TestCase):
-    @unittest.expectedFailure
+    fixtures = ["current_elections"]
+
     def test_claim_list(self):
-        ranked_list = factories.RankedList(owner=None)
+        council_list = factories.RankedList(owner=None, election__position="council")
         session = self.client.session
-        session["ranked_list_id"] = ranked_list.id
+        session["ranked_list_council_id"] = council_list.id
         session.save()
 
         resp = self.client.post(
@@ -218,11 +219,15 @@ class ClaimList(TestCase):
         )
 
         self.assertEqual(resp.status_code, 302)
+        council_list.refresh_from_db()
 
-        ranked_list.refresh_from_db()
-        self.assertIn("kittens", ranked_list.name)
-        self.assertIn("kittens", ranked_list.slug)
-        self.assertEqual(int(self.client.session["_auth_user_id"]), ranked_list.owner.id)
+        # logged in successfully
+        self.assertEqual(int(self.client.session["_auth_user_id"]), council_list.owner.id)
+
+        self.assertIn("kittens", council_list.name)
+        self.assertIn("kittens", council_list.slug)
+
+        self.assertFalse(council_list.owner.rankedlist_set.filter(election__position="school").exists())
 
 
 class DeleteNote(TestCase):
