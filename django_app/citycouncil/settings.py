@@ -10,6 +10,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = os.environ["DJANGO_DEBUG"] == "TRUE"
 
+# Allow Django to detect that the original request was https so build absolute url picks https
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 ALLOWED_HOSTS = os.environ["DJANGO_ALLOWED_HOST"].split(",")
 CSRF_TRUSTED_ORIGINS = [
     "https://cambridge-wh2u.onrender.com",
