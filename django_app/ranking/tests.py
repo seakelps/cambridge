@@ -49,18 +49,18 @@ class GetList(TestCase):
 
         ranked_list = RankedList.objects.for_request(request, force=True, election=self.election)
         self.assertTrue(ranked_list)
-        self.assertEqual(ranked_list.id, request.session["ranked_list_id"])
+        self.assertEqual(ranked_list.id, request.session["ranked_list_council_id"])
 
     def test_logged_out_with_list(self):
         request = RequestFactory().get("/")
         request.user = AnonymousUser()
 
         ranked_list = factories.RankedList(owner=None, election=self.election)
-        request.session = {"ranked_list_id": ranked_list.id}
+        request.session = {"ranked_list_council_id": ranked_list.id}
 
         self.assertEqual(
             RankedList.objects.for_request(request, force=True, election=self.election).id,
-            request.session["ranked_list_id"],
+            request.session["ranked_list_council_id"],
         )
 
 
@@ -178,7 +178,7 @@ class UpdateNotes(TestCase):
 
         # everytime you read the client.session, it creates a new one
         session = self.client.session
-        session["ranked_list_id"] = ranked_list.id
+        session["ranked_list_council_id"] = ranked_list.id
         session.save()
 
         self.assertTrue(self.client.session)
