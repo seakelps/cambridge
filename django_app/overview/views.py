@@ -354,7 +354,7 @@ class CandidateBasicList(ListView):
         context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
 
         candidate_degree_map = {}
-        for candidate_election in self.objects:
+        for candidate_election in context["object_list"]:
             candidate_degree_map[candidate_election.id] = candidate_election.candidate.degrees.all()
 
         context["candidate_degree_map"] = candidate_degree_map

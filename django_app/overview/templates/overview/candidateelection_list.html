@@ -7,6 +7,7 @@
 {% block title %}
 {% if election.position == "council" %}Council Candidates Running in {{election.year|default:ELECTION_DATE.year}}
 {% else %}School Committee Candidates Running in {{election.year|default:ELECTION_DATE.year}}
+{% endif %}
 {% endblock %}
 
 {% block meta_description %}{{ runners.count }} candidates are running for 9 seats in {{election.year|default:ELECTION_DATE.year}}. Determine who deserves your #1, #2, or #9 vote on {{election.date|date:"F, jS"}}.{% endblock %}
