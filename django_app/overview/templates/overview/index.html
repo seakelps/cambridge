@@ -4,7 +4,11 @@
 {% load i18n %}
 {% load overview %}
 
-{% block title %}Cambridge Council Election {{election.year|default:ELECTION_DATE.year}}{% endblock %}
+{% block title %}
+{% if election.position == "council" %}Cambridge Council Election {{election.year|default:ELECTION_DATE.year}}
+{% else %}Cambridge School Committee Election {{election.year|default:ELECTION_DATE.year}}
+{% endif %}
+{% endblock %}
 
 {% block body_id %}welcome{% endblock %}
 
@@ -25,7 +29,7 @@
     var initialLocations = {{ candidate_locations|safe }};
 </script>
 <script>{% include "overview/candidate_map.js" %}</script>
-<script defer src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}&q=Cambridge"></script>
+<script defer async src="//maps.googleapis.com/maps/api/js?&callback=initMap&key={{ GOOGLE_EMBED_API_KEY }}&q=Cambridge"></script>
 
 {{ schema_org|json_ld }} 
 

@@ -23,6 +23,46 @@ class CandidateListTest(TestCase):
         self.assertEqual(resp.status_code, 200)
 
 
+class BasicListTest(TestCase):
+    def test_sanity(self):
+        election = factories.Election()
+        factories.CandidateElection.create(election=election)
+        factories.CandidateElection.create(election=election, is_running=False)
+
+        resp = self.client.get(reverse("basic_comparison", args=[election.year, election.position]))
+        self.assertEqual(resp.status_code, 200)
+
+
+class BikingTest(TestCase):
+    def test_sanity(self):
+        election = factories.Election()
+        factories.CandidateElection.create(election=election)
+        factories.CandidateElection.create(election=election, is_running=False)
+
+        resp = self.client.get(reverse("biking_comparison", args=[election.year, election.position]))
+        self.assertEqual(resp.status_code, 200)
+
+
+class ForumListTest(TestCase):
+    def test_sanity(self):
+        election = factories.Election()
+        factories.CandidateElection.create(election=election)
+        factories.CandidateElection.create(election=election, is_running=False)
+
+        resp = self.client.get(reverse("forum-list", args=[election.year, election.position]))
+        self.assertEqual(resp.status_code, 200)
+
+
+class WrittenCommentTest(TestCase):
+    def test_sanity(self):
+        election = factories.Election()
+        factories.CandidateElection.create(election=election)
+        factories.CandidateElection.create(election=election, is_running=False)
+
+        resp = self.client.get(reverse("written-public-comment", args=[election.year, election.position]))
+        self.assertEqual(resp.status_code, 200)
+
+
 class ByOrganizationTest(TestCase):
     def setUp(self):
         super().setUp()

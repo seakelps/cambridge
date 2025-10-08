@@ -5,6 +5,11 @@
 {% load get_item from overview %}
 
 {% block body_id %}candidate_comparison{% endblock %}
+{% block title %}
+{% if election.position == "council" %}Compare Council Candidates, {{election.year|default:ELECTION_DATE.year}}
+{% else %}Compare School Committee Candidates, {{election.year|default:ELECTION_DATE.year}}
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <div>
@@ -37,7 +42,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate in object_list %}
                             <tr>
                                 <td>
                                     <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
@@ -122,7 +127,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate in object_list %}
                             <tr>
                                 <td>
                                     <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}
