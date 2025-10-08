@@ -39,7 +39,7 @@ def index(request, year, position):
     schema_org = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Cambridge Council Candidates",
+        "name": "Cambridge.vote",
         "alternateName": ["cambridge.vote"],
         "url": request.build_absolute_uri(),
     }
@@ -334,27 +334,29 @@ class CandidateBasicList(ListView):
     model = CandidateElection
     template_name = "overview/candidates_basic.html"
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
+    def get_queryset(self):
+        election = Election.objects.filter(
+            year=self.kwargs["year"],
+            position=self.kwargs["position"],
+        ).first()
 
-        year=self.kwargs["year"] if "year" in kwargs else "2025"
-        position=self.kwargs["position"] if "position" in kwargs else "council"
-
-        election = Election.objects.filter(year=year, position=position).first()
-
-        candidate_elections = (
-            CandidateElection.objects.exclude(hide=True)
+        return (
+            super().get_queryset()
+            .exclude(hide=True)
             .exclude(is_running=False)
             .filter(election=election)
             .order_by("candidate__fullname")
             .prefetch_related("candidate__degrees")
         )
 
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
+
         candidate_degree_map = {}
-        for candidate_election in candidate_elections:
+        for candidate_election in self.objects:
             candidate_degree_map[candidate_election.id] = candidate_election.candidate.degrees.all()
 
-        context["candidates"] = candidate_elections
         context["candidate_degree_map"] = candidate_degree_map
 
         return context

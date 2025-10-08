@@ -6,6 +6,10 @@
 
 {% block body_id %}candidate_comparison{% endblock %}
 
+{% block title %}
+Biking Policy of Council Candidates, {{election.year|default:ELECTION_DATE.year}}
+{% endblock %}
+
 {% block content %}
 <div>
     <section class="container">

@@ -18,8 +18,13 @@
 <script defer src="{% static "public_comment.js" %}"></script>
 {% endblock %}
 
-
 {% block body_id %}candidate_public_comment{% endblock %}
+
+{% block title %}
+{% if election.position == "council" %}Public for Council Candidates, {{election.year|default:ELECTION_DATE.year}}
+{% else %}Public Comment for School Committee Candidates, {{election.year|default:ELECTION_DATE.year}}
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <div>

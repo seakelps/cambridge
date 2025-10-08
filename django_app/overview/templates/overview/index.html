@@ -4,7 +4,11 @@
 {% load i18n %}
 {% load overview %}
 
-{% block title %}Cambridge Council Election {{election.year|default:ELECTION_DATE.year}}{% endblock %}
+{% block title %}
+{% if election.position == "council" %}Cambridge Council Election {{election.year|default:ELECTION_DATE.year}}
+{% else %}Cambridge School Committee Election {{election.year|default:ELECTION_DATE.year}}
+{% endif %}
+{% endblock %}
 
 {% block body_id %}welcome{% endblock %}
 

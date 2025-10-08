@@ -37,7 +37,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate in objects %}
                             <tr>
                                 <td>
                                     <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}</a>
@@ -122,7 +122,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for candidate in candidates %}
+                            {% for candidate in objects %}
                             <tr>
                                 <td>
                                     <a href="{% url "candidate_detail" candidate.election.year candidate.election.position candidate.candidate.slug %}">{{ candidate.candidate.fullname }}
