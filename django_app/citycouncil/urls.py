@@ -144,16 +144,16 @@ urlpatterns += [
 
 urlpatterns += [
     path(
-        f"topic/housing.html",
+        "topic/housing.html",
         RedirectView.as_view(
-            url=f"/2025/council/by-topic/housing/",
+            url="/2025/council/by-topic/housing/",
             permanent=True,
         ),
     ),
     path(
-        f"topic/cycling.html",
+        "topic/cycling.html",
         RedirectView.as_view(
-            url=f"/2025/council/by-topic/biking/",
+            url="/2025/council/by-topic/biking/",
             permanent=True,
         ),
     )
