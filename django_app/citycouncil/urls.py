@@ -4,6 +4,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 """
 
+from functools import partial
 from django.urls import re_path, include, path
 from django.contrib import admin
 from django.views.generic.base import RedirectView
@@ -14,6 +15,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from overview.views import index as election_view
 from overview.models import Election, CandidateElection
 from overview.admin import money_admin_site
 
@@ -78,7 +80,7 @@ class Index(RedirectView):
 
 
 urlpatterns = [
-    re_path(r"^$", Index.as_view(), name="index"),
+    re_path(r"^$", partial(election_view, year=2025, position="council"), name="index"),
     re_path(r"^(?P<year>\d+)/(?P<position>\w+)/ranking/", include("ranking.urls")),
     re_path(r"^(?P<year>\d+)/(?P<position>\w+)/", include("overview.urls")),
 

@@ -36,12 +36,14 @@ def index(request, year, position):
         position="Cambridge City Council" if election.position == "council" else "Cambridge School Committee",
     ).strip()
 
+    canonical_url = request.build_absolute_uri(reverse("election", args=[election.year, election.position]))
+
     schema_org = {
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Cambridge.vote",
         "alternateName": ["cambridge.vote"],
-        "url": request.build_absolute_uri(),
+        "url": canonical_url,
     }
 
     return render(
@@ -53,6 +55,7 @@ def index(request, year, position):
             "num_runners": num_runners,
             "candidate_locations": json.dumps(list(get_candidate_locations(election).values())),
             "schema_org": schema_org,
+            "canonical_url": canonical_url,
         },
     )
 
