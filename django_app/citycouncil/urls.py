@@ -141,3 +141,20 @@ urlpatterns += [
         ("sumbul-siddiqui", "sumbul-siddiqui"),
     ]
 ]
+
+urlpatterns += [
+    path(
+        "topic/housing.html",
+        RedirectView.as_view(
+            url="/2025/council/by-topic/housing/",
+            permanent=True,
+        ),
+    ),
+    path(
+        "topic/cycling.html",
+        RedirectView.as_view(
+            url="/2025/council/by-topic/biking/",
+            permanent=True,
+        ),
+    )
+]
