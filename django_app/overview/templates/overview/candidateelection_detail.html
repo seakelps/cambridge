@@ -84,12 +84,12 @@ p:last-of-type {
                 <dl class="text-left mb-0">
                     {% if object.job and object.is_incumbent %}
                         <dt>Currently</dt>
-                        <dd class="mb-0">City Councillor</dd>
+                        <dd class="mb-0">Incumbent</dd>
                         <dt class="mt-0" style="line-height: 1rem;">Also</dt>
                         <dd class="mt-0" style="line-height: 1rem;">{{ object.job }}</dd>
                     {% elif object.is_incumbent %}
                         <dt>Currently</dt>
-                        <dd>City Councillor</dd>
+                        <dd>Incumbent</dd>
                     {% elif object.job %}
                         <dt>Currently</dt>
                         <dd style="line-height: 1rem;">{{ object.job }}</dd>
