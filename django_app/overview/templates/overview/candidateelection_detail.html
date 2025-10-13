@@ -84,12 +84,12 @@ p:last-of-type {
                 <dl class="text-left mb-0">
                     {% if object.job and object.is_incumbent %}
                         <dt>Currently</dt>
-                        <dd class="mb-0">City Councillor</dd>
+                        <dd class="mb-0">Incumbent</dd>
                         <dt class="mt-0" style="line-height: 1rem;">Also</dt>
                         <dd class="mt-0" style="line-height: 1rem;">{{ object.job }}</dd>
                     {% elif object.is_incumbent %}
                         <dt>Currently</dt>
-                        <dd>City Councillor</dd>
+                        <dd>Incumbent</dd>
                     {% elif object.job %}
                         <dt>Currently</dt>
                         <dd style="line-height: 1rem;">{{ object.job }}</dd>
@@ -269,11 +269,9 @@ p:last-of-type {
                                 data-container="body"
                                 data-content='Voting record since 2012 from MA Votebuilder (may be incomplete, ex. for out-of-state elections or because of errors in reporting).'></a>
                   </summary>
-                  Updated soon, we hope!
-                  <br>
 
                   {% if not candidate_voting_history %}
-
+                    No history of voting in MA
                   {% else %}
                         <ul style="list-style: none; text-align: left">
                         {% for candidate_election in candidate_voting_history %}
@@ -380,6 +378,7 @@ p:last-of-type {
     </section>
 </div>
 
+{% if election.position == "council" %}
 <div>
     <section class="container">
         <div class="row">
@@ -472,6 +471,103 @@ p:last-of-type {
 
     </section>
 </div>
+{% endif %}
+
+{% if election.position == "school" %}
+<div>
+    <section class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 id="education-policies">{{object.candidate.shortname}} on Education</h2>
+            </div>
+        </div>
+
+        {% if specific_education_support %}
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Proposal</th>
+                            <th>Supported?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for education in specific_education_support %}
+                        <tr>
+                            <td>
+                                {% if education.specific_proposal.shortname %}
+                                    {{ education.specific_proposal.shortname }}
+                                {% else %}
+                                    {{ education.specific_proposal.fullname }}
+                                {% endif %}
+
+                                {% if education.specific_proposal.blurb %}
+                                <a tabindex="0" class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ education.specific_proposal.blurb }}">
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if education.simple_yes_no == True %}
+                                    <i class="fa fa-check text-success"></i>
+                                {% elif education.simple_yes_no == False %}
+                                    <i class="fa fa-ban text-danger"></i>
+                                {% else %}
+                                    <span class="text-muted">n/a</span>
+                                {% endif %}
+
+                                {% if education.blurb %}
+                                <a tabindex="0" class="fa fa-info-circle"
+                                    href="#!"
+                                    data-toggle="popover"
+                                    data-trigger="focus"
+                                    data-html="true"
+                                    data-container="body"
+                                    data-content="{{ education.blurb }}">
+                                </a>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            {% if object.housing_blurb %}
+                <div class="col-12 py-3">
+                    {{ object.housing_blurb|markdown }}
+                </div>
+            {% endif %}
+
+            <div class="col-12">
+                {% for quote in object.quote_set.all %}
+                {% if quote.display_housing %}
+                <blockquote class="blockquote">
+                    {{ quote.quote|markdown }}
+                    <footer class="blockquote-footer">
+                        {{ quote.by|default:object.candidate.fullname }}
+            {% if quote.cite %}, <cite>{{ quote.cite|markdown_inline }}</cite>{% endif %}
+                    </footer>
+                </blockquote>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </section>
+</div>
+{% endif %}
+
 
 <div>
     <section class="container">
@@ -867,7 +963,13 @@ p:last-of-type {
             <div class="col">
                 <h2 id="finance">Campaign finance</h2>
 
-                <h3>
+        {% if election.position == "school" %}
+            School Committee candidates do not file public campaign
+            finance information.
+
+        {% else %}
+
+        <h3>
 		    {% if object.fundraising_info_url %}
 			{% if "https://cambridgereview.org/" in object.fundraising_info_url %}
 			    See <a href="{{ object.fundraising_info_url }}">Cambridge Review</a> for detailed information about {{object.candidate.shortname}}'s fundraising
@@ -897,6 +999,9 @@ p:last-of-type {
                         </div>
                     </div>
                 </div>
+
+            {% endif %}
+
             </div>
         </div>
     </section>

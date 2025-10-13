@@ -148,24 +148,45 @@ class CandidateDetail(DetailView):
         )
 
         context["canonical_url"] = self.request.build_absolute_uri(self.object.get_absolute_url())
-        context["specific_housing_support"] = (
-            self.object.candidate.candidatespecificproposalstance_set.filter(
-                display=True,
-                specific_proposal__display=True,
-                specific_proposal__main_topic="housing",
-            )
-            .select_related("specific_proposal")
-            .order_by("specific_proposal__order")
-        )
 
-        context["specific_proposal_support"] = (
-            self.object.candidate.candidatespecificproposalstance_set.filter(
-                display=True, specific_proposal__display=True
+        # minor split between school committee and city council here
+        if self.election.position == "council":
+            context["specific_housing_support"] = (
+                self.object.candidate.candidatespecificproposalstance_set.filter(
+                    display=True,
+                    specific_proposal__display=True,
+                    specific_proposal__main_topic="housing",
+                )
+                .select_related("specific_proposal")
+                .order_by("specific_proposal__order")
             )
-            .exclude(specific_proposal__main_topic="housing")
-            .select_related("specific_proposal")
-            .order_by("specific_proposal__order")
-        )
+            context["specific_proposal_support"] = (
+                self.object.candidate.candidatespecificproposalstance_set.filter(
+                    display=True, specific_proposal__display=True
+                )
+                .exclude(specific_proposal__main_topic="housing")
+                .select_related("specific_proposal")
+                .order_by("specific_proposal__order")
+            )
+        elif self.election.position == "school":
+            context["specific_education_support"] = (
+                self.object.candidate.candidatespecificproposalstance_set.filter(
+                    display=True,
+                    specific_proposal__display=True,
+                    specific_proposal__main_topic="education",
+                )
+                .select_related("specific_proposal")
+                .order_by("specific_proposal__order")
+            )
+
+            context["specific_proposal_support"] = (
+                self.object.candidate.candidatespecificproposalstance_set.filter(
+                    display=True, specific_proposal__display=True
+                )
+                .exclude(specific_proposal__main_topic="education")
+                .select_related("specific_proposal")
+                .order_by("specific_proposal__order")
+            )
 
         context["candidate_degrees"] = self.object.candidate.degrees.all()
 
