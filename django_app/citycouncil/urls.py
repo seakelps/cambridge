@@ -142,7 +142,14 @@ urlpatterns += [
     ]
 ]
 
+
+class Fix20251012(RedirectView):
+    def get_redirect_url(self, year):
+        return reverse("election", args=[year, "council"])
+
+
 urlpatterns += [
+    # Old urls from cambridge.vote, trying to capture search rank
     path(
         "topic/housing.html",
         RedirectView.as_view(
@@ -156,5 +163,8 @@ urlpatterns += [
             url="/2025/council/by-topic/biking/",
             permanent=True,
         ),
-    )
+    ),
+
+    # Redirect from broken link
+    re_path(r"^(?P<year>\d+)/", Fix20251012.as_view()),
 ]
