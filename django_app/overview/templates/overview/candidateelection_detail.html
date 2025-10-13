@@ -259,6 +259,8 @@ p:last-of-type {
                 </a>
                 <br>
 
+                {% if election.position == "council" %}
+
                 <details>
                   <summary>
                     History <a tabindex="0" class="fa fa-info-circle"
@@ -314,6 +316,8 @@ p:last-of-type {
                         </ul>
                   {% endif %}
                 </details>
+
+                {% endif %}
 
                 </dd>
                 {% endif %}
