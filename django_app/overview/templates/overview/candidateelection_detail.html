@@ -81,25 +81,35 @@ p:last-of-type {
                     </i>
                 </p>
 
-                <dl class="text-left mb-0">
                     {% if object.job and object.is_incumbent %}
-                        <dt>Currently</dt>
-                        <dd class="mb-0">Incumbent</dd>
-                        <dt class="mt-0" style="line-height: 1rem;">Also</dt>
-                        <dd class="mt-0" style="line-height: 1rem;">{{ object.job }}</dd>
+		    <p class="mb-0" style="line-height: 1rem">
+		    	<span>Currently: </span>
+                        <span>Incumbent</span>
+		    </p>
+
+		    <p class="mb-0" style="line-height: 1rem">
+                        <span>Also: </span>
+                        <span>{{ object.job }}</span>
+		    </p>
                     {% elif object.is_incumbent %}
-                        <dt>Currently</dt>
-                        <dd>Incumbent</dd>
+		    <p class="mb-0" style="line-height: 1rem">
+                        <span>Currently: </span>
+			<span>Incumbent</span>
+		    </p>
                     {% elif object.job %}
-                        <dt>Currently</dt>
-                        <dd style="line-height: 1rem;">{{ object.job }}</dd>
+		    <p class="mb-0" style="line-height: 1rem">
+                        <span>Currently: </span>
+                        <span>{{ object.job }}</span>
+		    </p>
                     {% endif %}
 
                     {% if object.short_history_text %}
-                        <dt>Election history</dt>
-                        <dd class="mb-0" style="line-height: 1rem;">{{ object.short_history_text }}</dd>
+		    <p class="mb-0" style="line-height: 1rem">
+                        <span>Election history: </span>
+                        <span>{{ object.short_history_text }}</span>
+		    </p>
                     {% endif %}
-                </dl>
+                </p>
             </div>
         </div>
     </div>
