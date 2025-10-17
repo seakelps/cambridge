@@ -42,3 +42,22 @@ class CandidateElection(factory.django.DjangoModelFactory):
     election = factory.SubFactory(Election)
     headshot = factory.django.ImageField()
 
+    is_running = True
+
+
+class Forum(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.Forum
+        django_get_or_create = ("name", "year")
+
+    name = factory.Faker("company")
+    year = 2025
+
+
+class ForumParticipant(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.ForumParticipant
+        django_get_or_create = ("forum", "candidate")
+
+    forum = factory.SubFactory(Forum)
+    candidate = factory.SubFactory(Candidate)

@@ -45,12 +45,22 @@ class BikingTest(TestCase):
 
 class ForumListTest(TestCase):
     def test_sanity(self):
-        election = factories.Election()
-        factories.CandidateElection.create(election=election)
+        election = factories.Election(position="school")
+
+        # School Committee Candidates
+        c1 = factories.CandidateElection.create(election=election)
         factories.CandidateElection.create(election=election, is_running=False)
+
+        fp1 = factories.ForumParticipant.create(candidate=c1.candidate)
+
+        # City Council Candidates
+        c3 = factories.CandidateElection.create(election__position="council")
+        fp2 = factories.ForumParticipant.create(candidate=c3.candidate)
 
         resp = self.client.get(reverse("forum-list", args=[election.year, election.position]))
         self.assertEqual(resp.status_code, 200)
+        self.assertInHTML(fp1.forum.name, resp.content.decode())
+        self.assertNotInHTML(fp2.forum.name, resp.content.decode())
 
 
 class WrittenCommentTest(TestCase):

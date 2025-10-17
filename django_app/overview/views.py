@@ -456,14 +456,21 @@ class CandidateForums(TemplateView):
 
         election = Election.objects.filter(year=year, position=position).first()
 
-        context["candidates"] = candidates = CandidateElection.objects.filter(is_running=True, hide=False, election=election)
-        context["forums"] = forums = Forum.objects.filter(display=True, year=year)
+        context["candidates"] = candidates = election.candidate_elections.filter(
+            is_running=True,
+            hide=False
+        )
+        forums = Forum.objects.filter(display=True, year=year)
 
         dataset = {}
+        forum_participation = {}
         for candidate in candidates:
-            # todo: candidate.candidate.forums.all() is not quite accurate
-            forum_participation = {p.forum_id: p for p in candidate.candidate.forums.all()}
-            dataset[candidate] = [forum_participation.get(forum.id) for forum in forums]
+            forum_participation[candidate.candidate.id] = candidate.candidate.forums.in_bulk()
+
+        visible_forum_ids = set().union(*[list(cf.keys()) for cf in forum_participation.values()])
+        context["forums"] = visible_forums = [f for f in forums if f.id in visible_forum_ids]
+        for candidate in candidates:
+            dataset[candidate] = [forum_participation[candidate.candidate.id].get(forum.id) for forum in visible_forums]
 
         context["dataset"] = dataset
 
