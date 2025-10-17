@@ -451,8 +451,8 @@ class CandidateForums(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        year=self.kwargs["year"] if "year" in kwargs else "2025"
-        position=self.kwargs["position"] if "position" in kwargs else "council"
+        year = self.kwargs["year"]
+        position = self.kwargs["position"]
 
         election = Election.objects.filter(year=year, position=position).first()
 
@@ -465,7 +465,9 @@ class CandidateForums(TemplateView):
         dataset = {}
         forum_participation = {}
         for candidate in candidates:
-            forum_participation[candidate.candidate.id] = candidate.candidate.forums.in_bulk()
+            forum_participation[candidate.candidate.id] = {
+                fp.forum_id: fp for fp in candidate.candidate.forums.all()
+            }
 
         visible_forum_ids = set().union(*[list(cf.keys()) for cf in forum_participation.values()])
         context["forums"] = visible_forums = [f for f in forums if f.id in visible_forum_ids]
