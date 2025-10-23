@@ -61,3 +61,17 @@ class ForumParticipant(factory.django.DjangoModelFactory):
 
     forum = factory.SubFactory(Forum)
     candidate = factory.SubFactory(Candidate)
+
+
+class SpecificProposal(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.SpecificProposal
+        django_get_or_create = ("main_topic", "fullname")
+
+    fullname = factory.Faker("name")
+    initial_year = 2025
+
+
+class CandidateSpecificProposalStance(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.CandidateSpecificProposalStance

@@ -104,8 +104,9 @@
                         {% if election.position == "council" %}
                             <a class="dropdown-item" href="{% url 'biking_comparison' election.year election.position %}">Issue: Biking</a>
                             <a class="dropdown-item" href="{% url 'housing_comparison' election.year election.position %}">Issue: Housing</a>
+		        {% else %}
+                            <a class="dropdown-item" href="{% url 'superintendent' election.year election.position %}">Issue: Superintendent Search</a>
                         {% endif %}
-                            <!-- <a class="dropdown-item disabled" href="#">Press Coverage</a> -->
                         </div>
                     </li>
 

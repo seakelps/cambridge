@@ -21,7 +21,7 @@ urlpatterns = [
 
     re_path(r"by-topic/", include([
         re_path(
-            r"^housing",
+            r"^housing/$",
             views.CandidateHousingList.as_view(),
             name="housing_comparison",
         ),
@@ -29,6 +29,12 @@ urlpatterns = [
             r"^biking/$",
             views.CandidateBikingList.as_view(),
             name="biking_comparison",
+        ),
+        # 2025 only
+        re_path(
+            r"^superintendent/$",
+            views.SuperIndendentList.as_view(),
+            name="superintendent",
         ),
         re_path(
             r"^basic/$",

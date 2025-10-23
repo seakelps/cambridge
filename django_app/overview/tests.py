@@ -43,6 +43,26 @@ class BikingTest(TestCase):
         self.assertEqual(resp.status_code, 200)
 
 
+class SuperintendentTest(TestCase):
+    def test_sanity(self):
+        election = factories.Election()
+        c1 = factories.CandidateElection.create(election=election)
+        c2 = factories.CandidateElection.create(election=election, is_running=False)
+
+        prop = factories.SpecificProposal.create(
+            fullname="Superintendent: Justice League",
+            main_topic="education"
+        )
+
+        factories.CandidateSpecificProposalStance.create(
+            candidate=c1.candidate,
+            specific_proposal=prop,
+        )
+
+        resp = self.client.get(reverse("superintendent", args=[election.year, election.position]))
+        self.assertEqual(resp.status_code, 200)
+
+
 class ForumListTest(TestCase):
     def test_sanity(self):
         election = factories.Election(position="school")
