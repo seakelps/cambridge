@@ -71,7 +71,7 @@ class ElectionCandidateList(DetailView):
         )
 
     def get_context_data(self, *args, **kwargs):
-        context = super(ElectionCandidateList, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
 
         candidate_elections = self.object.candidate_elections.exclude(hide=True).order_by("candidate__fullname")
         context["runners"] = candidate_elections.exclude(is_running=False)
@@ -97,7 +97,7 @@ class CandidateDetail(DetailView):
         )
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CandidateDetail, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context["title"] = title = f"Learn More About {self.object.candidate.fullname}"
         context["description"] = description = BeautifulSoup(
             markdown(self.object.blurb), features="html.parser"
@@ -231,7 +231,7 @@ class CandidateHousingList(ListView):
     template_name = "overview/candidates_housing.html"
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CandidateHousingList, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
 
         year=self.kwargs["year"] if "year" in kwargs else "2025"
         position=self.kwargs["position"] if "position" in kwargs else "council"
@@ -289,7 +289,7 @@ class CandidateBikingList(ListView):
     template_name = "overview/candidates_biking.html"
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CandidateBikingList, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
 
         year=self.kwargs["year"] if "year" in kwargs else "2025"
         position=self.kwargs["position"] if "position" in kwargs else "council"
@@ -348,6 +348,66 @@ class CandidateBikingList(ListView):
         return context
 
 
+class SuperIndendentList(ListView):
+    model = CandidateElection
+    template_name = "overview/candidates_super.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        year = self.kwargs["year"]
+        position = self.kwargs["position"]
+
+        election = Election.objects.filter(year=year, position=position).first()
+
+        candidate_elections = (
+            CandidateElection.objects.exclude(is_running=False).filter(election=election).order_by("candidate__fullname")
+        )
+        specific_proposals = (
+            SpecificProposal.objects.exclude(display=False)
+            .filter(
+                fullname__contains="Superintendent",
+                main_topic="education",
+            )
+            .order_by("order")
+        )
+
+        candidate_specific_proposals = (
+            CandidateSpecificProposalStance.objects.select_related("specific_proposal")
+            .select_related("candidate")
+            .filter(specific_proposal__display=True)
+            # todo: fix filtering....
+            # .filter(candidate__hide=False)
+            # .filter(candidate__is_running=True)
+        )
+
+        cp_map_yes_no = {}
+        cp_map_blurb = {}
+
+        for candidate_election in candidate_elections:
+            cp_map_yes_no[candidate_election.candidate.id] = {}
+            cp_map_blurb[candidate_election.candidate.id] = {}
+
+        for candidate_proposal in candidate_specific_proposals:
+            if candidate_proposal.candidate.id not in cp_map_yes_no:
+                continue
+
+            cp_map_yes_no[candidate_proposal.candidate.id][
+                candidate_proposal.specific_proposal.id
+            ] = candidate_proposal.simple_yes_no
+            cp_map_blurb[candidate_proposal.candidate.id][
+                candidate_proposal.specific_proposal.id
+            ] = candidate_proposal.blurb
+
+
+        context["candidate_elections"] = candidate_elections
+        context["specific_proposals"] = specific_proposals
+        context["cp_map_yes_no"] = cp_map_yes_no
+        context["cp_map_blurb"] = cp_map_blurb
+
+        return context
+
+
 class CandidateBasicList(ListView):
     """
     A specific "spreadsheet-like" view of candidate basic info.
@@ -372,7 +432,7 @@ class CandidateBasicList(ListView):
 
 
     def get_context_data(self, *args, **kwargs):
-        context = super(CandidateBasicList, self).get_context_data(*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
 
         candidate_degree_map = {}
         for candidate_election in context["object_list"]:

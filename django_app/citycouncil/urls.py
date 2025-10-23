@@ -42,7 +42,7 @@ class CandidateElectionSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return CandidateElection.objects.all()
+        return CandidateElection.objects.order_by('pk')
 
     def lastmod(self, obj):
         return obj.timestamp_modified
