@@ -59,6 +59,7 @@ class StaticViewSitemap(Sitemap):
             reverse("housing_comparison", args=[settings.ELECTION_DATE.year, "council"]),
             reverse("biking_comparison", args=[settings.ELECTION_DATE.year, "council"]),
             reverse("basic_comparison", args=[settings.ELECTION_DATE.year, "council"]),
+            reverse("superintendent", args=[settings.ELECTION_DATE.year, "school"]),
             reverse("forum-list", args=[settings.ELECTION_DATE.year, "council"]),
             reverse("written-public-comment", args=[settings.ELECTION_DATE.year, "council"]),
         ]
