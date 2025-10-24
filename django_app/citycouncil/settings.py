@@ -9,6 +9,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 DEBUG = os.environ["DJANGO_DEBUG"] == "TRUE"
+BING_VALIDATE = os.getenv("BING_VALIDATE", "")
 
 # Allow Django to detect that the original request was https so build absolute url picks https
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

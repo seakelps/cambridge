@@ -34,4 +34,5 @@ def constants(request):
         "CONTACT_EMAIL": settings.CONTACT_EMAIL,
         "GOOGLE_EMBED_API_KEY": settings.GOOGLE_EMBED_API_KEY,
         "ELECTION_DATE": settings.ELECTION_DATE,
+        "BING_VALIDATE": settings.BING_VALIDATE,
     }
