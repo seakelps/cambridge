@@ -24,6 +24,8 @@
 <meta property="og:description" content="{{ description }}" />
 <meta property="og:site_name" content="Cambridge.vote"/>
 
+<meta name="msvalidate.01" content="{{ BING_VALIDATE }}" />
+
 <script>
     // data for candidate_map.js
     var initialLocations = {{ candidate_locations|safe }};
@@ -37,9 +39,9 @@
 
 {% block content %}
     <!-- Main component for a primary marketing message or call to action -->
-    <main class="container-fluid bg-primary">
+    <main class="container-fluid bg-secondary">
         <div class="row justify-content-center" id="main">
-            <div class="jumbotron bg-transparent text-center text-light font-weight-bold col-lg-8 col-xs-6">
+            <div class="jumbotron bg-transparent text-center text-black font-weight-bold col-lg-8 col-xs-6">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
@@ -50,8 +52,8 @@
 
 
                             <div class="col" style="text-align: center">
-				<a class="btn btn-secondary mt-2" href="{% url "election_candidates" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
-				<a class="btn btn-secondary mt-2" href="{% url "election_candidates" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
+				<a class="btn btn-primary mt-2 rounded" href="{% url "election_candidates" ELECTION_DATE.year 'council' %}" role="button">{% blocktrans %}Explore Council{% endblocktrans %}</a>
+				<a class="btn btn-primary mt-2 rounded" href="{% url "election_candidates" ELECTION_DATE.year 'school' %}" role="button">{% blocktrans %}Explore School Committee{% endblocktrans %}</a>
                             </div>
                         </div>
                     </div>

@@ -73,7 +73,7 @@ class ElectionCandidateList(DetailView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        candidate_elections = self.object.candidate_elections.exclude(hide=True).order_by("candidate__fullname")
+        candidate_elections = self.object.candidate_elections.exclude(hide=True).order_by("candidate__fullname").select_related("candidate")
         context["runners"] = candidate_elections.exclude(is_running=False)
         context["not_runners"] = candidate_elections.filter(is_running=False)
         return context
