@@ -19,7 +19,7 @@ def header(request):
         ).first()
     else:
         if election:
-            candidates = election.candidate_elections.filter(hide=False).order_by("-is_running", "candidate__fullname")
+            candidates = election.candidate_elections.filter(hide=False).order_by("-is_running", "candidate__fullname").select_related("candidate")
             context.update({
                 "incumbents": candidates.filter(is_incumbent=True),
                 "non_incumbents": candidates.filter(is_incumbent=False),
